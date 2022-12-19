@@ -7,12 +7,10 @@ WORKDIR /ft_transcendence/src/app
 
 # Copy package-lock.json & package.json from host to inside container working directory
 COPY package*.json ./
+COPY tsconfig.json ./
 
 # Install deps inside container
 RUN npm install 
-
-# Bundle App Sources
-COPY . .
 
 RUN npm run build
 
