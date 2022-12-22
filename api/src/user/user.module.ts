@@ -12,6 +12,7 @@ imports: [
 	AuthModule
 ],
   controllers: [UserController],
-  providers: [UserService, UserHelperService]
+  providers: [UserService, UserHelperService],
+  exports: [UserService]
 })
 export class UserModule {}
