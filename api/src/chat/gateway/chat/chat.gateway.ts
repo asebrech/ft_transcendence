@@ -2,9 +2,11 @@ import { UnauthorizedException } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/service/auth.service';
+import { ConnectedUserI } from 'src/chat/model/connected-user.interface';
 import { PageI } from 'src/chat/model/page.interface';
 import { RoomI } from 'src/chat/model/room.interface';
-import { RoomService } from 'src/chat/service/room-service/room/room.service';
+import { ConnectedUserService } from 'src/chat/service/connected-user/connected-user.service';
+import { RoomService } from 'src/chat/service/room-service/room.service';
 import { UserI } from 'src/user/model/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
 
@@ -14,7 +16,10 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect{
   @WebSocketServer()
   server: Server;
 
-	constructor(private authService: AuthService, private userService: UserService, private roomService: RoomService) {};
+	constructor(private authService: AuthService,
+		private userService: UserService,
+		private roomService: RoomService,
+		private connectedUserService: ConnectedUserService) {};
 
 	async handleConnection(socket: Socket) {
 		try {
@@ -29,6 +34,9 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect{
 				// substract page -1 to match the angular material paginator
 				rooms.meta.currentPage = rooms.meta.currentPage - 1;
 
+				//save connection to DB
+				await this.connectedUserService.create({socketId: socket.id, user});
+
 				// Only emit to the specific connected client
 				return this.server.to(socket.id).emit('rooms', rooms);
 			}
@@ -37,7 +45,9 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect{
 		}
 }
 
-	handleDisconnect(socket: Socket) {
+	async handleDisconnect(socket: Socket) {
+		//remove connection from DB
+		await this.connectedUserService.deleteBySocketId(socket.id);
 		socket.disconnect();
 }
 
@@ -47,8 +57,16 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect{
   }
 
   @SubscribeMessage('createRoom')
-  async onCreateRoom(socket: Socket, room: RoomI): Promise<RoomI> {
-	return this.roomService.createRoom(room, socket.data.user);
+  async onCreateRoom(socket: Socket, room: RoomI) {
+	const createdRoom: RoomI = await this.roomService.createRoom(room, socket.data.user);
+
+	for(const user of createdRoom.users) {
+		const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
+		const rooms = await this.roomService.getRoomsForUser(user.id, {page: 1, limit: 10});
+		for (const connection of connections) {
+			await this.server.to(connection.socketId).emit('rooms', rooms);
+		}
+	}
   }
 
   @SubscribeMessage('paginateRooms')
