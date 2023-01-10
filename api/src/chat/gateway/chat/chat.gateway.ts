@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/service/auth.service';
@@ -11,15 +11,21 @@ import { UserI } from 'src/user/model/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
 
 @WebSocketGateway({cors: {origin: ['https://hoppscotch.io', 'http://localhost:3000', 'http://localhost:4200']}})
-export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect{
+export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
 
   @WebSocketServer()
   server: Server;
+
+	
 
 	constructor(private authService: AuthService,
 		private userService: UserService,
 		private roomService: RoomService,
 		private connectedUserService: ConnectedUserService) {};
+
+	async onModuleInit() {
+		await this.connectedUserService.deleteAll();
+	}
 
 	async handleConnection(socket: Socket) {
 		try {
