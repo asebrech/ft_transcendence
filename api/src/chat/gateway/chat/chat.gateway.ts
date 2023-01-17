@@ -2,10 +2,14 @@ import { OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/service/auth.service';
-import { ConnectedUserI } from 'src/chat/model/connected-user.interface';
+import { ConnectedUserI } from 'src/chat/model/connected-user/connected-user.interface';
+import { JoinedRoomI } from 'src/chat/model/joined-room/joined-room.interface';
+import { MessageI } from 'src/chat/model/message/message.interface';
 import { PageI } from 'src/chat/model/page.interface';
-import { RoomI } from 'src/chat/model/room.interface';
+import { RoomI } from 'src/chat/model/room/room.interface';
 import { ConnectedUserService } from 'src/chat/service/connected-user/connected-user.service';
+import { JoinedRoomService } from 'src/chat/service/joined-room/joined-room.service';
+import { MessageService } from 'src/chat/service/message/message.service';
 import { RoomService } from 'src/chat/service/room-service/room.service';
 import { UserI } from 'src/user/model/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
@@ -16,15 +20,16 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect, O
   @WebSocketServer()
   server: Server;
 
-	
-
 	constructor(private authService: AuthService,
 		private userService: UserService,
 		private roomService: RoomService,
-		private connectedUserService: ConnectedUserService) {};
+		private connectedUserService: ConnectedUserService,
+		private joinedRoomService: JoinedRoomService,
+		private messageService: MessageService) {};
 
 	async onModuleInit() {
 		await this.connectedUserService.deleteAll();
+		await this.joinedRoomService.deleteAll();
 	}
 
 	async handleConnection(socket: Socket) {
@@ -69,6 +74,8 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect, O
 	for(const user of createdRoom.users) {
 		const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
 		const rooms = await this.roomService.getRoomsForUser(user.id, {page: 1, limit: 10});
+		// substract page -1 to match the angular material paginator
+		rooms.meta.currentPage -= 1;
 		for (const connection of connections) {
 			await this.server.to(connection.socketId).emit('rooms', rooms);
 		}
@@ -77,13 +84,41 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect, O
 
   @SubscribeMessage('paginateRooms')
   async onPaginatieRoom(socket: Socket, page: PageI) {
-	page.limit = page.limit > 100 ? 100: page.limit;
-	// add page +1 to match angular paginator
-	page.page = page.page + 1;
-	const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, page);
+	const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, this.handleIncommigPageRequest(page));
 	// substract page -1 to match the angular material paginator
 	rooms.meta.currentPage = rooms.meta.currentPage - 1;
 	return this.server.to(socket.id).emit('rooms', rooms);
+  }
+
+  @SubscribeMessage('joinRoom')
+  async onJoinRoom(socket: Socket, room: RoomI) {
+	const messages = await this.messageService.findMessagesForRoom(room, {limit: 10, page: 1});
+	messages.meta.currentPage -= 1; 
+	// Save connection to Room
+	await this.joinedRoomService.create({socketId: socket.id, user: socket.data.user, room});
+	// Send last messages from Room to User
+	await this.server.emit('messages', messages);
+  }
+
+  @SubscribeMessage('leaveRoom')
+  async onLeaveRoom(socket: Socket) {
+	// remove connection from JoinedRoom
+	await this.joinedRoomService.deleteBySocketId(socket.id);
+  }
+
+  @SubscribeMessage('addMessage')
+  async onAddMessage(socket: Socket, message: MessageI) {
+	const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
+	const room: RoomI = await this.roomService.getRoom(message.room.id);
+	const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room);
+	// TODO : Sen new message to all Joined Users of thr Room (currently online) 
+  }
+
+  private handleIncommigPageRequest(page: PageI) {
+	page.limit = page.limit > 100 ? 100: page.limit;
+	// add page +1 to match angular paginator
+	page.page = page.page + 1;
+	return page;
   }
   
 }
