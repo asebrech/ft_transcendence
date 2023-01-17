@@ -1,5 +1,5 @@
 # Specify Node Version and Image
-# Name Image devlopment (can be anything)
+# Name Image development (can be anything)
 FROM node AS development
 
 # Specify Working directory inside container
