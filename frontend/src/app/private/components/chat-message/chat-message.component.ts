@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MessageI } from 'src/app/model/message.interface';
+import { UserI } from 'src/app/model/user.interface';
+import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 
 @Component({
   selector: 'app-chat-message',
@@ -9,5 +11,9 @@ import { MessageI } from 'src/app/model/message.interface';
 export class ChatMessageComponent {
 
 @Input() message: MessageI;
+
+user: UserI = this.authService.getLoggedInUser();
+
+constructor(private authService: AuthService) {}
 
 }
