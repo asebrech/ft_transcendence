@@ -3,6 +3,7 @@ import { CustomSocket } from '../../sockets/custom-socket';
 import { RoomI, RoomPaginateI } from 'src/app/model/room.interface';
  import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+import { MessageI, MessagePaginatedI } from 'src/app/model/message.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,20 @@ export class ChatService {
 
   constructor(private socket: CustomSocket, private snackbar: MatSnackBar) { }
 
-  sendMessage() {
-
+  sendMessage(message: MessageI) {
+	return this.socket.emit('addMessage', message);
   }
 
-  getMessage() {
-	return this.socket.fromEvent('message');
+  joinRoom(room: RoomI ) {
+	return this.socket.emit('joinRoom', room);
+  }
+
+  leaveRoom(room: RoomI) {
+	return this.socket.emit('leaveRoom', room);
+  }
+
+  getMessages(): Observable<MessagePaginatedI> {
+	return this.socket.fromEvent<MessagePaginatedI>('messages');
   }
 
   getMyRooms(): Observable<RoomPaginateI> {

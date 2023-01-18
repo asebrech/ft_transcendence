@@ -20,7 +20,7 @@ export class RoomService {
 	}
 
 	async getRoom(roomId: number): Promise<RoomI> {
-		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['user'] });;
+		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users'] });;
 	}
 
 	async getRoomsForUser(userId: number, options: IPaginationOptions): Promise<Pagination<RoomI>> {
