@@ -1,5 +1,6 @@
 import { OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import console from 'console';
 import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/service/auth.service';
 import { ConnectedUserI } from 'src/chat/model/connected-user/connected-user.interface';
@@ -109,9 +110,11 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect, O
   @SubscribeMessage('addMessage')
   async onAddMessage(socket: Socket, message: MessageI) {
 	const createdMessage: MessageI = await this.messageService.create({...message, user: socket.data.user});
-	const room: RoomI = await this.roomService.getRoom(message.room.id);
-	const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room);
-	// TODO : Sen new message to all Joined Users of thr Room (currently online) 
+	const room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
+	const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room.id);
+	for(const user of joinedUsers) {
+		await this.server.to(user.socketId).emit('messageAdded', createdMessage);
+	}
   }
 
   private handleIncommigPageRequest(page: PageI) {

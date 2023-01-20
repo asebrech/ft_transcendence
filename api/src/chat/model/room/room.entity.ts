@@ -19,7 +19,7 @@ export class RoomEntity {
 	@JoinTable()
 	users: UserEntity[];
 
-	@OneToMany(() => JoinedRoomEntity, joinedUser => joinedUser.room)
+	@OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
 	joinedUsers: JoinedRoomEntity[];
 
 	@OneToMany(() => MessageEntity, message => message.room)
