@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
@@ -6,6 +6,8 @@ import { UserI } from '../model/user.interface';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { LoginUserDto } from '../model/dto/login-user.dto';
 import { LoginResponseI } from '../model/login-response.interface';
+import { AccessTokenI } from '../model/access-token.interface';
+import { AccessTokenDto } from '../model/dto/access-token.dto';
 
 @Controller('users')
 export class UserController {
@@ -13,7 +15,7 @@ export class UserController {
 	constructor(
 		private userService: UserService,
 		private userHelperService: UserHelperService
-	){}
+	) { }
 
 	@Post()
 	async create(@Body() createUserDto: CreateUserDto): Promise<UserI> {
@@ -23,13 +25,13 @@ export class UserController {
 
 	@Get()
 	async findAll(
-		@Query('page') page: number = 1, @Query('limit') limit: number = 10) : Promise<Pagination<UserI>> {
-		limit = limit > 100 ? 100: limit;
-		return this.userService.findAll({page, limit, route: 'http://localhost:3000/api/users'});
+		@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<Pagination<UserI>> {
+		limit = limit > 100 ? 100 : limit;
+		return this.userService.findAll({ page, limit, route: 'http://localhost:3000/api/users' });
 	}
 
 	@Get('/find-by-username')
-	async findAllByUsername (@Query('username') username: string) {
+	async findAllByUsername(@Query('username') username: string) {
 		return this.userService.findAllByUsername(username);
 	}
 
@@ -42,5 +44,17 @@ export class UserController {
 			token_type: 'JWT',
 			expires_in: 10000
 		};
+	}
+
+	@Post('api-login')
+	async apiLogin(@Body() accessTokenDto: AccessTokenDto) {
+		const accessToken: AccessTokenI = this.userHelperService.accessTokenDtoToEntity(accessTokenDto);
+		const user: UserI = await this.userHelperService.getDataFromApi(accessToken.access_token);
+		const jwt: string = await this.userService.apiLoginHandle(user);
+		return {
+			access_token: jwt,
+			token_type: 'JWT',
+			expires_in: 10000
+		}
 	}
 }

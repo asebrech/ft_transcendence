@@ -10,12 +10,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field'; 
 import { MatButtonModule } from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input'; 
-import {MatCardModule} from '@angular/material/card'; 
+import {MatCardModule} from '@angular/material/card';
+import { ApiLoginComponent } from './components/api-login/api-login.component'; 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ApiLoginComponent
   ],
   imports: [
     CommonModule,

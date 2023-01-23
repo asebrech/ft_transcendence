@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
+import generatePassword from 'password-generator';
 import { AuthService } from 'src/auth/service/auth.service';
 import { UserEntity } from 'src/user/model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
@@ -49,6 +50,23 @@ export class UserService {
 		} catch {
 			throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 		}
+	}
+
+	async apiLoginHandle(apiUser: UserI): Promise<string> {
+		const exists: boolean = await this.mailExists(apiUser.email);
+			if (!exists) {
+				const passwordHash: string = await this.hashPassword(generatePassword(12, false));
+				apiUser.password = passwordHash;
+				const user = await this.userRepository.save(this.userRepository.create(apiUser));
+				return this.apiLogin(user);
+			} else {
+				return this.apiLogin(apiUser);
+			}
+	}
+
+	private async apiLogin(apiUser: UserI): Promise<string> {
+		const payload: UserI = await this.findOne(apiUser.id);
+		return this.authService.generateJwt(payload);
 	}
 
 	async findAll(options : IPaginationOptions) : Promise<Pagination<UserI>> {
