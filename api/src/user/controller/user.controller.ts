@@ -8,6 +8,7 @@ import { LoginUserDto } from '../model/dto/login-user.dto';
 import { LoginResponseI } from '../model/login-response.interface';
 import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
+import * as otplib from 'otplib';
 
 @Controller('users')
 export class UserController {
@@ -57,4 +58,21 @@ export class UserController {
 			expires_in: 10000
 		}
 	}
+
+	@Get('qr-code')
+	getQrCode(): { qr: string; secret: string } {
+	 // const secret = otplib.authenticator.generateSecret();
+	 const secret = 'otpauth://totp/myapp:alois.alois.com?secret=DVABMLQZAUQE2MCG&period=30&digits=6&algorithm=SHA1&issuer=myapp'
+	  const test = otplib.authenticator.keyuri('alois.alois.com', 'myapp', secret);
+	  return {
+		qr: test,
+		secret		
+	  };
+	}
+  
+	@Post('verify')
+	verifyToken(@Body() body: { token: string; secret: string }): boolean {
+	  return otplib.authenticator.check(body.token, body.secret);
+	}
+
 }

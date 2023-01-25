@@ -1,11 +1,11 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
-import generatePassword from 'password-generator';
 import { AuthService } from 'src/auth/service/auth.service';
 import { UserEntity } from 'src/user/model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';
+import * as crypto from 'crypto'
 
 @Injectable()
 export class UserService {
@@ -14,9 +14,9 @@ export class UserService {
 		@InjectRepository(UserEntity)
 		private readonly userRepository: Repository<UserEntity>,
 		private authService: AuthService
-	) {}
+	) { }
 
-	async create(newUser : UserI): Promise<UserI> {
+	async create(newUser: UserI): Promise<UserI> {
 		try {
 			const exists: boolean = await this.mailExists(newUser.email);
 			if (!exists) {
@@ -54,14 +54,21 @@ export class UserService {
 
 	async apiLoginHandle(apiUser: UserI): Promise<string> {
 		const exists: boolean = await this.mailExists(apiUser.email);
-			if (!exists) {
-				const passwordHash: string = await this.hashPassword(generatePassword(12, false));
-				apiUser.password = passwordHash;
-				const user = await this.userRepository.save(this.userRepository.create(apiUser));
-				return this.apiLogin(user);
-			} else {
-				return this.apiLogin(apiUser);
-			}
+		if (!exists) {
+			const passwordHash: string = await this.hashPassword(this.generatePassword(12));
+			apiUser.password = passwordHash;
+			const user = await this.userRepository.save(this.userRepository.create(apiUser));
+			return this.apiLogin(user);
+		} else {
+			return this.apiLogin(apiUser);
+		}
+	}
+
+	private generatePassword(length: number) {
+		return crypto
+			.randomBytes(Math.ceil(length / 2))
+			.toString("hex")
+			.slice(0, length);
 	}
 
 	private async apiLogin(apiUser: UserI): Promise<string> {
@@ -69,7 +76,7 @@ export class UserService {
 		return this.authService.generateJwt(payload);
 	}
 
-	async findAll(options : IPaginationOptions) : Promise<Pagination<UserI>> {
+	async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
 		return paginate<UserEntity>(this.userRepository, options);
 	}
 
@@ -82,8 +89,8 @@ export class UserService {
 	}
 
 	// also returns the password
-	private async findByEmail(email : string) : Promise<UserI> {
-		return this.userRepository.findOne({where: {email}, select: ['id', 'email', 'username', 'password']});
+	private async findByEmail(email: string): Promise<UserI> {
+		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password'] });
 	}
 
 	private async hashPassword(password: string): Promise<string> {
@@ -95,16 +102,16 @@ export class UserService {
 	}
 
 	private async findOne(id: number): Promise<UserI> {
-		return this.userRepository.findOneBy( {id} );
+		return this.userRepository.findOneBy({ id });
 	}
 
 	public getOne(id: number): Promise<UserI> {
-		return this.userRepository.findOneByOrFail({id});
+		return this.userRepository.findOneByOrFail({ id });
 	}
 
 	private async mailExists(email: string): Promise<boolean> {
-		const user = await this.userRepository.findOneBy({email});
-		if (user){
+		const user = await this.userRepository.findOneBy({ email });
+		if (user) {
 			return true;
 		} else {
 			return false;

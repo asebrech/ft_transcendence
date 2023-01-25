@@ -11,13 +11,17 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input'; 
 import {MatCardModule} from '@angular/material/card';
-import { ApiLoginComponent } from './components/api-login/api-login.component'; 
+import { ApiLoginComponent } from './components/api-login/api-login.component';
+import { GoogleAuthComponent } from './components/google-auth/google-auth.component'; 
+import { FormsModule } from '@angular/forms';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
     LoginComponent,
     RegisterComponent,
-    ApiLoginComponent
+    ApiLoginComponent,
+    GoogleAuthComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +31,9 @@ import { ApiLoginComponent } from './components/api-login/api-login.component';
 	MatFormFieldModule,
 	MatInputModule,
 	MatButtonModule,
-	MatCardModule
+	MatCardModule,
+	FormsModule,
+	QRCodeModule
   ]
 })
 export class PublicModule { }

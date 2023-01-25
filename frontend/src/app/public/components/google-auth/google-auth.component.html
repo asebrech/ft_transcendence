@@ -1,0 +1,12 @@
+<div>
+		<qrcode [qrdata]="qr"></qrcode>
+</div>
+
+<form (ngSubmit)="onSubmit()">
+	<label>
+	  Token:
+	  <input type="text" [(ngModel)]="token" name="token">
+	</label>
+	<button type="submit">Verify</button>
+  </form>
+  
