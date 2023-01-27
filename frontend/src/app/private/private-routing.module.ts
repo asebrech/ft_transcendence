@@ -1,25 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { CreateRoomComponent } from './components/create-room/create-room.component';
-import { GameFrontComponent } from './components/game.front/game.front.component';
+import { AuthGuard } from '../guards/auth.guard';
 
 const routes: Routes = [
 	{
-		path: 'SpacePong',
-		component: GameFrontComponent
+		path: 'game',
+		canActivate: [AuthGuard],
+		loadChildren: () => import('./game/game.module').then(m => m.GameModule)
 	},
 	{
-		path: 'dashboard',
-		component: DashboardComponent
-	},
-	{
-		path: 'create-room',
-		component: CreateRoomComponent
+		path: 'chat',
+		canActivate: [AuthGuard],
+		loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule)
 	},
 	{
 		path: '**',
-		redirectTo: 'dashboard',
+		redirectTo: 'chat',
 		pathMatch: 'full'
 	}
 	
