@@ -11,6 +11,7 @@ export class AppComponent {
   title = 'frontend';
 
   testValue: Observable<Test> = this.service.getTest();
+    
 
   constructor(private service: TestService) {}
 }

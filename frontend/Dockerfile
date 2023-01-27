@@ -1,5 +1,5 @@
 # Stage 1: build
-FROM node AS development
+FROM node:lts AS development
 
 WORKDIR /ft_transcendence/frontend/src/app
 
