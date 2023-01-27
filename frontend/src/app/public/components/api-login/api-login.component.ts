@@ -30,7 +30,7 @@ export class ApiLoginComponent implements OnInit {
 		  if (this.code) {
 			this.authService.exchangeCodeForToken(this.code).pipe(
 				tap(token => this.authService.apiLogin(token).pipe(
-					tap(() => this.router.navigate(['../../private/dashboard'], { replaceUrl: true }))
+					tap(() => this.router.navigate(['../../private/chat/dashboard'], { replaceUrl: true }))
 				).subscribe())
 				).subscribe();
 		  }

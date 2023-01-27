@@ -30,7 +30,7 @@ export class RegisterComponent {
 				password: this.password.value,
 				username: this.username.value
 			}).pipe(
-				tap(() => this.router.navigate(['../login']))
+				tap(() => this.router.navigate(['./public/login']))
 			).subscribe();
 		}
 	}
