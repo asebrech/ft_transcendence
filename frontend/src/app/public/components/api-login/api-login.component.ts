@@ -19,7 +19,7 @@ export class ApiLoginComponent implements OnInit {
 	login() {
 		
 		const clientId = 'u-s4t2ud-555dc7231ce9896ca6b978542a200be75b8ddd2b1569e6621355172e4c6ec0e2'
-		const redirect_uri = 'http://localhost:4200'
+		const redirect_uri = 'http://localhost:4200/public/login'
 		const url= `https://api.intra.42.fr/oauth/authorize?client_id=${clientId}&redirect_uri=${redirect_uri}&response_type=code`
 		window.location.href = url;
 	}

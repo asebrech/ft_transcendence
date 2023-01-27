@@ -8,5 +8,8 @@ import {Router } from '@angular/router';
 })
 export class HomeComponent {
  
+	test(){
+		console.log('test');
+	}
   
 }

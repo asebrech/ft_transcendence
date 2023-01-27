@@ -15,13 +15,15 @@ import { ApiLoginComponent } from './components/api-login/api-login.component';
 import { GoogleAuthComponent } from './components/google-auth/google-auth.component'; 
 import { FormsModule } from '@angular/forms';
 import { QRCodeModule } from 'angularx-qrcode';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
     RegisterComponent,
     ApiLoginComponent,
-    GoogleAuthComponent
+    GoogleAuthComponent,
+	HomeComponent
   ],
   imports: [
     CommonModule,
