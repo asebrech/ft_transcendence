@@ -6,6 +6,8 @@ import { UserEntity } from 'src/user/model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';
 import * as crypto from 'crypto'
+import * as otplib from 'otplib';
+
 
 @Injectable()
 export class UserService {
@@ -64,6 +66,26 @@ export class UserService {
 		}
 	}
 
+	async googleAuthCreate(user: UserI): Promise<UserI> {
+		const foundUser: UserI =  await this.findByEmail(user.email);
+		foundUser.google_auth = true;
+		//foundUser.google_auth_secret = this.authService.encrypteSecret(otplib.authenticator.generateSecret());
+		foundUser.google_auth_secret = otplib.authenticator.generateSecret();
+		return this.userRepository.save(foundUser);
+	}
+
+	async getQrCode(user: UserI): Promise<string> {
+		//const secret: string = this.authService.decrypteSecret(user.google_auth_secret);
+		const foundUser: UserI =  await this.findByEmail(user.email);
+		Logger.log(foundUser.google_auth_secret);
+		return otplib.authenticator.keyuri(foundUser.email, 'spacepong', foundUser.google_auth_secret);
+	}
+
+	test() {
+		const secret = 'secret';
+		let ok = this.authService.encrypteSecret(secret);
+	}
+
 	private generatePassword(length: number) {
 		return crypto
 			.randomBytes(Math.ceil(length / 2))
@@ -90,7 +112,7 @@ export class UserService {
 
 	// also returns the password
 	private async findByEmail(email: string): Promise<UserI> {
-		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password'] });
+		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth_secret'] });
 	}
 
 	private async hashPassword(password: string): Promise<string> {

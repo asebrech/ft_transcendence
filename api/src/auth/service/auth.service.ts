@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserI } from 'src/user/model/user.interface';
 
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
+const key = crypto.randomBytes(32);
 @Injectable()
 export class AuthService {
 
@@ -23,6 +25,20 @@ export class AuthService {
 
 	verifyJwt(jwt: string): Promise<any> {
 		return this.jwtService.verifyAsync(jwt);
+	}
+
+	encrypteSecret(secret: string): string {
+		const cipher = crypto.createCipher('aes-256-cbc', key);
+		let encrypted_message = cipher.update(secret, 'utf8', 'hex');
+		encrypted_message += cipher.final('hex');
+		return encrypted_message;
+	}
+
+	decrypteSecret(secret: string): string {
+		const decipher = crypto.createDecipher('aes-256-cbc', key);
+		let decrypted_message = decipher.update(secret, 'hex', 'utf8');
+		decrypted_message += decipher.final('utf8');
+		return secret;
 	}
 	
 }

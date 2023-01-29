@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
@@ -9,6 +9,7 @@ import { LoginResponseI } from '../model/login-response.interface';
 import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
 import * as otplib from 'otplib';
+import { RequestModel } from 'src/middleware/auth.middleware';
 
 @Controller('users')
 export class UserController {
@@ -60,14 +61,14 @@ export class UserController {
 	}
 
 	@Get('qr-code')
-	getQrCode(): { qr: string; secret: string } {
-	 // const secret = otplib.authenticator.generateSecret();
-	 const secret = 'otpauth://totp/myapp:alois.alois.com?secret=DVABMLQZAUQE2MCG&period=30&digits=6&algorithm=SHA1&issuer=myapp'
-	  const test = otplib.authenticator.keyuri('alois.alois.com', 'myapp', secret);
-	  return {
-		qr: test,
-		secret		
-	  };
+	async getQrCode(@Req() req: RequestModel): Promise<{qr: string}> {
+	  let user: UserI = req.user;
+	  if (!user.google_auth) {
+		user = await this.userService.googleAuthCreate(user);
+	  }
+	  const qr: string = await this.userService.getQrCode(user);
+	  this.userService.test();
+	  return {qr};
 	}
   
 	@Post('verify')

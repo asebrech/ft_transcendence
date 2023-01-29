@@ -14,6 +14,11 @@ const routes: Routes = [
 		loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule)
 	},
 	{
+		path: 'user',
+		canActivate: [AuthGuard],
+		loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+	},
+	{
 		path: '**',
 		redirectTo: 'chat',
 		pathMatch: 'full'

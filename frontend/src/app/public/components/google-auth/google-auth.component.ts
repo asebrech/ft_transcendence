@@ -6,21 +6,12 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './google-auth.component.html',
   styleUrls: ['./google-auth.component.scss']
 })
-export class GoogleAuthComponent implements OnInit{
+export class GoogleAuthComponent {
 
-	qr: string;
-  secret: string;
-  token: string;
+	secret = 'CNYEE4ZBLBBAGTTH'
+	token: string;
 
   constructor(private http: HttpClient) { }
-
-  ngOnInit() {
-    this.http.get<{qr: string, secret: string}>('api/users/qr-code').subscribe(data => {
-		console.log(data.qr);
-      this.qr = data.qr;
-      this.secret = data.secret;
-    });
-  }
 
   onSubmit() {
     // Get the secret key from local storage or some other secure storage
