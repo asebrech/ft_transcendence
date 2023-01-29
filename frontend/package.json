@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
     "@auth0/angular-jwt": "^5.1.2",
+    "@jridgewell/sourcemap-codec": "^1.4.14",
     "@npmcli/fs": "^3.1.0",
     "angularx-qrcode": "^15.0.1",
     "ngx-socket-io": "^4.4.0",

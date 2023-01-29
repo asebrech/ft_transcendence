@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   # Our NestJS Api
   api:
@@ -43,7 +44,7 @@ services:
 
   # Our Postgres Database for NestJS to connect to
   postgres:
-    image: postgres
+    image: postgres:15.1
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -53,7 +54,7 @@ services:
 
   # The Postgres Admin tool if we want to run some custom queries and so on against our Database
   postgres_admin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:6.19
     depends_on: 
       - postgres
     environment:
