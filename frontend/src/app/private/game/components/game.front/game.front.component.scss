@@ -2,8 +2,10 @@
 // {
 //     box-sizing: border-box;
 // }
+
 #main-div
 {
+    background-color: #16072D;
     background-image: url("../../../../../assets/images/stars.png");
 }
 .row 
@@ -66,10 +68,12 @@
 
 .ball
 {
+    // --x: 42;
+    // --y: 44;
     position: absolute;
     background-color: white;
-    left: 42vw;
-    top: 42vh;
+    left: calc(42 * 1vw);
+    top: calc(44 * 1vh);
     width: 2.5vh;
     height: 2.5vh;
     border-radius: 50%;

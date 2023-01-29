@@ -6,7 +6,7 @@ const routes: Routes = [
 	{
 		path: 'spacepong',
 		component: GameFrontComponent
-	},
+	}
 ];
 
 @NgModule({

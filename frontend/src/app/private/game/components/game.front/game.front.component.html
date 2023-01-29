@@ -1,4 +1,4 @@
-<div id="main-div" class="row">
+<div (click)="start()" id="main-div" class="row">
 
     <div id="nav-side" class="col m1">
 
@@ -9,7 +9,7 @@
             <div id="player-score">0</div>
             <div id="computer-score">0</div>
         </div>
-        <div class="ball" id="Ball"></div>
+        <div class="ball" id="Ball" [@gameStart]="isShown ? 'open' : 'close' "></div>
         <div class="p_1 left" id="player-paddle"></div>
         <div class="p_2 right" id="computer-paddle"></div>
     </div>
