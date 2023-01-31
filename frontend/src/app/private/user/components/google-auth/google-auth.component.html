@@ -1,8 +1,9 @@
 <div *ngIf="qr">
 		<qrcode [qrdata]="qr"></qrcode>
+		<button (click)="disable2FA()">Disable 2FA</button>
 </div>
 
 <div *ngIf="!qr">
-	<button (click)="activate2FA()">Activer le 2FA</button>
+	<button (click)="enable2FA()">Enable 2FA</button>
 </div>
   

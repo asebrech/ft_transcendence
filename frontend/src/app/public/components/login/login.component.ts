@@ -23,9 +23,7 @@ export class LoginComponent {
 		this.authService.login({
 			email: this.email.value,
 			password: this.password.value
-		}).pipe(
-			tap(() => this.router.navigate(['../../private/chat/dashboard']))
-		).subscribe()
+		});
 	}
 
 	get email(): FormControl {

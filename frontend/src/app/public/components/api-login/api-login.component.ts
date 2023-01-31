@@ -28,11 +28,7 @@ export class ApiLoginComponent implements OnInit {
 		this.route.queryParams.subscribe(params => {
 		  this.code = params['code'];});
 		  if (this.code) {
-			this.authService.exchangeCodeForToken(this.code).pipe(
-				tap(token => this.authService.apiLogin(token).pipe(
-					tap(() => this.router.navigate(['../../private/chat/dashboard'], { replaceUrl: true }))
-				).subscribe())
-				).subscribe();
+			this.authService.exchangeCodeForToken(this.code);
 		  }
 	  }
 

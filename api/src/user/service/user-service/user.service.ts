@@ -5,12 +5,14 @@ import { AuthService } from 'src/auth/service/auth.service';
 import { UserEntity } from 'src/user/model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 import * as crypto from 'crypto'
-import * as otplib from 'otplib';
 
 
 @Injectable()
 export class UserService {
+
+	private sessions = new Map<string, UserI>();
 
 	constructor(
 		@InjectRepository(UserEntity)
@@ -35,14 +37,13 @@ export class UserService {
 
 	}
 
-	async login(user: UserI): Promise<string> {
+	async login(user: UserI): Promise<UserI> {
 		try {
 			const fondUser: UserI = await this.findByEmail(user.email.toLowerCase());
 			if (fondUser) {
 				const matches: boolean = await this.validatePassword(user.password, fondUser.password);
 				if (matches) {
-					const payload: UserI = await this.findOne(fondUser.id);
-					return this.authService.generateJwt(payload);
+					return fondUser;
 				} else {
 					throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
 				}
@@ -54,48 +55,76 @@ export class UserService {
 		}
 	}
 
-	async apiLoginHandle(apiUser: UserI): Promise<string> {
+	async apiLoginHandle(apiUser: UserI): Promise<UserI> {
 		const exists: boolean = await this.mailExists(apiUser.email);
 		if (!exists) {
 			const passwordHash: string = await this.hashPassword(this.generatePassword(12));
 			apiUser.password = passwordHash;
 			const user = await this.userRepository.save(this.userRepository.create(apiUser));
-			return this.apiLogin(user);
+			return user
 		} else {
-			return this.apiLogin(apiUser);
+			return apiUser;
 		}
 	}
 
 	async googleAuthCreate(user: UserI): Promise<UserI> {
 		const foundUser: UserI =  await this.findByEmail(user.email);
 		foundUser.google_auth = true;
-		//foundUser.google_auth_secret = this.authService.encrypteSecret(otplib.authenticator.generateSecret());
-		foundUser.google_auth_secret = otplib.authenticator.generateSecret();
+		foundUser.google_auth_secret = this.authService.encrypteSecret();
+		return this.userRepository.save(foundUser);
+	}
+
+	async googleAuthRemove(user: UserI): Promise<UserI> {
+		const foundUser: UserI =  await this.findByEmail(user.email);
+		foundUser.google_auth = false;
+		foundUser.google_auth_secret = null;
 		return this.userRepository.save(foundUser);
 	}
 
 	async getQrCode(user: UserI): Promise<string> {
-		//const secret: string = this.authService.decrypteSecret(user.google_auth_secret);
 		const foundUser: UserI =  await this.findByEmail(user.email);
-		Logger.log(foundUser.google_auth_secret);
-		return otplib.authenticator.keyuri(foundUser.email, 'spacepong', foundUser.google_auth_secret);
+		const secret: string = this.authService.decrypteSecret(foundUser.google_auth_secret);
+		return this.authService.getQrCodeKeyuri(foundUser, secret);
 	}
 
-	test() {
-		const secret = 'secret';
-		let ok = this.authService.encrypteSecret(secret);
+	async handleVerifyToken(token: string, sessionId: string): Promise<UserI> {
+		const session = this.getSession(sessionId);
+		if (!session) {
+			throw new HttpException('Login was not successful, invalid session', HttpStatus.UNAUTHORIZED);
+		}
+		const foundUser: UserI =  await this.findByEmail(session.email);
+		const check: boolean = this.authService.checkToken(foundUser, token);
+		if (check) {
+			return foundUser;
+		} else {
+			throw new HttpException('Login was not successful, invalid token', HttpStatus.UNAUTHORIZED);
+		}
 	}
+
+	async returnJwt(apiUser: UserI): Promise<string> {
+		const payload: UserI = await this.findOne(apiUser.id);
+		return this.authService.generateJwt(payload);
+	}
+
+	createSession(user: UserI): string {
+		const sessionToken: string = uuidv4();
+		this.sessions.set(sessionToken, user);
+		return sessionToken;
+	}
+
+	getSession(sessionToken): UserI {
+    return this.sessions.get(sessionToken);
+  }
+
+  deleteSession(sessionToken) {
+    this.sessions.delete(sessionToken);
+  }
 
 	private generatePassword(length: number) {
 		return crypto
 			.randomBytes(Math.ceil(length / 2))
 			.toString("hex")
 			.slice(0, length);
-	}
-
-	private async apiLogin(apiUser: UserI): Promise<string> {
-		const payload: UserI = await this.findOne(apiUser.id);
-		return this.authService.generateJwt(payload);
 	}
 
 	async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
@@ -112,7 +141,7 @@ export class UserService {
 
 	// also returns the password
 	private async findByEmail(email: string): Promise<UserI> {
-		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth_secret'] });
+		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth', 'google_auth_secret'] });
 	}
 
 	private async hashPassword(password: string): Promise<string> {

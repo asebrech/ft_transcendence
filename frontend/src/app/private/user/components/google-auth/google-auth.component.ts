@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-google-auth',
@@ -14,16 +15,21 @@ export class GoogleAuthComponent implements OnInit{
 
   ngOnInit() {
     this.http.get<{qr:string}>('api/users/qr-code').subscribe(data => {
-		console.log(data.qr);
       this.qr = data.qr;
     });
   }
 
-  activate2FA() {
-	this.http.get<{qr: string}>('api/users/qr-code').subscribe(data => {
-		console.log(data.qr);
-      this.qr = data.qr;
-    });
+  enable2FA() {
+	this.http.get('api/users/enable-2fa').pipe(tap(() => {
+		this.http.get<{qr: string}>('api/users/qr-code').subscribe(data => {
+		  this.qr = data.qr;
+		});
+	})).subscribe();
+  }
+
+  disable2FA() {
+	this.http.get('api/users/disable-2fa').subscribe();
+	this.qr = null;
   }
 
 }
