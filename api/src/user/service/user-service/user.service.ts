@@ -5,14 +5,10 @@ import { AuthService } from 'src/auth/service/auth.service';
 import { UserEntity } from 'src/user/model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
-import * as crypto from 'crypto'
-
 
 @Injectable()
 export class UserService {
 
-	private sessions = new Map<string, UserI>();
 
 	constructor(
 		@InjectRepository(UserEntity)
@@ -58,13 +54,11 @@ export class UserService {
 	async apiLoginHandle(apiUser: UserI): Promise<UserI> {
 		const exists: boolean = await this.mailExists(apiUser.email);
 		if (!exists) {
-			const passwordHash: string = await this.hashPassword(this.generatePassword(12));
+			const passwordHash: string = await this.hashPassword(this.authService.generatePassword(12));
 			apiUser.password = passwordHash;
 			const user = await this.userRepository.save(this.userRepository.create(apiUser));
-			return user
-		} else {
-			return apiUser;
 		}
+		return await this.findByEmail(apiUser.email);
 	}
 
 	async googleAuthCreate(user: UserI): Promise<UserI> {
@@ -88,13 +82,19 @@ export class UserService {
 	}
 
 	async handleVerifyToken(token: string, sessionId: string): Promise<UserI> {
-		const session = this.getSession(sessionId);
+		const session = this.authService.getSession(sessionId);
 		if (!session) {
 			throw new HttpException('Login was not successful, invalid session', HttpStatus.UNAUTHORIZED);
 		}
 		const foundUser: UserI =  await this.findByEmail(session.email);
+		if (!token)
+		{
+			this.authService.deleteSession(sessionId);
+			throw new HttpException('Session leaved', HttpStatus.NO_CONTENT);
+		}
 		const check: boolean = this.authService.checkToken(foundUser, token);
 		if (check) {
+			this.authService.deleteSession(sessionId);
 			return foundUser;
 		} else {
 			throw new HttpException('Login was not successful, invalid token', HttpStatus.UNAUTHORIZED);
@@ -104,27 +104,6 @@ export class UserService {
 	async returnJwt(apiUser: UserI): Promise<string> {
 		const payload: UserI = await this.findOne(apiUser.id);
 		return this.authService.generateJwt(payload);
-	}
-
-	createSession(user: UserI): string {
-		const sessionToken: string = uuidv4();
-		this.sessions.set(sessionToken, user);
-		return sessionToken;
-	}
-
-	getSession(sessionToken): UserI {
-    return this.sessions.get(sessionToken);
-  }
-
-  deleteSession(sessionToken) {
-    this.sessions.delete(sessionToken);
-  }
-
-	private generatePassword(length: number) {
-		return crypto
-			.randomBytes(Math.ceil(length / 2))
-			.toString("hex")
-			.slice(0, length);
 	}
 
 	async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
@@ -139,6 +118,10 @@ export class UserService {
 		})
 	}
 
+	returnSession(user: UserI): string {
+		return this.authService.createSession(user);
+	}
+	
 	// also returns the password
 	private async findByEmail(email: string): Promise<UserI> {
 		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth', 'google_auth_secret'] });

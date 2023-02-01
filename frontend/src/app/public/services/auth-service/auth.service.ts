@@ -36,11 +36,6 @@ export class AuthService {
 			this.router.navigate(['../../public/google-auth'], {queryParams: {session: response.session}});
 		}
 	});
-		// tap((res: LoginResponseI) => localStorage.setItem('access_token', res.access_token)),
-		// tap(() => this.snackbar.open('Login Successfull', 'Close', {
-		// 	duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'})),
-		// tap(() => this.router.navigate(['../../private/chat/dashboard']))
-		// );
   }
 
   exchangeCodeForToken(code: string): Observable<AccessTokenI> {

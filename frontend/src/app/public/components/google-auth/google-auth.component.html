@@ -1,8 +1,11 @@
 <form (ngSubmit)="onSubmit()">
 	<label>
 	  Token:
-	  <input type="text" [(ngModel)]="token" name="token">
+	  <input type="text" [(ngModel)]="token" name="token" #tokenInput="ngModel" required>
 	</label>
-	<button type="submit">Verify</button>
+	<div *ngIf="tokenInput.invalid && (tokenInput.dirty || tokenInput.touched)" class="alert alert-danger">
+	  Token is required
+	</div>
+	<button type="submit" [disabled]="tokenInput.invalid">Verify</button>
   </form>
   

@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserI } from 'src/user/model/user.interface';
+import { v4 as uuidv4 } from 'uuid';
 import * as otplib from 'otplib';
+
 
 
 const bcrypt = require('bcrypt');
@@ -14,10 +16,12 @@ const iv = Buffer.from('2f971f6e1f2c3615abd130ed8e0d64b9', "hex");
 @Injectable()
 export class AuthService {
 
-	constructor(private readonly jwtService : JwtService) {}
+	private sessions = new Map<string, UserI>();
+
+	constructor(private readonly jwtService: JwtService) { }
 
 	async generateJwt(user: UserI): Promise<string> {
-		return this.jwtService.signAsync({user});
+		return this.jwtService.signAsync({ user });
 	}
 
 	async hashPassword(password: string): Promise<string> {
@@ -53,9 +57,30 @@ export class AuthService {
 	getQrCodeKeyuri(user: UserI, secret: string): string {
 		return otplib.authenticator.keyuri(user.email, 'spacepong', secret);
 	}
-	
+
 	checkToken(user: UserI, token: string): boolean {
 		return otplib.authenticator.check(token, this.decrypteSecret(user.google_auth_secret));
+	}
+
+	createSession(user: UserI): string {
+		const sessionToken: string = uuidv4();
+		this.sessions.set(sessionToken, user);
+		return sessionToken;
+	}
+
+	getSession(sessionToken): UserI {
+		return this.sessions.get(sessionToken);
+	}
+
+	deleteSession(sessionToken) {
+		this.sessions.delete(sessionToken);
+	}
+
+	generatePassword(length: number) {
+		return crypto
+			.randomBytes(Math.ceil(length / 2))
+			.toString("hex")
+			.slice(0, length);
 	}
 
 }

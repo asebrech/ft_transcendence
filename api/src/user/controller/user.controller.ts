@@ -50,7 +50,7 @@ export class UserController {
 			}
 		}
 		else {
-			const sessionToken: string = this.userService.createSession(user);
+			const sessionToken: string = this.userService.returnSession(user);
 			return {session: sessionToken}
 		}
 	}
@@ -69,7 +69,7 @@ export class UserController {
 			}
 		}
 		else {
-			const sessionToken: string = this.userService.createSession(user);
+			const sessionToken: string = this.userService.returnSession(user);
 			return {session: sessionToken};
 		}
 	}
@@ -100,9 +100,6 @@ export class UserController {
   
 	@Post('verify')
 	async verifyToken(@Body() body: { token: string; session: string;}) {
-		if (!body.token) {
-			Logger.log("verufytoken")
-		}
 		const user: UserI = await this.userService.handleVerifyToken(body.token, body.session);
 		const jwt: string = await this.userService.returnJwt(user);
 		return {

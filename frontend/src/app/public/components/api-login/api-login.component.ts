@@ -28,7 +28,7 @@ export class ApiLoginComponent implements OnInit {
 		this.route.queryParams.subscribe(params => {
 		  this.code = params['code'];});
 		  if (this.code) {
-			this.authService.exchangeCodeForToken(this.code);
+			this.authService.exchangeCodeForToken(this.code).subscribe(token => this.authService.apiLogin(token));
 		  }
 	  }
 

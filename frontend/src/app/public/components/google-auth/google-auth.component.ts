@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, tap } from 'rxjs';
 import { AuthService } from '../../services/auth-service/auth.service';
 import { ActivatedRoute, Route } from '@angular/router';
@@ -10,7 +10,7 @@ import { LoginResponseI } from 'src/app/model/login-response';
   templateUrl: './google-auth.component.html',
   styleUrls: ['./google-auth.component.scss']
 })
-export class GoogleAuthComponent implements OnInit {;
+export class GoogleAuthComponent implements OnInit, OnDestroy{;
 
 	session: any;
 	token: string;
@@ -22,11 +22,14 @@ export class GoogleAuthComponent implements OnInit {;
   }
 
   onSubmit() {
-    // Get the secret key from local storage or some other secure storage
-    // Send a POST request to the server to verify the token
-	console.log(this.token);
     const response = this.http.post<LoginResponseI>('api/users/verify', { token: this.token, session: this.session.session});
 	this.authService.loginHandler(response);
+  }
+
+  ngOnDestroy() {
+	setTimeout(() => {
+		this.http.post<LoginResponseI>('api/users/verify', { token: null, session: this.session.session}).subscribe();
+	});
   }
 
 }
