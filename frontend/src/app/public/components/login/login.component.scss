@@ -1,31 +1,92 @@
+.nav_base
+{
+	background: #110720;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scroll-behavior: none;
+}
+
+
+
 .container {
 	display: flex;
-	justify-content: center;
+	justify-content:right;
 	margin: 100px;
 	min-width: 350px;
 
 	.register {
 		margin-bottom: 20px;
+		font-family: "nasalization";
+		color: white !important;
 	}
 
+
 	mat-card {
+		position: relative;
+		left: 100px;
+		background-color: #110720;
 		mat-card-content {
 			form {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
+			color: #110720;
 
 				mat-form-field {
 					width: 100%;
 					min-width: 300px;
+					.matInput {
+						background-color: #110720;
+					}
 				}
-
 				.button {
 					display: flex;
-					justify-content: flex-end;
+					justify-content: center;
+					
 				}
 			}
 		}
+		mat-hint {
+			color: white;
+		}
+		.register {
+			padding-top: 5%;
+			text-align: center;
+		}
+		.astronaut_white_user_def {
+			padding-bottom: 10%;
+			width: 40%;
+			align-self: center;		
+		}
+		button {
+			color:white;
+			text-align: center;
+			font-family: "nasalization";
+		}
 	}
-	
 }
+
+.nasa-font
+{
+	font-family: "nasalization";
+	color: white !important;
+}
+.logo-title
+{
+	position: relative;
+	left: -300px;
+	display:flex;
+	flex-direction: row;
+	align-items: center;
+	width: 50%;
+}
+
+.rocket
+{
+	width: 10%;
+	z-index: +1;
+	rotate: 45deg;
+}
+
