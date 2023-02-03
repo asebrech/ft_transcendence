@@ -1,92 +1,95 @@
 .nav_base
 {
-	background: #110720;
-    width: 100%;
+    width: 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
     scroll-behavior: none;
-}
-
-
-
-.container {
-	display: flex;
-	justify-content:right;
-	margin: 100px;
-	min-width: 350px;
-
-	.register {
-		margin-bottom: 20px;
+	.nasa-font
+	{
 		font-family: "nasalization";
 		color: white !important;
+		font-size: 200%;
+
 	}
-
-
-	mat-card {
+	.logo-title
+	{
 		position: relative;
-		left: 100px;
-		background-color: #110720;
-		mat-card-content {
-			form {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			color: #110720;
+		align-items:flex-end;
+		align-content: center;
+		align-self:flex-start;
+		padding: 10px;
 
-				mat-form-field {
-					width: 100%;
-					min-width: 300px;
-					.matInput {
-						background-color: #110720;
-					}
-				}
-				.button {
-					display: flex;
-					justify-content: center;
-					
-				}
-			}
-		}
-		mat-hint {
-			color: white;
-		}
-		.register {
-			padding-top: 5%;
-			text-align: center;
-		}
-		.astronaut_white_user_def {
-			padding-bottom: 10%;
-			width: 40%;
-			align-self: center;		
-		}
-		button {
-			color:white;
-			text-align: center;
-			font-family: "nasalization";
-		}
 	}
 }
 
-.nasa-font
-{
+.container {
+	background-color:#110720;
+	width: 45%;
+	align-self: right;
+	margin-right: 0px;
+	padding-top: 100px;
+}
+
+.astronaut {
+	align-self: center;
+	padding-bottom: 10%;
+	width: 30%;
+}
+
+.general {
+	height: 100vh;
+	background-color: #110720;
+}
+
+.form{
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	input {
+		align-self: center;
+		background-color: #110720;
+		font-family: "nasalization";
+		text-indent: 10%;
+		border-style: solid;
+		border-color: white;
+		border-radius: 50px;
+		border-width: 1px;
+		max-inline-size: fit-content;
+		color: white;
+		padding-bottom: 5px;
+		
+	}
+}
+
+
+button {
+	color: white;
+	max-inline-size: fit-content;
+	background-color: #110720;
 	font-family: "nasalization";
-	color: white !important;
-}
-.logo-title
-{
-	position: relative;
-	left: -300px;
-	display:flex;
-	flex-direction: row;
-	align-items: center;
-	width: 50%;
+	font-style:normal;
+	align-self: center;
+	margin-top: 5px;
 }
 
-.rocket
-{
-	width: 10%;
-	z-index: +1;
-	rotate: 45deg;
+app-api-login {
+
 }
 
+p {
+	align-self: center;
+	color: red;
+}
+
+row {
+
+	display: flex;
+	margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    justify-content: space-between;
+	.rocket {
+		width: 30%;
+	}
+}
