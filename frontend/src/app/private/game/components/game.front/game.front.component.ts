@@ -1,67 +1,91 @@
-import { Component, OnInit, HostListener, ElementRef , ViewChild, Renderer2, AfterViewInit} from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BallService } from '../../services/ball/ball.service';
-// Animation of the ball
-const gameStart = trigger('gameStart', [
-  state('open', style({
-    left : 'calc(42 * 1vw)',
-  })),
-  state('close', style({
-    left : "calc(44 * 1vw)",
-  })),
-  transition('open => close', [animate('10s')]),
-  transition('close => open', [animate('0s')]),
-]);
-//
+import { Component, OnInit} from '@angular/core';
+import * as Phaser from 'phaser';
+
+class NewScene extends Phaser.Scene {
+  green: any;
+  blue: any;
+  greenKeys: any;
+  blueKeys: any;
+
+  constructor() {
+    super({ key: 'new' });
+  }
+
+  preload() {
+    this.load.setBaseURL('');
+    this.load.image('blueBox', './Green.PNG');
+    this.load.image('greenBox', './Solid_blue.png');
+  }
+
+  create() {
+    this.blue = this.physics.add.image(100, 100, 'blueBox').setCollideWorldBounds(true);
+    this.green = this.physics.add.image(300, 340, 'greenBox').setCollideWorldBounds(true);
+
+    this.greenKeys = this.input.keyboard.createCursorKeys();
+    this.blueKeys = this.input.keyboard.addKeys('a,s,d,w');
+
+    this.physics.add.collider(this.green, this.blue, null);
+  }
+
+  override update() {
+    if (this.blueKeys.a.isDown) {
+      this.blue.setVelocityX(-200);
+    } else if (this.blueKeys.d.isDown) {
+      this.blue.setVelocityX(200);
+    } else if (this.blueKeys.w.isDown) {
+      this.blue.setVelocityY(-200);
+    } else if (this.blueKeys.s.isDown) {
+      this.blue.setVelocityY(200);
+    } else if (!this.blue.triggered) {
+      this.blue.setVelocity(0);
+    }
+
+    if (this.greenKeys.left.isDown) {
+      this.green.setVelocityX(-200);
+    } else if (this.greenKeys.right.isDown) {
+      this.green.setVelocityX(200);
+    } else if (this.greenKeys.up.isDown) {
+      this.green.setVelocityY(-200);
+    } else if (this.greenKeys.down.isDown) {
+      this.green.setVelocityY(200);
+    } else if (!this.green.triggered) {
+      this.green.setVelocity(0);
+    }
+  }
+}
 
 @Component({
   selector: 'app-game.front',
   templateUrl: './game.front.component.html',
   styleUrls: ['./game.front.component.scss'],
-  animations: [gameStart]
 })
 
-export class GameFrontComponent implements AfterViewInit
-{
-  constructor(private renderer: Renderer2) 
-  {
-    
+export class GameFrontComponent implements OnInit {
+  phaserGame: Phaser.Game;
+  config: Phaser.Types.Core.GameConfig;
+
+  constructor() {
+    this.config = {
+      type: Phaser.AUTO,
+      scene: [ NewScene ],
+      scale: {
+        mode: Phaser.Scale.FIT,
+        parent: 'gameContainer',
+        height: 600,
+        width: 600
+      },
+      physics: {
+        default: 'arcade',
+        arcade: {
+          gravity: { y: 0 }
+        }
+      }
+    };
   }
-  ball : BallService = new BallService(document.querySelector('Ball'));
-  //--------------//
-  isShown = false;
-  start(): void {
-    this.isShown = !this.isShown;
-  }
-  //--------------//
 
-  //--------------//
-  @ViewChild('pad', { static: true }) pad: ElementRef | any;
-  player_pad : string = ".p_2.right"
-  //--------------//
-
-  ngAfterViewInit() 
+  ngOnInit() 
   {
-    this.pad = document.querySelector(this.player_pad);    
-  }
-
-  //--------------//
-  value: number = 42;
-
-  @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) 
-  {
-    if (event.key === 'ArrowUp') 
-    {
-      this.value -= 1;
-      this.renderer.setStyle(this.pad, 'top', this.value.toString()+'vh');    
-    
-    }
-    if (event.key === 'ArrowDown') 
-    {
-      this.value += 1;
-      this.renderer.setStyle(this.pad, 'top', this.value.toString()+'vh');    
-    }
+    this.phaserGame = new Phaser.Game(this.config);
   }
 
 }
