@@ -9,6 +9,7 @@ import { LoginResponseI } from '../model/login-response.interface';
 import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
 import * as otplib from 'otplib';
+import { MetadataWithSuchNameAlreadyExistsError } from 'typeorm';
 
 @Controller('users')
 export class UserController {
@@ -73,6 +74,11 @@ export class UserController {
 	@Post('verify')
 	verifyToken(@Body() body: { token: string; secret: string }): boolean {
 	  return otplib.authenticator.check(body.token, body.secret);
+	}
+
+	@Get('check-email')
+	async checkEmail(@Query('mail') mail :string ) : Promise<boolean> {
+		return this.userService.checkEmail(mail);
 	}
 
 }

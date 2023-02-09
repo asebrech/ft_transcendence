@@ -1,30 +1,27 @@
 .nav_base
 {
-    width: 25%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    scroll-behavior: none;
+	width: 25%;
+	height: 20%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	.nasa-font
 	{
 		font-family: "nasalization";
 		color: white !important;
 		font-size: 200%;
-
 	}
 	.logo-title
 	{
 		position: relative;
-		align-items:flex-end;
-		align-content: center;
 		align-self:flex-start;
 		padding: 10px;
-
 	}
 }
 
 .container {
 	background-color:#110720;
+	display: grid;
 	width: 45%;
 	align-self: right;
 	margin-right: 0px;
@@ -34,18 +31,19 @@
 .astronaut {
 	align-self: center;
 	padding-bottom: 10%;
-	width: 30%;
+	width: 50%;
 }
 
 .general {
 	height: 100vh;
 	background-color: #110720;
+	display: flex;
 }
 
 .form{
 	display: flex;
 	flex-direction: column;
-	align-content: center;
+	justify-content: center;
 	input {
 		align-self: center;
 		background-color: #110720;
@@ -73,23 +71,22 @@ button {
 	margin-top: 5px;
 }
 
-app-api-login {
-
-}
-
 p {
 	align-self: center;
 	color: red;
 }
 
-row {
-
+.img {
 	display: flex;
-	margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
-    justify-content: space-between;
-	.rocket {
-		width: 30%;
-	}
+	margin-block-start: auto;
+	height: 50%;
+	width: 50%;
+	justify-content: left;
+}
+
+app-api-login {
+	justify-self: center;
+}
+
+pwd-submit {
 }

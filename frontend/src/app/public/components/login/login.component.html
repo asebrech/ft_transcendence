@@ -5,22 +5,25 @@
 			<a href="#" class="nasa-font">SPACE PONG</a>
 		</div>
 	</div>
-	<div class = "container" >
-		<div class="form" [formGroup]="form" (ngSubmit)="login()">
-			<!-- <div class="register">
-				<a [routerLink]="['../register']">Go to Register</a>
-			</div> -->
-			<img href="#" class="astronaut" src="../../../../assets/images/astronaut_white_user_def.png" alt="rocket">
-			<input type="email" placeholder="EMAIL" formControlName="email">
-			<p *ngIf="email.touched && email.hasError('required')">Email is required</p>
-			<p *ngIf="email.touched && email.hasError('email')">Email must be valid</p> -->
-			<input type="password" placeholder="PASSWORD" formControlName="password">
-			<p *ngIf="password.touched && password.hasError('required')">Password is required</p>
-			<button (click)="login()" type="submit" [disabled]="!form.valid">login or signin</button>
-		</div>
-		<app-api-login></app-api-login>
-	</div>
-	<div class="row">	
+	<div class="img">
 		<img href="#" class="rocket"  src="../../../../assets/images/rocket.png" alt="rocket">
+	</div>
+	<div class = "container">
+		<div class="form" [formGroup]="form" (ngSubmit)="login()">
+			<img href="#" class="astronaut" src="../../../../assets/images/astronaut_white_user_def.png" alt="rocket">
+			<input type="email" placeholder="EMAIL" formControlName="email" [(ngModel)]="mail">
+			<p *ngIf="email.touched && email.hasError('required')">Email is required</p>
+			<p *ngIf="email.touched && email.hasError('email')">Email must be valid</p>
+			<button
+			type="submit"
+			(click)="checkEmail(mail)"
+			*ngIf="!showPasswordField">
+			login or signin
+			</button>
+			<input [hidden]="!showPasswordField" [@testAnimation]="showPasswordField" type="password" placeholder="PASSWORD" formControlName="password">
+			<p *ngIf="password.touched && password.hasError('required')">Password is required</p>
+			<button *ngIf="showPasswordField" type="submit" (click)="login()">LOGIN</button>
+		</div>
+	<app-api-login></app-api-login>
 	</div>
 </div>
