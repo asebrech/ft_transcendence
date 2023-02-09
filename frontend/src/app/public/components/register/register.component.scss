@@ -1,42 +1,115 @@
 .nav_base
 {
-	background: #110720;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    scroll-behavior: none;
+	width: 25%;
+	height: 20%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	.nasa-font
+	{
+		font-family: "nasalization";
+		color: white !important;
+		font-size: 200%;
+	}
+	.logo-title
+	{
+		position: relative;
+		align-self:flex-start;
+		padding: 10px;
+	}
+}
+
+.container {
+	background-color:#110720;
+	display: grid;
+	width: 45%;
+	align-self: right;
+	margin-right: 0px;
+	padding-top: 100px;
+}
+
+.astronaut {
+	align-self: center;
+	padding-bottom: 10%;
+	width: 50%;
+}
+
+.general {
+	height: 100vh;
+	background-color: #110720;
+	display: flex;
+}
+
+.form{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	input {
+		align-self: center;
+		background-color: #110720;
+		font-family: "nasalization";
+		text-indent: 10%;
+		border-style: solid;
+		border-color: white;
+		border-radius: 50px;
+		border-width: 1px;
+		max-inline-size: fit-content;
+		color: white;
+		padding-bottom: 5px;
+		
+	}
 }
 
 
-.container {
+button {
+	color: white;
+	max-inline-size: fit-content;
+	background-color: #110720;
+	font-family: "nasalization";
+	font-style:normal;
+	align-self: center;
+	margin-top: 5px;
+}
+
+p {
+	align-self: center;
+	color: red;
+}
+
+.img {
 	display: flex;
+	margin-block-start: auto;
+	height: 50%;
+	width: 50%;
+	justify-content: left;
+}
+
+app-api-login {
+	justify-self: center;
+}
+
+
+mat-card {
+	display: flex;
+	background-color: #110720;
 	justify-content: center;
-	margin: 100px;
-	min-width: 350px;
+	margin-block-start: auto;
+	margin-right: 100px;
+	mat-card-content {
+		form {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 
-	.login {
-		margin-bottom: 20px;
-	}
+			mat-form-field {
+				width: 100%;
+				min-width: 300px;
+			}
 
-	mat-card {
-		mat-card-content {
-			form {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-
-				mat-form-field {
-					width: 100%;
-					min-width: 300px;
-				}
-
-				.button {
-					display: flex;
-					justify-content: flex-end;
-				}
+			.button {
+				display: flex;
+				justify-content: flex-end;
 			}
 		}
 	}
-	
 }
