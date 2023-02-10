@@ -7,6 +7,7 @@ import { Observable, Subject, tap } from 'rxjs';
 import { AccessTokenI } from 'src/app/model/access-token.interface';
 import { LoginResponseI } from 'src/app/model/login-response';
 import { UserI } from 'src/app/model/user.interface';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -41,10 +42,10 @@ export class AuthService {
   exchangeCodeForToken(code: string): Observable<AccessTokenI> {
 	const body = {
 	  code: code,
-	  client_id: 'u-s4t2ud-555dc7231ce9896ca6b978542a200be75b8ddd2b1569e6621355172e4c6ec0e2',
-	  client_secret: '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',
-	  grant_type: 'authorization_code',
-	  redirect_uri: 'http://localhost:4200/public/login'
+	  client_id: environment.CLIENT_ID,
+	  client_secret: environment.CLIENT_SECRET,
+	  grant_type: environment.GRANT_TYPE,
+	  redirect_uri: environment.REDIRECT_URI
 	};
 
 	return this.http.post<AccessTokenI>('https://api.intra.42.fr/oauth/token', body);

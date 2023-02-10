@@ -37,6 +37,13 @@ services:
     volumes:
       - ./frontend:/ft_transcendence/frontend/src/app
       - /ft_transcendence/frontend/src/app/node_modules
+    env_file:
+      - .env
+    environment:
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      REDIRECT_URI: ${REDIRECT_URI}
+      GRANT_TYPE: ${GRANT_TYPE}
     ports:
       - 4200:4200
     links:
