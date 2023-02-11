@@ -7,9 +7,11 @@
 	align-items: center;
 	.nasa-font
 	{
+		display: flex;
 		font-family: "nasalization";
 		color: white !important;
 		font-size: 200%;
+		width: max-content;
 	}
 	.logo-title
 	{
@@ -40,7 +42,7 @@
 	display: flex;
 }
 
-.form{
+form{
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -49,26 +51,15 @@
 		background-color: #110720;
 		font-family: "nasalization";
 		text-indent: 10%;
+		width: 10cm;
 		border-style: solid;
 		border-color: white;
 		border-radius: 50px;
 		border-width: 1px;
-		max-inline-size: fit-content;
 		color: white;
 		padding-bottom: 5px;
-		
+		margin-block: 15px;
 	}
-}
-
-
-button {
-	color: white;
-	max-inline-size: fit-content;
-	background-color: #110720;
-	font-family: "nasalization";
-	font-style:normal;
-	align-self: center;
-	margin-top: 5px;
 }
 
 p {
@@ -82,6 +73,7 @@ p {
 	height: 50%;
 	width: 50%;
 	justify-content: left;
+	margin-right: 20%;
 }
 
 app-api-login {
@@ -93,22 +85,43 @@ mat-card {
 	display: flex;
 	background-color: #110720;
 	justify-content: center;
-	margin-block-start: auto;
 	margin-right: 100px;
+
+	mat-card-title {
+		color: white;
+		font-family: "nasalization";
+		align-self: center;
+	}
 	mat-card-content {
 		form {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-
 			mat-form-field {
 				width: 100%;
 				min-width: 300px;
 			}
-
 			.button {
 				display: flex;
 				justify-content: flex-end;
+			}
+			mat-error {
+				padding-top: 5px;
+				padding-bottom: 5px;
+			}
+			mat-hint {
+				color: white;
+				justify-content: center;
+			}
+
+			button {
+				color: white;
+				max-inline-size: fit-content;
+				background-color: #110720;
+				font-family: "nasalization";
+				font-style:normal;
+				align-self: center;
+				margin-top: 5px;
 			}
 		}
 	}
