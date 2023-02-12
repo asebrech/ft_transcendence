@@ -29,8 +29,15 @@ class NewScene extends Phaser.Scene
   }
 
    getRandomInt(min : number, max: number) {
+    let ret_min = min;
+    let ret_max = max;
     min = Math.ceil(min);
     max = Math.floor(max);
+    if ((Math.floor(Math.random() * (max - min)) + min) <= 300 && (Math.floor(Math.random() * (max - min)) + min) < -300)
+    {
+      this.getRandomInt(ret_min, ret_max);
+    }
+    console.log(Math.floor(Math.random() * (max - min)) + min)
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
@@ -47,7 +54,7 @@ class NewScene extends Phaser.Scene
   }
 
   create() {
-    this.ball_velocity = this.getRandomInt(-200, 200);
+    this.ball_velocity = this.getRandomInt(-400, 600);
     this.score = this.add.text(850 / 2, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'});
 
     this.wall_bottom = this.add.rectangle(950 / 2, 699, 950, 10 , 0xff0000);
@@ -58,7 +65,7 @@ class NewScene extends Phaser.Scene
     
     // Ball config
     this.ball = this.physics.add.image(950 / 2, 694 / 2, 'ball').setCollideWorldBounds(false);
-    this.ball.setVelocityX(-200, 15);
+    this.ball.setVelocity(this.ball_velocity, 1000);
     this.ball.scale = 0.03;
     this.ball.body.setBounce(1,1);
     //
@@ -133,7 +140,7 @@ export class GameFrontComponent implements OnInit {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { y: 0 }
+          gravity: {y : 0, x: 0 }
         }
       }
     };
