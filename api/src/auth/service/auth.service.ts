@@ -4,14 +4,12 @@ import { UserI } from 'src/user/model/user.interface';
 import { v4 as uuidv4 } from 'uuid';
 import * as otplib from 'otplib';
 
-
-
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
-const algorithm = 'aes-256-ctr';
-const password = Buffer.from('2f971f6e1f2c3615abd130ed8e0d64b973a45aa9b50e671406a0e37ad7b52d10', "hex");
-const iv = Buffer.from('2f971f6e1f2c3615abd130ed8e0d64b9', "hex");
+const algorithm = process.env.ALGORITHM;
+const password = Buffer.from(process.env.ENCRYPT_PASS, "hex");
+const iv = Buffer.from(process.env.IV, "hex");
 
 @Injectable()
 export class AuthService {
@@ -36,8 +34,7 @@ export class AuthService {
 		return this.jwtService.verifyAsync(jwt);
 	}
 
-	encrypteSecret(): string {
-		const secret: string = otplib.authenticator.generateSecret();
+	encrypteSecret(secret: string): string {
 		const cipher = crypto.createCipheriv(algorithm, password, iv);
 		let crypted = cipher.update(secret, 'utf8', 'hex');
 		crypted += cipher.final('hex');
@@ -52,6 +49,10 @@ export class AuthService {
 		let dec = decipher.update(crypted, 'hex', 'utf8');
 		dec += decipher.final('utf8');
 		return dec;
+	}
+
+	genrateSecret(): string {
+		return otplib.authenticator.generateSecret();	
 	}
 
 	getQrCodeKeyuri(user: UserI, secret: string): string {

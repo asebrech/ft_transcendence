@@ -24,7 +24,10 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       NODE_ENV: ${NODE_ENV}
       JWT_SECRET: ${JWT_SECRET}
-      PORT: 3000
+      PORT: ${PORT}
+      ENCRYPT_PASS: ${ENCRYPT_PASS}
+      ALGORITHM: ${ALGORITHM}
+      IV: ${IV}
     ports:
       - 3000:3000
       - 9229:9229

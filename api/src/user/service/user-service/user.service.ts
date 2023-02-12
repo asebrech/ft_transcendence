@@ -64,7 +64,7 @@ export class UserService {
 	async googleAuthCreate(user: UserI): Promise<UserI> {
 		const foundUser: UserI =  await this.findByEmail(user.email);
 		foundUser.google_auth = true;
-		foundUser.google_auth_secret = this.authService.encrypteSecret();
+		foundUser.google_auth_secret = this.authService.encrypteSecret(this.authService.genrateSecret());
 		return this.userRepository.save(foundUser);
 	}
 
