@@ -9,8 +9,8 @@ const environment = argv.environment;
 const isProduction = environment === 'prod';
 
 const targetPath = isProduction
-   ? `./src/environment.prod.ts`
-   : `./src/environment.ts`;
+   ? `./src/environments/environment.prod.ts`
+   : `./src/environments/environment.ts`;
 
 // we have access to our environment variables
 // in the process.env object thanks to dotenv

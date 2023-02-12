@@ -7,7 +7,7 @@ import { Observable, Subject, tap } from 'rxjs';
 import { AccessTokenI } from 'src/app/model/access-token.interface';
 import { LoginResponseI } from 'src/app/model/login-response';
 import { UserI } from 'src/app/model/user.interface';
-import { environment } from 'src/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
