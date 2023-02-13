@@ -11,7 +11,7 @@ import { GameFrontComponent } from './components/game.front/game.front.component
   ],
   imports: [
     CommonModule,
-    GameRoutingModule
+    GameRoutingModule,
   ]
 })
 export class GameModule { }
