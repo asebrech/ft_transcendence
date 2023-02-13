@@ -10,6 +10,7 @@ import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
 import { RequestModel } from 'src/middleware/auth.middleware';
 
+
 @Controller('users')
 export class UserController {
 
@@ -107,6 +108,11 @@ export class UserController {
 			token_type: 'JWT',
 			expires_in: 10000
 		}
+	}
+
+	@Get('check-email')
+	async checkEmail(@Query('mail') mail :string ) : Promise<boolean> {
+		return this.userService.checkEmail(mail);
 	}
 
 }

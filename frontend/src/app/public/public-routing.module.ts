@@ -11,12 +11,12 @@ const routes: Routes = [
 		component: HomeComponent
 	},
 	{
-		path: 'login',
-		component: LoginComponent
+		path: 'register', 
+		component : RegisterComponent
 	},
 	{
-		path: 'register',
-		component: RegisterComponent
+		path: 'login',
+		component: LoginComponent
 	},
 	{
 		path: 'google-auth',
@@ -34,3 +34,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class PublicRoutingModule { }
+

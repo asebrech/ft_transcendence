@@ -1,31 +1,128 @@
-.container {
+.nav_base
+{
+	width: 25%;
+	height: 20%;
 	display: flex;
-	justify-content: center;
-	margin: 100px;
-	min-width: 350px;
-
-	.login {
-		margin-bottom: 20px;
+	flex-direction: column;
+	align-items: center;
+	.nasa-font
+	{
+		display: flex;
+		font-family: "nasalization";
+		color: white !important;
+		font-size: 200%;
+		width: max-content;
 	}
+	.logo-title
+	{
+		position: relative;
+		align-self:flex-start;
+		padding: 10px;
+	}
+}
 
-	mat-card {
-		mat-card-content {
-			form {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
+.container {
+	background-color:#110720;
+	display: grid;
+	width: 45%;
+	align-self: right;
+	margin-right: 0px;
+	padding-top: 100px;
+}
 
-				mat-form-field {
-					width: 100%;
-					min-width: 300px;
-				}
+.astronaut {
+	align-self: center;
+	padding-bottom: 10%;
+	width: 50%;
+}
 
-				.button {
-					display: flex;
-					justify-content: flex-end;
-				}
+.general {
+	height: 100vh;
+	background-color: #110720;
+	display: flex;
+}
+
+form{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	input {
+		align-self: center;
+		background-color: #110720;
+		font-family: "nasalization";
+		text-indent: 10%;
+		width: 10cm;
+		border-style: solid;
+		border-color: white;
+		border-radius: 50px;
+		border-width: 1px;
+		color: white;
+		padding-bottom: 5px;
+		margin-block: 15px;
+	}
+}
+
+p {
+	align-self: center;
+	color: red;
+}
+
+.img {
+	display: flex;
+	margin-block-start: auto;
+	height: 50%;
+	width: 50%;
+	justify-content: left;
+	margin-right: 20%;
+}
+
+app-api-login {
+	justify-self: center;
+}
+
+
+mat-card {
+	display: flex;
+	background-color: #110720;
+	justify-content: center;
+	margin-right: 100px;
+
+	mat-card-title {
+		color: white;
+		font-family: "nasalization";
+		align-self: center;
+	}
+	mat-card-content {
+		form {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+			mat-form-field {
+				width: 100%;
+				min-width: 300px;
+			}
+			.button {
+				display: flex;
+				justify-content: flex-end;
+			}
+			mat-error {
+				padding-top: 5px;
+				padding-bottom: 5px;
+			}
+			mat-hint {
+				color: white;
+				justify-content: center;
+			}
+
+			button {
+				color: white;
+				max-inline-size: fit-content;
+				background-color: #110720;
+				font-family: "nasalization";
+				font-style:normal;
+				align-self: center;
+				margin-top: 5px;
 			}
 		}
 	}
-	
 }

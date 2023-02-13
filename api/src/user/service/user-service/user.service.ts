@@ -30,7 +30,6 @@ export class UserService {
 		} catch {
 			throw new HttpException('Email is already in use', HttpStatus.CONFLICT);
 		}
-
 	}
 
 	async login(user: UserI): Promise<UserI> {
@@ -122,6 +121,10 @@ export class UserService {
 		return this.authService.createSession(user);
 	}
 	
+	async checkEmail(mail: string) : Promise<boolean> {
+		return this.mailExists(mail);
+	}
+
 	// also returns the password
 	private async findByEmail(email: string): Promise<UserI> {
 		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth', 'google_auth_secret'] });
@@ -151,5 +154,4 @@ export class UserService {
 			return false;
 		}
 	}
-
 }

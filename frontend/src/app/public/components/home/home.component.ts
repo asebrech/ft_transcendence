@@ -11,5 +11,4 @@ export class HomeComponent {
 	test(){
 		console.log('test');
 	}
-  
 }
