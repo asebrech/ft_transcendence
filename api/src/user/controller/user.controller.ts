@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
@@ -8,7 +8,7 @@ import { LoginUserDto } from '../model/dto/login-user.dto';
 import { LoginResponseI } from '../model/login-response.interface';
 import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
-import * as otplib from 'otplib';
+import { RequestModel } from 'src/middleware/auth.middleware';
 
 @Controller('users')
 export class UserController {
@@ -39,40 +39,74 @@ export class UserController {
 	@Post('login')
 	async login(@Body() loginUserDto: LoginUserDto): Promise<LoginResponseI> {
 		const userEntity: UserI = this.userHelperService.loginUserDtoToEntity(loginUserDto);
-		const jwt: string = await this.userService.login(userEntity);
-		return {
-			access_token: jwt,
-			token_type: 'JWT',
-			expires_in: 10000
-		};
+		const user: UserI = await this.userService.login(userEntity);
+		const jwt: string = await this.userService.returnJwt(user);
+		if (!user.google_auth) {
+			const jwt: string = await this.userService.returnJwt(user);
+			return {
+				access_token: jwt,
+				token_type: 'JWT',
+				expires_in: 10000
+			}
+		}
+		else {
+			const sessionToken: string = this.userService.returnSession(user);
+			return {session: sessionToken}
+		}
 	}
 
 	@Post('api-login')
-	async apiLogin(@Body() accessTokenDto: AccessTokenDto) {
+	async apiLogin(@Body() accessTokenDto: AccessTokenDto): Promise<LoginResponseI>{
 		const accessToken: AccessTokenI = this.userHelperService.accessTokenDtoToEntity(accessTokenDto);
-		const user: UserI = await this.userHelperService.getDataFromApi(accessToken.access_token);
-		const jwt: string = await this.userService.apiLoginHandle(user);
+		const userApi: UserI = await this.userHelperService.getDataFromApi(accessToken.access_token);
+		const user : UserI = await this.userService.apiLoginHandle(userApi);
+		if (!user.google_auth) {
+			const jwt: string = await this.userService.returnJwt(user);
+			return {
+				access_token: jwt,
+				token_type: 'JWT',
+				expires_in: 10000
+			}
+		}
+		else {
+			const sessionToken: string = this.userService.returnSession(user);
+			return {session: sessionToken};
+		}
+	}
+
+	@Get('enable-2fa')
+	async enable2FA(@Req() req: RequestModel) {
+	  let user: UserI = req.user;
+	  user = await this.userService.googleAuthCreate(user);
+	}
+
+	@Get('disable-2fa')
+	async disable2FA(@Req() req: RequestModel) {
+	  let user: UserI = req.user;
+	  user = await this.userService.googleAuthRemove(user);
+	}
+
+	@Get('qr-code')
+	async getQrCode(@Req() req: RequestModel): Promise<{qr: string}> {
+	  let user: UserI = req.user;
+	  if (user.google_auth) {
+		const qr: string = await this.userService.getQrCode(user);
+		return {qr};
+	  }
+	  else {
+		return {qr: null};
+	  }
+	}
+  
+	@Post('verify')
+	async verifyToken(@Body() body: { token: string; session: string;}) {
+		const user: UserI = await this.userService.handleVerifyToken(body.token, body.session);
+		const jwt: string = await this.userService.returnJwt(user);
 		return {
 			access_token: jwt,
 			token_type: 'JWT',
 			expires_in: 10000
 		}
-	}
-
-	@Get('qr-code')
-	getQrCode(): { qr: string; secret: string } {
-	 // const secret = otplib.authenticator.generateSecret();
-	 const secret = 'otpauth://totp/myapp:alois.alois.com?secret=DVABMLQZAUQE2MCG&period=30&digits=6&algorithm=SHA1&issuer=myapp'
-	  const test = otplib.authenticator.keyuri('alois.alois.com', 'myapp', secret);
-	  return {
-		qr: test,
-		secret		
-	  };
-	}
-  
-	@Post('verify')
-	verifyToken(@Body() body: { token: string; secret: string }): boolean {
-	  return otplib.authenticator.check(body.token, body.secret);
 	}
 
 }

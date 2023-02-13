@@ -14,7 +14,6 @@ import {MatCardModule} from '@angular/material/card';
 import { ApiLoginComponent } from './components/api-login/api-login.component';
 import { GoogleAuthComponent } from './components/google-auth/google-auth.component'; 
 import { FormsModule } from '@angular/forms';
-import { QRCodeModule } from 'angularx-qrcode';
 import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
@@ -34,8 +33,7 @@ import { HomeComponent } from './components/home/home.component';
 	MatInputModule,
 	MatButtonModule,
 	MatCardModule,
-	FormsModule,
-	QRCodeModule
+	FormsModule
   ]
 })
 export class PublicModule { }

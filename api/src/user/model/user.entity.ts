@@ -18,6 +18,12 @@ export class UserEntity {
 
 	@Column({select: false})
 	password: string;
+
+	@Column({default: false})
+	google_auth: boolean;
+
+	@Column({select: false, default: null})
+	google_auth_secret: string;
 	
 	@ManyToMany(() => RoomEntity, room => room.users)
 	rooms: RoomEntity[];

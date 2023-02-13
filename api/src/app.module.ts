@@ -32,7 +32,6 @@ export class AppModule implements NestModule {
 			{path: '/api/users', method: RequestMethod.POST},
 			{path: '/api/users/login', method: RequestMethod.POST},
 			{path: '/api/users/api-login', method: RequestMethod.POST},
-			{path: '/api/users/qr-code', method: RequestMethod.GET},
 			{path: '/api/users/verify', method: RequestMethod.POST}
 		)
 		.forRoutes('')

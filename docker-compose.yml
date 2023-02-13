@@ -18,11 +18,16 @@ services:
     command: npm run start:debug
     depends_on: 
       - postgres
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgres://user:password@postgres:5432/db
-      NODE_ENV: development
-      JWT_SECRET: hard_to_guess_secret_123
-      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: ${NODE_ENV}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: ${PORT}
+      ENCRYPT_PASS: ${ENCRYPT_PASS}
+      ALGORITHM: ${ALGORITHM}
+      IV: ${IV}
     ports:
       - 3000:3000
       - 9229:9229
@@ -37,6 +42,13 @@ services:
     volumes:
       - ./frontend:/ft_transcendence/frontend/src/app
       - /ft_transcendence/frontend/src/app/node_modules
+    env_file:
+      - .env
+    environment:
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      REDIRECT_URI: ${REDIRECT_URI}
+      GRANT_TYPE: ${GRANT_TYPE}
     ports:
       - 4200:4200
     links:
@@ -45,10 +57,12 @@ services:
   # Our Postgres Database for NestJS to connect to
   postgres:
     image: postgres:15.1
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - 35000:5432
 
@@ -57,8 +71,10 @@ services:
     image: dpage/pgadmin4:6.19
     depends_on: 
       - postgres
+    env_file:
+      - .env
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: password
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - 5050:80

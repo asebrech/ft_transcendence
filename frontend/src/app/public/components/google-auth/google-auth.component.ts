@@ -1,39 +1,35 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, tap } from 'rxjs';
+import { AuthService } from '../../services/auth-service/auth.service';
+import { ActivatedRoute, Route } from '@angular/router';
+import { LoginResponseI } from 'src/app/model/login-response';
 
 @Component({
   selector: 'app-google-auth',
   templateUrl: './google-auth.component.html',
   styleUrls: ['./google-auth.component.scss']
 })
-export class GoogleAuthComponent implements OnInit{
+export class GoogleAuthComponent implements OnInit, OnDestroy{;
 
-	qr: string;
-  secret: string;
-  token: string;
+	session: any;
+	token: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.http.get<{qr: string, secret: string}>('api/users/qr-code').subscribe(data => {
-		console.log(data.qr);
-      this.qr = data.qr;
-      this.secret = data.secret;
-    });
+	this.session = this.route.snapshot.queryParams;
   }
 
   onSubmit() {
-    // Get the secret key from local storage or some other secure storage
-    // Send a POST request to the server to verify the token
-    this.http.post('api/users/verify', { token: this.token, secret: this.secret }).subscribe(data => {
-      if (data) {
-        // Token is valid
-        console.log('Token is valid');
-      } else {
-        // Token is invalid
-        console.log('Token is invalid');
-      }
-    });
+    const response = this.http.post<LoginResponseI>('api/users/verify', { token: this.token, session: this.session.session});
+	this.authService.loginHandler(response);
+  }
+
+  ngOnDestroy() {
+	setTimeout(() => {
+		this.http.post<LoginResponseI>('api/users/verify', { token: null, session: this.session.session}).subscribe();
+	});
   }
 
 }

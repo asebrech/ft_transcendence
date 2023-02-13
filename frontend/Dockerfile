@@ -5,6 +5,7 @@ WORKDIR /ft_transcendence/frontend/src/app
 
 COPY package*.json ./
 
+RUN npm install -g ts-node
 RUN npm install
 RUN npm install -g @angular/cli@14.2.10
 

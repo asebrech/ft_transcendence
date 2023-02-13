@@ -5,10 +5,10 @@ import { AuthService } from 'src/auth/service/auth.service';
 import { UserEntity } from 'src/user/model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';
-import * as crypto from 'crypto'
 
 @Injectable()
 export class UserService {
+
 
 	constructor(
 		@InjectRepository(UserEntity)
@@ -33,14 +33,13 @@ export class UserService {
 
 	}
 
-	async login(user: UserI): Promise<string> {
+	async login(user: UserI): Promise<UserI> {
 		try {
 			const fondUser: UserI = await this.findByEmail(user.email.toLowerCase());
 			if (fondUser) {
 				const matches: boolean = await this.validatePassword(user.password, fondUser.password);
 				if (matches) {
-					const payload: UserI = await this.findOne(fondUser.id);
-					return this.authService.generateJwt(payload);
+					return fondUser;
 				} else {
 					throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
 				}
@@ -52,26 +51,57 @@ export class UserService {
 		}
 	}
 
-	async apiLoginHandle(apiUser: UserI): Promise<string> {
+	async apiLoginHandle(apiUser: UserI): Promise<UserI> {
 		const exists: boolean = await this.mailExists(apiUser.email);
 		if (!exists) {
-			const passwordHash: string = await this.hashPassword(this.generatePassword(12));
+			const passwordHash: string = await this.hashPassword(this.authService.generatePassword(12));
 			apiUser.password = passwordHash;
 			const user = await this.userRepository.save(this.userRepository.create(apiUser));
-			return this.apiLogin(user);
+		}
+		return await this.findByEmail(apiUser.email);
+	}
+
+	async googleAuthCreate(user: UserI): Promise<UserI> {
+		const foundUser: UserI =  await this.findByEmail(user.email);
+		foundUser.google_auth = true;
+		foundUser.google_auth_secret = this.authService.encrypteSecret(this.authService.genrateSecret());
+		return this.userRepository.save(foundUser);
+	}
+
+	async googleAuthRemove(user: UserI): Promise<UserI> {
+		const foundUser: UserI =  await this.findByEmail(user.email);
+		foundUser.google_auth = false;
+		foundUser.google_auth_secret = null;
+		return this.userRepository.save(foundUser);
+	}
+
+	async getQrCode(user: UserI): Promise<string> {
+		const foundUser: UserI =  await this.findByEmail(user.email);
+		const secret: string = this.authService.decrypteSecret(foundUser.google_auth_secret);
+		return this.authService.getQrCodeKeyuri(foundUser, secret);
+	}
+
+	async handleVerifyToken(token: string, sessionId: string): Promise<UserI> {
+		const session = this.authService.getSession(sessionId);
+		if (!session) {
+			throw new HttpException('Login was not successful, invalid session', HttpStatus.UNAUTHORIZED);
+		}
+		const foundUser: UserI =  await this.findByEmail(session.email);
+		if (!token)
+		{
+			this.authService.deleteSession(sessionId);
+			throw new HttpException('Session leaved', HttpStatus.NO_CONTENT);
+		}
+		const check: boolean = this.authService.checkToken(foundUser, token);
+		if (check) {
+			this.authService.deleteSession(sessionId);
+			return foundUser;
 		} else {
-			return this.apiLogin(apiUser);
+			throw new HttpException('Login was not successful, invalid token', HttpStatus.UNAUTHORIZED);
 		}
 	}
 
-	private generatePassword(length: number) {
-		return crypto
-			.randomBytes(Math.ceil(length / 2))
-			.toString("hex")
-			.slice(0, length);
-	}
-
-	private async apiLogin(apiUser: UserI): Promise<string> {
+	async returnJwt(apiUser: UserI): Promise<string> {
 		const payload: UserI = await this.findOne(apiUser.id);
 		return this.authService.generateJwt(payload);
 	}
@@ -88,9 +118,13 @@ export class UserService {
 		})
 	}
 
+	returnSession(user: UserI): string {
+		return this.authService.createSession(user);
+	}
+	
 	// also returns the password
 	private async findByEmail(email: string): Promise<UserI> {
-		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password'] });
+		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth', 'google_auth_secret'] });
 	}
 
 	private async hashPassword(password: string): Promise<string> {
