@@ -6,6 +6,11 @@ const routes: Routes = [
 	{
 		path: 'spacepong',
 		component: GameFrontComponent
+	},
+	{
+		path: '**',
+		redirectTo: 'spacepong',
+		pathMatch: 'full'
 	}
 ];
 
