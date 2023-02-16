@@ -18,6 +18,7 @@ import { SelectUsersComponent } from './components/select-users/select-users.com
 import { ChatRoomComponent } from './components/chat-room/chat-room.component';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component'; 
 import { ChatRoutingModule } from './chat-routing.module';
+import { PrivateModule } from '../private.module';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ChatRoutingModule } from './chat-routing.module';
 	MatInputModule,
 	MatChipsModule,
 	MatAutocompleteModule,
-	MatIconModule 
+	MatIconModule,
+	PrivateModule
   ]
 })
 export class ChatModule { }

@@ -7,6 +7,11 @@ const routes: Routes = [
 		path: 'google-auth',
 		component: GoogleAuthComponent
 	},
+	{
+		path: '**',
+		redirectTo: 'user',
+		pathMatch: 'full'
+	}
 ];
 
 @NgModule({
