@@ -55,4 +55,9 @@ export class AuthService {
 	const decodedToken = this.jwtService.decodeToken();
 	return decodedToken.user;
   }
+
+  isLoggedIn() {
+	const token = localStorage.getItem('access_token');
+	return !this.jwtService.isTokenExpired(token);
+  }
 }

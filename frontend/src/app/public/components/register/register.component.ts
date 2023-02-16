@@ -4,6 +4,7 @@ import { CustomValidators } from '../../_helpers/custom-validators';
 import { UserService } from '../../services/user-service/user.service';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
+import { AuthService } from '../../services/auth-service/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -21,7 +22,7 @@ export class RegisterComponent {
 		{ validators: CustomValidators.passwordsMatching }	
 	);
 
-	constructor(private userService: UserService, private router: Router) {}
+	constructor(private userService: UserService, private router: Router, private authService: AuthService) {}
 
 	register() {
 		if (this.form.valid) {
@@ -30,9 +31,11 @@ export class RegisterComponent {
 				password: this.password.value,
 				username: this.username.value
 			}).pipe(
-				tap(() => this.router.navigate(['./public/login']))
-			).subscribe();
-		}
+				tap(() => this.authService.login({
+					email: this.email.value,
+					password: this.password.value
+				}))).subscribe();
+			}
 	}
 
 	get	email(): FormControl {

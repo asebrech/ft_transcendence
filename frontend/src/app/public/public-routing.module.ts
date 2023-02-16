@@ -4,23 +4,29 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { GoogleAuthComponent } from './components/google-auth/google-auth.component';
 import { HomeComponent } from './components/home/home.component';
+import { AuthGuardReverse } from '../guards/auth.guard.reverse';
+
 
 const routes: Routes = [
 	{
 		path: 'home',
-		component: HomeComponent
+		component: HomeComponent,
+		canActivate : [AuthGuardReverse]
 	},
 	{
 		path: 'register', 
-		component : RegisterComponent
+		component : RegisterComponent,
+		canActivate : [AuthGuardReverse]
 	},
 	{
 		path: 'login',
-		component: LoginComponent
+		component: LoginComponent,
+		canActivate : [AuthGuardReverse]
 	},
 	{
 		path: 'google-auth',
-		component: GoogleAuthComponent
+		component: GoogleAuthComponent,
+		canActivate : [AuthGuardReverse]
 	},
 	{
 		path: '**',
