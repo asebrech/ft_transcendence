@@ -7,7 +7,7 @@
             <a class="nasa-font">SPACE PONG</a>
            <img class="rocket"  src="../../../../assets/images/rocket.png" alt="rocket">
         </div>
-        <div class="sign" [routerLink]="['../login']" *ngIf="!user.username; else login">
+        <div class="sign" [routerLink]="['../login']" *ngIf="!user; else login">
 			<a  class="nasa-font">login/sign in</a>
         </div>
 

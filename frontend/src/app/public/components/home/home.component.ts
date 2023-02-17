@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service/auth.service';
 import { UserI } from 'src/app/model/user.interface';
@@ -8,10 +8,18 @@ import { UserI } from 'src/app/model/user.interface';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
  
-	user: UserI = this.authService.getLoggedInUser();
+	user: UserI; 
 
 	constructor(private authService: AuthService) {}
 
+	ngOnInit() {
+		if (this.authService.isLoggedIn()) {
+			this.user = this.authService.getLoggedInUser();
+		}
+		else {
+			this.user = undefined;
+		}
+	}
 }
