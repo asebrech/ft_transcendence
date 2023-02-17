@@ -1,15 +1,16 @@
 header {
+	z-index: 9998;
 	display: flex;
 	justify-content: center;
 	font-family: 'nasalization';
-	font-size: 24px;
+	font-size: 45px;
 }
 
 header h1 {
-	margin: 0;
-	cursor: pointer;
+	display: flex;
+	justify-content: center;
 	color: white;
-  }
+}
 
 nav {
 	z-index: 9999;
@@ -59,7 +60,7 @@ img:hover {
 
 a:hover {
 	background-color: transparent;
-  }
+}
 
 .game {
 	width: 75px;
@@ -83,4 +84,18 @@ a {
 
 li:first-of-type a {
 	height: 90px;
- }
+	margin-top: -9px;
+}
+
+a.active {
+	background: rgba(217, 217, 217, 0.3);
+	border-bottom: 1px solid white;
+}
+
+nav a.active img {
+	transform: scale(1.2);
+}
+
+nav a.activeGame img {
+	transform: scale(1.2);
+}

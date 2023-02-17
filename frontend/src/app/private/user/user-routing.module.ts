@@ -1,15 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { GoogleAuthComponent } from './components/google-auth/google-auth.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
 	{
+		path: 'profile',
+		component: ProfileComponent
+	},
+	{
+		path: 'friends',
+		component: ProfileComponent
+	},
+	{
 		path: 'google-auth',
-		component: GoogleAuthComponent
+		component: ProfileComponent
 	},
 	{
 		path: '**',
-		redirectTo: 'user',
+		redirectTo: 'profile',
 		pathMatch: 'full'
 	}
 ];

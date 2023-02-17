@@ -1,25 +1,14 @@
-
-
 #main-div
 {
     display: flex;
     flex-direction: row;
-    background-color: #16072D;
-    background-image: url("../../../../../assets/images/stars.png");
+
 }
 .row 
 {
     margin-bottom: 0;
 }
-#nav-side
-{
-    width: 6%;
-    height: 100vh;
-    margin-left: 0;
-    background: #16072D;
-    // background : blue;
-    box-shadow: 10px 0px 39px rgba(0, 0, 0, 0.25);
-}
+
 #chat
 {
     width: 19%;

@@ -31,7 +31,7 @@ export class AuthService {
 		if (response.access_token) {
 			localStorage.setItem('access_token', response.access_token);
 			this.snackbar.open('Login Successfull', 'Close', { duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'});
-			this.router.navigate(['../../private/chat/dashboard']);
+			this.router.navigate(['../../private/game/spacepong']);
 		}
 		else if(response.session) {
 			this.router.navigate(['../../public/google-auth'], {queryParams: {session: response.session}});

@@ -12,7 +12,7 @@ export class AuthGuardReverse implements CanActivate {
 
   canActivate() {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/private/chat/dashboard']);
+      this.router.navigate(['/private/game/spacepong']);
       return false;
     }
 

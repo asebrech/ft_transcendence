@@ -1,32 +1,32 @@
 <nav>
 	<ul>
 	  <li>
-		<a [routerLink]="['/private/game/']" title="Game">
+		<a [routerLink]="['/private/game/spacepong']" title="Game" [ngClass]="{'activeGame': currentUrl === '/private/game/spacepong'}">
 		  <img src="../../../../assets/images/rocket.png" alt="Game" class="game">
 		</a>
 	  </li>
 	  <li>
-		<a [routerLink]="['/private/user/']" title="User">
-		  <img src="../../../../assets/images/utilisateur-astronaute_1.png" alt="User" class="user">
+		<a [routerLink]="['/private/user/profile']" title="Profile" [ngClass]="{'active': currentUrl === '/private/user/profile'}">
+		  <img src="../../../../assets/images/utilisateur-astronaute_1.png" alt="Profile" class="profile">
 		</a>
 	  </li>
 	  <li>
-		<a [routerLink]="['/private/chat/']" title="Chat">
+		<a [routerLink]="['/private/chat/dashboard']" title="Chat" [ngClass]="{'active': currentUrl === '/private/chat/dashboard'}">
 		  <img src="../../../../assets/images/transmitter_1.png" alt="Chat" class="chat">
 		</a>
 	  </li>
 	  <li>
-		<a [routerLink]="['/private/game/']" title="Live">
+		<a [routerLink]="['/private/game/live']" title="Live" [ngClass]="{'active': currentUrl === '/private/game/live'}">
 		  <img src="../../../../assets/images/satellite_1.png" alt="Live" class="live">
 		</a>
 	  </li>
 	  <li>
-		<a [routerLink]="['/private/user/']" title="Friends">
+		<a [routerLink]="['/private/user/friends']" title="Friends" [ngClass]="{'active': currentUrl === '/private/user/friends'}">
 		  <img src="../../../../assets/images/src.png" alt="Friends" class="friends">
 		</a>
 	  </li>
 	  <li>
-		<a [routerLink]="['/private/game/']" title="Settings">
+		<a [routerLink]="['/private/game/settings']" title="Settings" [ngClass]="{'active': currentUrl === '/private/game/settings'}">
 		  <img src="../../../../assets/images/technical-support_1.png" alt="Settings" class="settings">
 		</a>
 	  </li>
