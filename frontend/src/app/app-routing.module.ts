@@ -11,7 +11,6 @@ const routes: Routes = [
 	},
 	{
 		path: 'public',
-		canActivate : [AuthGuardReverse],
 		loadChildren: () => import('./public/public.module').then(m => m.PublicModule)
 	},
 	{

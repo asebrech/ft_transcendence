@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {Router } from '@angular/router';
+import { AuthService } from '../../services/auth-service/auth.service';
+import { UserI } from 'src/app/model/user.interface';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +10,8 @@ import {Router } from '@angular/router';
 })
 export class HomeComponent {
  
-	test(){
-		console.log('test');
-	}
+	user: UserI = this.authService.getLoggedInUser();
+
+	constructor(private authService: AuthService) {}
+
 }

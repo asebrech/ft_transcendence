@@ -1,3 +1,7 @@
+body {
+	background: transparent;
+}
+
 .nav_base
 {
 	width: 25%;
@@ -17,6 +21,7 @@
 		align-self:flex-start;
 		padding: 10px;
 	}
+	background: transparent;
 }
 
 .container {
@@ -36,8 +41,8 @@
 
 .general {
 	height: 100vh;
-	background-color: #110720;
 	display: flex;
+
 }
 
 .form{
@@ -86,7 +91,4 @@ p {
 
 app-api-login {
 	justify-self: center;
-}
-
-pwd-submit {
 }
