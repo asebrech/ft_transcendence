@@ -1,1 +1,5 @@
-{}
+{
+  "dependencies": {
+    "@colyseus/monitor": "^0.14.22"
+  }
+}
