@@ -2,6 +2,9 @@ import * as Phaser from 'phaser';
 
 let ball_velocity_x : number;
 let ball_velocity_y : number;
+let right_pad: any;
+let left_pad: any;
+
 
 
 export class PlayScene extends Phaser.Scene 
@@ -9,9 +12,6 @@ export class PlayScene extends Phaser.Scene
   score : any;
   left_score : number;
   right_score : number;
-
-  right_pad: any;
-  left_pad: any;
 
   wall_bottom : any;
   wall_top : any;
@@ -44,8 +44,8 @@ export class PlayScene extends Phaser.Scene
 
   create() 
   {
-    console.log(ball_velocity_x);
-    console.log(ball_velocity_y);
+    // console.log(ball_velocity_x);
+    // console.log(ball_velocity_y);
     this.score = this.add.text(850 / 2, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'});
 
     this.wall_bottom = this.add.rectangle(950 / 2, 699, 950, 10 , 0xff0000);
@@ -56,30 +56,30 @@ export class PlayScene extends Phaser.Scene
     this.ball = this.physics.add.image(950 / 2, 694 / 2, 'ball').setCollideWorldBounds(false);
     this.ball.scale = 0.03;
     this.ball.body.setBounce(1,1);
-    this.ball.setVelocity(ball_velocity_x, ball_velocity_y);
+    // this.ball.setVelocity(ball_velocity_x, ball_velocity_y);
     //
 
     // Pads config
-    this.left_pad = this.physics.add.image(30, 350, 'left_pad').setCollideWorldBounds(true);
-    this.right_pad = this.physics.add.image(920, 350, 'right_pad').setCollideWorldBounds(true);
-    this.left_pad.scale = 0.3;
-    this.right_pad.scale = 0.3;
-    this.left_pad.body.pushable = false;
-    this.right_pad.body.pushable = false;
+    left_pad = this.physics.add.image(30, 350, 'left_pad').setCollideWorldBounds(true);
+    right_pad = this.physics.add.image(920, 350, 'right_pad').setCollideWorldBounds(true);
+    left_pad.scale = 0.3;
+    right_pad.scale = 0.3;
+    left_pad.body.pushable = false;
+    right_pad.body.pushable = false;
     //
     
     this.physics.add.existing(this.wall_bottom, true); // Ajoute la physique au rectangle cree avec phaser
     this.physics.add.existing(this.wall_top, true); // Ajoute la physique au rectangle cree avec phaser
     this.physics.add.existing(this.ball, true);
 
-    this.physics.add.collider(this.right_pad, this.ball);
-    this.physics.add.collider(this.ball, this.left_pad);
+    this.physics.add.collider(right_pad, this.ball);
+    this.physics.add.collider(this.ball, left_pad);
     this.physics.add.collider(this.ball, this.wall_bottom); // Ajoute la collision entre l'object cree avec phaser et un autre objet
     this.physics.add.collider(this.ball, this.wall_top);
     
     this.input.on('pointermove', function (pointer)
     {
-      this.left_pad.setVisible(true).setPosition(30, pointer.y);
+      left_pad.setVisible(true).setPosition(30, pointer.y);
     }, this);
   }
   
