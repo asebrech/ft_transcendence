@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Test, TestService } from './services/test-service/test.service';
+import { StarsService } from './services/stars-service/stars.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +8,10 @@ import { Test, TestService } from './services/test-service/test.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'frontend';
 
-  testValue: Observable<Test> = this.service.getTest();
-    
+	enableBackground = this.service.isActive();
+	switchBackground: boolean= true;
 
-  constructor(private service: TestService) {}
+  constructor(public service: StarsService) {}
+
 }

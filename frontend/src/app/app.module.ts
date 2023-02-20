@@ -9,6 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { JwtModule } from '@auth0/angular-jwt';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { StarsComponent } from './components/stars/stars.component';
+import { StarsInteractiveComponent } from './components/stars-interactive/stars-interactive.component';
 
 export function tokenGetter() {
 	return localStorage.getItem("access_token");
@@ -16,7 +18,9 @@ export function tokenGetter() {
   
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    StarsComponent,
+    StarsInteractiveComponent
   ],
   imports: [
     BrowserModule,

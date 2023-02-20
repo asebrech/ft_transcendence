@@ -23,7 +23,7 @@
 </body>
 
 <ng-template #login>
-	<div style="color: white;">{{user.username}}</div>
+	<div (click)="deconnection()" style="color: white; cursor: pointer;">{{user.username}}</div>
 </ng-template>
 
 <ng-template #goToLogin>

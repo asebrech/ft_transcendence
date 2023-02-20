@@ -22,4 +22,10 @@ export class HomeComponent implements OnInit {
 			this.user = undefined;
 		}
 	}
+
+	deconnection() {
+		console.log('deco');
+		localStorage.removeItem('access_token');
+		location.reload();
+	}
 }
