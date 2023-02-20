@@ -37,9 +37,11 @@
 }
 
 .general {
-	height: 100vh;
 	background-color: #110720;
 	display: flex;
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
 
 form{
@@ -69,11 +71,11 @@ p {
 
 .img {
 	display: flex;
-	margin-block-start: auto;
 	height: 50%;
 	width: 50%;
 	justify-content: left;
 	margin-right: 20%;
+  align-self: end;
 }
 
 app-api-login {

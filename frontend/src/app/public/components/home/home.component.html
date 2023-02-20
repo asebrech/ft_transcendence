@@ -14,8 +14,8 @@
     </div>
 
 	<div *ngIf="user; else goToLogin">
-   		 <div  class="play">       
-    	    <a [routerLink]="['/private/game/spacepong']" class="nasa-font play_animation" >PLAY</a>    
+   		 <div  class="play">
+    	    <a [routerLink]="['/private/game/spacepong']" class="nasa-font play_animation" >PLAY</a>
    		 </div>
 	</div>
 
@@ -27,7 +27,7 @@
 </ng-template>
 
 <ng-template #goToLogin>
-	<div  class="play">       
-		<a [routerLink]="['../login']" class="nasa-font play_animation" >PLAY</a>    
+	<div  class="play">
+		<a [routerLink]="['../login']" class="nasa-font play_animation" >PLAY</a>
 	</div>
 </ng-template>
