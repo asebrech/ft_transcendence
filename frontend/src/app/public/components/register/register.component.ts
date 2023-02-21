@@ -1,16 +1,19 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Injectable, Input } from '@angular/core';
+import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { CustomValidators } from '../../_helpers/custom-validators';
 import { UserService } from '../../services/user-service/user.service';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 import { AuthService } from '../../services/auth-service/auth.service';
+import { LoginComponent } from '../login/login.component';
+
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
+
 export class RegisterComponent {
 
 	form: FormGroup = new FormGroup ({
@@ -19,12 +22,13 @@ export class RegisterComponent {
 		password: new FormControl(null, [Validators.required]),
 		passwordConfirm: new FormControl(null, [Validators.required])
 	},
-		{ validators: CustomValidators.passwordsMatching }	
+		{ validators: CustomValidators.passwordsMatching }
 	);
+  mail : string | undefined = this.userService.mail;
 
 	constructor(private userService: UserService, private router: Router, private authService: AuthService) {}
 
-	register() {
+  register() {
 		if (this.form.valid) {
 			this.userService.create({
 				email: this.email.value,
@@ -49,9 +53,8 @@ export class RegisterComponent {
 	get password(): FormControl {
 		return this.form.get('password') as FormControl;
 	}
-	
+
 	get passwordConfirm(): FormControl {
 		return this.form.get('passwordConfirm') as FormControl;
 	}
-
 }

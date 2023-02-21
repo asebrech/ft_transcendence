@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Injectable, Input } from '@angular/core';
 import { EmailValidator, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth-service/auth.service';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { UserService } from '../../services/user-service/user.service';
 
 @Component({
   selector: 'app-login',
@@ -30,10 +31,11 @@ export class LoginComponent {
 		email: new FormControl(null, [Validators.required, Validators.email]),
 		password: new FormControl(null, [Validators.required])
 	});
-	mail: string;
+
+  mail: string;
 	showPasswordField : boolean = false;
 
-	constructor(private authService: AuthService, private router: Router, private http: HttpClient) {}
+	constructor(private authService: AuthService, private router: Router, private http: HttpClient, private user: UserService) {}
 
 	login() {
 		if (this.form.valid)
@@ -46,12 +48,13 @@ export class LoginComponent {
 	get email(): FormControl {
 		return this.form.get('email') as FormControl;
 	}
-	
+
 	get password(): FormControl {
 		return this.form.get('password') as FormControl;
 	}
 
 	checkEmail(mail: string) {
+    this.user.mail = mail;
 		this.http.get(`api/users/check-email?mail=${mail}`)
 		.subscribe(res => {
 			if (res) {

@@ -9,6 +9,8 @@ import { UserI } from 'src/app/model/user.interface';
 })
 export class UserService {
 
+  mail : string;
+
   constructor(private http: HttpClient, private snackbar: MatSnackBar ) { }
 
   findByUsername(username: string) : Observable<UserI[]> {
