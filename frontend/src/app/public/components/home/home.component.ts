@@ -9,8 +9,8 @@ import { UserI } from 'src/app/model/user.interface';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
- 
-	user: UserI; 
+
+	user: UserI;
 
 	constructor(private authService: AuthService) {}
 

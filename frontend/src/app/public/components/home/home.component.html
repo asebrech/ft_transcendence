@@ -23,7 +23,9 @@
 </body>
 
 <ng-template #login>
-	<div (click)="deconnection()" style="color: white; cursor: pointer;">{{user.username}}</div>
+	<div class="profile_pic" (click)="deconnection()" style="cursor: pointer;">
+    <img class="astro" src="../../../../assets/images/astronaut.png">
+  </div>
 </ng-template>
 
 <ng-template #goToLogin>
