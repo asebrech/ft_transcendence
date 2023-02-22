@@ -1,5 +1,5 @@
 <router-outlet></router-outlet>
-<div [ngClass]="{'disabled': !service.isActive()}">
+<div *ngIf="false">
 	<app-stars-interactive [ngClass]="{'stars-interactive ': service.isEnable()}"></app-stars-interactive>
 	<app-stars [ngClass]="{'stars': !service.isEnable()}"></app-stars>
 </div>
