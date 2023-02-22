@@ -9,9 +9,6 @@ import { StarsService } from './services/stars-service/stars.service';
 })
 export class AppComponent {
 
-	enableBackground = this.service.isActive();
-	switchBackground: boolean= true;
-
   constructor(public service: StarsService) {}
 
 }

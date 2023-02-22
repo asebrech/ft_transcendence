@@ -1,9 +1,10 @@
-import { Component, NgModule, OnInit, SimpleChanges} from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import * as Phaser from 'phaser';
 import * as Colyseus from "colyseus.js";
 import { Client } from 'colyseus.js';
 import { NgModel } from '@angular/forms';
 import { recommendCommands } from 'yargs';
+import { StarsService } from 'src/app/services/stars-service/stars.service';
 
 let ball_velocity_x : number;
 let ball_velocity_y : number;
@@ -19,17 +20,20 @@ let room : any;
 })
 
 
-export class GameFrontComponent implements OnInit
+export class GameFrontComponent implements OnInit, OnDestroy
 {
   phaserGame: Phaser.Game;
   config: Phaser.Types.Core.GameConfig;
   client : Client;
 
-  constructor() 
+  constructor(private starsService: StarsService) 
   {}
 
   ngOnInit()
   {
+
+	//background
+	this.starsService.setActive(false);
 
     this.client = new Colyseus.Client("ws://localhost:3000");
     // room = this.client.joinOrCreate("my_room", {/* options */});
@@ -63,7 +67,9 @@ export class GameFrontComponent implements OnInit
       console.error("join error", e);
     }  
   }
-
+  ngOnDestroy(): void {
+	this.starsService.setActive(true);
+  }
 }
 
 export class PlayScene extends Phaser.Scene 
