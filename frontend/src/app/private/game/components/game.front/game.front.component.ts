@@ -1,4 +1,4 @@
-import { Component, NgModule, OnInit, SimpleChanges} from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import * as Phaser from 'phaser';
 import * as Colyseus from "colyseus.js";
 import { Client } from 'colyseus.js';
@@ -9,6 +9,7 @@ import { PlayScene } from '../../services/play.scene.service';
 
 export let room : any;
 export let client : Client;
+import { StarsService } from 'src/app/services/stars-service/stars.service';
 
 
 
@@ -19,17 +20,24 @@ export let client : Client;
 })
 
 
-export class GameFrontComponent implements OnInit
+export class GameFrontComponent implements OnInit, OnDestroy
 {
   phaserGame: Phaser.Game;
   config: Phaser.Types.Core.GameConfig;
 
-  constructor() 
+  constructor(private starsService: StarsService) 
   {}
 
   ngOnInit()
   {
     client = new Client("ws://localhost:3000");
+
+	//background
+	this.starsService.setActive(false);
+
+    this.client = new Colyseus.Client("ws://localhost:3000");
+    // room = this.client.joinOrCreate("my_room", {/* options */});
+
     this.config = {
       type: Phaser.AUTO,
       scene: [PlayScene],
@@ -62,6 +70,8 @@ export class GameFrontComponent implements OnInit
       console.error("join error", e);
     }  
   }
-
+  ngOnDestroy(): void {
+	this.starsService.setActive(true);
+  }
 }
 
