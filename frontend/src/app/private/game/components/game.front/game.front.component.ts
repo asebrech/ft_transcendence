@@ -33,9 +33,8 @@ export class GameFrontComponent implements OnInit, OnDestroy
     client = new Client("ws://localhost:3000");
 
 	//background
-	this.starsService.setActive(false);
+	  this.starsService.setActive(false);
 
-    this.client = new Colyseus.Client("ws://localhost:3000");
     // room = this.client.joinOrCreate("my_room", {/* options */});
 
     this.config = {
