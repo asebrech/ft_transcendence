@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { FriendsComponent } from './components/friends/friends.component';
 import { GoogleAuthComponent } from './components/google-auth/google-auth.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
@@ -10,11 +11,11 @@ const routes: Routes = [
 	},
 	{
 		path: 'friends',
-		component: ProfileComponent
+		component: FriendsComponent
 	},
 	{
 		path: 'google-auth',
-		component: ProfileComponent
+		component: GoogleAuthComponent
 	},
 	{
 		path: '**',

@@ -33,13 +33,13 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit{
 
 	ngOnChanges(changes: SimpleChanges) {
 		this.chatService.leaveRoom(changes['chatRoom'].previousValue)
-		if (this.chatRoom) { 
+		if (this.chatRoom) {
 			this.chatService.joinRoom(this.chatRoom);
 		}
 	}
 
 	ngAfterViewInit(): void {
-		this.scrollToBottom(); 
+		this.scrollToBottom();
 	}
 
 
@@ -53,6 +53,6 @@ export class ChatRoomComponent implements OnChanges, OnDestroy, AfterViewInit{
 	}
 
 	scrollToBottom(): void {
-        setTimeout(() => {this.messagesScroller.nativeElement.scrollTop = this.messagesScroller  .nativeElement.scrollHeight}, 1);    
+        setTimeout(() => {this.messagesScroller.nativeElement.scrollTop = this.messagesScroller.nativeElement.scrollHeight}, 1);
     }
 }
