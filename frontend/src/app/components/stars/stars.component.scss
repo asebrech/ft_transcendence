@@ -10,19 +10,19 @@
 	$h-shadow: random($screen-width);
 	$v-shadow: random($screen-width);
 	
-	$stars: '#{$h-shadow}px #{$v-shadow}px #{$color}';
+	$stars: '#{$h-shadow}vw #{$v-shadow}vh #{$color}';
 	  @for $i from 2 through $density {
 		$h-shadow: random($screen-width);
 		$v-shadow: random($screen-width);
 	  
-	  $stars: '#{$stars}, #{$h-shadow}px #{$v-shadow}px #{$color}';
+	  $stars: '#{$stars}, #{$h-shadow}vw #{$v-shadow}vh #{$color}';
 	  }
 	  @return unquote($stars);
   }
   
   @mixin stars-content($screen-width, $color, $density, $speed, $delay, $w, $h) {
-	width: #{$w}px;
-	height: #{$h}px;
+	width: #{$w}vw;
+	height: #{$h}vw;
 	  border-radius: 50%;
 	  opacity: 0;
 	  box-shadow: generate-random-stars($screen-width, $color, $density);
@@ -37,27 +37,27 @@
   //Change colors for multi-colors star groups
   
   #stars-group-1{
-	  @include stars-content(3500, #CD317C, 150, 15, 0, 12, 12);
+	  @include stars-content(100, #CD317C, 40, 15, 0, 0.12, 0.12);
   }
   
   #stars-group-2{
-	  @include stars-content(3500, #CD317C, 150, 2, 0.1, 4, 4);
+	  @include stars-content(100, #CD317C, 40, 2, 0.1, 0.4, 0.4);
   }
   
   #stars-group-3{
-	  @include stars-content(3500, #CD317C, 150, 1, 0.2, 2, 2);
+	  @include stars-content(100, #CD317C, 40, 1, 0.2, 0.2, 0.2);
   }
   
   #stars-group-4{
-	  @include stars-content(3500, #CD317C, 150, 10, 0.3, 10, 10);
+	  @include stars-content(100, #CD317C, 40, 10, 0.3, 0.10, 0.10);
   }
   
   #stars-group-5{
-	  @include stars-content(3500, #CD317C, 150, 4, 0.4, 6, 6);
+	  @include stars-content(100, #CD317C, 40, 4, 0.4, 0.6, 0.6);
   }
   
   #stars-group-6{
-	  @include stars-content(3500, #CD317C, 150, 1, 0.5, 2, 2);
+	  @include stars-content(100, #CD317C, 40, 1, 0.5, 0.2, 0.2);
   }
   
   

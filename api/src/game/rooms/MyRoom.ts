@@ -21,10 +21,10 @@ export class MyRoom extends Room<Schema> {
     }
 
     // Authorize client based on provided options before WebSocket handshake is complete
-    onAuth (client: Client, options: any, request: http.IncomingMessage) 
-    {
-      return true;
-    }
+    // onAuth (client: Client, options: any, request: http.IncomingMessage) 
+    // {
+    //   return true;
+    // }
    
     // When client successfully join the room
     onJoin (client: Client, options: any, auth: any) 

@@ -1,3 +1,30 @@
+
+.dashboard {
+	display: flex;
+	justify-content: flex-start;
+}
+
+.chat-selector {
+	height: 90vh;
+	width: 300px;
+	margin-left: 120px;
+	//background-color: black;
+	backdrop-filter: blur(4.5px);
+	box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
+}
+
+.messages {
+	height: 90vh;
+	width: 1250px;
+	margin-left: 40px;
+	//background-color: black;
+	backdrop-filter: blur(4.5px);
+	box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
+}
+
+
+
+
 // div {
 // 	//background-color: #110720;
 // }
@@ -13,43 +40,43 @@
 
 
 
-.container {
-	display: flex;
-	justify-content: center;
+// .container {
+// 	display: flex;
+// 	justify-content: center;
 
-	mat-card {
-		position: fixed;
-		margin: 20px;
+// 	mat-card {
+// 		position: fixed;
+// 		margin: 20px;
 
-		.rooms {
-			height: 500px;
-			width: 250;
-			overflow-y: scroll;
-			scrollbar-color: lightgrey darkgrey; 
-			scrollbar-width: thin;
-		}
-		.chatroom {
-			margin-left: 40px;
-			width: 600px;
-		}
-	}
-}
+// 		.rooms {
+// 			height: 500px;
+// 			width: 250;
+// 			overflow-y: scroll;
+// 			scrollbar-color: lightgrey darkgrey; 
+// 			scrollbar-width: thin;
+// 		}
+// 		.chatroom {
+// 			margin-left: 40px;
+// 			width: 600px;
+// 		}
+// 	}
+// }
 
-::-webkit-scrollbar-track {
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	border-radius: 10px;
-	background-color: lightgray;
-}
+// ::-webkit-scrollbar-track {
+// 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+// 	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+// 	border-radius: 10px;
+// 	background-color: lightgray;
+// }
 
-::-webkit-scrollbar {
-	width: 12px;
-	background-color: lightgray;
-}
+// ::-webkit-scrollbar {
+// 	width: 12px;
+// 	background-color: lightgray;
+// }
 
-::-webkit-scrollbar-thumb {
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: lightgray;
-}
+// ::-webkit-scrollbar-thumb {
+// 	border-radius: 10px;
+// 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+// 	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+// 	background-color: lightgray;
+// }
