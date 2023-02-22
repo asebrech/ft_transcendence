@@ -11,7 +11,6 @@ async function bootstrap()
 
   gameServer.define("my_room", MyRoom);
   
-  console.log("hello");
 // attach Colyseus into the existing http server from NestJS
   gameServer.attach({ server: app.getHttpServer() });
   app.setGlobalPrefix('api');
