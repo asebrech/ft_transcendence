@@ -8,8 +8,6 @@ import { StarsService } from 'src/app/services/stars-service/stars.service';
 })
 export class SettingsComponent implements OnInit {
 
-	switch = true;
-
   constructor(private starsService: StarsService) { }
 
   ngOnInit(): void {
@@ -23,9 +21,12 @@ export class SettingsComponent implements OnInit {
     this.starsService.setActive(true);
   }
 
-  switchBack() {
-	(this.switch) ? this.switch = false : this.switch = true;
-    this.starsService.setEnable(this.switch);
+  switchBack1() {
+    this.starsService.setEnable(true);
+  }
+
+  switchBack2() {
+    this.starsService.setEnable(false);
   }
 
 }
