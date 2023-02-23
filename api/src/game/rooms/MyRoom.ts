@@ -33,7 +33,7 @@ export class MyRoom extends Room<Schema> {
         player.set(client.sessionId, "player_left")
       else
         player.set(client.sessionId, "player_right")
-  
+
       ///////////////////////////////////////////
       console.log(player.get(client.sessionId))
       console.log(client.sessionId + " is connected to " + this.roomId + " , now this room has " + player.get(client.sessionId))
