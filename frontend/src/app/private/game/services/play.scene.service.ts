@@ -3,8 +3,6 @@ import { Client, Room } from 'colyseus.js';
 import * as Colyseus from "colyseus.js";
 import { room } from "../components/game.front/game.front.component";
 
-// let ball_velocity_x : number;
-// let ball_velocity_y : number;
 let right_pad: any;
 let left_pad: any;
 let ball : any;
@@ -28,8 +26,6 @@ export class PlayScene extends Phaser.Scene
     super({ key: 'new' });
     this.left_score = 0;
     this.right_score = 0;
-    // ball_velocity_x = 400;
-    // ball_velocity_y = 400;
     start = false;
   }
 
@@ -51,24 +47,23 @@ export class PlayScene extends Phaser.Scene
 
   async create() 
   {
-    this.score = this.add.text(850 / 2, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'});
+    this.score = this.add.text(970 / 2, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'});
 
-    this.wall_bottom = this.add.rectangle(950 / 2, 699, 950, 10 , 0xff0000);
-    this.wall_top = this.add.rectangle(950 / 2, -5, 950, 10 , 0xff0000);
+    this.wall_bottom = this.add.rectangle(1050 / 2, 745, 950, 10 , 0xff0000);
+    this.wall_top = this.add.rectangle(1050 / 2, -5, 950, 10 , 0xff0000);
     
     
     // Ball config
-    ball = this.add.circle(950 / 2,650 / 2 , 20, 0XFFFFFF)
+    ball = this.add.circle(1050 / 2,740 / 2 , 20, 0XFFFFFF)
   
     
-    this.false_ball = this.physics.add.image(950 / 2, 694 / 2, 'ball').setCollideWorldBounds(false).setVisible(false);
-    
+    this.false_ball = this.physics.add.image(1050 / 2, 740 / 2, 'ball').setCollideWorldBounds(false).setVisible(false);
     this.false_ball.body.setBounce(1,1);
     this.false_ball.scale = 0.03;
 
     // Pads config
     left_pad = this.physics.add.image(30, 350, 'left_pad').setCollideWorldBounds(true);
-    right_pad = this.physics.add.image(920, 350, 'right_pad').setCollideWorldBounds(true);
+    right_pad = this.physics.add.image(1020, 350, 'right_pad').setCollideWorldBounds(true);
     left_pad.scale = 0.3;
     right_pad.scale = 0.3;
     left_pad.body.pushable = false;
