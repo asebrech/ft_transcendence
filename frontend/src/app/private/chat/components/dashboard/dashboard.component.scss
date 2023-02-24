@@ -8,16 +8,17 @@
 	height: 90vh;
 	width: 300px;
 	margin-left: 120px;
-	//background-color: black;
+	background-color: black;
 	backdrop-filter: blur(4.5px);
 	box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
+	flex-shrink: 0;
 }
 
 .messages {
 	height: 90vh;
 	width: 1250px;
 	margin-left: 40px;
-	//background-color: black;
+	background-color: black;
 	backdrop-filter: blur(4.5px);
 	box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
 }
