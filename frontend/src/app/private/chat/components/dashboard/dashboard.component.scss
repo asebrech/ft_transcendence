@@ -24,7 +24,30 @@
 }
 
 
+.search-container {
+	display: flex;
+	align-items: center;
+	height: 40px;
+	margin-top: 45px;
+	margin-left: 10%;
+	margin-right: 10%;
+	padding-left: 5px;
+	border-radius: 3px; 
+	background: rgba(217, 217, 217, 0.25);
+	cursor: pointer;
+}
 
+.search-container label {
+	cursor: pointer;
+	user-select: none;
+}
+
+.hidden {
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0s ease-in-out;
+
+}
 
 // div {
 // 	//background-color: #110720;

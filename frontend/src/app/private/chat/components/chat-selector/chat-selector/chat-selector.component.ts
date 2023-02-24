@@ -1,5 +1,6 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { number } from 'yargs';
+import { Component, ElementRef, EventEmitter, HostListener, Output } from '@angular/core';
+import { ChatService } from '../../../services/chat-service/chat.service';
+import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
 
 @Component({
 	selector: 'app-chat-selector',
@@ -9,13 +10,13 @@ import { number } from 'yargs';
 export class ChatSelectorComponent {
 
 	switchMenue: boolean = false;
-	channel: boolean = false;
+	imagePath1 = "../../../../../../assets/images/close.png";
+	imagePath2 = "../../../../../../assets/images/arrow-down-sign-to-navigate.png";
 
-
-	constructor(private elementRef: ElementRef) { }
+	constructor(private elementRef: ElementRef, public dashService: DashboardService) { }
 
 	switch() {
-		this.channel ? this.channel = false : this.channel = true;
+		this.dashService.channel = !this.dashService.channel;
 		this.hideSwitch();
 	}
 

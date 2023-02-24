@@ -20,6 +20,7 @@ import { ChatMessageComponent } from './components/chat-message/chat-message.com
 import { ChatRoutingModule } from './chat-routing.module';
 import { PrivateModule } from '../private.module';
 import { ChatSelectorComponent } from './components/chat-selector/chat-selector/chat-selector.component';
+import { FindChannelComponent } from './components/find-channel/find-channel/find-channel.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ChatSelectorComponent } from './components/chat-selector/chat-selector/
     SelectUsersComponent,
     ChatRoomComponent,
     ChatMessageComponent,
-    ChatSelectorComponent
+    ChatSelectorComponent,
+    FindChannelComponent
   ],
   imports: [
     CommonModule,
