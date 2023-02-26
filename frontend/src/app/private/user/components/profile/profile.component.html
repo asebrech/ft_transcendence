@@ -6,15 +6,46 @@
       <label>Level</label>
       <progress max="100" value="70">
         70%</progress>
-        <div>"Badge ici"</div>
+        <div><img src="../../../../../assets/images/master-chief.png" alt="badge" class="badge"></div>
       </div>
       <div class="block">
         <h1>STATISTIC</h1>
         <div class="row">
-          <p>Victory 8</p>
-        <p>Loss 1</p>
-        <p>Playtime</p>
-      </div>
+          <div class="col">
+            <h2>VICTORY</h2>
+            <p>7</p>
+          </div>
+          <div class="col">
+            <h2>LOSS</h2>
+            <p>2</p>
+          </div>
+          <div class="col">
+            <h2>PLAYTIME</h2>
+            <p>3H</p>
+          </div>
+        </div>
+        <div class="ratio">
+          <circle-progress
+          [radius]="100"
+          [space]="-10"
+          [outerStrokeGradient]="true"
+          [outerStrokeWidth]="10"
+          [outerStrokeColor]="'#4882c2'"
+          [outerStrokeGradientStopColor]="'#53a9ff'"
+          [innerStrokeColor]="'#e7e8ea'"
+          [innerStrokeWidth]="10"
+          [title]="'ratio'"
+          [animateTitle]="true"
+          [animationDuration]="1000"
+          [showUnits]="true"
+          [showBackground]="false"
+          [clockwise]="false"
+          [startFromZero]="true"
+          [lazy]="true"
+          [responsive]="true"
+
+        ></circle-progress>
+        </div>
     </div>
     <div class="block">
       <h1>HISTORY</h1>

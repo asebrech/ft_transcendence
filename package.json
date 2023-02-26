@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@colyseus/monitor": "^0.14.22"
+    "@colyseus/monitor": "^0.14.22",
+    "ng-circle-progress": "^1.7.1"
   }
 }

@@ -1,8 +1,7 @@
 .container {
   display: table;
-  width: 100%;
-  border-collapse: separate
-  //margin-top: 40px;
+  min-width: fit-content;
+  margin-top: 5%;
 }
 
 .block {
@@ -18,8 +17,8 @@
 h1 {
   color: white;
   font-family: 'nasalization';
-  font-size: xx-large;
-  margin: 20px;
+  font-size:xx-large;
+  margin-bottom: 15px;
 }
 
 label {
@@ -44,6 +43,43 @@ progress {
   height: 20px;
 }
 
-profile {
+.profile {
+width: 80%;
+}
+
+.badge {
 width: 30%;
+}
+
+
+.col {
+display: inline-block;
+width: 30%;
+border-left: 1px solid gray;
+border-right: 1px solid gray;
+padding: 10px;
+font-family: 'nasalization';
+}
+
+h2 {
+  color: white;
+  font-family: 'nasalization';
+}
+
+
+.col:first-child {
+  border-left: none;
+}
+
+.col:last-child {
+  border-right: none;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+.ratio {
+  width: auto;
 }

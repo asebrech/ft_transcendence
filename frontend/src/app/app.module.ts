@@ -15,7 +15,7 @@ import { StarsInteractiveComponent } from './components/stars-interactive/stars-
 export function tokenGetter() {
 	return localStorage.getItem("access_token");
   }
-  
+
 @NgModule({
   declarations: [
     AppComponent,
