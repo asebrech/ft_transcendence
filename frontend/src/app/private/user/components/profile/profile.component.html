@@ -24,28 +24,11 @@
             <p>3H</p>
           </div>
         </div>
-        <div class="ratio">
-          <circle-progress
-          [radius]="100"
-          [space]="-10"
-          [outerStrokeGradient]="true"
-          [outerStrokeWidth]="10"
-          [outerStrokeColor]="'#4882c2'"
-          [outerStrokeGradientStopColor]="'#53a9ff'"
-          [innerStrokeColor]="'#e7e8ea'"
-          [innerStrokeWidth]="10"
-          [title]="'ratio'"
-          [animateTitle]="true"
-          [animationDuration]="1000"
-          [showUnits]="true"
-          [showBackground]="false"
-          [clockwise]="false"
-          [startFromZero]="true"
-          [lazy]="true"
-          [responsive]="true"
-
-        ></circle-progress>
-        </div>
+        <svg class="progress-circle" width="100%" height="100%" viewBox="0 0 42 42" >
+          <circle class="progress-background" cx="21" cy="21" r="15.91549430918954"></circle>
+          <circle class="progress-bar" cx="21" cy="21" r="15.91549430918954" [style.stroke-dasharray]="progress"></circle>
+        </svg>
+        <div class="progress-label">RATIO</div>
     </div>
     <div class="block">
       <h1>HISTORY</h1>

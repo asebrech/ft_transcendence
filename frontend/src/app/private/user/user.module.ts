@@ -22,28 +22,9 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
   imports: [
     CommonModule,
     UserRoutingModule,
-    NgCircleProgressModule.forRoot({
-      radius: 100,
-      space: -10,
-      outerStrokeGradient: true,
-      outerStrokeWidth: 10,
-      outerStrokeColor: "#4882c2",
-      outerStrokeGradientStopColor: "#53a9ff",
-      innerStrokeColor: "#e7e8ea",
-      innerStrokeWidth: 10,
-      title: "ratio",
-      animateTitle: true,
-      animationDuration: 1000,
-      showUnits: true,
-      showBackground: true,
-      clockwise: false,
-      startFromZero: true,
-      lazy: true,
-      responsive: true
-    }),
-	QRCodeModule,
-	FormsModule,
-	PrivateModule
+    QRCodeModule,
+    FormsModule,
+    PrivateModule,
   ]
 })
 export class UserModule { }
