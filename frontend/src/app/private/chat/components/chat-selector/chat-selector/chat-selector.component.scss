@@ -1,0 +1,66 @@
+.main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.title {
+	display: flex;
+	justify-content: center;
+	font-family: 'nasalization';
+	font-size: 30px;
+	color: white;
+	margin-top: 10px;
+	cursor: 	default;
+	user-select: none;
+}
+
+.separator {
+	content: '';
+	position: absolute;
+	top: 60px;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 150px;
+	height: 1px;
+	background-color: white;
+}
+
+.arrow {
+	width: 15px;
+	height: 15px;
+	display: flex;
+	margin-left: 85%;
+	margin-top: -5%;
+}
+
+.switch {
+	z-index: 99999;
+	position: absolute;
+	margin-top: 55px;
+	width: 200px;
+	height: 60px;
+	border-radius: 9px;
+	background: rgba(22, 7, 45, 0.5);
+	box-shadow: 23px 0px 24px rgba(0, 0, 0, 0.25);
+	backdrop-filter: blur(15px);
+	opacity: 1;
+	transition: opacity 0.2s ease-in-out;
+}
+
+.hidden {
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0s ease-in-out;
+
+}
+
+.switch label {
+	position: absolute;
+	top: 50%;
+  	left: 50%;
+	transform: translate(-50%, -50%);
+	cursor: pointer;
+	font-size: 18px;
+	color: white
+}

@@ -102,17 +102,16 @@ export class PlayScene extends Phaser.Scene
       })
   }
 
-  
-
   override update() 
   {
     
     if(start == true)
       room?.send("ball_pos", {x : this.false_ball.x, y : this.false_ball.y})
     
-      room?.onMessage("position", ({x, y}) =>{
-      ball.setPosition(x,y);
-    })
+      room?.onMessage("position", ({x, y}) =>
+      {
+        ball.setPosition(x,y);
+      })
 
     // room?.send("ball_launch", {ball_velocity_x, ball_velocity_y})
     // if (ball.x > 950)
