@@ -1,31 +1,21 @@
-
-
 #main-div
 {
     display: flex;
     flex-direction: row;
-
+    color: white;
+    font-family: 'nasalization';
+    height: 710px;
 }
 .row 
 {
     margin-bottom: 0;
 }
-
-#chat
-{
-    width: 19%;
-    height: 85vh;
-    margin-top: 10vh;
-    margin-left: 3vh;
-    background: rgba(22, 7, 45, 0.3) ;
-    // background: red;
-    box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(4.5px);
-}
-
 //----------------------------//
 #gameContainer
 {
-    margin-left: 5vw;
-    margin-top: 10vh;
+    margin-left: 100px;   
+    height: 740px;
+    width: 1325px;
+    backdrop-filter: blur(4.5px);
 }
+

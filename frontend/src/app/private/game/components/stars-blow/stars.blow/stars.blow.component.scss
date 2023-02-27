@@ -1,0 +1,112 @@
+.bdy, .ht 
+{ 
+	width: 1295px;
+	height: 740px;
+	margin-left: -160px;
+}
+.bdy {
+	background-color: rgba(25,25,25,1);
+}
+
+#blackhole {
+	
+	height: 100%;
+	width: 100%;
+	margin-left: 11%;
+	position: relative;
+	display: flex;
+}
+
+.centerHover {
+	width: 255px;
+	height: 255px;
+	background-color: transparent;
+	border-radius: 50%;
+	position: absolute;
+	left: 33%;
+	top: 26.5%;
+	margin-top: 50px;
+	margin-left: 50px;
+	z-index: 2;
+	cursor: pointer;
+	line-height: 255px;
+	text-align: center;
+	transition: all 500ms;
+	
+	&.open  {
+		opacity: 0;
+		pointer-events: none;
+	}
+	
+	&:hover span {
+		color: #DDD;
+		
+		&:before { background-color: #DDD; }
+		&:after { background-color: #DDD; }
+	}
+	
+	span {
+		color: rgb(255, 255, 255);
+		font-family: 'nasalization';
+		font-size: 18px;
+		position: relative;
+		transition: all 500ms;
+		
+		&:before {
+			content: '';
+			display: inline-block;
+			height: 1px;
+			width: 16px;
+			margin-right: 12px;
+			margin-bottom: 4px;
+			background-color: #666;
+			transition: all 500ms;
+		}
+		&:after {
+			content: '';
+			display: inline-block;
+			height: 1px;
+			width: 16px;
+			margin-left: 12px;
+			margin-bottom: 4px;
+			background-color: #666;
+			transition: all 500ms;
+		}
+	}
+}
+canvas {
+	position: relative;
+}
+
+.waiting
+{	
+	position: absolute;
+	left: 48vw;
+	top: 52vh;
+	border-left: solid 1px white;
+	border-right: solid 1px white;
+	padding-left: 5px;
+	padding-right: 5px;
+
+}
+
+.waiting_animation
+{
+    transform: opacity;
+    animation: pulse 3s infinite;
+    @keyframes pulse 
+	{
+        0% {
+            opacity: 0;
+        }
+        
+        50% {
+            opacity: 50;
+        }
+        
+        100% {
+            opacity: 0;
+        }
+    }
+  
+}

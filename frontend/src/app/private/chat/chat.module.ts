@@ -19,6 +19,8 @@ import { ChatRoomComponent } from './components/chat-room/chat-room.component';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component'; 
 import { ChatRoutingModule } from './chat-routing.module';
 import { PrivateModule } from '../private.module';
+import { ChatSelectorComponent } from './components/chat-selector/chat-selector/chat-selector.component';
+import { FindChannelComponent } from './components/find-channel/find-channel/find-channel.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { PrivateModule } from '../private.module';
     CreateRoomComponent,
     SelectUsersComponent,
     ChatRoomComponent,
-    ChatMessageComponent
+    ChatMessageComponent,
+    ChatSelectorComponent,
+    FindChannelComponent
   ],
   imports: [
     CommonModule,

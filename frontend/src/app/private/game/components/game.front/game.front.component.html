@@ -1,19 +1,7 @@
 <app-nav-bar></app-nav-bar>
-
-<div id="main-div" class="row">
-
-    <div id="nav-side" class="col m1">
-
-    </div>
-
-    <div id="gameContainer">
-      </div>
-
-      <button (click)="this.test()" style="width: 100px; height: 50px;">Join Room</button>
-      <button  (click)="this.throw()" style="width: 100px; height: 50px;">throwBall</button>
-      <input type="text"  style="width: 100px; height: 50px; background-color: white;" >
-    <div id="chat" class="col m5">
-
-    </div>
+<div id="main-div" class="row" (click)="launchWaitingGame()">
+  <div id="gameContainer">
+  </div>
+  <app-stars-blow *ngIf="hide"></app-stars-blow>
 </div>
 

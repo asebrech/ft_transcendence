@@ -1,0 +1,12 @@
+<div class="main">
+	<h1 *ngIf="!dashService.channel" class="title">Messages</h1>
+	<h1 *ngIf="dashService.channel" class="title">Channels</h1>
+	<img [src]="switchMenue ? imagePath1 : imagePath2" class="arrow">
+	<div class="switch" [ngClass]="{'hidden': !switchMenue}" >
+		<label *ngIf="!dashService.channel" (click)="switch()" >Channel</label>
+		<label *ngIf="dashService.channel" (click)="switch()" >Messages</label>
+	</div>
+	<div class="separator"></div>
+</div>
+
+

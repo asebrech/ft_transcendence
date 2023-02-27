@@ -1,11 +1,17 @@
 <app-nav-bar></app-nav-bar>
-
 <div class="dashboard">
+	
 	<div class="chat-selector">
+		<app-chat-selector></app-chat-selector>
+		<div *ngIf="dashService.channel"  class="search-container">
+			<label>Find a channel</label>
+		</div>
 	</div>
+	
 	<div class="messages">
 	</div>
 </div>
+<app-find-channel [ngClass]="{'hidden': !find}" class="findChannel"></app-find-channel>
 
 
 	<!-- <div class="container">
