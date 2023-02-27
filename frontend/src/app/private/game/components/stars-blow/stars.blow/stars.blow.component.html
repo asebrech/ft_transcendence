@@ -1,0 +1,11 @@
+<div class="ht" style="background-color: transparent;">
+    <div class="bdy" style="background-color: transparent;">
+        <div id="blackhole" style="background-color: transparent;">
+            <canvas id="canvas" ></canvas>
+            <div (click)="playSound()" class="centerHover"><span>START GAME</span></div>
+        </div>
+    </div>
+</div>
+<div *ngIf="waiting" ><p class="waiting waiting_animation" >SEARCHING</p> </div>
+
+

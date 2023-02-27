@@ -1,20 +1,7 @@
 <app-nav-bar></app-nav-bar>
-
-<div id="main-div" class="row">
-    <!-- <button (click)="this.test()" style="width: 100px; height: 50px;">Join Room</button>
-    <button  (click)="this.throw()" style="width: 100px; height: 50px;">throwBall</button>
-    <input type="text" #roomId style="width: 100px; height: 50px; background-color: white;" (keyup.enter)="connect(roomId.value)" > -->
-
-    <div id="gameContainer">
-      <div  class="play">
-        <a [routerLink]="['../login']" class="play_animation" >START GAME</a>
-      </div>
-      </div>
-    <div id="chat" class="col m5">
-      <div class="chat-container">
-        <p class="chat-title">Game Chat</p> 
-        <a ><img class="chat-logo" src="../../../../assets/images/transmitter_1.png"></a>
-      </div>
-    </div>
+<div id="main-div" class="row" (click)="launchWaitingGame()">
+  <div id="gameContainer">
+  </div>
+  <app-stars-blow *ngIf="hide"></app-stars-blow>
 </div>
 
