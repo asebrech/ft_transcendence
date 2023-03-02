@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
+import { LaunchGameService } from '../../../services/launch.game.service';
 
-export let wty : number = 0;
 
 @Component({
   selector: 'app-stars-blow',
@@ -10,19 +10,20 @@ export let wty : number = 0;
 })
 export class StarsBlowComponent implements OnInit {
   
-  constructor() { }
-  
-  waiting : number = 0;
- 
-  playSound() {
+  constructor(private launch: LaunchGameService) {}
+
+  hide_waiting : number = 0;
+
+  playSound()
+  {
     let audio = new Audio()
     audio.src = "../../../../assets/test.wav";
     audio.load();
     audio.play();
-    this.waiting = 1;
-    wty = 1;
+    this.hide_waiting = this.launch.hideWaiting(this.hide_waiting);
+    this.launch.showButtonOn(1);
   }
-  
+
   ngOnInit(): void 
   {
     blackhole('#blackhole');

@@ -5,7 +5,8 @@ import { Client } from 'colyseus.js';
 import { PlayScene } from '../../services/play.scene.service';
 import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
-import { wty } from '../stars-blow/stars.blow/stars.blow.component'
+import { LaunchGameService } from '../../services/launch.game.service';
+import { threadId } from 'worker_threads';
 
 export let room : any;
 export let client : Client;
@@ -31,10 +32,9 @@ export class GameFrontComponent implements OnInit, OnDestroy
   endLoseScene: Phaser.Game;
   endLoseSceneConfig: Phaser.Types.Core.GameConfig;
   //////////////////////////////////
-  hide : boolean = true;
-  constructor(private starsService: StarsService, private location : Location) 
-  {}
-
+  constructor(private starsService: StarsService, private location : Location, private launch : LaunchGameService) 
+  {
+  }
   ngOnInit()
   {
     ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
@@ -76,24 +76,36 @@ export class GameFrontComponent implements OnInit, OnDestroy
         }
       }
     };
-
     // this.playScene = new Phaser.Game(this.playSceneConfig);
     // this.endLoseScene = new Phaser.Game(this.endLoseSceneConfig);
     // this.endWinScene = new Phaser.Game(this.endWinSceneConfig);
-
   }
-
-  launchWaitingGame()
+  addButtonStatus(nbr : number)
   {
-    if(wty == 1)
-    {
-      setTimeout(() => {
-        this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
-        this.hide = false;
-      }, 10000);
-    }
+    //////THIS BUTTON HAS 2 STATS///////
+    //////0 = button not shown//////////
+    //////1 =  button shown ////////////
+    this.launch.showButtonOn(nbr);
+  }
+  callButtonStatus()
+  {
+    return this.launch.showButtonStats();
   }
 
+  launchBotPlay()
+  {
+    this.addButtonStatus(0);
+    this.launch.launchGame();
+    this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
+  }
+  switchToBotPlay()
+  {
+    if (this.launch.launchGameRet() == 1)
+    {
+      return 0;
+    }
+    return 1;
+  }
 
   async throw()
   {

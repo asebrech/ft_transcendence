@@ -1,6 +1,6 @@
 import { room } from "../components/game.front/game.front.component";
 
-let right_pad: any;
+let computerPad: any;
 let left_pad: any;
 let ball : any;
 let ball_velocity_x : number;
@@ -35,7 +35,7 @@ export class WaitingScene extends Phaser.Scene
     }   
 
   preload() {
-    this.load.image('right_pad', 'assets/images/pad.png');
+    this.load.image('computerPad', 'assets/images/pad.png');
     this.load.image('left_pad', 'assets/images/pad2.png');
     this.load.image('ball', 'assets/images/ball.png');
   }
@@ -52,21 +52,26 @@ export class WaitingScene extends Phaser.Scene
     ball.setBounce(1,1);
     /////////////PADS CONFIG/////////////////////////////
     left_pad = this.physics.add.image(30, 350, 'left_pad').setCollideWorldBounds(true);
-    right_pad = this.physics.add.image(1310, 350, 'right_pad').setCollideWorldBounds(true);
+    computerPad = this.physics.add.image(1310, 350, 'computerPad').setCollideWorldBounds(true);
     left_pad.scale = 0.3;
-    right_pad.scale = 0.3;
+    computerPad.scale = 0.3;
     left_pad.body.pushable = false;
-    right_pad.body.pushable = false;
+    computerPad.body.pushable = false;
     //////////////////////////////////////////////////
     this.physics.add.existing(this.wall_bottom, true); // Ajoute la physique au rectangle cree avec phaser
     this.physics.add.existing(this.wall_top, true); // Ajoute la physique au rectangle cree avec phaser
     this.physics.add.existing(ball, true);
     //////////////////////////////////////////////////
-    this.physics.add.collider(right_pad, ball);
+    this.physics.add.collider(computerPad, ball);
     this.physics.add.collider(ball, left_pad);
     this.physics.add.collider(ball, this.wall_bottom); // Ajoute la collision entre l'object cree avec phaser et un autre objet
     this.physics.add.collider(ball, this.wall_top);
     //////////////////////////////////////////////////
+    this.physics.add.collider(computerPad, this.wall_bottom);
+    this.physics.add.collider(computerPad, this.wall_top);
+    this.physics.add.existing(computerPad, true);
+
+
     this.input.on('pointermove', function (pointer)
     {
         left_pad.setVisible(true).setPosition(30, pointer.y)
@@ -75,6 +80,8 @@ export class WaitingScene extends Phaser.Scene
 
   override update() 
   {
+    
+    computerPad.setY(ball.y)
     if (ball.x > 1310)
     {
       this.scene.restart();

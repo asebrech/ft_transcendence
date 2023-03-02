@@ -18,4 +18,28 @@
     width: 1325px;
     backdrop-filter: blur(4.5px);
 }
+.playBotScene
+{
+    position: absolute;
+    z-index: 99;
+    margin-top: 80vh;
+    left: 43vw;
+    align-self: center;
+    font-family: 'nasalization';
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 15px;
+    padding: 15px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 5s ease-out;
+}
+
+.playBotScene:hover
+{
+    background-color: rgb(255, 255, 255, 0.3);
+}
+
+
 
