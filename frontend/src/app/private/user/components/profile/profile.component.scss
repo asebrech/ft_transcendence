@@ -2,6 +2,7 @@
   display: table;
   min-width: fit-content;
   margin-top: 5%;
+  width: 100vh;
 }
 
 .block {
@@ -118,4 +119,22 @@ h2 {
   font-family: 'nasalization';
   color: white;
   font-size: xxx-large;
+}
+
+
+table {
+  border-collapse: collapse;
+  display: grid;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+td {
+  text-align: center;
+  border: 1px solid white;
+  margin-bottom: 10px;
+}
+
+tr {
+  margin-bottom: 10px;
 }

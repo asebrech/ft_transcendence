@@ -3,6 +3,7 @@ import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { Math } from 'phaser';
 import { PercentPipe } from '@angular/common';
+import { UserService } from 'src/app/public/services/user-service/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,15 +13,26 @@ import { PercentPipe } from '@angular/common';
 
 export class ProfileComponent {
 
-  user : UserI = this.authService.getLoggedInUser();
+  user = this.authService.getLoggedInUser();
+  player : UserI;
   progress: number = 0;
-  victory: number = 15;
-  loss: number = 4;
 
-  constructor(private authService : AuthService) { }
+  constructor(private authService : AuthService, private userService: UserService) { }
 
   ngOnInit() {
-  this.progress = ((this.victory - this.loss) / this.victory) * 100;
+    this.player = this.userService.getUser(this.user.id);
+    // vérifier si l'objet player existe et a la propriété playerstats
+    if (this.player && this.player.playerstats) {
+      this.player.playerstats.player_win = 10;
+      this.player.playerstats.player_losse = 6;
+      this.player.playerstats.total =
+        this.player.playerstats.player_win +
+        this.player.playerstats.player_losse;
+      this.progress =
+        (this.player.playerstats.player_win /
+          this.player.playerstats.total) *
+        100;
   console.log(this.progress);
+   }
   }
 }

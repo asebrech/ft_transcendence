@@ -10,6 +10,11 @@ import { UserI } from 'src/app/model/user.interface';
 export class UserService {
 
   mail : string;
+  users: UserI[] = [
+    { id: 1, username: 'John Doe', playerstats: { player_win: 5, player_losse: 2 , player_id : 'jd', player_name: 'john doe', total:16} },
+    { id: 2, username: 'Jane Doe', playerstats: { player_win: 10, player_losse: 5, player_id : 'jda', player_name: 'john dane', total:14 } },
+    { id: 3, username: 'Bob Smith', playerstats: { player_win: 2, player_losse: 3, player_id : 'bs', player_name: 'bob smith', total:8 } },
+  ];
 
   constructor(private http: HttpClient, private snackbar: MatSnackBar ) { }
 
@@ -29,5 +34,9 @@ export class UserService {
 			return throwError(() => e);
 		})
 	);
+  }
+
+  getUser(id: number): UserI | undefined {
+    return this.users.find(user => user.id === id);
   }
 }

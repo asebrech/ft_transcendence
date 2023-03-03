@@ -61,6 +61,7 @@ form{
 		color: white;
 		padding-bottom: 5px;
 		margin-block: 15px;
+    font-size: 2em;
 	}
 }
 
@@ -127,4 +128,8 @@ mat-card {
 			}
 		}
 	}
+}
+
+::placeholder {
+  font-size: 0.8em;
 }

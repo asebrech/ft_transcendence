@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
-/* 
+/*
 html5doctor.com Reset Stylesheet
 v1.6.1
 Last Updated: 2010-09-17
-Author: Richard Clark - http://richclarkdesign.com 
+Author: Richard Clark - http://richclarkdesign.com
 Twitter: @rich_clark
 */
 
@@ -16,7 +16,7 @@ b, i,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, figcaption, figure, 
+article, aside, canvas, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section, summary,
 time, mark, audio, video {
     margin:0;
@@ -38,10 +38,12 @@ body {
 	background-color: #110720;
 	font-family: Arial, sans-serif;
 	color: white;
+  text-align: -webkit-center;
+
 }
 
 article,aside,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section { 
+footer,header,hgroup,menu,nav,section {
   display:block;
 }
 
@@ -78,7 +80,7 @@ ins {
 /* change colours to suit your needs */
 mark {
   background-color:#ff9;
-  color:#000; 
+  color:#000;
   font-style:italic;
   font-weight:bold;
 }
@@ -101,7 +103,7 @@ table {
 hr {
   display:block;
   height:1px;
-  border:0;   
+  border:0;
   border-top:1px solid #ffffff;
   margin:1em 0;
   padding:0;
@@ -113,5 +115,4 @@ input, select {
 @font-face {
   font-family: nasalization;
   src: url(./assets/font/nasalization-rg.ttf);
-} 
-///-------------///
+}

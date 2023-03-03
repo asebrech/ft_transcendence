@@ -24,6 +24,7 @@ export class RegisterComponent {
 	},
 		{ validators: CustomValidators.passwordsMatching }
 	);
+
   mail : string | undefined = this.userService.mail;
 
 	constructor(private userService: UserService, private router: Router, private authService: AuthService) {}
