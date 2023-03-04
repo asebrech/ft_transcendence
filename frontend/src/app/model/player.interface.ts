@@ -5,4 +5,5 @@ export interface Player
     player_win: number | undefined;
     player_losse: number | undefined;
     total: number;
+    
 }

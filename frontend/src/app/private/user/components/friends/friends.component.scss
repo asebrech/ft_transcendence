@@ -1,0 +1,63 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: flex-start;
+    justify-content: space-between;
+    align-items: baseline;
+    box-shadow: 23px 0px 31px rgb(0 0 0 / 25%);
+    backdrop-filter: blur(4.5px);
+    margin-left: 100px;
+    margin-right: 50px;
+    overflow: hidden; // eviter les depassement de div par rapport a sa div parent selon taille de la fenetre
+}
+
+.friend-list {
+  display: flex;
+  padding-bottom: 30em;
+}
+
+.search {
+  margin-left: 100px;
+  display: flex;
+  padding-bottom: 30em;
+  flex-direction: column;
+}
+
+img {
+  width: 30px;
+}
+
+hr {
+  width: -webkit-fill-available;
+  position: absolute;
+  margin-top:80px;
+}
+
+.title {
+    display: flex;
+    font-family: 'nasalization';
+    border: solid;
+    border-block-width: 1px;
+    font-size: xx-large;
+    padding: 15px;
+    border-width: thin;
+}
+
+input {
+  position: absolute;
+  display: flex;
+  width: -webkit-fill-available;
+  margin-top: 100px;
+  border: none;
+  opacity: 25%;
+  font-size: x-large;
+  background-color: transparent;
+  border-radius: 3px;
+  color: white;
+}
+
+::placeholder {
+  font-size: 0.8em;
+  color: whitesmoke;
+}
