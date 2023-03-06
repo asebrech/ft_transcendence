@@ -9,10 +9,10 @@ import { UserService } from 'src/app/public/services/user-service/user.service';
 })
 export class FriendsComponent implements OnInit {
 
-  friendlist : [];
   constructor(private authService: AuthService, private userService: UserService) { }
 
   ngOnInit(): void {
+
   }
 
 }
