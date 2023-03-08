@@ -1,4 +1,4 @@
-import { Component, NgModule, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, SimpleChanges, HostListener} from '@angular/core';
 import { Location } from '@angular/common';
 import * as Phaser from 'phaser';
 import { Client } from 'colyseus.js';
@@ -7,9 +7,12 @@ import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
 import { threadId } from 'worker_threads';
+import { debug } from 'console';
 
 export let room : any;
 export let client : Client;
+export let inWidth : number;
+export let inHeight : number;
 
 @Component({
   selector: 'app-game.front',
@@ -19,6 +22,8 @@ export let client : Client;
 
 export class GameFrontComponent implements OnInit, OnDestroy
 {
+  @HostListener('window:resize', ['$event'])
+
   //////////////////////////////////
   playScene: Phaser.Game;
   playSceneConfig: Phaser.Types.Core.GameConfig;
@@ -35,8 +40,12 @@ export class GameFrontComponent implements OnInit, OnDestroy
   constructor(private starsService: StarsService, private location : Location, private launch : LaunchGameService) 
   {
   }
+
   ngOnInit()
-  {
+  { 
+    inWidth = window.innerWidth;
+    inHeight = window.innerHeight;  
+    console.log(innerWidth)
     ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
 	  this.starsService.setActive(false);
     /////////////////INIT PLAYER SESSION//////////////////////////
@@ -48,8 +57,8 @@ export class GameFrontComponent implements OnInit, OnDestroy
       scale: {
         mode: Phaser.Scale.FIT,
         parent: 'gameContainer',
-        width: 1050,
-        height: 740,
+        width: innerWidth,
+        height: innerHeight,
       },
       physics: {
         default: 'arcade',
@@ -64,14 +73,16 @@ export class GameFrontComponent implements OnInit, OnDestroy
       scene: [WaitingScene],
       scale: {
         mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: 'gameContainer',
-        width: 1310,
-        height: 730,
+        width: innerWidth,
+        height: innerHeight,
       },
       transparent: true,
       physics: {
         default: 'arcade',
         arcade: {
+          debug: true,
           gravity: {y : 0, x: 0 }
         }
       }

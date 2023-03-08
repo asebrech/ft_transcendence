@@ -1,21 +1,24 @@
 #main-div
 {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
     color: white;
     font-family: 'nasalization';
-    height: 710px;
 }
 .row 
 {
     margin-bottom: 0;
 }
 //----------------------------//
+
 #gameContainer
 {
-    margin-left: 100px;   
-    height: 740px;
-    width: 1325px;
+    position: absolute;
+    height: 90vh;
+    width: 100vw;
+    margin-left: 3%;
+    margin-top: 90vh;
     backdrop-filter: blur(4.5px);
 }
 .playBotScene
