@@ -6,8 +6,7 @@ import { PlayScene } from '../../services/play.scene.service';
 import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
-import { threadId } from 'worker_threads';
-import { debug } from 'console';
+import { Lost } from '../../services/lost.scene.service';
 
 export let room : any;
 export let client : Client;
@@ -87,9 +86,28 @@ export class GameFrontComponent implements OnInit, OnDestroy
         }
       }
     };
-    // this.playScene = new Phaser.Game(this.playSceneConfig);
-    // this.endLoseScene = new Phaser.Game(this.endLoseSceneConfig);
-    // this.endWinScene = new Phaser.Game(this.endWinSceneConfig);
+    /////////////////LOST SCENE CONFIG////////////////////
+    this.endLoseSceneConfig = {
+      type: Phaser.AUTO,
+      scene: [Lost],
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        parent: 'gameContainer',
+        width: innerWidth,
+        height: innerHeight,
+      },
+      transparent: true,
+      physics: {
+        default: 'arcade',
+        arcade: {
+          debug: true,
+          gravity: {y : 0, x: 0 }
+        }
+      }
+    };
+
+  
   }
   addButtonStatus(nbr : number)
   {
@@ -107,7 +125,12 @@ export class GameFrontComponent implements OnInit, OnDestroy
   {
     this.addButtonStatus(0);
     this.launch.launchGame();
+
+    
     this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
+    // this.endLoseScene = new Phaser.Game(this.endLoseSceneConfig);
+    // this.playScene = new Phaser.Game(this.playSceneConfig);
+    // this.endWinScene = new Phaser.Game(this.endWinSceneConfig);
   }
   switchToBotPlay()
   {

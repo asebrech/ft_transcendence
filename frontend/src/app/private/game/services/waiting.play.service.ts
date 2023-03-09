@@ -25,7 +25,6 @@ export class WaitingScene extends Phaser.Scene
   last_bg_y : number;
   speed : number;
 
-
   constructor() 
   {
     super({ key: 'new' });
@@ -34,8 +33,8 @@ export class WaitingScene extends Phaser.Scene
     ball_velocity_x = 300;
     ball_velocity_y = 300;
     ///////////////TODO : REGLER L APPARITION ALEATOIR
-    this.last_bg_x = this.getRandomInt(inWidth, 4000);
-    this.last_bg_y = this.getRandomInt(inHeight, 4000);
+    this.last_bg_x = 5345 + 1024;
+    this.last_bg_y = 327 + 1024;
     this.speed = 300;
   }
 
@@ -86,11 +85,6 @@ export class WaitingScene extends Phaser.Scene
     this.camera1 = this.cameras.add(0,0, inWidth, inHeight);
     this.camera1.startFollow(this.bg)
     this.camera1.centerOn(inWidth,inHeight);
-    this.cameras.main.once('camerafadeoutcomplete', function (camera) 
-    {
-      camera.fadeIn(6000, 255);
-    }, this);
-    this.cameras.main.fadeOut(6000, 255);
     /////////////////////////////////////////////////
     this.score = this.add.text(1160 / 2, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'}).setScrollFactor(0);
     this.wall_bottom = this.add.rectangle(inWidth / 2, -5, inWidth, 10 , 0xff0000).setScrollFactor(0);
@@ -148,11 +142,14 @@ export class WaitingScene extends Phaser.Scene
       }
     }, this);
     //////////////////////////////////////////
-
   }
-
+  
   override update() 
   {
+    if (this.right_score || this.left_score == 10)
+    {
+
+    }
     //////////////////////////////////////////////////////////////
     if (ball.body.newVelocity.x > 0)
     {
