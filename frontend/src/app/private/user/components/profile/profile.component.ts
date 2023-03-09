@@ -1,10 +1,9 @@
 import { Component, NgModule, OnInit } from '@angular/core';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
-import { Math } from 'phaser';
 import { PercentPipe } from '@angular/common';
 import { UserService } from 'src/app/public/services/user-service/user.service';
-import { PlayerService } from '../../services/player-service.service';
+import { PlayerService } from '../../services/player.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +21,7 @@ export class ProfileComponent {
   constructor(private authService : AuthService, private userService: UserService, private playerService: PlayerService) { }
 
   ngOnInit() {
-    this.user = this.userService.getUser(this.user.id);
+    this.user = this.authService.getLoggedInUser();
     this.username = this.playerService.username;
     this.victories = this.playerService.victories;
     this.defeats = this.playerService.defeats;

@@ -8,7 +8,7 @@ import { UserService } from 'src/app/public/services/user-service/user.service';
 })
 export class PlayerService {
 
-  user : UserI;
+  user : UserI = this.authService.getLoggedInUser();
   username: string;
   victories: number;
   defeats: number;
@@ -26,7 +26,7 @@ export class PlayerService {
     this.ratio = (this.victories / (this.victories + this.defeats)) * 100;
     return this.ratio;
   }
-
+  
 }
 
 

@@ -14,13 +14,17 @@
 
 .friend-list {
   display: flex;
-  padding-bottom: 30em;
+  padding-bottom: 18em;
+}
+
+h1 {
+  padding-right: 10px;
 }
 
 .search {
   margin-left: 100px;
   display: flex;
-  padding-bottom: 30em;
+  padding-bottom: 18em;
   flex-direction: column;
 }
 
