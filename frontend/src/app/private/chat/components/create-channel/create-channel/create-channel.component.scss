@@ -1,0 +1,97 @@
+.main {
+	position: absolute;
+	z-index: 9999;
+	width: 250px;
+	height: auto;
+	margin-left: 260px;
+	border-radius: 9px;
+	background: rgba(22, 7, 45, 0.5);
+	box-shadow: 23px 0px 24px rgba(0, 0, 0, 0.25);
+	backdrop-filter: blur(15px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+}
+
+@media screen and (max-height: 430px) {
+	.main {
+		position: fixed;
+		bottom: 0;
+	}
+  }
+
+  @media screen and (max-width: 630px) {
+	.main {
+		position: fixed;
+		right: 0;
+	}
+  }
+
+.title {
+	margin-top: 10px;
+	font-family: 'nasalization';
+	font-size: 20px;
+}
+
+.separator {
+	width: 100px;
+	height: 1px;
+	background-color: white;
+	margin-bottom: 10px;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+}
+
+.checkbox {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.inputCustom {
+	background: rgba(217, 217, 217, 0.25);
+	border: none;
+	color: #989aa2;
+	border-radius: 3px;
+	padding: 5px;
+}
+
+.inputCustom:focus {
+	outline: none;
+	color: white;
+}
+
+.error {
+	color: red;
+	font-size: 10px;
+	margin: -5px;
+}
+
+.submit {
+	width: 100%;
+}
+
+.submit button {
+	width: 100%;
+	background: #C32F76;
+	border: none;
+	border-radius: 3px;
+	color: white;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+.submit button:disabled {
+	color: #989aa2;
+	background: #AB3B71;
+}
+
+.submit button:enabled {
+	cursor: pointer;
+}
