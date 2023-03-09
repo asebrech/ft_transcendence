@@ -7,7 +7,7 @@
     align-items: baseline;
     box-shadow: 23px 0px 31px rgb(0 0 0 / 25%);
     backdrop-filter: blur(4.5px);
-    margin-left: 100px;
+    margin-left: 130px;
     margin-right: 50px;
     overflow: hidden; // eviter les depassement de div par rapport a sa div parent selon taille de la fenetre
 }
@@ -22,7 +22,6 @@ h1 {
 }
 
 .search {
-  margin-left: 100px;
   display: flex;
   padding-bottom: 18em;
   flex-direction: column;
@@ -33,7 +32,7 @@ img {
 }
 
 hr {
-  width: -webkit-fill-available;
+  width: 100%;
   position: absolute;
   margin-top:80px;
 }
