@@ -1,14 +1,17 @@
-import { Component, NgModule, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, SimpleChanges, HostListener} from '@angular/core';
 import { Location } from '@angular/common';
 import * as Phaser from 'phaser';
 import { Client } from 'colyseus.js';
 import { PlayScene } from '../../services/play.scene.service';
 import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
-import { wty } from '../stars-blow/stars.blow/stars.blow.component'
+import { LaunchGameService } from '../../services/launch.game.service';
+import { Lost } from '../../services/lost.scene.service';
 
 export let room : any;
 export let client : Client;
+export let inWidth : number;
+export let inHeight : number;
 
 @Component({
   selector: 'app-game.front',
@@ -18,6 +21,8 @@ export let client : Client;
 
 export class GameFrontComponent implements OnInit, OnDestroy
 {
+  @HostListener('window:resize', ['$event'])
+
   //////////////////////////////////
   playScene: Phaser.Game;
   playSceneConfig: Phaser.Types.Core.GameConfig;
@@ -31,12 +36,15 @@ export class GameFrontComponent implements OnInit, OnDestroy
   endLoseScene: Phaser.Game;
   endLoseSceneConfig: Phaser.Types.Core.GameConfig;
   //////////////////////////////////
-  hide : boolean = true;
-  constructor(private starsService: StarsService, private location : Location) 
-  {}
+  constructor(private starsService: StarsService, private location : Location, private launch : LaunchGameService) 
+  {
+  }
 
   ngOnInit()
-  {
+  { 
+    inWidth = window.innerWidth;
+    inHeight = window.innerHeight;  
+    console.log(innerWidth)
     ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
 	  this.starsService.setActive(false);
     /////////////////INIT PLAYER SESSION//////////////////////////
@@ -48,8 +56,8 @@ export class GameFrontComponent implements OnInit, OnDestroy
       scale: {
         mode: Phaser.Scale.FIT,
         parent: 'gameContainer',
-        width: 1050,
-        height: 740,
+        width: innerWidth,
+        height: innerHeight,
       },
       physics: {
         default: 'arcade',
@@ -64,36 +72,74 @@ export class GameFrontComponent implements OnInit, OnDestroy
       scene: [WaitingScene],
       scale: {
         mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: 'gameContainer',
-        width: 1310,
-        height: 730,
+        width: innerWidth,
+        height: innerHeight,
       },
       transparent: true,
       physics: {
         default: 'arcade',
         arcade: {
+          debug: true,
+          gravity: {y : 0, x: 0 }
+        }
+      }
+    };
+    /////////////////LOST SCENE CONFIG////////////////////
+    this.endLoseSceneConfig = {
+      type: Phaser.AUTO,
+      scene: [Lost],
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        parent: 'gameContainer',
+        width: innerWidth,
+        height: innerHeight,
+      },
+      transparent: true,
+      physics: {
+        default: 'arcade',
+        arcade: {
+          debug: true,
           gravity: {y : 0, x: 0 }
         }
       }
     };
 
-    // this.playScene = new Phaser.Game(this.playSceneConfig);
-    // this.endLoseScene = new Phaser.Game(this.endLoseSceneConfig);
-    // this.endWinScene = new Phaser.Game(this.endWinSceneConfig);
-
+  
   }
-
-  launchWaitingGame()
+  addButtonStatus(nbr : number)
   {
-    if(wty == 1)
-    {
-      setTimeout(() => {
-        this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
-        this.hide = false;
-      }, 10000);
-    }
+    //////THIS BUTTON HAS 2 STATS///////
+    //////0 = button not shown//////////
+    //////1 =  button shown ////////////
+    this.launch.showButtonOn(nbr);
+  }
+  callButtonStatus()
+  {
+    return this.launch.showButtonStats();
   }
 
+  launchBotPlay()
+  {
+    this.addButtonStatus(0);
+    this.launch.launchGame();
+
+    
+    this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
+    // this.endLoseScene = new Phaser.Game(this.endLoseSceneConfig);
+    // this.playScene = new Phaser.Game(this.playSceneConfig);
+    // this.endWinScene = new Phaser.Game(this.endWinSceneConfig);
+  }
+  switchToBotPlay()
+  {
+    if (this.launch.launchGameRet() == 1)
+    {
+      return 0;
+    }
+    return 1;
+  }
 
   async throw()
   {
