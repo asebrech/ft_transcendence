@@ -2,9 +2,9 @@
 <div id="main-div" class="row">
   <div id="gameContainer">
   </div>
-  <button *ngIf="callButtonStatus()" (click)="launchBotPlay()" class="playBotScene">Play vs Bot while waiting</button>
+  <!-- <button *ngIf="callButtonStatus()" (click)="launchBotPlay()" class="playBotScene">Play vs Bot while waiting</button> -->
   <button (click)="join()" style="z-index: 999999;">join</button>
-  <!-- <button (click)="ready()" style="z-index: 999999;">throw</button> -->
-  <app-stars-blow *ngIf="switchToBotPlay()"></app-stars-blow>
+  <button (click)="ready()" style="z-index: 999999;">throw</button>
+  <!-- <app-stars-blow *ngIf="switchToBotPlay()"></app-stars-blow> -->
 </div>
 

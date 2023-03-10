@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { LaunchGameService } from '../../../services/launch.game.service';
-import { setTimeout } from 'timers';
 import { room } from '../../game.front/game.front.component';
 
 

@@ -141,10 +141,10 @@ export class GameFrontComponent implements OnInit, OnDestroy
     return 1;
   }
   ////////////////////////////////////////////////
-  // async ready()
-  // {
-  //   room?.send("ready");
-  // }
+  async ready()
+  {
+    room?.send("ready");
+  }
   async join()
   {
     try {

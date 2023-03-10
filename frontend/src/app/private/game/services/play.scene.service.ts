@@ -109,7 +109,6 @@ export class PlayScene extends Phaser.Scene
     this.false_ball.body.setBounce(1,1);
     this.false_ball.scale = 0.03;
     ball.scale = 0.03;
-    ball.setVelocity(ball_velocity_x,ball_velocity_y);
     ball.setBounce(1,1);
     right_pad.scale = 0.3;
     right_pad.setBounce(1,1);
@@ -142,7 +141,7 @@ export class PlayScene extends Phaser.Scene
     ////////////////////////////////////////////
     var buttonOn = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
     var buttonOff = this.add.image(inWidth - 30 , 30, 'fullscreenOff', 0).setInteractive().setScrollFactor(0);
-    var readyButton = this.add.image(inWidth / 2 , inHeight / 2, 'readyButton', 0).setInteractive().setScrollFactor(0);
+    // var readyButton = this.add.image(inWidth / 2 , inHeight / 2, 'readyButton', 0).setInteractive().setScrollFactor(0);
     
     buttonOff.setVisible(false);
     buttonOff.scale = 0.3;
@@ -159,10 +158,10 @@ export class PlayScene extends Phaser.Scene
       buttonOn.setVisible(true);
       buttonOff.setVisible(false);
     }, this);
-    readyButton.on('pointerup', function () 
-    {
-      room?.send("ready");
-    }, this);
+    // readyButton.on('pointerup', function () 
+    // {
+    //   room?.send("ready");
+    // }, this);
     //////////////////////////////////////////
     this.input.on('pointermove', function (pointer)
     {
