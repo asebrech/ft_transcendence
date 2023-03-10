@@ -14,6 +14,8 @@ export class State extends Schema
 }
 
 export class MyRoom extends Room<Schema> {
+
+
     // When room is initialized
     onCreate (options: any) 
     {
@@ -30,9 +32,11 @@ export class MyRoom extends Room<Schema> {
     onJoin (client: Client, options: any, auth: any) 
     {
       if (this.clients.length == 1)
-        player.set(client.sessionId, "player_left")
+        player.set(client.sessionId, "player_left");
+      else if (this.clients.length == 2)
+        player.set(client.sessionId, "player_right");
       else
-        player.set(client.sessionId, "player_right")
+        player.set(client.sessionId, "spectator" + client.sessionId);
 
       ///////////////////////////////////////////
       console.log(player.get(client.sessionId))
