@@ -2,12 +2,13 @@
 .dashboard {
 	display: flex;
 	justify-content: flex-start;
-	width: 99%;
+	width: 99vw;
+	height: 90vh;
 }
 
 .chat-selector {
 	z-index: 99;
-	height: 90vh;
+	//height: 90vh;
 	width: 300px;
 	margin-left: 120px;
 	background-color: black;
@@ -23,7 +24,7 @@
 }
 
 .messages {
-	height: 90vh;
+	//height: 90vh;
 	width: 100%;
 	min-width: 400px;
 	margin-left: 40px;
