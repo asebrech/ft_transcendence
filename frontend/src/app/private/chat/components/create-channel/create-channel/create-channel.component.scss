@@ -14,19 +14,19 @@
 	gap: 10px;
 }
 
-@media screen and (max-height: 430px) {
-	.main {
-		position: fixed;
-		bottom: 0;
-	}
-  }
+// @media screen and (max-height: 430px) {
+// 	.main {
+// 		position: fixed;
+// 		bottom: 0;
+// 	}
+//   }
 
-  @media screen and (max-width: 630px) {
-	.main {
-		position: fixed;
-		right: 0;
-	}
-  }
+//   @media screen and (max-width: 630px) {
+// 	.main {
+// 		position: fixed;
+// 		right: 0;
+// 	}
+//   }
 
 .title {
 	margin-top: 10px;

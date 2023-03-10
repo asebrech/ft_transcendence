@@ -1,17 +1,20 @@
 
 .dashboard {
+	position: absolute;
+	top: 0;
 	display: flex;
 	justify-content: flex-start;
 	width: 99vw;
-	height: 90vh;
+	height: 98vh;
 }
 
 .chat-selector {
+	margin-top: 95px;
 	z-index: 99;
-	//height: 90vh;
 	width: 300px;
+	min-height: 300px;
 	margin-left: 120px;
-	background-color: black;
+	//background-color: black; //to be deleted
 	backdrop-filter: blur(4.5px);
 	box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
 	flex-shrink: 0;
@@ -19,16 +22,20 @@
 }
 
 .conversation {
-	overflow-y: scroll;
-	height: 80%;
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	z-index: -99;
 }
 
 .messages {
-	//height: 90vh;
+	margin-top: 95px;
+	min-height: 300px;
 	width: 100%;
 	min-width: 400px;
-	margin-left: 40px;
-	background-color: black;
+	margin-left: 20px;
+	background-color: black; //to be deleted
 	backdrop-filter: blur(4.5px);
 	box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
 }

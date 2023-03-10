@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
 
 @Component({
   selector: 'app-conversation-list',
@@ -25,9 +26,13 @@ export class ConversationListComponent implements OnInit {
 		{ name: 'Wanis' }
 	  ];
 
-  constructor() { }
+  constructor(public dashService: DashboardService) { }
 
   ngOnInit(): void {
+  }
+
+  test() {
+	console.log('fonctionne');
   }
 
 }
