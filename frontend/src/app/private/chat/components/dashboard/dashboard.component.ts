@@ -25,6 +25,14 @@ export class DashboardComponent {//implements OnInit, AfterViewInit {
 	HideChannel() {
 		this.find = false;
 	}
+
+	createChannel() {
+		this.dashService.create = true;
+	}
+
+	createHide() {
+		this.dashService.create = false;
+	}
 	// rooms$: Observable<RoomPaginateI>= this.chatService.getMyRooms();
 	// selectedRoom = null;
 	// user: UserI = this.authService.getLoggedInUser();
@@ -39,6 +47,12 @@ export class DashboardComponent {//implements OnInit, AfterViewInit {
 		}
 		else if (this.find && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.findChannel').contains(event.target)) {
 			this.HideChannel();
+		}
+		if (!this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && this.elementRef.nativeElement.querySelector('.add').contains(event.target)) {
+			this.createChannel();
+		}
+		else if (this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && !this.elementRef.nativeElement.querySelector('.createChannel').contains(event.target)) {
+			this.createHide();
 		}
 	}
 

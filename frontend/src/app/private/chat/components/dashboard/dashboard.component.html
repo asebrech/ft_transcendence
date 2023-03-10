@@ -1,20 +1,31 @@
 <app-nav-bar></app-nav-bar>
 <div class="dashboard">
-	
+
 	<div class="chat-selector">
 		<app-chat-selector></app-chat-selector>
-		<div *ngIf="dashService.channel"  class="search-container">
-			<label>Find a channel</label>
+		<div class="search-container">
+			<label *ngIf="dashService.channel">Find a Channel</label>
+			<label *ngIf="!dashService.channel">Find a User</label>
+		</div>
+		<div class="create-container" *ngIf="dashService.channel">
+			<label>Create new Channel</label>
+			<div class="add">+</div>
+		</div>
+		<div *ngIf="dashService.create" class="createChannel">
+			<app-create-channel></app-create-channel>
+		</div>
+		<div class="conversation">
+			<app-conversation-list></app-conversation-list>
 		</div>
 	</div>
-	
 	<div class="messages">
 	</div>
 </div>
-<app-find-channel [ngClass]="{'hidden': !find}" class="findChannel"></app-find-channel>
+<app-find-channel *ngIf="find" class="findChannel"></app-find-channel>
+<div *ngIf="find" class="overlay"></div>
 
 
-	<!-- <div class="container">
+<!-- <div class="container">
 		<mat-card>
 			<div style="display: flex; flex-direction: row;">
 
@@ -58,4 +69,3 @@
 			<mat-error>No Chatrooms for you so far, please create one or get invited</mat-error>
 		</div>
 	</ng-template> -->
-

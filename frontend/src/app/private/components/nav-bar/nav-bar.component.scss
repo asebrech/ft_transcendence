@@ -7,6 +7,10 @@ header {
 	font-size: 45px;
 }
 
+.title {
+	z-index: 9999;
+}
+
 header h1 {
 	display: flex;
 	justify-content: center;
