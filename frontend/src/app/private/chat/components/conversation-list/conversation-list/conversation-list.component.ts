@@ -7,6 +7,8 @@ import { DashboardService } from '../../../services/dashboard-service/dashboard-
   styleUrls: ['./conversation-list.component.scss']
 })
 export class ConversationListComponent implements OnInit {
+	selectedUser: any;
+	isClicked = false;
 
 	users = [
 		{ name: 'Mago' },
