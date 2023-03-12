@@ -23,6 +23,7 @@ import { ChatSelectorComponent } from './components/chat-selector/chat-selector/
 import { FindChannelComponent } from './components/find-channel/find-channel/find-channel.component';
 import { CreateChannelComponent } from './components/create-channel/create-channel/create-channel.component';
 import { ConversationListComponent } from './components/conversation-list/conversation-list/conversation-list.component';
+import { MessagesComponent } from './components/messages/messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ConversationListComponent } from './components/conversation-list/conver
     ChatSelectorComponent,
     FindChannelComponent,
     CreateChannelComponent,
-    ConversationListComponent
+    ConversationListComponent,
+    MessagesComponent
   ],
   imports: [
     CommonModule,
