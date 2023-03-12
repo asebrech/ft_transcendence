@@ -132,6 +132,7 @@ export class WaitingScene extends Phaser.Scene
     var buttonOn = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
     var buttonOff = this.add.image(inWidth - 30 , 30, 'fullscreenOff', 0).setInteractive().setScrollFactor(0);
     buttonOff.setVisible(false);
+    buttonOff.scale = 0.3;
     buttonOn.scale = 0.3;
     buttonOn.on('pointerup', function () 
     {
@@ -139,7 +140,6 @@ export class WaitingScene extends Phaser.Scene
       buttonOn.setVisible(false);
       buttonOff.setVisible(true);
     }, this);
-    buttonOff.scale = 0.3;
     buttonOff.on('pointerup', function () 
     {
       this.scale.stopFullscreen();
@@ -158,10 +158,9 @@ export class WaitingScene extends Phaser.Scene
     //////////////////////////////////////////////////////////////
     if (ball.body.newVelocity.x > 0)
     {
-      let difference : number = (ball.y) - (computerPad.y);
-      if (((computerPad.y) + (difference)) < (inWidth / 2) && ((computerPad.y) + (difference)) > 0)
+      if ((computerPad.y < inHeight && computerPad.y > 0) && (ball.y < inHeight - 100 && ball.y > 100))
       {
-        computerPad.setY((computerPad.y) + (difference));
+        computerPad.setY(ball.y);
       }
     }
     ///////////////////////////////////////////////////////////////

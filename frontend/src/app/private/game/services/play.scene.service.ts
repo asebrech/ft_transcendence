@@ -1,7 +1,6 @@
 import { inWidth, inHeight } from "../components/game.front/game.front.component";
 import * as Phaser from "phaser";
 import { room } from "../components/game.front/game.front.component";
-import { flatMap } from "rxjs";
 
 let start : boolean;
 let right_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
@@ -9,8 +8,6 @@ let left_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
 let ball : any;
 let ball_velocity_x : number;
 let ball_velocity_y : number;
-
-
 
 export class PlayScene extends Phaser.Scene 
 {
@@ -28,9 +25,6 @@ export class PlayScene extends Phaser.Scene
   last_bg_y : number;
   speed : number;
   camera1 : Phaser.Cameras.Scene2D.Camera;
-
-
-
 
   constructor() 
   {
@@ -66,8 +60,7 @@ export class PlayScene extends Phaser.Scene
     this.load.image('ball', 'assets/images/ball.png');
     this.load.image('fullscreen', 'assets/images/fullscreenOff.png');
     this.load.image('fullscreenOff', 'assets/images/fullscreen.png');
-    this.load.image('readyButton', 'assets/images/readyButton.png')
-
+    this.load.image('readyButton', 'assets/images/readyButton.png');
   }
 
   async create() 
@@ -109,7 +102,6 @@ export class PlayScene extends Phaser.Scene
     this.false_ball.body.setBounce(1,1);
     this.false_ball.scale = 0.03;
     ball.scale = 0.03;
-    ball.setVelocity(ball_velocity_x,ball_velocity_y);
     ball.setBounce(1,1);
     right_pad.scale = 0.3;
     right_pad.setBounce(1,1);
@@ -132,21 +124,21 @@ export class PlayScene extends Phaser.Scene
     this.physics.add.collider(left_pad, this.false_ball, () =>
     {
       this.speed += 100;
-      ball.body.velocity.normalize().scale(this.speed);
+      this.false_ball.body.velocity.normalize().scale(this.speed);
     });
     this.physics.add.collider(right_pad, this.false_ball, () =>
     {
       this.speed += 100;
-      ball.body.velocity.normalize().scale(this.speed);
+      this.false_ball.body.velocity.normalize().scale(this.speed);
     });
     ////////////////////////////////////////////
     var buttonOn = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
     var buttonOff = this.add.image(inWidth - 30 , 30, 'fullscreenOff', 0).setInteractive().setScrollFactor(0);
     var readyButton = this.add.image(inWidth / 2 , inHeight / 2, 'readyButton', 0).setInteractive().setScrollFactor(0);
-    
     buttonOff.setVisible(false);
     buttonOff.scale = 0.3;
     buttonOn.scale = 0.3;
+    readyButton.scale = 0.3;
     buttonOn.on('pointerup', function () 
     {
       this.scale.startFullscreen();
@@ -162,6 +154,7 @@ export class PlayScene extends Phaser.Scene
     readyButton.on('pointerup', function () 
     {
       room?.send("ready");
+      readyButton.setVisible(false);
     }, this);
     //////////////////////////////////////////
     this.input.on('pointermove', function (pointer)
@@ -171,41 +164,18 @@ export class PlayScene extends Phaser.Scene
         left_pad.setVisible(true).setPosition(30, message.y);
       })
       room?.onMessage("paddle_right", (message) =>{
-        right_pad.setVisible(true).setPosition(920, message.y);
+        right_pad.setVisible(true).setPosition(inWidth - 30, message.y);
       })
     }, this);
-     room?.onMessage("launch", ({x, y}) =>{
+
+    room?.onMessage("launch", ({x, y}) =>{
         this.false_ball.setVelocity(x, y);
         start = true;
     })
-    
   }
-
-  override update() 
+  override update()
   {
     
-    if(start == true)
-      room?.send("ball_pos", {x : this.false_ball.x, y : this.false_ball.y})
-    room?.onMessage("position", ({x, y}) =>
-    {
-      ball.setPosition(x,y);
-    })
-    ///////////////////////////////////////////////////////////////
-    if (this.right_score || this.left_score == 10)
-    {
-
-    }
-    ///////////////////////////////////////////////////////////////
-    if (ball.x > inWidth)
-    {
-      ball_velocity_x = this.getRandomInt(200, 300);
-      ball_velocity_y = this.getRandomInt(200, 300);
-    }
-    else if (ball.x < 0)
-    {
-      ball_velocity_x = this.getRandomInt(-200, -300);
-      ball_velocity_y = this.getRandomInt(-200, -300);
-    }
     ///////////////////////////////////////////////////////////////
     this.bg.x += 1;
     this.bg.y += 1;
@@ -214,22 +184,5 @@ export class PlayScene extends Phaser.Scene
     this.stars.tilePositionX += 1;
     this.stars.tilePositionY += 1;
     /////////////////////////////////////////////////////////////
-  
-
-    // room?.send("ball_launch", {ball_velocity_x, ball_velocity_y})
-    // if (ball.x > 950)
-    // {
-    //   this.scene.restart();
-    //   this.left_score++;
-    //   ball_velocity_x = this.getRandomInt(200, 700);
-    //   ball_velocity_y = this.getRandomInt(200, 500);  
-    // }
-    // else if (ball.x < 0)
-    // {
-    //   this.scene.restart();
-    //   this.right_score++;
-    //   ball_velocity_x = this.getRandomInt(-200, -700);
-    //   ball_velocity_y = this.getRandomInt(-200, -500);
-    // }
   }
 }
