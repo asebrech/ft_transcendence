@@ -9,6 +9,7 @@ import { DashboardService } from '../../../services/dashboard-service/dashboard-
 export class ConversationListComponent implements OnInit {
 	selectedUser: any;
 	isClicked = false;
+	connected: boolean = true;
 
 	users = [
 		{ name: 'Mago' },

@@ -11,6 +11,7 @@
 			[ngClass]="{'selected': selectedUser === user}"
 			>
 			<img src="../../../../../../assets/images/astronaut.png">
+			<div class="connected" [ngStyle]="{'background-color': !connected ? 'red' : ''}"></div>
 			{{ user.name }}
 		</li>
 	</ul>
