@@ -1,4 +1,4 @@
-import { Component, NgModule, OnDestroy, OnInit, SimpleChanges, HostListener} from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, SimpleChanges, HostListener, OnChanges, Input, DoCheck} from '@angular/core';
 import { Location } from '@angular/common';
 import * as Phaser from 'phaser';
 import { Client } from 'colyseus.js';
@@ -20,10 +20,9 @@ export let inHeight : number;
   styleUrls: ['./game.front.component.scss'],
 })
 
-export class GameFrontComponent implements OnInit
+export class GameFrontComponent implements OnInit, DoCheck
 {
   @HostListener('window:resize', ['$event'])
-
   //////////////////////////////////
   playScene: Phaser.Game;
   playSceneConfig: Phaser.Types.Core.GameConfig;
@@ -41,8 +40,29 @@ export class GameFrontComponent implements OnInit
   {
   }
 
+  joined = false;
+  ngDoCheck() 
+  {
+    if (this.launch.showButtonStats() == 1)
+    {
+      if (this.joined == false)
+      {
+        this.join()
+        room?.onMessage("second_player_found", ({}) =>
+        {
+          this.launch.gameFound();
+          this.addButtonStatus(0);
+          this.launch.launchGame();
+          this.playScene = new Phaser.Game(this.playSceneConfig);
+        })    
+        this.joined = true;
+      }
+    }
+
+  }
   ngOnInit()
   { 
+    this.ngDoCheck()
     inWidth = window.innerWidth;
     inHeight = window.innerHeight;
     ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
@@ -107,8 +127,10 @@ export class GameFrontComponent implements OnInit
         }
       }
     };
-
-  
+  }
+  checkIfGameFoundRet()
+  {
+    return this.launch.gameFoundRet();
   }
   ///////////////////////////////////////
   addButtonStatus(nbr : number)
@@ -149,7 +171,6 @@ export class GameFrontComponent implements OnInit
   {
     try {
       room = await client?.joinOrCreate("my_room", { });
-      this.playScene = new Phaser.Game(this.playSceneConfig);
       console.log(room);
       console.log(client.auth);
     } catch (e) {

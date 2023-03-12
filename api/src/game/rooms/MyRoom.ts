@@ -54,7 +54,8 @@ export class MyRoom extends Room<Schema>
     //////////////////////////////////////////
     if (this.clients.length == 2)
     {
-      console.log("2 player ready");
+      this.broadcast("second_player_found");
+      console.log("[ROOM IS FULL]")
     }
     //////////////////////////////////////////
     //--------------------------------------------//
