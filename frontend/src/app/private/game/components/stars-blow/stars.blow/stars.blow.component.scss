@@ -22,9 +22,10 @@
 .centerHover 
 {
 	position: absolute;
-	top: 100%;
+	top: 0;
 	left: 50%;
-	transform: translate(-50%, -100%);
+	margin-top: 50vh;
+	transform: translate(-50%, 0);
 	align-self: center;
 	width: 50%;
 	height: 50%;
