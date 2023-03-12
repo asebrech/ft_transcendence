@@ -1,35 +1,37 @@
 .bdy, .ht 
-{ 
-	width: 90vw;
-	height: 90vh;
-	margin-left: -10vw;
+{
+	display: flex;
+	justify-content: center;
 }
 .bdy {
-	background-color: rgba(25,25,25,1);
+
+	width: 90%;
+	height: 100%;
 }
 
 #blackhole {
 	
 	height: 100%;
 	width: 100%;
-	margin-left: 33%;
+	margin-left: 0%;
 	position: relative;
 	display: flex;
+	justify-content: center;
 }
 
-.centerHover {
-	width: 255px;
-	height: 255px;
+.centerHover 
+{
+	width: 50%;
+	height: 50%;
 	background-color: transparent;
 	border-radius: 50%;
 	position: absolute;
-	left: 33%;
-	top: 26.5%;
-	margin-top: 50px;
-	margin-left: 50px;
+	left: 0%;
+	top: 0%;
+	margin-top: 0vh;
+	margin-left: 0vw;
 	z-index: 2;
 	cursor: pointer;
-	line-height: 255px;
 	text-align: center;
 	transition: all 500ms;
 	
