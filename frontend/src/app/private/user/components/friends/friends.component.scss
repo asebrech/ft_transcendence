@@ -50,7 +50,7 @@ hr {
 input {
   position: absolute;
   display: flex;
-  width: -webkit-fill-available;
+  width: 95%;
   margin-top: 100px;
   border: none;
   opacity: 25%;
@@ -63,4 +63,8 @@ input {
 ::placeholder {
   font-size: 0.8em;
   color: whitesmoke;
+}
+
+.friendSuggestion {
+  color: red;
 }

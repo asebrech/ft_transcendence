@@ -7,7 +7,7 @@
     </div>
     <hr>
     <label for="search-friends"></label>
-    <input type="text" id="search-friends" name="search-friends" placeholder="Cherchez des amis...">
+    <input type="text " id="search-friends" name="search-friends" [(ngModel)]="search" (keyup)="displaySuggests()" (focus)="displayList = true" (blur)="displayList = false" placeholder="Cherchez des amis...">
   </div>
   <div class="friend-list">
     <div class="title">
@@ -16,4 +16,8 @@
     </div>
     <hr>
   </div>
+</div>
+
+<div class="friendSuggestion" *ngIf="displayList">
+  <div *ngFor="let ami of suggestions" (click)="selectionner(ami)">{{ ami.nom }}</div>
 </div>
