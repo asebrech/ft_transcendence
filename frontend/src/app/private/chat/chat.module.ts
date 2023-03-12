@@ -8,7 +8,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CreateRoomComponent } from './components/create-room/create-room.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatChipsModule} from '@angular/material/chips';
@@ -21,6 +21,8 @@ import { ChatRoutingModule } from './chat-routing.module';
 import { PrivateModule } from '../private.module';
 import { ChatSelectorComponent } from './components/chat-selector/chat-selector/chat-selector.component';
 import { FindChannelComponent } from './components/find-channel/find-channel/find-channel.component';
+import { CreateChannelComponent } from './components/create-channel/create-channel/create-channel.component';
+import { ConversationListComponent } from './components/conversation-list/conversation-list/conversation-list.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { FindChannelComponent } from './components/find-channel/find-channel/fin
     ChatRoomComponent,
     ChatMessageComponent,
     ChatSelectorComponent,
-    FindChannelComponent
+    FindChannelComponent,
+    CreateChannelComponent,
+    ConversationListComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +49,8 @@ import { FindChannelComponent } from './components/find-channel/find-channel/fin
 	MatChipsModule,
 	MatAutocompleteModule,
 	MatIconModule,
-	PrivateModule
+	PrivateModule,
+	FormsModule
   ]
 })
 export class ChatModule { }
