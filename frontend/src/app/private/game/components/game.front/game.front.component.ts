@@ -20,7 +20,7 @@ export let inHeight : number;
   styleUrls: ['./game.front.component.scss'],
 })
 
-export class GameFrontComponent implements OnInit, OnDestroy
+export class GameFrontComponent implements OnInit
 {
   @HostListener('window:resize', ['$event'])
 
@@ -44,8 +44,7 @@ export class GameFrontComponent implements OnInit, OnDestroy
   ngOnInit()
   { 
     inWidth = window.innerWidth;
-    inHeight = window.innerHeight;  
-    console.log(innerWidth)
+    inHeight = window.innerHeight;
     ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
 	  this.starsService.setActive(false);
     /////////////////INIT PLAYER SESSION//////////////////////////
@@ -56,6 +55,7 @@ export class GameFrontComponent implements OnInit, OnDestroy
       scene: [PlayScene],
       scale: {
         mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: 'gameContainer',
         width: innerWidth,
         height: innerHeight,

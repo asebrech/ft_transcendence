@@ -1,21 +1,27 @@
 import { Room, Client, Server } from "colyseus";
-import http from "http"
-import { throws } from "assert";
 import { Schema } from "@colyseus/schema";
-import { IBroadcastOptions } from "@colyseus/core/build/Room";
-import { runInThisContext } from "vm";
 
 let player = new Map<string, string>()
-let rdyPlayer : number = 2;
 
-export class State extends Schema 
+interface screen_size 
 {
+  x : number;
+  y : number;
+};
 
-
-}
+interface new_pos_ball
+{  
+  x : number;
+  y : number;
+};
 
 export class MyRoom extends Room<Schema> 
 {
+
+  rdyPlayer = 2;
+  left_player_screen : screen_size = {x : 0, y : 0};
+  right_player_screen : screen_size = {x : 0, y : 0};
+  new_pos : new_pos_ball = {x : 0, y : 0};
 
 
   // When room is initialized
@@ -36,9 +42,11 @@ export class MyRoom extends Room<Schema>
     if (this.clients.length == 1)
       player.set(client.sessionId, "player_left");
     else if (this.clients.length == 2)
+    {
       player.set(client.sessionId, "player_right");
+    }
     else
-      player.set(client.sessionId, "spectator" + client.sessionId);
+      player.set(client.sessionId, "spectator");
 
     ///////////////////////////////////////////
     console.log(player.get(client.sessionId))
@@ -48,39 +56,27 @@ export class MyRoom extends Room<Schema>
     {
       console.log("2 player ready");
     }
-    this.onMessage("ready", (client, message) =>
-    {
-      if(rdyPlayer != 0)
-      {
-        if (player.get(client.sessionId) == "player_left")
-          rdyPlayer - 1;
-        if (player.get(client.sessionId) == "player_right")
-          rdyPlayer - 1;
-      }
-      else
-        this.broadcast("launch", {x : 400, y : 400});
-    })
     //////////////////////////////////////////
-    this.onMessage("move", (client, message) =>{
+    //--------------------------------------------//
+    this.onMessage("move", (client, message) =>
+    {
       if (player.get(client.sessionId) == "player_left")
         this.broadcast("paddle_left", message);
       if (player.get(client.sessionId) == "player_right")
         this.broadcast("paddle_right",message);
     })
-    //////////////////////////////////////////
-    this.onMessage("ball_pos", (client, message)=>{
-        this.broadcast("position", {x : message.x, y : message.y});
-    })
-
+    //--------------------------------------------//
+    ///////////////////////////////////////////
   }
+
+
+
     // When a client leaves the room
     onLeave (client: Client, consented: boolean) 
     {
       client.leave();    
       console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length)
     }
-
-
     // Cleanup callback, called after there are no more clients in the room. (see `autoDispose`)
     onDispose () { }
 }
