@@ -55,6 +55,8 @@ export class WaitingScene extends Phaser.Scene
     this.load.image('ball', 'assets/images/ball.png');
     this.load.image('computerPad', 'assets/images/pad.png')
     this.load.image('leftPad', 'assets/images/pad.png')
+    this.load.image('fullscreen', 'assets/images/fullscreenOff.png')
+    this.load.image('fullscreenOff', 'assets/images/fullscreen.png')
   }
 
   create() 
@@ -86,7 +88,7 @@ export class WaitingScene extends Phaser.Scene
     this.camera1.startFollow(this.bg)
     this.camera1.centerOn(inWidth,inHeight);
     /////////////////////////////////////////////////
-    this.score = this.add.text(1160 / 2, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'}).setScrollFactor(0);
+    this.score = this.add.text(inWidth / 2, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'}).setScrollFactor(0);
     this.wall_bottom = this.add.rectangle(inWidth / 2, -5, inWidth, 10 , 0xff0000).setScrollFactor(0);
     this.wall_top = this.add.rectangle(inWidth / 2, inHeight + 5, inWidth, 10 , 0xff0000).setScrollFactor(0);
     computerPad = this.physics.add.image(inWidth - 30, 350, 'computerPad').setCollideWorldBounds(true).setScrollFactor(0);
@@ -127,19 +129,22 @@ export class WaitingScene extends Phaser.Scene
       left_pad.setVisible(true).setY(pointer.y)
     }, this);
     ////////////////////////////////////////////
-    var button = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
-    button.on('pointerup', function () 
+    var buttonOn = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
+    var buttonOff = this.add.image(inWidth - 30 , 30, 'fullscreenOff', 0).setInteractive().setScrollFactor(0);
+    buttonOff.setVisible(false);
+    buttonOn.scale = 0.3;
+    buttonOn.on('pointerup', function () 
     {
-      if (this.scale.isFullscreen)
-      {
-        button.setFrame(0);
-        this.scale.stopFullscreen();
-      }
-      else
-      {
-        button.setFrame(1, true);
-        this.scale.startFullscreen();
-      }
+      this.scale.startFullscreen();
+      buttonOn.setVisible(false);
+      buttonOff.setVisible(true);
+    }, this);
+    buttonOff.scale = 0.3;
+    buttonOff.on('pointerup', function () 
+    {
+      this.scale.stopFullscreen();
+      buttonOn.setVisible(true);
+      buttonOff.setVisible(false);
     }, this);
     //////////////////////////////////////////
   }

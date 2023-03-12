@@ -9,6 +9,7 @@ import { LaunchGameService } from '../../services/launch.game.service';
 import { Lost } from '../../services/lost.scene.service';
 
 export let room : any;
+
 export let client : Client;
 export let inWidth : number;
 export let inHeight : number;
@@ -109,6 +110,7 @@ export class GameFrontComponent implements OnInit, OnDestroy
 
   
   }
+  ///////////////////////////////////////
   addButtonStatus(nbr : number)
   {
     //////THIS BUTTON HAS 2 STATS///////
@@ -125,8 +127,6 @@ export class GameFrontComponent implements OnInit, OnDestroy
   {
     this.addButtonStatus(0);
     this.launch.launchGame();
-
-    
     this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
     // this.endLoseScene = new Phaser.Game(this.endLoseSceneConfig);
     // this.playScene = new Phaser.Game(this.playSceneConfig);
@@ -140,33 +140,34 @@ export class GameFrontComponent implements OnInit, OnDestroy
     }
     return 1;
   }
-
-  async throw()
+  ////////////////////////////////////////////////
+  // async ready()
+  // {
+  //   room?.send("ready");
+  // }
+  async join()
   {
-    room?.send("ready");
-    this.playScene = new Phaser.Game(this.playSceneConfig);
+    try {
+      room = await client?.joinOrCreate("my_room", { });
+      this.playScene = new Phaser.Game(this.playSceneConfig);
+      console.log(room);
+      console.log(client.auth);
+    } catch (e) {
+      console.error("join error", e);
+    }  
   }
-
   async connect(value : string)
   {
     try {
       room = await client?.joinById(value, { });
+      this.playScene = new Phaser.Game(this.playSceneConfig);
       console.log(room);
       console.log(client.auth);
     } catch (e) {
       console.error("join error", e);
     }  
   }
-  async test()
-  {
-    try {
-      room = await client?.joinOrCreate("my_room", { });
-      console.log(room);
-      console.log(client.auth);
-    } catch (e) {
-      console.error("join error", e);
-    }  
-  }
+  ///////////////////////////////////////////////
   ngOnDestroy(): void {
 	this.starsService.setActive(true);
   }

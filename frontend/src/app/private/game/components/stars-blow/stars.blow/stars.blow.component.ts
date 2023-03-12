@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { LaunchGameService } from '../../../services/launch.game.service';
+import { setTimeout } from 'timers';
+import { room } from '../../game.front/game.front.component';
 
 
 @Component({
@@ -20,6 +22,9 @@ export class StarsBlowComponent implements OnInit {
     audio.src = "../../../../assets/test.wav";
     audio.load();
     audio.play();
+    // setTimeout(() => {
+    //   room?.
+    // }, 3000);
     this.hide_waiting = this.launch.hideWaiting(this.hide_waiting);
     this.launch.showButtonOn(1);
   }

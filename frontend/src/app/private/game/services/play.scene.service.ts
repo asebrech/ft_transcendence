@@ -64,8 +64,9 @@ export class PlayScene extends Phaser.Scene
     this.load.image('stars', 'assets/images/tests/stars.png');
     this.load.image('wing', 'assets/images/tests/wing.png');
     this.load.image('ball', 'assets/images/ball.png');
-    this.load.image('fullscreen', 'assets/images/fullscreenOff.png')
-    this.load.image('fullscreenOff', 'assets/images/fullscreen.png')
+    this.load.image('fullscreen', 'assets/images/fullscreenOff.png');
+    this.load.image('fullscreenOff', 'assets/images/fullscreen.png');
+    this.load.image('readyButton', 'assets/images/readyButton.png')
 
   }
 
@@ -141,7 +142,10 @@ export class PlayScene extends Phaser.Scene
     ////////////////////////////////////////////
     var buttonOn = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
     var buttonOff = this.add.image(inWidth - 30 , 30, 'fullscreenOff', 0).setInteractive().setScrollFactor(0);
+    var readyButton = this.add.image(inWidth / 2 , inHeight / 2, 'readyButton', 0).setInteractive().setScrollFactor(0);
+    
     buttonOff.setVisible(false);
+    buttonOff.scale = 0.3;
     buttonOn.scale = 0.3;
     buttonOn.on('pointerup', function () 
     {
@@ -149,12 +153,15 @@ export class PlayScene extends Phaser.Scene
       buttonOn.setVisible(false);
       buttonOff.setVisible(true);
     }, this);
-    buttonOff.scale = 0.3;
     buttonOff.on('pointerup', function () 
     {
       this.scale.stopFullscreen();
       buttonOn.setVisible(true);
       buttonOff.setVisible(false);
+    }, this);
+    readyButton.on('pointerup', function () 
+    {
+      room?.send("ready");
     }, this);
     //////////////////////////////////////////
     this.input.on('pointermove', function (pointer)
@@ -167,11 +174,11 @@ export class PlayScene extends Phaser.Scene
         right_pad.setVisible(true).setPosition(920, message.y);
       })
     }, this);
- 
      room?.onMessage("launch", ({x, y}) =>{
         this.false_ball.setVelocity(x, y);
         start = true;
     })
+    
   }
 
   override update() 
@@ -179,7 +186,6 @@ export class PlayScene extends Phaser.Scene
     
     if(start == true)
       room?.send("ball_pos", {x : this.false_ball.x, y : this.false_ball.y})
-    
     room?.onMessage("position", ({x, y}) =>
     {
       ball.setPosition(x,y);
