@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { LaunchGameService } from '../../../services/launch.game.service';
 import { room } from '../../game.front/game.front.component';
@@ -12,8 +12,11 @@ import { room } from '../../game.front/game.front.component';
 export class StarsBlowComponent implements OnInit {
   
   constructor(private launch: LaunchGameService) {}
-
+  
+  @HostListener('window:resize', ['$event'])
   hide_waiting : number = 0;
+  inWidth = window.innerWidth;
+  inHeight = window.innerHeight;
 
   playSound()
   {
