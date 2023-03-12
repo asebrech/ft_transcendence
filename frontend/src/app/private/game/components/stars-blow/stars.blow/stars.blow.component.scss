@@ -64,8 +64,8 @@
 		&:before {
 			content: '';
 			display: inline-block;
-			height: 1px;
-			width: 16px;
+			height: 0.1vh;
+			width: 0.8vw;
 			margin-right: 12px;
 			margin-bottom: 4px;
 			background-color: #666;
@@ -74,8 +74,8 @@
 		&:after {
 			content: '';
 			display: inline-block;
-			height: 1px;
-			width: 16px;
+			height: 0.1vh;
+			width: 0.8vw;
 			margin-left: 12px;
 			margin-bottom: 4px;
 			background-color: #666;

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { LaunchGameService } from '../../../services/launch.game.service';
 import { room } from '../../game.front/game.front.component';
@@ -10,13 +10,10 @@ import { room } from '../../game.front/game.front.component';
   styleUrls: ['./stars.blow.component.scss']
 })
 export class StarsBlowComponent implements OnInit {
-  
+
   constructor(private launch: LaunchGameService) {}
-  
-  @HostListener('window:resize', ['$event'])
+
   hide_waiting : number = 0;
-  inWidth = window.innerWidth;
-  inHeight = window.innerHeight;
 
   playSound()
   {
@@ -57,7 +54,7 @@ export class StarsBlowComponent implements OnInit {
       function setDPI(canvas, dpi) {
         // Set up CSS size if it's not set up already
         if (!canvas.style.width)
-          canvas.style.width = 90 + 'vw';
+          canvas.style.width = 100 + 'vw';
         if (!canvas.style.height)
           canvas.style.height = 100 + 'vh';
         canvas.width = 1250;
