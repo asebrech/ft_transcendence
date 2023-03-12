@@ -54,9 +54,9 @@ export class StarsBlowComponent implements OnInit {
       function setDPI(canvas, dpi) {
         // Set up CSS size if it's not set up already
         if (!canvas.style.width)
-          canvas.style.width = 1250 + 'px';
+          canvas.style.width = 90 + 'vw';
         if (!canvas.style.height)
-          canvas.style.height = 740 + 'px';
+          canvas.style.height = 100 + 'vh';
         canvas.width = 1250;
         canvas.height = 740;
         var ctx = canvas.getContext('2d');

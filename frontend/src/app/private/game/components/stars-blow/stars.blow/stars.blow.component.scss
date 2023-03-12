@@ -6,17 +6,16 @@
 }
 .bdy {
 
-	width: 90%;
+	width: 87vw;
 }
 
 #blackhole {
 	
 	height: 100%;
 	width: 100%;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 }
 
 .centerHover 
