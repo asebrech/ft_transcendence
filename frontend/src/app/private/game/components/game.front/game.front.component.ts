@@ -7,6 +7,7 @@ import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
 import { Lost } from '../../services/lost.scene.service';
+import { BehaviorSubject } from 'rxjs';
 
 export let room : any;
 
@@ -22,7 +23,6 @@ export let inHeight : number;
 
 export class GameFrontComponent implements OnInit, DoCheck
 {
-  @HostListener('window:resize', ['$event'])
   //////////////////////////////////
   playScene: Phaser.Game;
   playSceneConfig: Phaser.Types.Core.GameConfig;
@@ -36,11 +36,17 @@ export class GameFrontComponent implements OnInit, DoCheck
   endLoseScene: Phaser.Game;
   endLoseSceneConfig: Phaser.Types.Core.GameConfig;
   //////////////////////////////////
+  
+  joined = false;
+  in = 0;
+  joinedVar = new BehaviorSubject<boolean> (this.joined);
+
   constructor(private starsService: StarsService, private location : Location, private launch : LaunchGameService) 
   {
   }
 
-  joined = false;
+  @HostListener('window:resize', ['$event'])
+
   ngDoCheck() 
   {
     if (this.launch.showButtonStats() == 1)
@@ -48,23 +54,40 @@ export class GameFrontComponent implements OnInit, DoCheck
       if (this.joined == false)
       {
         this.join()
-        room?.onMessage("second_player_found", ({}) =>
+        this.joined = true;
+        this.joinedVar.next(this.joined);
+      }
+    }
+    room?.onMessage("second_player_found", ({}) =>
+    {
+      this.joinedVar.subscribe((value) =>
+      {
+        if (value == true && this.in == 0)
         {
           this.launch.gameFound();
           this.addButtonStatus(0);
           this.launch.launchGame();
           this.playScene = new Phaser.Game(this.playSceneConfig);
-        })    
-        this.joined = true;
-      }
-    }
-
+          room?.send("player_joined", {x : inWidth, y : inHeight});
+          this.in += 1;
+        }
+      });
+    })
+    room?.onMessage("screen_size", (message) =>
+    {
+      inWidth = message.x;
+      inHeight = message.y;
+    })
+    //// l envoi des taille fonctionne mais le jeu du joueur adverse dois etre mise a jour
+    console.log(inWidth, inHeight);
   }
+
   ngOnInit()
-  { 
-    this.ngDoCheck()
+  {
     inWidth = window.innerWidth;
     inHeight = window.innerHeight;
+    console.log(inWidth, inHeight);
+
     ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
 	  this.starsService.setActive(false);
     /////////////////INIT PLAYER SESSION//////////////////////////
@@ -127,6 +150,7 @@ export class GameFrontComponent implements OnInit, DoCheck
         }
       }
     };
+    
   }
   checkIfGameFoundRet()
   {
@@ -150,9 +174,6 @@ export class GameFrontComponent implements OnInit, DoCheck
     this.addButtonStatus(0);
     this.launch.launchGame();
     this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
-    // this.endLoseScene = new Phaser.Game(this.endLoseSceneConfig);
-    // this.playScene = new Phaser.Game(this.playSceneConfig);
-    // this.endWinScene = new Phaser.Game(this.endWinSceneConfig);
   }
   switchToBotPlay()
   {
