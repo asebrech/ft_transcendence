@@ -11,7 +11,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 })
 export class FriendsComponent implements OnInit {
 
-  amis = [];
+  amis = ["alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi", "alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi"];
   suggestions: any[] = [];
   search : string;
   displayList: boolean = false;
@@ -34,4 +34,7 @@ export class FriendsComponent implements OnInit {
     this.resultats = [];
   }
 
+  test() {
+    console.log("ca marche");
+  }
 }

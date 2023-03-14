@@ -22,8 +22,13 @@
     </div>
     <hr>
     <p *ngIf="message">{{message}}</p>
-    <div>
-      
+    <div class="main">
+      <ul>
+        <li *ngFor="let user of amis; let i = index" (click)="test()">
+          <img src="../../../../../../assets/images/astronaut.png">
+          {{ amis[ i % amis.length] }}
+        </li>
+        </ul>
     </div>
   </div>
 </div>

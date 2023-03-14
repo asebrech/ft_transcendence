@@ -18,7 +18,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  padding-bottom: 18em;
+  overflow: auto;
 }
 
 h1 {
@@ -110,3 +110,43 @@ align-items: center;
 .autocomplete .suggestion:hover {
   background-color: #f2f2f2;
 }
+
+
+.main {
+	height: calc(90vh - 18em);
+  width: 100%;
+	margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap; /* retour à la ligne des éléments */
+  overflow-y: auto; /* affichage d'une scrollbar si nécessaire */
+}
+
+.main ul {
+  display: flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+	z-index: 999;
+	list-style: none;
+}
+
+.main li {
+	display: flex;
+	align-items: center;
+	margin-bottom:10px;
+  flex-basis: 20%;
+	//background-color: grey;
+}
+
+.main li:hover {
+	background: #2b2d31;
+	transition: 0.1s ease-in-out;
+}
+
+.main img {
+	width: 80px;
+	height: 80px;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+
