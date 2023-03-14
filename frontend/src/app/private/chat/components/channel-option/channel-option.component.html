@@ -1,3 +1,5 @@
-<div>
-	<img src="../../../../../../assets/images/arrow-down-sign-to-navigate.png">
+<img [src]="switchMenue ? imagePath1 : imagePath2" class="arrow">
+<div class="switch" [ngClass]="{'hidden': !switchMenue}" >
+	<label *ngIf="!dashService.channel" (click)="switch()" >Channel</label>
+	<label *ngIf="dashService.channel" (click)="switch()" >Messages</label>
 </div>
