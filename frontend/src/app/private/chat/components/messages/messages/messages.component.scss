@@ -1,4 +1,4 @@
-div {
+.top {
 	display: flex;
 	justify-content: center;
 }
@@ -46,4 +46,71 @@ div {
 .header img {
 	width: 15px;
 	height: 15px;
+}
+
+.message {
+	position: absolute;
+	margin-top: 61px;
+	width: 93%;
+	height: calc(100% - 127px);
+	overflow-y: scroll;
+}
+
+.messages {
+	display: flex;
+	margin-top: 25px;
+}
+
+.messages:last-child {
+	margin-bottom: 30px;
+}
+
+.message div {
+	margin-left: 20px;
+}
+
+.message div p {
+	margin-top: 5px;
+}
+
+.messagePicture {
+	width: 50px;
+	height: 50px;
+}
+
+.input {
+	position: absolute;
+	bottom: 20px;
+	width: 95%;
+	display: flex;
+	justify-content: center;
+}
+
+.input input {
+	width: 95%;
+	background: transparent;
+	height: 40px;
+	border-color: lightgray;
+	border-radius: 2px;
+	color: lightgray;
+	padding-left: 10px;
+}
+
+.input input:focus {
+	outline: none;
+	color: white;
+	border-color: white;
+}
+
+.input img {
+	width: 40px;
+	height: 40px;
+	transition: ease-in-out 0.1s;
+
+}
+
+.send:hover {
+	transform: scale(1.2);
+	transition: ease-in-out 0.1s;
+	cursor: pointer;
 }

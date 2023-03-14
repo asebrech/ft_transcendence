@@ -1,12 +1,29 @@
 <div class="separator"></div>
-<div>
+<div class="top">
 	<div class="main">
 		<img src="../../../../../../assets/images/transmitter_1.png">
 		<div class="header">
 			<div class="username">
 				<h1>{{name}}</h1>
 			</div>
-			<img src="../../../../../../assets/images/arrow-down-sign-to-navigate.png">
+			<app-channel-option></app-channel-option>
 		</div>
 	</div>
+	<div #messageList class="message">
+		<div class="messages" *ngFor="let message of messages">
+			<img class="messagePicture" src="../../../../../../assets/images/astronaut.png">
+			<div>
+				<strong class="usernameMessage">{{message.username}}</strong>
+				<p class="text">{{message.text}}</p>
+			</div>
+		</div>
+	</div>
+	<form class="input" (submit)="onSubmit()">
+		<input placeholder="Send Message..." [ngModelOptions]="{standalone: true}" autofocus [(ngModel)]="message" required>
+		<img src="../../../../../../assets/images/rocket.png" (click)="onSubmit()" *ngIf="message" class="send">
+		<img src="../../../../../../assets/images/rocket.png" *ngIf="!message">
+	</form>
 <div>
+<div class="users">
+
+</div>
