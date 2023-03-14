@@ -11,7 +11,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 })
 export class FriendsComponent implements OnInit {
 
-  amis = ['Alice', 'Bob', 'Charlie', 'David', 'Emma', 'Frank'];
+  amis = [];
   suggestions: any[] = [];
   search : string;
   displayList: boolean = false;
@@ -22,7 +22,8 @@ export class FriendsComponent implements OnInit {
   constructor(private authService: AuthService, private userService: UserService) { }
 
   ngOnInit(): void {
-
+    if (!this.amis.length)
+      this.message = "Liste d'amis vide !";
   }
 
   chercher(username: string) {
@@ -33,8 +34,4 @@ export class FriendsComponent implements OnInit {
     this.resultats = [];
   }
 
-  messageDisplayer(){
-    if (this.amis.length == 0)
-      this.message = "T'as pas d'amis sale merde";
-  }
 }
