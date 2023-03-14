@@ -65,6 +65,7 @@ export class PlayScene extends Phaser.Scene
 
   async create() 
   {
+    
     //  World size is 8000 x 6000
     this.bg = this.add.tileSprite(this.last_bg_x, this.last_bg_y, inWidth, inHeight, 'background');
     //  Add our planets, etc
@@ -97,10 +98,7 @@ export class PlayScene extends Phaser.Scene
     right_pad = this.physics.add.image(inWidth - 30, 350, 'right_pad').setCollideWorldBounds(true).setScrollFactor(0);
     left_pad = this.physics.add.image(30, 350, 'left_pad').setCollideWorldBounds(true).setScrollFactor(0);
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
-    this.false_ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setVisible(false);
     //////////////////////////////////////////////////
-    this.false_ball.body.setBounce(1,1);
-    this.false_ball.scale = 0.03;
     ball.scale = 0.03;
     ball.setBounce(1,1);
     right_pad.scale = 0.3;
@@ -115,21 +113,18 @@ export class PlayScene extends Phaser.Scene
     this.physics.add.existing(ball, true);
     this.physics.add.existing(left_pad, true);
     this.physics.add.existing(right_pad, true);
-    this.physics.add.existing(this.false_ball, true);
     //////////////////////////////////////////////////
     this.physics.add.collider(ball, this.wall_bottom); // Ajoute la collision entre l'object cree avec phaser et un autre objet
     this.physics.add.collider(ball, this.wall_top);
-    this.physics.add.collider(this.false_ball, this.wall_top);
-    this.physics.add.collider(this.false_ball, this.wall_bottom); // Ajoute la collision entre l'object cree avec phaser et un autre objet
-    this.physics.add.collider(left_pad, this.false_ball, () =>
+    this.physics.add.collider(left_pad, ball, () =>
     {
       this.speed += 100;
-      this.false_ball.body.velocity.normalize().scale(this.speed);
+      ball.body.velocity.normalize().scale(this.speed);
     });
-    this.physics.add.collider(right_pad, this.false_ball, () =>
+    this.physics.add.collider(right_pad, ball, () =>
     {
       this.speed += 100;
-      this.false_ball.body.velocity.normalize().scale(this.speed);
+      ball.body.velocity.normalize().scale(this.speed);
     });
     ////////////////////////////////////////////
     var buttonOn = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
@@ -159,23 +154,29 @@ export class PlayScene extends Phaser.Scene
     //////////////////////////////////////////
     this.input.on('pointermove', function (pointer)
     {
-      room?.send("move", {y : pointer.y}) // envois pos pointeur souris en y 
+      room?.send("move", {y : pointer.y / inHeight}) // envois pos pointeur souris en y 
+      
       room?.onMessage("paddle_left", (message) =>{ // reception pos pointeur souris en y
-        left_pad.setVisible(true).setPosition(30, message.y);
+        left_pad.setVisible(true).setPosition(30, message.y * inHeight);
       })
       room?.onMessage("paddle_right", (message) =>{
-        right_pad.setVisible(true).setPosition(inWidth - 30, message.y);
+        right_pad.setVisible(true).setPosition(inWidth - 30, message.y * inHeight);
       })
     }, this);
 
     room?.onMessage("launch", ({x, y}) =>{
-        this.false_ball.setVelocity(x, y);
+        ball.setVelocity(x, y);
         start = true;
     })
   }
   override update()
   {
-    
+    if (start == true)
+      room?.send("ball_position", ({x : (ball.body.x / inWidth), y : (ball.body.y / inHeight)}))
+    room?.onMessage("set_ball_position", ({x, y})=>
+    {
+      ball.setPosition(x * inWidth, y * inHeight)
+    })
     ///////////////////////////////////////////////////////////////
     this.bg.x += 1;
     this.bg.y += 1;

@@ -3,12 +3,6 @@ import { Schema } from "@colyseus/schema";
 
 let player = new Map<string, string>()
 
-interface screen_size 
-{
-  x : number;
-  y : number;
-};
-
 interface new_pos_ball
 {  
   x : number;
@@ -19,7 +13,6 @@ export class MyRoom extends Room<Schema>
 {
 
   rdyPlayer = 2;
-  player_screen : screen_size = {x : 0, y : 0};
   new_pos : new_pos_ball = {x : 0, y : 0};
 
 
@@ -43,47 +36,42 @@ export class MyRoom extends Room<Schema>
     else if (this.clients.length == 2)
     {
       player.set(client.sessionId, "player_right");
+      this.broadcast("second_player_found", ({}));
     }
     else
       player.set(client.sessionId, "spectator");
-
     ///////////////////////////////////////////
     console.log(player.get(client.sessionId))
     console.log(client.sessionId + " is connected to " + this.roomId + " , now this room has " + player.get(client.sessionId))
-    //////////////////////////////////////////
-    if (this.clients.length == 2)
-    {
-      this.broadcast("second_player_found", ({}));
-      console.log("[ROOM IS FULL]")
-    }
-    //////////////////////////////////////////
-    //--------------------------------------------//
+    ///////////////////////////////////////////
     this.onMessage("move", (client, message) =>
     {
       if (player.get(client.sessionId) == "player_left")
+      {
         this.broadcast("paddle_left", message);
+      }
       if (player.get(client.sessionId) == "player_right")
+      {
         this.broadcast("paddle_right",message);
+      }
     });
-    this.onMessage("player_joined", (client, message) =>
+    this.onMessage("ready" , (client, message) =>
+    {
+      this.rdyPlayer--;
+      if (this.rdyPlayer == 0)
+      {
+        this.clients[0].send("launch", ({x: 300, y : 300}));
+      }
+    });
+    this.onMessage("ball_position", (client, message) =>
     {
       if (player.get(client.sessionId) == "player_left")
       {
-        this.player_screen.x = message.x;
-        this.player_screen.y = message.y;
-      };
-      if (player.get(client.sessionId) == "player_right")
-      {
-        if (this.player_screen.x > 0 && this.player_screen.y > 0)
-        {
-          client.send("screen_size", ({x : this.player_screen.x, y : this.player_screen.y }))
-        }
+        this.clients[1].send("set_ball_position", ({x : message.x , y : message.y}));
       }
     });
-    //--------------------------------------------//
     ///////////////////////////////////////////
   }
-
 
   // When a client leaves the room
   onLeave (client: Client, consented: boolean) 

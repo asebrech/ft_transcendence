@@ -68,26 +68,16 @@ export class GameFrontComponent implements OnInit, DoCheck
           this.addButtonStatus(0);
           this.launch.launchGame();
           this.playScene = new Phaser.Game(this.playSceneConfig);
-          room?.send("player_joined", {x : inWidth, y : inHeight});
           this.in += 1;
         }
       });
     })
-    room?.onMessage("screen_size", (message) =>
-    {
-      inWidth = message.x;
-      inHeight = message.y;
-    })
-    //// l envoi des taille fonctionne mais le jeu du joueur adverse dois etre mise a jour
-    console.log(inWidth, inHeight);
   }
 
   ngOnInit()
   {
     inWidth = window.innerWidth;
     inHeight = window.innerHeight;
-    console.log(inWidth, inHeight);
-
     ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
 	  this.starsService.setActive(false);
     /////////////////INIT PLAYER SESSION//////////////////////////
@@ -129,28 +119,7 @@ export class GameFrontComponent implements OnInit, DoCheck
           gravity: {y : 0, x: 0 }
         }
       }
-    };
-    /////////////////LOST SCENE CONFIG////////////////////
-    this.endLoseSceneConfig = {
-      type: Phaser.AUTO,
-      scene: [Lost],
-      scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-        parent: 'gameContainer',
-        width: innerWidth,
-        height: innerHeight,
-      },
-      transparent: true,
-      physics: {
-        default: 'arcade',
-        arcade: {
-          debug: true,
-          gravity: {y : 0, x: 0 }
-        }
-      }
-    };
-    
+    };    
   }
   checkIfGameFoundRet()
   {
