@@ -58,6 +58,14 @@ export class GameFrontComponent implements OnInit, DoCheck
         this.joinedVar.next(this.joined);
       }
     }
+    room?.onMessage("request_left_player_screen", ()=>
+    {
+      room?.send("player_left_screen_size", ({x : inWidth, y : inHeight}));
+    })
+    room?.onMessage("request_right_player_screen", ()=>
+    {
+      room?.send("player_right_screen_size", ({x : inWidth, y : inHeight}));
+    })
     room?.onMessage("second_player_found", ({}) =>
     {
       this.joinedVar.subscribe((value) =>

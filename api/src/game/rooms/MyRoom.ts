@@ -3,7 +3,7 @@ import { Schema } from "@colyseus/schema";
 
 let player = new Map<string, string>()
 
-interface new_pos_ball
+interface screen_size
 {  
   x : number;
   y : number;
@@ -13,8 +13,8 @@ export class MyRoom extends Room<Schema>
 {
 
   rdyPlayer = 2;
-  new_pos : new_pos_ball = {x : 0, y : 0};
-
+  player_left_size : screen_size = {x : 0, y : 0};
+  player_right_size : screen_size = {x : 0, y : 0};
 
   // When room is initialized
   onCreate (options: any) 
@@ -32,10 +32,28 @@ export class MyRoom extends Room<Schema>
   onJoin (client: Client, options: any, auth: any) 
   {
     if (this.clients.length == 1)
+    {
       player.set(client.sessionId, "player_left");
+      try
+      {
+        client.send("request_left_player_screen");
+      }
+      catch
+      {
+        console.log("error could not send [request_left_player_screen]")
+      }
+    }
     else if (this.clients.length == 2)
     {
       player.set(client.sessionId, "player_right");
+      try
+      {
+        client.send("request_right_player_screen");
+      }
+      catch
+      {
+        console.log("error could not send [request_right_player_screen]")
+      }
       this.broadcast("second_player_found", ({}));
     }
     else
@@ -60,16 +78,46 @@ export class MyRoom extends Room<Schema>
       this.rdyPlayer--;
       if (this.rdyPlayer == 0)
       {
-        this.clients[0].send("launch", ({x: 300, y : 300}));
+        try 
+        {
+          this.clients[0].send("launch", ({x: 300, y : 300}));
+        } catch 
+        {
+          console.log("error could not send [launch]")
+        }
       }
     });
     this.onMessage("ball_position", (client, message) =>
     {
       if (player.get(client.sessionId) == "player_left")
       {
-        this.clients[1].send("set_ball_position", ({x : message.x , y : message.y}));
+        const x_pos = (message.x / this.player_left_size.x) * (this.player_right_size.x);
+        const y_pos = (message.y / this.player_left_size.y) * (this.player_right_size.y);
+        try 
+        {
+          this.clients[1].send("set_ball_position", ({x : x_pos , y : y_pos}));
+        } catch 
+        {
+          console.log("error could not send [set_ball_position]")
+        }
       }
     });
+    this.onMessage("player_left_screen_size", (client, message) =>
+    {
+      if (player.get(client.sessionId) == "player_left")
+      {
+        this.player_left_size.x = message.x;
+        this.player_left_size.y = message.y;
+      }
+    })
+    this.onMessage("player_right_screen_size", (client, message) =>
+    {      
+      if (player.get(client.sessionId) == "player_right")
+      {
+        this.player_right_size.x = message.x;
+        this.player_right_size.y = message.y;
+      }
+    })
     ///////////////////////////////////////////
   }
 

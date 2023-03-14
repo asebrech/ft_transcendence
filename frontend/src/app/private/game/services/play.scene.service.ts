@@ -172,10 +172,10 @@ export class PlayScene extends Phaser.Scene
   override update()
   {
     if (start == true)
-      room?.send("ball_position", ({x : (ball.body.x / inWidth), y : (ball.body.y / inHeight)}))
+      room?.send("ball_position", ({x : ball.x, y : ball.y}))
     room?.onMessage("set_ball_position", ({x, y})=>
     {
-      ball.setPosition(x * inWidth, y * inHeight)
+      ball.setPosition(x, y)
     })
     ///////////////////////////////////////////////////////////////
     this.bg.x += 1;
