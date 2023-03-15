@@ -7,7 +7,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
-    NavBarComponent
+    NavBarComponent,
 
   ],
   exports: [

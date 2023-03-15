@@ -8,6 +8,7 @@ export class LaunchGameService
   hideW : number = 0;
   launch : number = 0;
   button_show : number = 0;
+  found : number = 0;
 
   constructor() 
   {
@@ -39,5 +40,14 @@ export class LaunchGameService
   launchGameRet()
   {
     return this.launch;
+  }
+
+  gameFound()
+  {
+    this.found = 1;
+  }
+  gameFoundRet()
+  {
+    return this.found
   }
 }

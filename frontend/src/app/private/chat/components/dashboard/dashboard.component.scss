@@ -33,7 +33,7 @@
 	margin-top: 95px;
 	min-height: 300px;
 	width: 100%;
-	min-width: 400px;
+	min-width: 300px;
 	margin-left: 20px;
 	background-color: black; //to be deleted
 	backdrop-filter: blur(4.5px);
@@ -95,6 +95,14 @@
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.6); /* Couleur foncée semi-transparente */
   }
+
+.users {
+	margin-top: 95px;
+	min-width: 300px;
+	//height: 100%;
+	background: black;
+	margin-left: 20px;
+}
 
 // div {
 // 	//background-color: #110720;
