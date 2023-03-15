@@ -1,10 +1,6 @@
 .container {
   display: table;
-  min-width: fit-content;
-  margin-top: 50px;
-  margin-left: 120px;
-  margin-right: 10px;
-  width: 100vh;
+  margin: 50px auto;
 }
 
 .block {
@@ -12,7 +8,7 @@
   width: 33.3333%;
   padding: 10px;
   box-shadow: 23px 0px 31px rgb(0 0 0 / 25%);
-  text-align: -webkit-center;
+  text-align: center;
   backdrop-filter: blur(3px);
   font-variant-caps: all-petite-caps;
 }

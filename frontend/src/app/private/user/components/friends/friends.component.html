@@ -6,8 +6,14 @@
       <img src="../../../../../assets/images/icons8-telescope-100_1.png" alt="icons8-telescope-100_1">
     </div>
     <hr>
-    <label for="search-friends"></label>
-    <input type="text" id="search-friends" name="search-friends" placeholder="Cherchez des amis...">
+    <div class="autocomplete">
+      <input type="text" placeholder="Rechercher..." [(ngModel)]="username" (keyup)="chercher(username)">
+      <div class="suggestions" *ngIf="resultats.length > 0">
+        <div class="suggestion" *ngFor="let resultat of resultats" (click)="selectionner(resultat)">
+          {{ resultat }}
+        </div>
+      </div>
+    </div>
   </div>
   <div class="friend-list">
     <div class="title">
@@ -15,5 +21,14 @@
       <img src="../../../../../assets/images/src.png" alt="amis-logo">
     </div>
     <hr>
+    <p *ngIf="message">{{message}}</p>
+    <div class="main">
+      <ul>
+        <li *ngFor="let user of amis; let i = index" (click)="test()">
+          <img src="../../../../../../assets/images/astronaut.png">
+          {{ amis[ i % amis.length] }}
+        </li>
+        </ul>
+    </div>
   </div>
 </div>
