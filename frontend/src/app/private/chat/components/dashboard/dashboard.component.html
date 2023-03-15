@@ -21,9 +21,9 @@
 	<div class="messages">
 		<app-messages></app-messages>
 	</div>
-	<!-- <div class="users">
+	<div *ngIf="dashService.members" class="users">
 
-	</div> -->
+	</div>
 </div>
 <app-find-channel *ngIf="find" class="findChannel"></app-find-channel>
 <div *ngIf="find" class="overlay"></div>

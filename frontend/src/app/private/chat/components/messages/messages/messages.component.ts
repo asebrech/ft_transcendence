@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
 
 @Component({
   selector: 'app-messages',
@@ -16,11 +17,12 @@ export class MessagesComponent implements OnInit {
 	];
 
 	name: string = 'Mago'
+	isEditing = false;
 
 	@ViewChild('messageList') messageList: ElementRef;
 
 
-  constructor(private formBuilder: FormBuilder) {   for (let i = 1; i <= 20; i++) {
+  constructor(private formBuilder: FormBuilder, public dashService: DashboardService) {   for (let i = 1; i <= 20; i++) {
     const username = 'User' + i;
     const text = 'Message ' + i;
     const message = {username: username, text: text};
@@ -41,5 +43,28 @@ export class MessagesComponent implements OnInit {
   scrollToBottom(): void {
     this.messageList.nativeElement.scrollTop = this.messageList.nativeElement.scrollHeight;
   }
+
+  members() {
+	this.dashService.members = !this.dashService.members;
+  }
+
+  updateName(event: Event) {
+    const newName = (event.target as HTMLInputElement).innerText.trim();
+	if (newName === '') {
+		console.log('hello');
+		this.name = newName;
+		return; // Quitter la méthode si le nouveau nom est vide
+	  }
+	if (newName && this.name !== newName){
+		this.name = newName;
+	}
+	console.log(this.name);
+  }
+
+  updateNameEnter(event: Event) {
+	(event.target as HTMLInputElement).blur();
+  }
+
+  update() {}
 
 }

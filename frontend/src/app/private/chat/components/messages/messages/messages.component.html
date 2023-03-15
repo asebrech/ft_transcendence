@@ -4,16 +4,25 @@
 		<img src="../../../../../../assets/images/transmitter_1.png">
 		<div class="header">
 			<div class="username">
-				<h1>{{name}}</h1>
+				<h1 class="editName" *ngIf="dashService.channel" contenteditable="true" (blur)="updateName($event)" (keydown.enter)="updateNameEnter($event)" >{{name}}</h1>
+		
+				<!-- <form (submit)="update()">
+					<input *ngIf="dashService.channel" [ngModelOptions]="{standalone: true}" [(ngModel)]="name"  [placeholder]="name">
+				</form> -->
+				<h1 *ngIf="!dashService.channel" >{{name}}</h1>
 			</div>
-			<app-channel-option></app-channel-option>
 		</div>
+	</div>
+	<app-channel-option class="channelOption"></app-channel-option>
+	<div class="shortcut">
+		<img src="../../../../../../assets/images/add-user.png">
+		<img class="members" src="../../../../../../assets/images/users.png" (click)="members()">
 	</div>
 	<div #messageList class="message">
 		<div class="messages" *ngFor="let message of messages">
 			<img class="messagePicture" src="../../../../../../assets/images/astronaut.png">
 			<div>
-				<strong class="usernameMessage">{{message.username}}</strong>
+				<strong class="usernameMessage" >{{message.username}}</strong>
 				<p class="text">{{message.text}}</p>
 			</div>
 		</div>
@@ -24,6 +33,3 @@
 		<img src="../../../../../../assets/images/rocket.png" *ngIf="!message">
 	</form>
 <div>
-<div class="users">
-
-</div>

@@ -15,7 +15,6 @@ export class ChannelOptionComponent {
 	constructor(private elementRef: ElementRef, public dashService: DashboardService) { }
 
 	switch() {
-		this.dashService.channel = !this.dashService.channel;
 		this.hideSwitch();
 	}
 
