@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
 
@@ -10,29 +10,42 @@ import { DashboardService } from '../../../services/dashboard-service/dashboard-
 export class MessagesComponent implements OnInit {
 
 	message: string = '';
+	ChannelName: string = 'mago';
 
 	messages: any[] = [
 		{username: 'mago', text:'salutgjhlwregharhglarghlhsagbhlrshaglaghaliughlaghlakrsghlriaugthlriaughlaiughrli giu liuhalufghal l tliuhtglaiuwhg l;g luahgluaglhag lhg lauhgluhtal l luhl khl hlahleauth lkajhglkgjeh lskgh l;rhg'},
 		{username: 'mago', text:'salutgjhlwregharhglarghlhsagbhlrshaglaghaliughlaghlakrsghlriaugthlriaughlaiughrli giu liuhalufghal l tliuhtglaiuwhg l;g luahgluaglhag lhg lauhgluhtal l luhl khl hlahleauth lkajhglkgjeh lskgh l;rhg leudihglagh glirsa ghlrsuahglrashglkuharl;oigujhj lsrghjsl;ogjh; sohj; ldjsgh;losjhg;olikltds jh;lkdtj;hlsdetj;oihjtsdel;goh ijteds;lohijdt;oijkghd;lkihj;tedosikhj;todskjh ;dxkjjh ;sedtikohj; tsdlkh j;dothktj;tlkhjd;etlkhj ;teslhj;diytjh;sedtolihj ;dolitkh j;odshj ;dlk hj;lkdyhj t;lshj ;seoihjty; shjtse;lhgjset;l hkgnjsdlknj'}
 	];
 
-	name: string = 'Mago'
 	isEditing = false;
+	placeholderText: string;
+	placeTmp: string;
+	inputText: string;
 
 	@ViewChild('messageList') messageList: ElementRef;
+	@ViewChild('inputElement') inputElementRef: ElementRef;
 
 
-  constructor(private formBuilder: FormBuilder, public dashService: DashboardService) {   for (let i = 1; i <= 20; i++) {
+  constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef) {   for (let i = 1; i <= 20; i++) {
     const username = 'User' + i;
     const text = 'Message ' + i;
     const message = {username: username, text: text};
     this.messages.push(message);
-  }}
+	}
+
+	this.placeholderText = this.ChannelName;
+	//this.placeTmp = this.placeholderText;
+    this.inputText = "";
+  }
 
   ngOnInit(): void {
 	setTimeout(() => {
         this.scrollToBottom();
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.ajusterLargeurInput(this.inputElementRef.nativeElement, null);
   }
 
   onSubmit() {
@@ -48,23 +61,61 @@ export class MessagesComponent implements OnInit {
 	this.dashService.members = !this.dashService.members;
   }
 
-  updateName(event: Event) {
-    const newName = (event.target as HTMLInputElement).innerText.trim();
-	if (newName === '') {
-		console.log('hello');
-		this.name = newName;
-		return; // Quitter la méthode si le nouveau nom est vide
-	  }
-	if (newName && this.name !== newName){
-		this.name = newName;
+  onFocus(): void {
+    this.inputText = this.placeholderText;
+	this.placeTmp = this.placeholderText;
+	this.placeholderText = '';
+    this.changeDetector.detectChanges();
+  }
+
+  validerPlaceholder(inputElement: HTMLInputElement): void {
+	this.placeholderText = this.placeTmp;
+	const tmp : string = this.inputText.trim();
+    if ( tmp !== '' && tmp != this.placeholderText ) {
+      this.placeholderText = this.inputText;
+
+	  this.ChannelName = this.placeholderText;
+	  console.log(this.ChannelName);
+    }
+	this.ajusterLargeurInput(inputElement, this.placeholderText);
+    this.inputText = "";
+	this.changeDetector.detectChanges();
+  }
+
+  validerPlaceholderEnter(inputElement: HTMLInputElement): void {
+	inputElement.blur();
+  }
+
+  onInput(inputElement: HTMLInputElement): void {
+	this.ajusterLargeurInput(inputElement, this.inputText);
+  }
+
+  ajusterLargeurInput(inputElement: HTMLInputElement, text: string): void {
+	// Créez un élément span temporaire pour mesurer la largeur du texte
+	const span = document.createElement('span');
+	span.style.position = 'absolute';
+	span.style.visibility = 'hidden';
+	span.style.whiteSpace = 'pre';
+	// span.textContent = inputElement.placeholder;
+	span.textContent = text || inputElement.placeholder;
+  
+	// Copiez les propriétés de style pertinentes de l'input vers le span
+	const inputStyle = getComputedStyle(inputElement);
+	const propertiesToCopy = ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'letterSpacing'];
+	for (const property of propertiesToCopy) {
+	  span.style[property] = inputStyle[property];
 	}
-	console.log(this.name);
+  
+	// Ajoutez le span au DOM, mesurez sa largeur et retirez-le du DOM
+	document.body.appendChild(span);
+	const textWidth = span.getBoundingClientRect().width;
+	document.body.removeChild(span);
+  
+	// Ajoutez un peu d'espace supplémentaire pour éviter que le texte ne soit coupé
+	const padding = 0;
+  
+	// Définissez la largeur de l'input en fonction de la largeur du texte mesurée
+	inputElement.style.width = `${textWidth + padding}px`;
   }
-
-  updateNameEnter(event: Event) {
-	(event.target as HTMLInputElement).blur();
-  }
-
-  update() {}
 
 }

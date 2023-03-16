@@ -4,12 +4,13 @@
 		<img src="../../../../../../assets/images/transmitter_1.png">
 		<div class="header">
 			<div class="username">
-				<h1 class="editName" *ngIf="dashService.channel" contenteditable="true" (blur)="updateName($event)" (keydown.enter)="updateNameEnter($event)" >{{name}}</h1>
-		
-				<!-- <form (submit)="update()">
-					<input *ngIf="dashService.channel" [ngModelOptions]="{standalone: true}" [(ngModel)]="name"  [placeholder]="name">
-				</form> -->
-				<h1 *ngIf="!dashService.channel" >{{name}}</h1>
+				<div [ngClass]="{'hidden': !dashService.channel}" >
+
+					<input class="channelName" type="text" #inputElement [placeholder]="placeholderText"
+					[(ngModel)]="inputText" (focus)="onFocus()" (blur)="validerPlaceholder(inputElement)"
+					(keydown.enter)="validerPlaceholderEnter(inputElement)" (input)="onInput(inputElement)">
+				</div>
+				<h1 *ngIf="!dashService.channel" >{{ChannelName}}</h1>
 			</div>
 		</div>
 	</div>
