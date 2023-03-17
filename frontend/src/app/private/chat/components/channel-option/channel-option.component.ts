@@ -36,4 +36,15 @@ export class ChannelOptionComponent {
 		}
 	}
 
+	changePass() {
+		console.log('changePass');
+	}
+
+	leaveChannel() {
+		console.log('leaveChannel');
+	}
+
+	deleteChannel() {
+		console.log('deleteChannel');
+	}
 }

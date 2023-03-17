@@ -1,0 +1,24 @@
+<div class="header">
+	<h1 class="title">Members</h1>
+	<div class="separator"></div>
+</div>
+<div class="main"  >
+	<ul>
+		<li *ngFor="let user of users" class="list"
+		(click)="test()"
+		(mousedown)="isClicked = true"
+		(mousedown)="selectedUser = user"
+		(mouseup)="isClicked = false"
+		(mouseleave)="isClicked = false"
+		[ngStyle]="{ 'background-color': selectedUser === user && isClicked ? 'rgba(217, 217, 217, 0.25)' : '',
+		'transition': selectedUser === user && !isClicked ?'ease-in 0.1s': '' }"
+		[ngClass]="{'selected': selectedUser === user}"
+		>
+		<img src="../../../../../../assets/images/astronaut.png">
+		<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}"></div>
+		<div class="name">
+			{{ user.name }}
+		</div>
+	</li>
+</ul>
+</div>
