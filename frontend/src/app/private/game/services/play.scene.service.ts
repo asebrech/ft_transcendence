@@ -1,11 +1,11 @@
-import { inWidth, inHeight } from "../components/game.front/game.front.component";
+import { inWidth, inHeight, player_left } from "../components/game.front/game.front.component";
 import * as Phaser from "phaser";
 import { room } from "../components/game.front/game.front.component";
 
 let start : boolean;
 let right_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
 let left_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
-let ball : any;
+let ball : Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
 let ball_velocity_x : number;
 let ball_velocity_y : number;
 
@@ -15,7 +15,7 @@ export class PlayScene extends Phaser.Scene
   right_score : number;
   wall_bottom : any;
   wall_top : any;
-  false_ball : any;
+  false_ball : Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
   score : Phaser.GameObjects.Text;
   padHit : boolean;
   bg: Phaser.GameObjects.TileSprite;
@@ -77,9 +77,9 @@ export class PlayScene extends Phaser.Scene
     this.add.image(3140, 2974, 'space', 'brown-planet').setOrigin(0).setScrollFactor(0.6).setScale(0.8).setTint(0x882d2d);
     this.add.image(6052, 4280, 'space', 'purple-planet').setOrigin(0).setScrollFactor(0.6);
     for (let i = 0; i < 8; i++)
-      {
-          this.add.image(Phaser.Math.Between(0, 8000), Phaser.Math.Between(0, 6000), 'space', 'eyes').setBlendMode(1).setScrollFactor(0.8);
-      }
+    {
+        this.add.image(Phaser.Math.Between(0, 8000), Phaser.Math.Between(0, 6000), 'space', 'eyes').setBlendMode(1).setScrollFactor(0.8);
+    }
       this.tweens.add({
         targets: this.galaxy,
         angle: 360,
@@ -154,13 +154,37 @@ export class PlayScene extends Phaser.Scene
     //////////////////////////////////////////
     this.input.on('pointermove', function (pointer)
     {
-      room?.send("move", {y : pointer.y / inHeight}) // envois pos pointeur souris en y 
-      
-      room?.onMessage("paddle_left", (message) =>{ // reception pos pointeur souris en y
-        left_pad.setVisible(true).setPosition(30, message.y * inHeight);
+      if(player_left == true)
+      {
+        left_pad.setVisible(true).setPosition(30, pointer.y);
+        room?.send("move_left_pad", {x : left_pad.x, y : left_pad.y});
+      }
+      else if (player_left == false)
+      {
+        right_pad.setVisible(true).setPosition(inWidth - 30, pointer.y);
+        room?.send("move_right_pad", {x : right_pad.x, y :right_pad.y});
+      }
+      room?.onMessage("paddle_left", ({x, y})=>
+      {
+        if(player_left == false)
+        {
+          let currentPosition = new Phaser.Math.Vector2(left_pad.x, left_pad.y);
+          let toGoPosition = new Phaser.Math.Vector2(x, y);
+          let newPosition_x = Phaser.Math.Interpolation.Linear([currentPosition.x, toGoPosition.x], 1);
+          let newPosition_y = Phaser.Math.Interpolation.Linear([currentPosition.y, toGoPosition.y], 1);
+          left_pad.setVisible(true).setPosition(newPosition_x, newPosition_y);
+        }
       })
-      room?.onMessage("paddle_right", (message) =>{
-        right_pad.setVisible(true).setPosition(inWidth - 30, message.y * inHeight);
+      room?.onMessage("paddle_right", ({x, y}) =>
+      {
+        if(player_left == true)
+        {
+          let currentPosition = new Phaser.Math.Vector2(right_pad.x, right_pad.y);
+          let toGoPosition = new Phaser.Math.Vector2(x, y);
+          let newPosition_x = Phaser.Math.Interpolation.Linear([currentPosition.x, toGoPosition.x], 1);
+          let newPosition_y = Phaser.Math.Interpolation.Linear([currentPosition.y, toGoPosition.y], 1);
+          right_pad.setVisible(true).setPosition(newPosition_x, newPosition_y);
+        }
       })
     }, this);
 
@@ -175,7 +199,11 @@ export class PlayScene extends Phaser.Scene
       room?.send("ball_position", ({x : ball.x, y : ball.y}))
     room?.onMessage("set_ball_position", ({x, y})=>
     {
-      ball.setPosition(x, y)
+      let currentPosition = new Phaser.Math.Vector2(ball.x, ball.y);
+      let toGoPosition = new Phaser.Math.Vector2(x, y);
+      let newPosition_x = Phaser.Math.Interpolation.Linear([currentPosition.x, toGoPosition.x], 1);
+      let newPosition_y = Phaser.Math.Interpolation.Linear([currentPosition.y, toGoPosition.y], 1);
+      ball.setPosition(newPosition_x, newPosition_y)
     })
     ///////////////////////////////////////////////////////////////
     this.bg.x += 1;

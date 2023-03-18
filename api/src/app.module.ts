@@ -1,4 +1,3 @@
-import { Ball_dataService } from './game/rooms/ball_data.service';
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -24,7 +23,7 @@ import { ChatModule } from './chat/chat.module';
 	],
 	controllers: [AppController],
 	providers: [
-		Ball_dataService, AppService],
+		AppService],
 })
 export class AppModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {

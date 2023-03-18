@@ -6,7 +6,6 @@ import { PlayScene } from '../../services/play.scene.service';
 import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
-import { Lost } from '../../services/lost.scene.service';
 import { BehaviorSubject } from 'rxjs';
 
 export let room : any;
@@ -14,6 +13,7 @@ export let room : any;
 export let client : Client;
 export let inWidth : number;
 export let inHeight : number;
+export let player_left : boolean;
 
 @Component({
   selector: 'app-game.front',
@@ -29,14 +29,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   ///////////////////////////////////
   waitingPlayScene: Phaser.Game;
   waitingPlaySceneConfig: Phaser.Types.Core.GameConfig;
-  //////////////////////////////////
-  endWinScene: Phaser.Game;
-  endWinSceneConfig: Phaser.Types.Core.GameConfig;
-  //////////////////////////////////
-  endLoseScene: Phaser.Game;
-  endLoseSceneConfig: Phaser.Types.Core.GameConfig;
-  //////////////////////////////////
-  
+  ///////////////////////////////////
   joined = false;
   in = 0;
   joinedVar = new BehaviorSubject<boolean> (this.joined);
@@ -60,13 +53,15 @@ export class GameFrontComponent implements OnInit, DoCheck
     }
     room?.onMessage("request_left_player_screen", ()=>
     {
+      player_left = true;
       room?.send("player_left_screen_size", ({x : inWidth, y : inHeight}));
     })
     room?.onMessage("request_right_player_screen", ()=>
     {
+      player_left = false;
       room?.send("player_right_screen_size", ({x : inWidth, y : inHeight}));
     })
-    room?.onMessage("second_player_found", ({}) =>
+    room?.onMessage("second_player_found", () =>
     {
       this.joinedVar.subscribe((value) =>
       {
@@ -84,8 +79,8 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnInit()
   {
-    inWidth = window.innerWidth;
-    inHeight = window.innerHeight;
+    inWidth = 1920;
+    inHeight = 1080;
     ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
 	  this.starsService.setActive(false);
     /////////////////INIT PLAYER SESSION//////////////////////////
@@ -98,8 +93,8 @@ export class GameFrontComponent implements OnInit, DoCheck
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: 'gameContainer',
-        width: innerWidth,
-        height: innerHeight,
+        width: inWidth,
+        height:  inHeight,
       },
       physics: {
         default: 'arcade',
@@ -116,8 +111,8 @@ export class GameFrontComponent implements OnInit, DoCheck
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: 'gameContainer',
-        width: innerWidth,
-        height: innerHeight,
+        width: inWidth,
+        height: inHeight,
       },
       transparent: true,
       physics: {
@@ -128,6 +123,10 @@ export class GameFrontComponent implements OnInit, DoCheck
         }
       }
     };    
+  }
+  IfGameFound()
+  {
+    this.launch.gameFound();
   }
   checkIfGameFoundRet()
   {
@@ -150,6 +149,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   {
     this.addButtonStatus(0);
     this.launch.launchGame();
+    this.IfGameFound();
     this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
   }
   switchToBotPlay()

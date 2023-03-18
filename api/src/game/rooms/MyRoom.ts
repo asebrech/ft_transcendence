@@ -1,5 +1,7 @@
 import { Room, Client, Server } from "colyseus";
+import { matchMaker } from "colyseus";
 import { Schema } from "@colyseus/schema";
+import * as Phaser from 'phaser';
 
 let player = new Map<string, string>()
 
@@ -9,13 +11,16 @@ interface screen_size
   y : number;
 };
 
+
+
 export class MyRoom extends Room<Schema> 
 {
 
   rdyPlayer = 2;
   player_left_size : screen_size = {x : 0, y : 0};
   player_right_size : screen_size = {x : 0, y : 0};
-
+  senderScreenRatio = this.player_left_size.x / this.player_left_size.y;
+  receiverScreenRatio = this.player_right_size.x / this.player_right_size.y;
   // When room is initialized
   onCreate (options: any) 
   {
@@ -40,7 +45,7 @@ export class MyRoom extends Room<Schema>
       }
       catch
       {
-        console.log("error could not send [request_left_player_screen]")
+        console.error("error could not send [request_left_player_screen]")
       }
     }
     else if (this.clients.length == 2)
@@ -52,9 +57,9 @@ export class MyRoom extends Room<Schema>
       }
       catch
       {
-        console.log("error could not send [request_right_player_screen]")
+        console.error("error could not send [request_right_player_screen]")
       }
-      this.broadcast("second_player_found", ({}));
+      this.broadcast("second_player_found");
     }
     else
       player.set(client.sessionId, "spectator");
@@ -62,46 +67,106 @@ export class MyRoom extends Room<Schema>
     console.log(player.get(client.sessionId))
     console.log(client.sessionId + " is connected to " + this.roomId + " , now this room has " + player.get(client.sessionId))
     ///////////////////////////////////////////
-    this.onMessage("move", (client, message) =>
+    this.onMessage("move_left_pad", (client, message) =>
     {
       if (player.get(client.sessionId) == "player_left")
       {
-        this.broadcast("paddle_left", message);
-      }
-      if (player.get(client.sessionId) == "player_right")
-      {
-        this.broadcast("paddle_right",message);
+        let normalizedX = message.x / this.player_left_size.x;
+        let normalizedY = message.y / this.player_left_size.y;
+        let scaledX = 0;
+        let scaledY = 0;
+        scaledX = normalizedX * this.player_right_size.x;
+        scaledY = normalizedY * this.player_right_size.y;
+        try
+        {
+          this.clients[1].send("paddle_left", ({x : scaledX, y : scaledY}));
+        }
+        catch
+        {
+          console.error("cannot send to right player paddle movement")
+        }
       }
     });
+
+    this.onMessage("move_right_pad", (client, message) =>
+    {
+      if (player.get(client.sessionId) == "player_right")
+      {
+        let normalizedX = message.x / this.player_right_size.x;
+        let normalizedY = message.y / this.player_right_size.y;
+        let scaledX = 0;
+        let scaledY = 0;
+        scaledX = normalizedX * this.player_left_size.x;
+        scaledY = normalizedY * this.player_left_size.y;
+        try
+        {
+          this.clients[0].send("paddle_right", ({x : scaledX, y : scaledY}));
+        }
+        catch
+        {
+          console.error("cannot send to left player paddle movement");
+        }
+      }
+    });
+
+
     this.onMessage("ready" , (client, message) =>
     {
       this.rdyPlayer--;
       if (this.rdyPlayer == 0)
       {
-        try 
+        try
         {
           this.clients[0].send("launch", ({x: 300, y : 300}));
-        } catch 
+        }
+        catch
         {
-          console.log("error could not send [launch]")
+          console.error("error could not send [launch]")
         }
       }
     });
+    //////////////////////////////////////////
     this.onMessage("ball_position", (client, message) =>
     {
       if (player.get(client.sessionId) == "player_left")
       {
-        const x_pos = (message.x / this.player_left_size.x) * (this.player_right_size.x);
-        const y_pos = (message.y / this.player_left_size.y) * (this.player_right_size.y);
+        let normalizedX = message.x / this.player_left_size.x;
+        let normalizedY = message.y / this.player_left_size.y;
+        let scaledX = 0;
+        let scaledY = 0;
+        // if (this.receiverScreenRatio > this.senderScreenRatio) 
+        // {
+        //   // Receiver's screen is wider than sender's screen
+          scaledX = normalizedX * this.player_right_size.x;
+          // scaledY = normalizedY * this.player_right_size.y * (this.player_left_size.y / this.player_left_size.x);
+        // } else if (this.receiverScreenRatio < this.senderScreenRatio) 
+        // {
+        //   // Receiver's screen is taller than sender's screen
+        //   scaledX = normalizedX * this.player_right_size.x  * (this.player_left_size.x / this.player_left_size.y);
+          scaledY = normalizedY * this.player_right_size.y;
+        // }
+        // else if(this.player_left_size.x > this.player_right_size.x && this.player_left_size.y > this.player_right_size.y)
+        // {
+          // scaledX = normalizedX * this.player_right_size.x * (this.player_left_size.x / this.player_left_size.y);
+          // scaledY = normalizedY * this.player_right_size.y * (this.player_left_size.y / this.player_left_size.x);
+        // }
+        // else
+        // {
+        //   scaledX = message.x;
+        //   scaledY = message.y;
+        // }      
+        // Apply the scale factors to the normalized coordinates
         try 
         {
-          this.clients[1].send("set_ball_position", ({x : x_pos , y : y_pos}));
-        } catch 
+          this.clients[1].send("set_ball_position", ({x : scaledX, y : scaledY}));
+        }
+        catch 
         {
-          console.log("error could not send [set_ball_position]")
+          console.error("error could not send [set_ball_position]")
         }
       }
     });
+    ////////////////////////////////////////
     this.onMessage("player_left_screen_size", (client, message) =>
     {
       if (player.get(client.sessionId) == "player_left")
