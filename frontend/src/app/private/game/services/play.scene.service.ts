@@ -199,11 +199,7 @@ export class PlayScene extends Phaser.Scene
       room?.send("ball_position", ({x : ball.x, y : ball.y}))
     room?.onMessage("set_ball_position", ({x, y})=>
     {
-      let currentPosition = new Phaser.Math.Vector2(ball.x, ball.y);
-      let toGoPosition = new Phaser.Math.Vector2(x, y);
-      let newPosition_x = Phaser.Math.Interpolation.Linear([currentPosition.x, toGoPosition.x], 1);
-      let newPosition_y = Phaser.Math.Interpolation.Linear([currentPosition.y, toGoPosition.y], 1);
-      ball.setPosition(newPosition_x, newPosition_y)
+      ball.setPosition(x, y)
     })
     ///////////////////////////////////////////////////////////////
     this.bg.x += 1;

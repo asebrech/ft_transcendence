@@ -130,35 +130,9 @@ export class MyRoom extends Room<Schema>
     {
       if (player.get(client.sessionId) == "player_left")
       {
-        let normalizedX = message.x / this.player_left_size.x;
-        let normalizedY = message.y / this.player_left_size.y;
-        let scaledX = 0;
-        let scaledY = 0;
-        // if (this.receiverScreenRatio > this.senderScreenRatio) 
-        // {
-        //   // Receiver's screen is wider than sender's screen
-          scaledX = normalizedX * this.player_right_size.x;
-          // scaledY = normalizedY * this.player_right_size.y * (this.player_left_size.y / this.player_left_size.x);
-        // } else if (this.receiverScreenRatio < this.senderScreenRatio) 
-        // {
-        //   // Receiver's screen is taller than sender's screen
-        //   scaledX = normalizedX * this.player_right_size.x  * (this.player_left_size.x / this.player_left_size.y);
-          scaledY = normalizedY * this.player_right_size.y;
-        // }
-        // else if(this.player_left_size.x > this.player_right_size.x && this.player_left_size.y > this.player_right_size.y)
-        // {
-          // scaledX = normalizedX * this.player_right_size.x * (this.player_left_size.x / this.player_left_size.y);
-          // scaledY = normalizedY * this.player_right_size.y * (this.player_left_size.y / this.player_left_size.x);
-        // }
-        // else
-        // {
-        //   scaledX = message.x;
-        //   scaledY = message.y;
-        // }      
-        // Apply the scale factors to the normalized coordinates
         try 
         {
-          this.clients[1].send("set_ball_position", ({x : scaledX, y : scaledY}));
+          this.clients[1].send("set_ball_position", ({x : message.x, y : message.y}));
         }
         catch 
         {

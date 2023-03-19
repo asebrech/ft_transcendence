@@ -38,8 +38,6 @@ export class GameFrontComponent implements OnInit, DoCheck
   {
   }
 
-  @HostListener('window:resize', ['$event'])
-
   ngDoCheck() 
   {
     if (this.launch.showButtonStats() == 1)
