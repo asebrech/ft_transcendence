@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/public/services/auth-service/auth.service';
+import { UserService } from 'src/app/public/services/user-service/user.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -9,7 +11,7 @@ import { Router } from '@angular/router';
 export class NavBarComponent implements OnInit {
 	currentUrl: string;
   
-	constructor(private router: Router) {}
+	constructor(private router: Router, private auth : AuthService) {}
   
 	ngOnInit() {
 	  this.currentUrl = this.router.url;

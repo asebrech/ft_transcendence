@@ -46,7 +46,6 @@ export class UserHelperService {
 			return this.apiLoginDtoToEntity(response.data);
 		} catch {
 			throw new HttpException('wrong token', HttpStatus.UNAUTHORIZED);
-			
 		}
 	}
 	

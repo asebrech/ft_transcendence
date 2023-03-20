@@ -1,7 +1,7 @@
 import { Component, NgModule, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
-import { PercentPipe } from '@angular/common';
 import { UserService } from 'src/app/public/services/user-service/user.service';
 import { PlayerService } from '../../services/player.service';
 
@@ -12,19 +12,26 @@ import { PlayerService } from '../../services/player.service';
 })
 
 export class ProfileComponent {
-  user : UserI;
+  user;
   username : string;
   victories: number;
   defeats: number;
   ratio: number;
+  isCurrentUser: boolean;
 
-  constructor(private authService : AuthService, private userService: UserService, private playerService: PlayerService) { }
+  constructor(private authService : AuthService, private userService: UserService, private playerService: PlayerService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.user = this.authService.getLoggedInUser();
-    this.username = this.playerService.username;
-    this.victories = this.playerService.victories;
-    this.defeats = this.playerService.defeats;
-    this.ratio = this.playerService.ratio;
+    const username = this.route.snapshot.params['username'];
+    if (username) {
+      // Si le username est présent dans l'URL, récupérez les informations de l'utilisateur correspondant
+      this.user = this.userService.findByUsername(username);
+      this.isCurrentUser = false;
+    } else {
+      // Sinon, récupérez les informations de l'utilisateur connecté
+      this.user = this.authService.getLoggedInUser();
+      this.isCurrentUser = true;
+    }
+    this.ratio = this.user.stats.ratio;
    }
 }

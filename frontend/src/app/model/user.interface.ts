@@ -5,6 +5,6 @@ export interface UserI {
 	email?: string,
 	username?: string,
 	password?: string;
-  friendList?: string[];
-  stats?: Player;
+ 	friendList?: string[];
+  	stats?: Player;
 }
