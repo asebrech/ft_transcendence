@@ -49,15 +49,13 @@ export class GameFrontComponent implements OnInit, DoCheck
         this.joinedVar.next(this.joined);
       }
     }
-    room?.onMessage("request_left_player_screen", ()=>
+    room?.onMessage("left_player", ()=>
     {
       player_left = true;
-      room?.send("player_left_screen_size", ({x : inWidth, y : inHeight}));
     })
-    room?.onMessage("request_right_player_screen", ()=>
+    room?.onMessage("right_player", ()=>
     {
       player_left = false;
-      room?.send("player_right_screen_size", ({x : inWidth, y : inHeight}));
     })
     room?.onMessage("second_player_found", () =>
     {
@@ -166,7 +164,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   async join()
   {
     try {
-      room = await client?.joinOrCreate("my_room", { });
+      room = await client?.joinOrCreate("ranked", { });
       console.log(room);
       console.log(client.auth);
     } catch (e) {

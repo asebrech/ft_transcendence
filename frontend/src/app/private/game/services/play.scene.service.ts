@@ -168,22 +168,14 @@ export class PlayScene extends Phaser.Scene
       {
         if(player_left == false)
         {
-          let currentPosition = new Phaser.Math.Vector2(left_pad.x, left_pad.y);
-          let toGoPosition = new Phaser.Math.Vector2(x, y);
-          let newPosition_x = Phaser.Math.Interpolation.Linear([currentPosition.x, toGoPosition.x], 1);
-          let newPosition_y = Phaser.Math.Interpolation.Linear([currentPosition.y, toGoPosition.y], 1);
-          left_pad.setVisible(true).setPosition(newPosition_x, newPosition_y);
+          left_pad.setVisible(true).setPosition(x, y);
         }
       })
       room?.onMessage("paddle_right", ({x, y}) =>
       {
         if(player_left == true)
         {
-          let currentPosition = new Phaser.Math.Vector2(right_pad.x, right_pad.y);
-          let toGoPosition = new Phaser.Math.Vector2(x, y);
-          let newPosition_x = Phaser.Math.Interpolation.Linear([currentPosition.x, toGoPosition.x], 1);
-          let newPosition_y = Phaser.Math.Interpolation.Linear([currentPosition.y, toGoPosition.y], 1);
-          right_pad.setVisible(true).setPosition(newPosition_x, newPosition_y);
+          right_pad.setVisible(true).setPosition(x, y);
         }
       })
     }, this);
@@ -197,9 +189,11 @@ export class PlayScene extends Phaser.Scene
   {
     if (start == true)
       room?.send("ball_position", ({x : ball.x, y : ball.y}))
+
     room?.onMessage("set_ball_position", ({x, y})=>
     {
-      ball.setPosition(x, y)
+      if(player_left == false)
+        ball.setPosition(x, y)
     })
     ///////////////////////////////////////////////////////////////
     this.bg.x += 1;

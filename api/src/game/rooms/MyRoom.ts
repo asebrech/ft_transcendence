@@ -1,37 +1,18 @@
 import { Room, Client, Server } from "colyseus";
 import { matchMaker } from "colyseus";
 import { Schema } from "@colyseus/schema";
-import * as Phaser from 'phaser';
 
 let player = new Map<string, string>()
-
-interface screen_size
-{  
-  x : number;
-  y : number;
-};
-
-
 
 export class MyRoom extends Room<Schema> 
 {
 
   rdyPlayer = 2;
-  player_left_size : screen_size = {x : 0, y : 0};
-  player_right_size : screen_size = {x : 0, y : 0};
-  senderScreenRatio = this.player_left_size.x / this.player_left_size.y;
-  receiverScreenRatio = this.player_right_size.x / this.player_right_size.y;
   // When room is initialized
   onCreate (options: any) 
   {
     console.log("room " + this.roomId + " created successfully");
   }
-
-  // Authorize client based on provided options before WebSocket handshake is complete
-  // onAuth (client: Client, options: any, request: http.IncomingMessage) 
-  // {
-  //   return true;
-  // }
   
   // When client successfully join the room
   onJoin (client: Client, options: any, auth: any) 
@@ -41,7 +22,7 @@ export class MyRoom extends Room<Schema>
       player.set(client.sessionId, "player_left");
       try
       {
-        client.send("request_left_player_screen");
+        client.send("left_player");
       }
       catch
       {
@@ -53,7 +34,7 @@ export class MyRoom extends Room<Schema>
       player.set(client.sessionId, "player_right");
       try
       {
-        client.send("request_right_player_screen");
+        client.send("right_player");
       }
       catch
       {
@@ -71,15 +52,9 @@ export class MyRoom extends Room<Schema>
     {
       if (player.get(client.sessionId) == "player_left")
       {
-        let normalizedX = message.x / this.player_left_size.x;
-        let normalizedY = message.y / this.player_left_size.y;
-        let scaledX = 0;
-        let scaledY = 0;
-        scaledX = normalizedX * this.player_right_size.x;
-        scaledY = normalizedY * this.player_right_size.y;
         try
         {
-          this.clients[1].send("paddle_left", ({x : scaledX, y : scaledY}));
+          this.broadcast("paddle_left", ({x : message.x, y : message.y}));
         }
         catch
         {
@@ -92,15 +67,9 @@ export class MyRoom extends Room<Schema>
     {
       if (player.get(client.sessionId) == "player_right")
       {
-        let normalizedX = message.x / this.player_right_size.x;
-        let normalizedY = message.y / this.player_right_size.y;
-        let scaledX = 0;
-        let scaledY = 0;
-        scaledX = normalizedX * this.player_left_size.x;
-        scaledY = normalizedY * this.player_left_size.y;
         try
         {
-          this.clients[0].send("paddle_right", ({x : scaledX, y : scaledY}));
+          this.broadcast("paddle_right", ({x : message.x, y : message.y}));
         }
         catch
         {
@@ -132,7 +101,7 @@ export class MyRoom extends Room<Schema>
       {
         try 
         {
-          this.clients[1].send("set_ball_position", ({x : message.x, y : message.y}));
+          this.broadcast("set_ball_position", ({x : message.x, y : message.y}));
         }
         catch 
         {
@@ -140,23 +109,6 @@ export class MyRoom extends Room<Schema>
         }
       }
     });
-    ////////////////////////////////////////
-    this.onMessage("player_left_screen_size", (client, message) =>
-    {
-      if (player.get(client.sessionId) == "player_left")
-      {
-        this.player_left_size.x = message.x;
-        this.player_left_size.y = message.y;
-      }
-    })
-    this.onMessage("player_right_screen_size", (client, message) =>
-    {      
-      if (player.get(client.sessionId) == "player_right")
-      {
-        this.player_right_size.x = message.x;
-        this.player_right_size.y = message.y;
-      }
-    })
     ///////////////////////////////////////////
   }
 
@@ -165,6 +117,7 @@ export class MyRoom extends Room<Schema>
   {
     client.leave();    
     console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length)
+    //appeler service pour rentre les donner de la partie.
   }
   // Cleanup callback, called after there are no more clients in the room. (see `autoDispose`)
   onDispose () { }
