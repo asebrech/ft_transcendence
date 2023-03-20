@@ -26,7 +26,6 @@ export class PlayerService {
     this.ratio = (this.victories / (this.victories + this.defeats)) * 100;
     return this.ratio;
   }
-  
 }
 
 

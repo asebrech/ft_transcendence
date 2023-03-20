@@ -24,7 +24,7 @@
     <p *ngIf="message">{{message}}</p>
     <div class="main">
       <ul>
-        <li *ngFor="let user of amis; let i = index" (click)="test()">
+        <li *ngFor="let user of amis; let i = index" (click)="goToProfileOf(user)">
           <img src="../../../../../../assets/images/astronaut.png">
           {{ amis[ i % amis.length] }}
         </li>
