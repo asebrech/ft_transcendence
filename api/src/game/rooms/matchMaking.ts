@@ -1,21 +1,17 @@
-import { Room, Client } from "colyseus";
+import { Room, Client, matchMaker } from "colyseus";
 import { IncomingMessage } from "http";
 
+
 interface MatchmakingGroup {
-    averageRank: number;
     clients: ClientStat[],
-    priority?: boolean;
-    ready?: boolean;
-    confirmed?: number;
   }
-  
-  interface ClientStat {
-    client: Client;
-    waitingTime: number;
-    options?: any;
-    group?: MatchmakingGroup;
-    rank: number;
-  }
+//cette interface est temporaire
+interface ClientStat {
+  client: Client;
+  waitingTime: number;
+  options?: any;
+  rank: number;
+}
 
 
 export class matchMaking extends Room 
@@ -31,10 +27,11 @@ export class matchMaking extends Room
       this.id++;
       return true;
     }
-    onJoin(client: Client, options: any)
+    async onJoin(client: Client, options: any)
     {
       //recupere le client et l'ajouter au groupe d attente
       console.log(client.sessionId + " est connecter !")
+      const room = await matchMaker.createRoom("my_room", {}); // cree la room pour ensuite reserve un seat 
       this.matchPlayer();
     }
 
