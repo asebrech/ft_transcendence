@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
@@ -9,6 +9,9 @@ import { LoginResponseI } from '../model/login-response.interface';
 import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
 import { RequestModel } from 'src/middleware/auth.middleware';
+import { query } from 'express';
+import { UserEntity } from '../model/user.entity';
+import { param } from 'jquery';
 
 
 @Controller('users')
@@ -114,5 +117,33 @@ export class UserController {
 	async checkEmail(@Query('mail') mail :string ) : Promise<boolean> {
 		return this.userService.checkEmail(mail);
 	}
+
+	@Post(':id/add-friend')	
+	async addFriend(@Param('id') userId : number, @Body('friendId') newFriend : UserEntity) : Promise<UserEntity> {
+		return this.userService.addFriend(userId, newFriend);
+	}
+
+	@Post(':id/remove-friend')
+	async removeFriend(@Param('id') userId : number, @Body('friendId') friend : UserEntity) : Promise<UserEntity> {
+		return this.userService.removeFriend(userId, friend.id);
+	}
+
+	@Post(':id/wins')
+	async addWin(@Param('id') userId: number) {
+	  return this.userService.addWinOrLoss(userId, true);
+	}
+  
+	@Post(':id/losses')
+	async addLoss(@Param('id') userId: number) {
+	  return this.userService.addWinOrLoss(userId, false);
+	}
+
+	@Get(':id')
+  	async getUserInfo(@Param('id') id: number): Promise<UserEntity> {
+    // Récupérer les informations de l'utilisateur avec l'ID fourni
+    const user = await this.userService.getUserInfo(id);
+    // Retourner les informations de l'utilisateur
+    return user;
+  }
 
 }
