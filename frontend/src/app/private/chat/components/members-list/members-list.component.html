@@ -1,10 +1,21 @@
+
+<app-member-option
+  *ngIf="showOverlay"
+  [style.left.px]="overlayPosition.left"
+  [style.top.px]="overlayPosition.top"
+  class="overlay"
+  (valueChanged)="onValueChanged($event)"
+  (divHeight)="divHeight($event)"
+  #option
+></app-member-option>
+
 <div class="header">
 	<h1 class="title">Members</h1>
 	<div class="separator"></div>
 </div>
 <div class="main"  >
-	<ul>
-		<li *ngFor="let user of users" class="list"
+	<ul class="test">
+		<li *ngFor="let user of users; let i = index" class="list" (click)="getElementPosition(i, $event)"
 		(click)="test()"
 		(mousedown)="isClicked = true"
 		(mousedown)="selectedUser = user"
