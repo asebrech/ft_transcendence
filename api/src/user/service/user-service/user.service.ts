@@ -154,4 +154,40 @@ export class UserService {
 			return false;
 		}
 	}
+
+	async addFriend(id : number, newFriend : UserEntity) : Promise<UserEntity> {
+		const user = await this.userRepository.findOneBy({id});
+		if (!user.friend.includes(newFriend)) {
+			user.friend.push(newFriend);
+			await this.userRepository.save(user);
+		}
+		return user;
+	}
+
+	async removeFriend(id: number, friendId: number): Promise<UserEntity> {
+		const user = await this.userRepository.findOneBy({id});
+		user.friend = user.friend.filter((friend) => friend.id !== friendId);
+		return this.userRepository.save(user);
+	  }
+
+	async addWinOrLoss(id: number, isWin: boolean): Promise<UserEntity> {
+		const user = await this.userRepository.findOneBy({id});
+		if (isWin) {
+		  user.wins += 1;
+		} else {
+		  user.losses += 1;
+		}
+		user.ratio = user.wins / user.losses;
+		return this.userRepository.save(user);
+	  }
+
+	  async getUserInfo(id: number): Promise<UserEntity> {
+		// Récupérer l'utilisateur correspondant à l'ID fourni avec ses amis
+		const user = await this.userRepository.findOneBy({id});
+	
+		// Retourner l'utilisateur avec toutes ses informations
+		return user;
+	  }
 }
+
+

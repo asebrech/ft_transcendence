@@ -1,4 +1,5 @@
 import { boolean } from "yargs";
+import { UserEntity } from "./user.entity";
 
 export interface UserI {
 	id?: number;
@@ -7,4 +8,10 @@ export interface UserI {
 	password?: string;
 	google_auth?: boolean;
 	google_auth_secret?: string;
+	wins : number;
+	losses : number;
+	ratio : number;
+	timePlayed: number
+	matchHistory: [];
+	friend: UserEntity[];
 }
