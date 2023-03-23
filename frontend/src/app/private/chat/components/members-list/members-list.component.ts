@@ -43,12 +43,20 @@ export class MembersListComponent implements OnInit {
   constructor(private elementRef: ElementRef, public dashService: DashboardService) { 
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngOnDestroy() {
+	console.log('test1');
+	this.hide();
+  }
+
+  checkResize(): void {
 	window.addEventListener('resize', this.onResize.bind(this));
   }
 
-  ngOnDestroy() {
+  uncheckResize() {
     // Supprimez le gestionnaire d'événements de défilement lorsque le composant est détruit
+	console.log('test');
     window.removeEventListener('resize', this.onResize.bind(this));
   }
 
@@ -76,6 +84,7 @@ export class MembersListComponent implements OnInit {
 	this.showOverlay = false;
 	this.selectedUser = null;
 	this.isClicked = false;
+	this.uncheckResize();
   }
 
   getElementPosition(index: number, event: MouseEvent) {
@@ -105,11 +114,12 @@ export class MembersListComponent implements OnInit {
 
     // Afficher la div de 100x100
     this.showOverlay = true;
-
+	this.checkResize();
   }
 
   onResize(event: Event) {
     // Vérifiez si la fenêtre est visible
+	console.log('hello');
     if (this.showOverlay && this.selectedIndex !== null) {
       // Calculez la hauteur de défilement
 	  const selectedElement = document.querySelector('.selected') as HTMLAnchorElement;
