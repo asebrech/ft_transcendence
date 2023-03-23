@@ -38,7 +38,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   {
   }
 
-  ngDoCheck() 
+  async ngDoCheck() 
   {
     if (this.launch.showButtonStats() == 1)
     {
@@ -48,15 +48,19 @@ export class GameFrontComponent implements OnInit, DoCheck
         this.joined = true;
         this.joinedVar.next(this.joined);
       }
-    }
+    };
     room?.onMessage("left_player", ()=>
     {
       player_left = true;
-    })
+    });
     room?.onMessage("right_player", ()=>
     {
       player_left = false;
-    })
+    });
+    room?.onMessage("seat", (message) => 
+    {
+      this.joinGameSession(message.ticket);
+    });
     room?.onMessage("second_player_found", () =>
     {
       this.joinedVar.subscribe((value) =>
@@ -120,6 +124,15 @@ export class GameFrontComponent implements OnInit, DoCheck
       }
     };    
   }
+  async joinGameSession(ticket) {
+    try {
+      room = await client?.consumeSeatReservation(ticket);
+      // continue with the game logic here...
+    } catch (error) {
+      console.log('Failed to join game session:', error);
+    }
+  }
+  
   IfGameFound()
   {
     this.launch.gameFound();
@@ -164,7 +177,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   async join()
   {
     try {
-      room = await client?.joinOrCreate("ranked", { });
+      room = await client?.joinOrCreate("ranked",  { rank : 10, numClientsToMatch : 2 });
       console.log(room);
       console.log(client.auth);
     } catch (e) {
