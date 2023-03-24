@@ -63,6 +63,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     });
     room?.onMessage("second_player_found", () =>
     {
+      this.playScene = new Phaser.Game(this.playSceneConfig);
       this.joinedVar.subscribe((value) =>
       {
         if (value == true && this.in == 0)
@@ -70,7 +71,7 @@ export class GameFrontComponent implements OnInit, DoCheck
           this.launch.gameFound();
           this.addButtonStatus(0);
           this.launch.launchGame();
-          this.playScene = new Phaser.Game(this.playSceneConfig);
+          this.playScene.scene.start('PlayScene');
           this.in += 1;
         }
       });
@@ -79,6 +80,7 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnInit()
   {
+    
     inWidth = 1920;
     inHeight = 1080;
     ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
@@ -118,7 +120,7 @@ export class GameFrontComponent implements OnInit, DoCheck
       physics: {
         default: 'arcade',
         arcade: {
-          debug: true,
+          // debug: true,
           gravity: {y : 0, x: 0 }
         }
       }
@@ -153,13 +155,13 @@ export class GameFrontComponent implements OnInit, DoCheck
   {
     return this.launch.showButtonStats();
   }
-
   launchBotPlay()
   {
     this.addButtonStatus(0);
     this.launch.launchGame();
     this.IfGameFound();
     this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
+    this.waitingPlayScene.scene.start('PlayScene');
   }
   switchToBotPlay()
   {
