@@ -1,3 +1,4 @@
+import { userInfo } from "os";
 import { ConnectedUserEntity } from "src/chat/model/connected-user/connected-user.entity";
 import { JoinedRoomEntity } from "src/chat/model/joined-room/joined-room.entity";
 import { MessageEntity } from "src/chat/model/message/message.entity";
@@ -25,18 +26,6 @@ export class UserEntity {
 
 	@Column({select: false, default: null})
 	google_auth_secret: string;
-	
-	@ManyToMany(() => RoomEntity, room => room.users)
-	rooms: RoomEntity[];
-
-	@OneToMany(() => ConnectedUserEntity, connection => connection.user)
-	connections: ConnectedUserEntity[];
-
-	@OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
-	joinedRooms: JoinedRoomEntity[];
-
-	@OneToMany(() => MessageEntity, message => message.user)
-	messages: MessageEntity[] ;
 
 	@Column()
 	wins : number;
@@ -53,13 +42,7 @@ export class UserEntity {
 	@Column()
 	matchHistory: [];
 
-	@Column()
+	@OneToMany( () => UserEntity, friend => friend.friend)
 	friend: UserEntity[];
 
-	@BeforeInsert()
-	@BeforeUpdate( )
-	emailToLowerCase() {
-		this.email = this.email.toLocaleLowerCase();
-		this.username = this.username.toLocaleLowerCase(); 
-	}
 }

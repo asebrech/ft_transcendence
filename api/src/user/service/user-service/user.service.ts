@@ -155,7 +155,7 @@ export class UserService {
 		}
 	}
 
-	async addFriend(id : number, newFriend : UserEntity) : Promise<UserEntity> {
+	async addFriend(id : number, newFriend : UserI) : Promise<UserI> {
 		const user = await this.userRepository.findOneBy({id});
 		if (!user.friend.includes(newFriend)) {
 			user.friend.push(newFriend);
@@ -164,13 +164,13 @@ export class UserService {
 		return user;
 	}
 
-	async removeFriend(id: number, friendId: number): Promise<UserEntity> {
+	async removeFriend(id: number, friendId: number): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({id});
 		user.friend = user.friend.filter((friend) => friend.id !== friendId);
 		return this.userRepository.save(user);
 	  }
 
-	async addWinOrLoss(id: number, isWin: boolean): Promise<UserEntity> {
+	async addWinOrLoss(id: number, isWin: boolean): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({id});
 		if (isWin) {
 		  user.wins += 1;
@@ -181,7 +181,7 @@ export class UserService {
 		return this.userRepository.save(user);
 	  }
 
-	  async getUserInfo(id: number): Promise<UserEntity> {
+	  async getUserInfo(id: number): Promise<UserI> {
 		// Récupérer l'utilisateur correspondant à l'ID fourni avec ses amis
 		const user = await this.userRepository.findOneBy({id});
 	
