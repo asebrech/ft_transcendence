@@ -9,9 +9,7 @@ import { LoginResponseI } from '../model/login-response.interface';
 import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
 import { RequestModel } from 'src/middleware/auth.middleware';
-import { query } from 'express';
 import { UserEntity } from '../model/user.entity';
-import { param } from 'jquery';
 
 
 @Controller('users')
@@ -119,12 +117,12 @@ export class UserController {
 	}
 
 	@Post(':id/add-friend')	
-	async addFriend(@Param('id') userId : number, @Body('friendId') newFriend : UserEntity) : Promise<UserEntity> {
+	async addFriend(@Param('id') userId : number, @Body('friendId') newFriend : UserEntity) : Promise<UserI> {
 		return this.userService.addFriend(userId, newFriend);
 	}
 
 	@Post(':id/remove-friend')
-	async removeFriend(@Param('id') userId : number, @Body('friendId') friend : UserEntity) : Promise<UserEntity> {
+	async removeFriend(@Param('id') userId : number, @Body('friendId') friend : UserI) : Promise<UserI> {
 		return this.userService.removeFriend(userId, friend.id);
 	}
 
@@ -139,7 +137,7 @@ export class UserController {
 	}
 
 	@Get(':id')
-  	async getUserInfo(@Param('id') id: number): Promise<UserEntity> {
+  	async getUserInfo(@Param('id') id: number): Promise<UserI> {
     // Récupérer les informations de l'utilisateur avec l'ID fourni
     const user = await this.userService.getUserInfo(id);
     // Retourner les informations de l'utilisateur

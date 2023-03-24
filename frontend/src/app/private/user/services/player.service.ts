@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
@@ -16,10 +17,10 @@ export class PlayerService {
   playtime: number;
   friends: string[] = [];
 
-  constructor(private userService: UserService, private authService: AuthService) { }
+  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient) { }
 
   addFriend(friend: string) {
-    this.friends.push(friend);
+    this.httpClient.post()
   }
 
   getRatio() : number {

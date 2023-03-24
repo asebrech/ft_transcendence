@@ -1,7 +1,4 @@
-import { ConnectedUserEntity } from "src/chat/model/connected-user/connected-user.entity";
-import { JoinedRoomEntity } from "src/chat/model/joined-room/joined-room.entity";
-import { MessageEntity } from "src/chat/model/message/message.entity";
-import { RoomEntity } from "src/chat/model/room/room.entity";
+import { userInfo } from "os";
 import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserI } from "./user.interface";
 
@@ -25,41 +22,20 @@ export class UserEntity {
 
 	@Column({select: false, default: null})
 	google_auth_secret: string;
-	
-	@ManyToMany(() => RoomEntity, room => room.users)
-	rooms: RoomEntity[];
 
-	@OneToMany(() => ConnectedUserEntity, connection => connection.user)
-	connections: ConnectedUserEntity[];
-
-	@OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
-	joinedRooms: JoinedRoomEntity[];
-
-	@OneToMany(() => MessageEntity, message => message.user)
-	messages: MessageEntity[] ;
-
-	@Column()
+	@Column({default: 0})
 	wins : number;
 
-	@Column()
+	@Column({default: 0})
 	losses : number;
 
-	@Column()
+	@Column({default: 0})
 	ratio : number;
 
-	@Column()
+	@Column({default: 0})
 	timePlayed: number;
 
-	@Column()
-	matchHistory: [];
-
-	@Column()
+	@OneToMany( () => UserEntity, friend => friend.friend)
 	friend: UserEntity[];
 
-	@BeforeInsert()
-	@BeforeUpdate( )
-	emailToLowerCase() {
-		this.email = this.email.toLocaleLowerCase();
-		this.username = this.username.toLocaleLowerCase(); 
-	}
 }
