@@ -32,6 +32,8 @@ export class ProfileComponent {
       this.user = this.authService.getLoggedInUser();
       this.isCurrentUser = true;
     }
-    this.ratio = this.user.stats.ratio;
+    this.victories = 17;
+    this.defeats = 3;
+    this.ratio = 0;
    }
 }

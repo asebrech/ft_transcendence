@@ -9,9 +9,7 @@ import { LoginResponseI } from '../model/login-response.interface';
 import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
 import { RequestModel } from 'src/middleware/auth.middleware';
-import { query } from 'express';
 import { UserEntity } from '../model/user.entity';
-import { param } from 'jquery';
 
 
 @Controller('users')
@@ -119,7 +117,7 @@ export class UserController {
 	}
 
 	@Post(':id/add-friend')	
-	async addFriend(@Param('id') userId : number, @Body('friendId') newFriend : UserI) : Promise<UserI> {
+	async addFriend(@Param('id') userId : number, @Body('friendId') newFriend : UserEntity) : Promise<UserI> {
 		return this.userService.addFriend(userId, newFriend);
 	}
 

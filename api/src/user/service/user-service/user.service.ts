@@ -155,7 +155,7 @@ export class UserService {
 		}
 	}
 
-	async addFriend(id : number, newFriend : UserI) : Promise<UserI> {
+	async addFriend(id : number, newFriend : UserEntity) : Promise<UserI> {
 		const user = await this.userRepository.findOneBy({id});
 		if (!user.friend.includes(newFriend)) {
 			user.friend.push(newFriend);

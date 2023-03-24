@@ -1,8 +1,4 @@
 import { userInfo } from "os";
-import { ConnectedUserEntity } from "src/chat/model/connected-user/connected-user.entity";
-import { JoinedRoomEntity } from "src/chat/model/joined-room/joined-room.entity";
-import { MessageEntity } from "src/chat/model/message/message.entity";
-import { RoomEntity } from "src/chat/model/room/room.entity";
 import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserI } from "./user.interface";
 
@@ -27,20 +23,17 @@ export class UserEntity {
 	@Column({select: false, default: null})
 	google_auth_secret: string;
 
-	@Column()
+	@Column({default: 0})
 	wins : number;
 
-	@Column()
+	@Column({default: 0})
 	losses : number;
 
-	@Column()
+	@Column({default: 0})
 	ratio : number;
 
-	@Column()
+	@Column({default: 0})
 	timePlayed: number;
-
-	@Column()
-	matchHistory: [];
 
 	@OneToMany( () => UserEntity, friend => friend.friend)
 	friend: UserEntity[];
