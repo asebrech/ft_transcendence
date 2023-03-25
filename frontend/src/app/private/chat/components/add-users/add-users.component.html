@@ -1,0 +1,20 @@
+<div class="main">
+    <h3 class="title">ADD USERS</h3>
+    <div class="separator"></div>
+    <form class="search" (submit)="onSubmit()">
+        <input #searchInput type="text" placeholder="Search" [(ngModel)]="searchTerm" (keyup)="searchOnKeyUp($event)" [ngModelOptions]="{standalone: true}"/>
+        <div class="result" >
+                <div *ngFor="let result of filteredResults; let i = index" >
+					<div class="list" (click)="result.selected = !result.selected">
+						<label>
+							<p>{{result.name}} - {{result.age}}</p>
+						</label>
+						<label>
+							<input type="checkbox" [(ngModel)]="result.selected" [name]="'user' + i" />
+						</label>
+					</div>
+                </div>
+			</div>
+			<button type="submit" [disabled]="!atLeastOneSelected()">Submit</button>
+    </form>
+</div>

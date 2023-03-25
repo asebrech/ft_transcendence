@@ -14,10 +14,11 @@
 			</div>
 		</div>
 	</div>
-	<app-channel-option class="channelOption"></app-channel-option>
 	<div class="shortcut">
-		<img src="../../../../../../assets/images/add-user.png">
+		<app-add-users class="addUser" *ngIf="dashService.addUsers"></app-add-users>
+		<img src="../../../../../../assets/images/add-user.png" class="enableAddUser">
 		<img class="members" src="../../../../../../assets/images/users.png" (click)="members()">
+		<app-channel-option class="channelOption"></app-channel-option>
 	</div>
 	<div #messageList class="message">
 		<div class="messages" *ngFor="let message of messages">

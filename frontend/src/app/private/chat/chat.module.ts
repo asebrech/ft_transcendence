@@ -27,6 +27,7 @@ import { MessagesComponent } from './components/messages/messages/messages.compo
 import { ChannelOptionComponent } from './components/channel-option/channel-option.component';
 import { MembersListComponent } from './components/members-list/members-list.component';
 import { MemberOptionComponent } from './components/member-option/member-option.component';
+import { AddUsersComponent } from './components/add-users/add-users.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { MemberOptionComponent } from './components/member-option/member-option.
     MessagesComponent,
 	ChannelOptionComponent,
  MembersListComponent,
- MemberOptionComponent
+ MemberOptionComponent,
+ AddUsersComponent
   ],
   imports: [
     CommonModule,

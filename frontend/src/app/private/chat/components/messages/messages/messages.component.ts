@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
 
@@ -26,7 +26,7 @@ export class MessagesComponent implements OnInit {
 	@ViewChild('inputElement') inputElementRef: ElementRef;
 
 
-  constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef) {   for (let i = 1; i <= 20; i++) {
+  constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef, private elementRef: ElementRef) {   for (let i = 1; i <= 20; i++) {
     const username = 'User' + i;
     const text = 'Message ' + i;
     const message = {username: username, text: text};
@@ -38,6 +38,16 @@ export class MessagesComponent implements OnInit {
     this.inputText = "";
   }
 
+  @HostListener('document:click', ['$event'])
+	onClick(event: MouseEvent) {
+		if (!this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.enableAddUser').contains(event.target)) {
+			this.dashService.addUsers = true;
+		}
+		else if (this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.addUser') && !this.elementRef.nativeElement.querySelector('.addUser').contains(event.target)) {
+			this.dashService.addUsers = false;
+		}
+	}
+
   ngOnInit(): void {
 	setTimeout(() => {
         this.scrollToBottom();
@@ -46,6 +56,10 @@ export class MessagesComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.ajusterLargeurInput(this.inputElementRef.nativeElement, null);
+  }
+
+  addUserEnable() {
+	this.dashService.addUsers = true;
   }
 
   onSubmit() {
@@ -92,7 +106,7 @@ export class MessagesComponent implements OnInit {
 
   ajusterLargeurInput(inputElement: HTMLInputElement, text: string): void {
 	// Créez un élément span temporaire pour mesurer la largeur du texte
-	const span = document.createElement('span');
+	const span = document.createElement('span');2
 	span.style.position = 'absolute';
 	span.style.visibility = 'hidden';
 	span.style.whiteSpace = 'pre';

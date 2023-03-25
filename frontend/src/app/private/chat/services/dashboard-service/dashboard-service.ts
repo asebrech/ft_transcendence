@@ -7,6 +7,8 @@ export class DashboardService {
 	channel: boolean = true;
 	create: boolean = false;
 	members: boolean = false;
+	addUsers: boolean = false;
+
 
 
 

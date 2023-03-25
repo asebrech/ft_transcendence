@@ -18,10 +18,11 @@
 }
 
 .channelOption {
-	position: absolute;
-	width: 98%;
-	display: flex;
-	justify-content: right;
+	//position: absolute;
+	//width: 98%;
+	z-index: 999;
+	//display: flex;
+	//justify-content: right;
 }
 
 .separator {
