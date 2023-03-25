@@ -93,6 +93,7 @@
 	display: flex;
 	justify-content: space-between;
 	cursor: pointer;
+	z-index: 999;
 }
 
 button {
@@ -108,4 +109,8 @@ button {
 button:disabled {
 	color: #989aa2;
 	background: #AB3B71;
+}
+
+.checkbox {
+	pointer-events: none;
 }

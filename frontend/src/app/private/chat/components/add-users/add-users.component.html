@@ -10,7 +10,7 @@
 							<p>{{result.name}} - {{result.age}}</p>
 						</label>
 						<label>
-							<input type="checkbox" [(ngModel)]="result.selected" [name]="'user' + i" />
+							<input type="checkbox" [(ngModel)]="result.selected" [name]="'user' + i" (click)="$event.stopPropagation()" />
 						</label>
 					</div>
                 </div>
