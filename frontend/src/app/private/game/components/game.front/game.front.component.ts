@@ -1,4 +1,4 @@
-import { Component, NgModule, OnDestroy, OnInit, SimpleChanges, HostListener, OnChanges, Input, DoCheck} from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, ViewChild, ElementRef, DoCheck} from '@angular/core';
 import { Location } from '@angular/common';
 import * as Phaser from 'phaser';
 import { Client } from 'colyseus.js';
@@ -7,9 +7,9 @@ import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
 import { BehaviorSubject } from 'rxjs';
+import { GameService } from '../../services/game.service';
 
 export let room : any;
-
 export let client : Client;
 export let inWidth : number;
 export let inHeight : number;
@@ -33,11 +33,11 @@ export class GameFrontComponent implements OnInit, DoCheck
   joined = false;
   in = 0;
   joinedVar = new BehaviorSubject<boolean> (this.joined);
-
-  constructor(private starsService: StarsService, private location : Location, private launch : LaunchGameService) 
+  botGameLaunched = false;
+  
+  constructor(private starsService: StarsService, private location : Location, private launch : LaunchGameService, private gameService : GameService) 
   {
   }
-
   async ngDoCheck() 
   {
     if (this.launch.showButtonStats() == 1)
@@ -63,15 +63,21 @@ export class GameFrontComponent implements OnInit, DoCheck
     });
     room?.onMessage("second_player_found", () =>
     {
-      this.playScene = new Phaser.Game(this.playSceneConfig);
       this.joinedVar.subscribe((value) =>
       {
         if (value == true && this.in == 0)
         {
+          if (this.botGameLaunched == false)
+          {
+            this.addButtonStatus(0);
+            this.launch.launchGame();
+          }
           this.launch.gameFound();
-          this.addButtonStatus(0);
-          this.launch.launchGame();
-          this.playScene.scene.start('PlayScene');
+          if(this.botGameLaunched == true)
+            this.waitingPlayScene.destroy(true, false);
+          setTimeout(() => {
+            this.playScene = new Phaser.Game(this.playSceneConfig);
+          }, 2000);
           this.in += 1;
         }
       });
@@ -80,14 +86,10 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnInit()
   {
-    
     inWidth = 1920;
     inHeight = 1080;
-    ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
 	  this.starsService.setActive(false);
-    /////////////////INIT PLAYER SESSION//////////////////////////
     client = new Client("ws://" + location.hostname + ":3000");
-    /////////////////INIT PLAY SCENE CONFIG///////////////////////
     this.playSceneConfig = {
       type: Phaser.AUTO,
       scene: [PlayScene],
@@ -105,7 +107,6 @@ export class GameFrontComponent implements OnInit, DoCheck
         }
       }
     };
-    /////////////////INIT WAITING PLAY SCENE CONFIG/////////////////
     this.waitingPlaySceneConfig = {
       type: Phaser.AUTO,
       scene: [WaitingScene],
@@ -124,12 +125,12 @@ export class GameFrontComponent implements OnInit, DoCheck
           gravity: {y : 0, x: 0 }
         }
       }
-    };    
+    };
   }
+
   async joinGameSession(ticket) {
     try {
       room = await client?.consumeSeatReservation(ticket);
-      // continue with the game logic here...
     } catch (error) {
       console.log('Failed to join game session:', error);
     }
@@ -146,9 +147,6 @@ export class GameFrontComponent implements OnInit, DoCheck
   ///////////////////////////////////////
   addButtonStatus(nbr : number)
   {
-    //////THIS BUTTON HAS 2 STATS///////
-    //////0 = button not shown//////////
-    //////1 =  button shown ////////////
     this.launch.showButtonOn(nbr);
   }
   callButtonStatus()
@@ -157,11 +155,16 @@ export class GameFrontComponent implements OnInit, DoCheck
   }
   launchBotPlay()
   {
+    this.botGameLaunched = true;
     this.addButtonStatus(0);
     this.launch.launchGame();
     this.IfGameFound();
-    this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
-    this.waitingPlayScene.scene.start('PlayScene');
+    if (this.checkIfGameFoundRet)
+    {
+      setTimeout(() => {
+        this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
+      }, 1000);
+    }
   }
   switchToBotPlay()
   {
