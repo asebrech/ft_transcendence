@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
+import { ChatService } from '../../../services/chat-service/chat.service';
 
 @Component({
 	selector: 'app-create-channel',
@@ -10,13 +11,13 @@ import { DashboardService } from '../../../services/dashboard-service/dashboard-
 export class CreateChannelComponent implements OnInit {
 
 	channelForm: FormGroup;
-	@ViewChild('channelName') monInput: ElementRef;
+	@ViewChild('name') monInput: ElementRef;
 
-	constructor(private fb: FormBuilder, private dashService: DashboardService) { }
+	constructor(private fb: FormBuilder, private dashService: DashboardService, private chatService: ChatService) { }
 
 	ngOnInit() {
 		this.channelForm = this.fb.group({
-			channelName: ['', Validators.required],
+			name: ['', Validators.required],
 			isPrivate: [false],
 			hasPass: [false],
 			channelPassword: [''],
@@ -47,14 +48,8 @@ export class CreateChannelComponent implements OnInit {
 
 
 	onSubmit() {
-		const channel = {
-			name: this.channelForm.get('channelName').value,
-			isPrivate: this.channelForm.get('isPrivate').value,
-			hasPass: this.channelForm.get('hasPass').value,
-			password: this.channelForm.get('channelPassword').value
-		};
-
-		console.log(channel);
+		console.log(this.channelForm.getRawValue());
+		this.chatService.createRoom(this.channelForm.getRawValue());
 		this.dashService.create = false;
 	}
 

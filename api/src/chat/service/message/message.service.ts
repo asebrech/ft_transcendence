@@ -26,6 +26,6 @@ export class MessageService {
 		.leftJoinAndSelect('message.user', 'user')
 		.orderBy('message.created_at', 'DESC');
 
-		return paginate(query, options);
+		return (query.getMany());
 	}
 }

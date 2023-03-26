@@ -15,7 +15,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
 import {MatIconModule} from '@angular/material/icon';
 import { SelectUsersComponent } from './components/select-users/select-users.component';
-import { ChatRoomComponent } from './components/chat-room/chat-room.component';
+//import { ChatRoomComponent } from './components/chat-room/chat-room.component';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component'; 
 import { ChatRoutingModule } from './chat-routing.module';
 import { PrivateModule } from '../private.module';
@@ -35,7 +35,7 @@ import { AddUsersComponent } from './components/add-users/add-users.component';
     DashboardComponent,
     CreateRoomComponent,
     SelectUsersComponent,
-    ChatRoomComponent,
+    //ChatRoomComponent,
     ChatMessageComponent,
     ChatSelectorComponent,
     FindChannelComponent,

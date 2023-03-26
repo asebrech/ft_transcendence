@@ -1,7 +1,7 @@
 <div class="main" [ngClass]="{'mainBis': !dashService.channel}">
 		<ul>
-			<li *ngFor="let user of users" class="list"
-			(click)="test()"
+			<li *ngFor="let user of (rooms$ | async)" class="list"
+			(click)="message(user)"
 			(mousedown)="isClicked = true"
 			(mousedown)="selectedUser = user"
 			(mouseup)="isClicked = false"

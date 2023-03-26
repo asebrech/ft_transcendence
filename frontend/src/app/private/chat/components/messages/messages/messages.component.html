@@ -21,10 +21,10 @@
 		<app-channel-option class="channelOption"></app-channel-option>
 	</div>
 	<div #messageList class="message">
-		<div class="messages" *ngFor="let message of messages">
+		<div class="messages" *ngFor="let message of (messages$ | async)">
 			<img class="messagePicture" src="../../../../../../assets/images/astronaut.png">
 			<div>
-				<strong class="usernameMessage" >{{message.username}}</strong>
+				<strong class="usernameMessage" >{{message.user.username}}</strong>
 				<p class="text">{{message.text}}</p>
 			</div>
 		</div>

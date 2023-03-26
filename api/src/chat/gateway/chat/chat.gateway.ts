@@ -1,4 +1,4 @@
-import { OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import console from 'console';
 import { Server, Socket } from 'socket.io';
@@ -44,7 +44,7 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect, O
 				socket.data.user = user;
 				const rooms = await this.roomService.getRoomsForUser(user.id, {page: 1, limit: 10});
 				// substract page -1 to match the angular material paginator
-				rooms.meta.currentPage = rooms.meta.currentPage - 1;
+				//rooms.meta.currentPage = rooms.meta.currentPage - 1;
 
 				//save connection to DB
 				await this.connectedUserService.create({socketId: socket.id, user});
@@ -72,29 +72,30 @@ export class ChatGateway  implements OnGatewayConnection, OnGatewayDisconnect, O
   async onCreateRoom(socket: Socket, room: RoomI) {
 	const createdRoom: RoomI = await this.roomService.createRoom(room, socket.data.user);
 
+
 	for(const user of createdRoom.users) {
 		const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
 		const rooms = await this.roomService.getRoomsForUser(user.id, {page: 1, limit: 10});
 		// substract page -1 to match the angular material paginator
-		rooms.meta.currentPage -= 1;
+		Logger.log(rooms);
 		for (const connection of connections) {
 			await this.server.to(connection.socketId).emit('rooms', rooms);
 		}
 	}
   }
 
-  @SubscribeMessage('paginateRooms')
-  async onPaginatieRoom(socket: Socket, page: PageI) {
-	const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, this.handleIncommigPageRequest(page));
-	// substract page -1 to match the angular material paginator
-	rooms.meta.currentPage = rooms.meta.currentPage - 1;
-	return this.server.to(socket.id).emit('rooms', rooms);
-  }
+//   @SubscribeMessage('paginateRooms')
+//   async onPaginatieRoom(socket: Socket, page: PageI) {
+// 	const rooms = await this.roomService.getRoomsForUser(socket.data.user.id, this.handleIncommigPageRequest(page));
+// 	// substract page -1 to match the angular material paginator
+// 	rooms.meta.currentPage = rooms.meta.currentPage - 1;
+// 	return this.server.to(socket.id).emit('rooms', rooms);
+//   }
 
   @SubscribeMessage('joinRoom')
   async onJoinRoom(socket: Socket, room: RoomI) {
 	const messages = await this.messageService.findMessagesForRoom(room, {limit: 10, page: 1});
-	messages.meta.currentPage -= 1; 
+	// messages.meta.currentPage -= 1; 
 	// Save connection to Room
 	await this.joinedRoomService.create({socketId: socket.id, user: socket.data.user, room});
 	// Send last messages from Room to User

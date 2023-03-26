@@ -10,6 +10,8 @@ import { MessageI, MessagePaginatedI } from 'src/app/model/message.interface';
 })
 export class ChatService {
 
+	selectedRoom: RoomI = null;
+
 	constructor(private socket: CustomSocket, private snackbar: MatSnackBar) { }
 
 	getAddedMessage(): Observable<MessageI> {
@@ -21,6 +23,7 @@ export class ChatService {
 	}
 
 	joinRoom(room: RoomI) {
+		this.selectedRoom = room;
 		return this.socket.emit('joinRoom', room);
 	}
 
@@ -28,12 +31,12 @@ export class ChatService {
 		return this.socket.emit('leaveRoom', room);
 	}
 
-	getMessages(): Observable<MessagePaginatedI> {
-		return this.socket.fromEvent<MessagePaginatedI>('messages');
+	getMessages(): Observable<MessageI[]> {
+		return this.socket.fromEvent<MessageI[]>('messages');
 	}
 
-	getMyRooms(): Observable<RoomPaginateI> {
-		return this.socket.fromEvent<RoomPaginateI>('rooms');
+	getMyRooms(): Observable<RoomI[]> {
+		return this.socket.fromEvent<RoomI[]>('rooms');
 	}
 
 	emitPaginateRooms(limit: number, page: number) {

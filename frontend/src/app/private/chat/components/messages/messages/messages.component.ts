@@ -1,6 +1,10 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
+import { MessageI } from 'src/app/model/message.interface';
+import { ChatService } from '../../../services/chat-service/chat.service';
+import { Observable } from 'rxjs';
+import { room } from 'src/app/private/game/components/game.front/game.front.component';
 
 @Component({
   selector: 'app-messages',
@@ -17,6 +21,8 @@ export class MessagesComponent implements OnInit {
 		{username: 'mago', text:'salutgjhlwregharhglarghlhsagbhlrshaglaghaliughlaghlakrsghlriaugthlriaughlaiughrli giu liuhalufghal l tliuhtglaiuwhg l;g luahgluaglhag lhg lauhgluhtal l luhl khl hlahleauth lkajhglkgjeh lskgh l;rhg leudihglagh glirsa ghlrsuahglrashglkuharl;oigujhj lsrghjsl;ogjh; sohj; ldjsgh;losjhg;olikltds jh;lkdtj;hlsdetj;oihjtsdel;goh ijteds;lohijdt;oijkghd;lkihj;tedosikhj;todskjh ;dxkjjh ;sedtikohj; tsdlkh j;dothktj;tlkhjd;etlkhj ;teslhj;diytjh;sedtolihj ;dolitkh j;odshj ;dlk hj;lkdyhj t;lshj ;seoihjty; shjtse;lhgjset;l hkgnjsdlknj'}
 	];
 
+	messages$: Observable<MessageI[]>= this.chatService.getMessages();
+
 	isEditing = false;
 	placeholderText: string;
 	placeTmp: string;
@@ -26,7 +32,7 @@ export class MessagesComponent implements OnInit {
 	@ViewChild('inputElement') inputElementRef: ElementRef;
 
 
-  constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef, private elementRef: ElementRef) {   for (let i = 1; i <= 20; i++) {
+  constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef, private elementRef: ElementRef, private chatService: ChatService) {   for (let i = 1; i <= 20; i++) {
     const username = 'User' + i;
     const text = 'Message ' + i;
     const message = {username: username, text: text};
@@ -63,7 +69,9 @@ export class MessagesComponent implements OnInit {
   }
 
   onSubmit() {
-	console.log(this.message);
+
+	this.chatService.sendMessage({text: this.message, room: this.chatService.selectedRoom});
+	console.log(this.message, 'ID', this.chatService.selectedRoom.id);
 	this.message = '';
   }
 

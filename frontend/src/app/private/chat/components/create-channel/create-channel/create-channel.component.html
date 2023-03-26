@@ -3,7 +3,7 @@
 	<div class="separator"></div>
 	<form [formGroup]="channelForm" (ngSubmit)="onSubmit()" class="form">
 		<div>
-			<input #channelName type="text" id="channelName" formControlName="channelName" placeholder="Channel Name" class="inputCustom">
+			<input #name type="text" id="name" formControlName="name" placeholder="Channel Name" class="inputCustom">
 		</div>
 		<div class="checkbox">
 			<label>
@@ -34,7 +34,7 @@
 			</label>
 		</div>
 		<div class="submit">
-			<button type="submit" [disabled]="channelForm.invalid || channelForm.get('channelName').value === ''">
+			<button type="submit" [disabled]="channelForm.invalid || channelForm.get('name').value === ''">
 				Create Channel
 			</button>
 		</div>

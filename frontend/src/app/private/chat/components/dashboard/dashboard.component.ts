@@ -36,7 +36,7 @@ export class DashboardComponent {//implements OnInit, AfterViewInit {
 	// rooms$: Observable<RoomPaginateI>= this.chatService.getMyRooms();
 	// selectedRoom = null;
 	// user: UserI = this.authService.getLoggedInUser();
-	constructor(public dashService: DashboardService, private elementRef: ElementRef) { }
+	constructor(public dashService: DashboardService, private elementRef: ElementRef, private chatService: ChatService) { }
 
 	//constructor(private chatService: ChatService, private authService: AuthService) { }
 
