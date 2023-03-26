@@ -12,28 +12,41 @@ import { PlayerService } from '../../services/player.service';
 })
 
 export class ProfileComponent {
-  user;
+  user : UserI;
   username : string;
-  victories: number;
-  defeats: number;
+  wins: number;
+  losses: number;
   ratio: number;
   isCurrentUser: boolean;
 
   constructor(private authService : AuthService, private userService: UserService, private playerService: PlayerService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    const username = this.route.snapshot.params['username'];
-    if (username) {
-      // Si le username est présent dans l'URL, récupérez les informations de l'utilisateur correspondant
-      this.user = this.userService.findByUsername(username);
-      this.isCurrentUser = false;
-    } else {
-      // Sinon, récupérez les informations de l'utilisateur connecté
-      this.user = this.authService.getLoggedInUser();
-      this.isCurrentUser = true;
-    }
-    this.victories = 17;
-    this.defeats = 3;
-    this.ratio = 0;
+    this.user = this.playerService.user;
+    this.username = this.user.username;
+    // const username = this.route.snapshot.params['username'];
+    // if (username) {
+    //   // Si le username est présent dans l'URL, récupérez les informations de l'utilisateur correspondant
+    //   this.user = this.userService.findByUsername(username);
+    //   this.isCurrentUser = false;
+    // } else {
+    //   // Sinon, récupérez les informations de l'utilisateur connecté
+    //   this.user = this.authService.getLoggedInUser();
+    //   this.isCurrentUser = true;
+    // }
+    this.wins = this.user.wins
+    this.losses = this.user.losses;
+    this.ratio = this.user.ratio;
+   }
+
+  addWin() {
+    this.playerService.addWin(this.user.id).subscribe((updateUser: UserI) => {
+      this.user = updateUser;
+      this.wins = updateUser.wins;
+
+    });
+
+    console.log(this.wins);
    }
 }
+

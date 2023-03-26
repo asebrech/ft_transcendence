@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
@@ -126,12 +127,12 @@ export class UserController {
 		return this.userService.removeFriend(userId, friend.id);
 	}
 
-	@Post(':id/wins')
+	@Post(':id/addwins')
 	async addWin(@Param('id') userId: number) {
 	  return this.userService.addWinOrLoss(userId, true);
 	}
   
-	@Post(':id/losses')
+	@Post(':id/addlosses')
 	async addLoss(@Param('id') userId: number) {
 	  return this.userService.addWinOrLoss(userId, false);
 	}

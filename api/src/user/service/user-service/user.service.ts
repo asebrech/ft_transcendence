@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
@@ -120,7 +121,7 @@ export class UserService {
 	returnSession(user: UserI): string {
 		return this.authService.createSession(user);
 	}
-	
+
 	async checkEmail(mail: string) : Promise<boolean> {
 		return this.mailExists(mail);
 	}
@@ -184,7 +185,7 @@ export class UserService {
 	  async getUserInfo(id: number): Promise<UserI> {
 		// Récupérer l'utilisateur correspondant à l'ID fourni avec ses amis
 		const user = await this.userRepository.findOneBy({id});
-	
+
 		// Retourner l'utilisateur avec toutes ses informations
 		return user;
 	  }

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { boolean } from "yargs";
 import { UserEntity } from "./user.entity";
 

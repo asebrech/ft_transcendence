@@ -19,6 +19,10 @@ export class FriendsComponent implements OnInit {
   resultats: string[] = [];
   username: string;
   message : string;
+  showContextMenu: boolean = false;
+  contextMenuTop: number = 0;
+  contextMenuLeft: number = 0;
+  isMyFriend: boolean = false;
 
   constructor(private authService: AuthService, private userService: UserService, private route : Router) { }
 
@@ -37,5 +41,24 @@ export class FriendsComponent implements OnInit {
 
   goToProfileOf(user: string) {
     this.route.navigate(['/private/user/profile', user]);
+  }
+
+  onContextMenu(event: MouseEvent){
+    event.preventDefault();
+    this.showContextMenu = true;
+    this.contextMenuTop = event.clientY;
+    this.contextMenuLeft = event.clientX;
+  }
+
+  option1() {
+    console.log("ajouter un ami")
+  }
+
+  option2() {
+    console.log("supprimer ami");
+  }
+
+  option3() {
+    console.log("envoyer msg");
   }
 }

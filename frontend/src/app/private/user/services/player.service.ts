@@ -10,23 +10,18 @@ import { UserService } from 'src/app/public/services/user-service/user.service';
 export class PlayerService {
 
   user : UserI = this.authService.getLoggedInUser();
-  username: string;
-  victories: number;
-  defeats: number;
-  ratio: number;
-  playtime: number;
-  friends: string[] = [];
+
 
   constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient) { }
 
-  addFriend(friend: string) {
-    this.httpClient.post()
+  // addFriend(friend: string) {
+  //   this.httpClient.post()
+  // }
+
+  addWin(id) {
+    return this.httpClient.post(`api/users/${id}/addwins/`, null);
   }
 
-  getRatio() : number {
-    this.ratio = (this.victories / (this.victories + this.defeats)) * 100;
-    return this.ratio;
-  }
 }
 
 
