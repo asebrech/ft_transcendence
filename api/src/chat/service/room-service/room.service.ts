@@ -41,4 +41,10 @@ export class RoomService {
 		room.users.push(creator);
 		return room;
 	}
+	async addUsersToRoom(room: RoomI, users: UserI[]): Promise<RoomI> {
+		for (const user of users) {
+			room.users.push(user);
+		}
+		return this.roomRepository.save(room);
+	} 
 }

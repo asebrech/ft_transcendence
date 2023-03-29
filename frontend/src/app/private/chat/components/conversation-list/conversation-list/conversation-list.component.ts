@@ -11,7 +11,7 @@ import { UserI } from 'src/app/model/user.interface';
   styleUrls: ['./conversation-list.component.scss']
 })
 export class ConversationListComponent implements OnInit {
-	selectedUser: any;
+	selectedUser: UserI;
 	isClicked = false;
 	connected: boolean = true;
 
@@ -20,10 +20,16 @@ export class ConversationListComponent implements OnInit {
 
   constructor(public dashService: DashboardService, private chatService: ChatService){ }
 
-  ngOnInit(): void {
-  }
+  ngOnInit() {
+	this.chatService.emitPaginateRooms(10, 0);
+}
+
+	ngOnDestroy() {
+		this.chatService.leaveRoom();
+	}
 
   message(room: RoomI) {
+	this.chatService.leaveRoom();
 	this.chatService.joinRoom(room);
   }
 

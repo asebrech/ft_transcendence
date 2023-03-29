@@ -105,8 +105,8 @@ export class UserService {
 		return this.authService.generateJwt(payload);
 	}
 
-	async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
-		return paginate<UserEntity>(this.userRepository, options);
+	async findAll(): Promise<UserI[]> {
+		return this.userRepository.find();
 	}
 
 	async findAllByUsername(username: string): Promise<UserI[]> {

@@ -4,6 +4,7 @@ import { RoomI, RoomPaginateI } from 'src/app/model/room.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, tap } from 'rxjs';
 import { MessageI, MessagePaginatedI } from 'src/app/model/message.interface';
+import { UserI } from 'src/app/model/user.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,6 +12,7 @@ import { MessageI, MessagePaginatedI } from 'src/app/model/message.interface';
 export class ChatService {
 
 	selectedRoom: RoomI = null;
+	selectedRoomName: string = null;
 
 	constructor(private socket: CustomSocket, private snackbar: MatSnackBar) { }
 
@@ -24,11 +26,12 @@ export class ChatService {
 
 	joinRoom(room: RoomI) {
 		this.selectedRoom = room;
+		this.selectedRoomName = room.name;
 		return this.socket.emit('joinRoom', room);
 	}
 
-	leaveRoom(room: RoomI) {
-		return this.socket.emit('leaveRoom', room);
+	leaveRoom() {
+		return this.socket.emit('leaveRoom', this.selectedRoom);
 	}
 
 	getMessages(): Observable<MessageI[]> {
@@ -48,6 +51,10 @@ export class ChatService {
 		this.snackbar.open(`User ${room.name} created successfuly`, 'Close', {
 			duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
 		});
+	}
+
+	addUsers(users: UserI[]) {
+		this.socket.emit('addUsers', {users: users, room: this.selectedRoom});
 	}
 
 }

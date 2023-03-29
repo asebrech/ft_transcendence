@@ -16,11 +16,6 @@ export class MessagesComponent implements OnInit {
 	message: string = '';
 	ChannelName: string = 'mago';
 
-	messages: any[] = [
-		{username: 'mago', text:'salutgjhlwregharhglarghlhsagbhlrshaglaghaliughlaghlakrsghlriaugthlriaughlaiughrli giu liuhalufghal l tliuhtglaiuwhg l;g luahgluaglhag lhg lauhgluhtal l luhl khl hlahleauth lkajhglkgjeh lskgh l;rhg'},
-		{username: 'mago', text:'salutgjhlwregharhglarghlhsagbhlrshaglaghaliughlaghlakrsghlriaugthlriaughlaiughrli giu liuhalufghal l tliuhtglaiuwhg l;g luahgluaglhag lhg lauhgluhtal l luhl khl hlahleauth lkajhglkgjeh lskgh l;rhg leudihglagh glirsa ghlrsuahglrashglkuharl;oigujhj lsrghjsl;ogjh; sohj; ldjsgh;losjhg;olikltds jh;lkdtj;hlsdetj;oihjtsdel;goh ijteds;lohijdt;oijkghd;lkihj;tedosikhj;todskjh ;dxkjjh ;sedtikohj; tsdlkh j;dothktj;tlkhjd;etlkhj ;teslhj;diytjh;sedtolihj ;dolitkh j;odshj ;dlk hj;lkdyhj t;lshj ;seoihjty; shjtse;lhgjset;l hkgnjsdlknj'}
-	];
-
 	messages$: Observable<MessageI[]>= this.chatService.getMessages();
 
 	isEditing = false;
@@ -32,12 +27,8 @@ export class MessagesComponent implements OnInit {
 	@ViewChild('inputElement') inputElementRef: ElementRef;
 
 
-  constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef, private elementRef: ElementRef, private chatService: ChatService) {   for (let i = 1; i <= 20; i++) {
-    const username = 'User' + i;
-    const text = 'Message ' + i;
-    const message = {username: username, text: text};
-    this.messages.push(message);
-	}
+  constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef,
+												private elementRef: ElementRef, public chatService: ChatService) { 
 
 	this.placeholderText = this.ChannelName;
 	//this.placeTmp = this.placeholderText;

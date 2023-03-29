@@ -5,9 +5,9 @@
         <input #searchInput type="text" placeholder="Search" [(ngModel)]="searchTerm" (keyup)="searchOnKeyUp($event)" [ngModelOptions]="{standalone: true}"/>
         <div class="result" >
                 <div *ngFor="let result of filteredResults; let i = index" >
-					<div class="list" (click)="result.selected = !result.selected">
+					<div class="list" (click)="result.selected = !result.selected" *ngIf="result.username != user.username">
 						<label>
-							<p>{{result.name}} - {{result.age}}</p>
+							<p>{{result.username}} </p>
 						</label>
 						<label>
 							<input type="checkbox" [(ngModel)]="result.selected" [name]="'user' + i" (click)="$event.stopPropagation()" />

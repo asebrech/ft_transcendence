@@ -1,6 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { DashboardService } from '../../services/dashboard-service/dashboard-service';
+import { UserService } from 'src/app/public/services/user-service/user.service';
+import { UserI } from 'src/app/model/user.interface';
+import { AuthService } from 'src/app/public/services/auth-service/auth.service';
+import { ChatService } from '../../services/chat-service/chat.service';
 
 @Component({
   selector: 'app-add-users',
@@ -10,36 +14,18 @@ import { DashboardService } from '../../services/dashboard-service/dashboard-ser
 export class AddUsersComponent implements OnInit {
 
   searchTerm: string;
-	searchResults: any[] = [
-		{ name: 'John', age: 30 },
-		{ name: 'Jane', age: 25 },
-		{ name: 'Bob', age: 40 },
-		{ name: 'Alice', age: 20 },
-		{ name: 'Dave', age: 45 },
-		{ name: 'Maria', age: 35 },
-		{ name: 'Peter', age: 27 },
-		{ name: 'Lucy', age: 32 },
-		{ name: 'Mike', age: 38 },
-		{ name: 'Sara', age: 42 },
-		{ name: 'Alex', age: 23 },
-		{ name: 'Chris', age: 31 },
-		{ name: 'Diana', age: 29 },
-		{ name: 'Eric', age: 34 },
-		{ name: 'Fiona', age: 22 },
-		{ name: 'Greg', age: 37 },
-		{ name: 'Hannah', age: 26 },
-		{ name: 'Isaac', age: 39 },
-		{ name: 'Julia', age: 28 },
-		{ name: 'Kevin', age: 33 }
+	searchResults$: Observable<UserI[]>= this.userService.finAll();
 
-	];
-	filteredResults: any[];
+
+	filteredResults: any[] = [];
+ 	user: UserI = this.authService.getLoggedInUser();
+
 
 	private searchTerms = new Subject<string>();
 
 	@ViewChild('searchInput') searchInput: ElementRef;
 
-	constructor(private elementRef: ElementRef, private dashService: DashboardService) { }
+	constructor(private elementRef: ElementRef, private dashService: DashboardService, private userService: UserService, private authService: AuthService, private chatService: ChatService) { }
 
 	ngOnInit(): void {
 		this.searchTerms.subscribe(() => this.search());
@@ -51,10 +37,10 @@ export class AddUsersComponent implements OnInit {
 
 	search() {
 		if (!this.searchTerm) {
-			this.filteredResults = this.searchResults;
+			this.searchResults$.subscribe(user => this.filteredResults = user);
 		} else {
-			this.filteredResults = this.searchResults.filter(result =>
-				result.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+			this.searchResults$.subscribe(users => this.filteredResults = users.filter(result =>
+				result.username.toLowerCase().includes(this.searchTerm.toLowerCase()))
 			);
 		}
 	}
@@ -72,7 +58,10 @@ export class AddUsersComponent implements OnInit {
 
   onSubmit() {
     const selectedUsers = this.filteredResults.filter(result => result.selected);
-    console.log('Selected users:', selectedUsers);
+	for(let selectedUser of selectedUsers) {
+		delete selectedUser.selected;
+	}
+	this.chatService.addUsers(selectedUsers);
 	this.dashService.addUsers = false;
   }
 }

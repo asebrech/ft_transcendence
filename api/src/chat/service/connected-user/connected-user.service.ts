@@ -19,6 +19,7 @@ export class ConnectedUserService {
 
 	async findByUser(user: UserI): Promise<ConnectedUserI[]>{
 		return this.connectedUserRepository.findBy({user});
+		
 	}
 
 	async deleteBySocketId(socketId: string) {
