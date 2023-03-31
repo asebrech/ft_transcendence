@@ -8,6 +8,8 @@ import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
 import { BehaviorSubject } from 'rxjs';
 import { GameService } from '../../services/game.service';
+import { PlayerService } from 'src/app/private/user/services/player.service';
+import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 
 export let room : any;
 export let client : Client;
@@ -32,13 +34,19 @@ export class GameFrontComponent implements OnInit, DoCheck
   ///////////////////////////////////
   joined = false;
   in = 0;
+  connected = false;
   joinedVar = new BehaviorSubject<boolean> (this.joined);
   botGameLaunched = false;
+  user : any ;
+  username : string;
   
-  constructor(private starsService: StarsService, private location : Location, private launch : LaunchGameService, private gameService : GameService) 
+  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService) 
   {
+    this.user = this.authService.getLoggedInUser();
+    this.username = this.user.username;
   }
-  async ngDoCheck() 
+
+  ngDoCheck() 
   {
     if (this.launch.showButtonStats() == 1)
     {
@@ -128,10 +136,13 @@ export class GameFrontComponent implements OnInit, DoCheck
     };
   }
 
-  async joinGameSession(ticket) {
-    try {
+  async joinGameSession(ticket) 
+  {
+    try 
+    {
       room = await client?.consumeSeatReservation(ticket);
-    } catch (error) {
+    } catch (error) 
+    {
       console.log('Failed to join game session:', error);
     }
   }
@@ -182,7 +193,8 @@ export class GameFrontComponent implements OnInit, DoCheck
   async join()
   {
     try {
-      room = await client?.joinOrCreate("ranked",  { rank : 10, numClientsToMatch : 2 });
+      // TODO : USERNAME EST UNDEFINED 
+      room = await client?.joinOrCreate("ranked",  { rank : 10, numClientsToMatch : 2 , clientId : this.username });
       console.log(room);
       console.log(client.auth);
     } catch (e) {

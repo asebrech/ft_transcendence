@@ -1,0 +1,133 @@
+.main-div
+{
+    display: flex;
+    background-color: red;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 9.5vw;
+    width: 88vw;
+    height: 87vh;
+    background: rgba(22, 7, 45, 0.3);
+    box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4.5px);
+}
+.title
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2vh;
+    margin-right: 8vw;
+    width: 14vw;
+    height: 6vh;
+    border: solid 1px white;
+}
+.live
+{
+    margin-top: 1.3vh;
+    font-size: 3.6vh;
+    font-family: 'nasalization';
+    font-weight: bolder;
+}
+.sat
+{
+    width: 50px;
+    height: auto;
+}
+.line-sep
+{
+    width: 70vw;
+    height: 0.1vh;
+    margin-top: 3vh;
+    background-color: white;
+}
+.room
+{
+    display: flex;
+    flex-direction: row;
+    align-self: flex-start;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5vh;
+    margin-left: 10vw;
+    width: 29vw;
+    height: 10vh;
+    background-color: transparent;
+}
+.room:hover
+{
+    cursor: pointer;
+    background: rgba(217, 217, 217, 0.3);
+}
+.room span
+{
+    color: white;
+}
+.red-dot
+{
+    position: fixed;
+    height: 20px;
+    width: 20px;
+    background-color: #f00;
+    border-radius: 50%;
+    margin-right: 25vw;
+}
+.red_dot_animation
+{
+  animation: pulse-black 2s infinite;
+  @keyframes pulse-black {
+      0% {
+        opacity: 0.8;
+      }
+
+      50% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 0.8;
+      }
+  }
+}
+
+.score-board
+{
+    width: 5vw;
+    height: 8vh;
+    margin-left: 22.5vw;    
+    position: absolute;
+    background: rgba(148, 148, 148, 0.3);
+    box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4.5px);
+    border-radius: 20px;
+}
+.line-score
+{
+    position: absolute;
+    width: 1px;
+    height: 8vh;
+    margin-left: 2.5vw;    
+    background-color: white;
+}
+.user-name
+{
+    font-size: 2.5vh;
+    margin-right: 8vw;
+    color: #CD317C;
+}
+.s_r,.s_l
+{
+    position: absolute;
+}
+.s_l
+{
+    margin-left: 0.8vw;
+    margin-top: 2vh;
+    font-size: 4vh;
+}
+.s_r
+{
+    margin-left: 3.2vw;
+    margin-top: 2vh;
+    font-size: 4vh;
+}

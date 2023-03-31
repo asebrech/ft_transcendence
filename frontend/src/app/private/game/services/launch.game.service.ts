@@ -4,6 +4,7 @@ import { HostListener, Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
+
 export class LaunchGameService 
 {
   hideW : number = 0;

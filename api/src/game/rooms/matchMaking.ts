@@ -4,10 +4,8 @@ interface MatchmakingGroup {
   averageRank: number;
   clients: ClientStat[],
   priority?: boolean;
-
   ready?: boolean;
   confirmed?: number;
-
   // cancelConfirmationTimeout?: Delayed;
 }
 
@@ -71,15 +69,6 @@ export class matchMaking extends Room {
   stats: ClientStat[] = [];
 
   onCreate(options: any) {
-    if (options.maxWaitingTime) 
-    {
-      this.maxWaitingTime = options.maxWaitingTime;
-    }
-
-    if (options.numClientsToMatch) 
-    {
-      this.numClientsToMatch = options.numClientsToMatch;
-    }
 
     this.onMessage("confirm", (client: Client, message: any) => 
     {
@@ -91,7 +80,6 @@ export class matchMaking extends Room {
         stat.group.confirmed++;
         stat.client.leave();
       }
-
     })
 
     /**
@@ -107,8 +95,6 @@ export class matchMaking extends Room {
       waitingTime: 0,
       options
     });
-
-    client.send("clients", 1);
   }
 
   createGroup() {
@@ -163,7 +149,6 @@ export class matchMaking extends Room {
           totalRank = 0;
         }
       }
-
       stat.group = currentGroup;
       currentGroup.clients.push(stat);
 
@@ -184,11 +169,11 @@ export class matchMaking extends Room {
         totalRank = 0;
       }
     }
-
     this.checkGroupsReady();
   }
 
-  async checkGroupsReady() {
+  async checkGroupsReady() 
+  {
     await Promise.all(
       this.groups
         .map(async (group) => {
