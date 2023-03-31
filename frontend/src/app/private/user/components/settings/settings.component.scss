@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  
+}
+
+.profil {
+  display: flex;
+  padding-bottom: 150px;
+  backdrop-filter: blur(3px);
+  align-items: center;
+}
+
+.skin {
+  display: flex;
+  padding-bottom: 150px;
+  backdrop-filter: blur(3px);
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+// CSS "flex-grow: 1" sur chaque div pour que chacune
+//prenne autant de place que possible dans le conteneur parent.

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
 import { AuthService } from 'src/auth/service/auth.service';
@@ -171,7 +171,7 @@ export class UserService {
 		return this.userRepository.save(user);
 	  }
 
-	async addWinOrLoss(id: number, isWin: boolean): Promise<UserI> {
+	async addWinOrLoss(id: number, isWin: boolean): Promise<UserEntity> {
 		const user = await this.userRepository.findOneBy({id});
 		if (isWin) {
 		  user.wins += 1;
@@ -182,10 +182,9 @@ export class UserService {
 		return this.userRepository.save(user);
 	  }
 
-	  async getUserInfo(id: number): Promise<UserI> {
+	  async getUserInfo(id: number): Promise<UserEntity> {
 		// Récupérer l'utilisateur correspondant à l'ID fourni avec ses amis
 		const user = await this.userRepository.findOneBy({id});
-
 		// Retourner l'utilisateur avec toutes ses informations
 		return user;
 	  }

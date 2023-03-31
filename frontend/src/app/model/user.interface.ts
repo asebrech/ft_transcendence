@@ -9,4 +9,5 @@ export interface UserI {
   wins?: number;
   losses?: number;
   ratio?: number;
+  timeplayed?: number;
 }

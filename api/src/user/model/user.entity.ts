@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 import { userInfo } from "os";
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, ManyToOne, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserI } from "./user.interface";
 
 @Entity()
@@ -35,7 +36,7 @@ export class UserEntity {
 	@Column({default: 0})
 	timePlayed: number;
 
-	@OneToMany( () => UserEntity, friend => friend.friend)
+	@ManyToOne(() => UserEntity, user => user.friend)
 	friend: UserEntity[];
 
 }

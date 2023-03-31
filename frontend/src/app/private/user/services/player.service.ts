@@ -18,7 +18,7 @@ export class PlayerService {
   //   this.httpClient.post()
   // }
 
-  addWin(id) {
+  addWin(id: number) {
     return this.httpClient.post(`api/users/${id}/addwins/`, null);
   }
 

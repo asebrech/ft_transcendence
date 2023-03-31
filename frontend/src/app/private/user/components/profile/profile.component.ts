@@ -17,6 +17,7 @@ export class ProfileComponent {
   wins: number;
   losses: number;
   ratio: number;
+  timeplayed: number;
   isCurrentUser: boolean;
 
   constructor(private authService : AuthService, private userService: UserService, private playerService: PlayerService, private route: ActivatedRoute) { }
@@ -37,6 +38,7 @@ export class ProfileComponent {
     this.wins = this.user.wins
     this.losses = this.user.losses;
     this.ratio = this.user.ratio;
+    this.timeplayed = this.user.timeplayed;
    }
 
   addWin() {
@@ -46,7 +48,8 @@ export class ProfileComponent {
 
     });
 
-    console.log(this.wins);
+    console.table(this.user);
+    console.log(this.timeplayed);
    }
 }
 

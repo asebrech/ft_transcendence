@@ -9,6 +9,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { PrivateModule } from '../private.module';
 import { FriendsComponent } from './components/friends/friends.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { SettingsComponent } from './components/settings/settings.component';
 
 
 
@@ -17,7 +18,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
   declarations: [
     GoogleAuthComponent,
     ProfileComponent,
-    FriendsComponent
+    FriendsComponent,
+    SettingsComponent
   ],
   imports: [
     CommonModule,
