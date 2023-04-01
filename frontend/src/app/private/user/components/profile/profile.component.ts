@@ -25,27 +25,28 @@ export class ProfileComponent {
   ngOnInit() {
     this.user = this.playerService.user;
     this.username = this.user.username;
+    this.timeplayed = this.user.timeplayed;
+    this.wins = this.user.wins;
+    this.losses = this.user.losses;
+    this.ratio = this.user.ratio;
     // const username = this.route.snapshot.params['username'];
     // if (username) {
     //   // Si le username est présent dans l'URL, récupérez les informations de l'utilisateur correspondant
-    //   this.user = this.userService.findByUsername(username);
+    // //  this.user = this.userService.findByUsername(username);
     //   this.isCurrentUser = false;
     // } else {
     //   // Sinon, récupérez les informations de l'utilisateur connecté
     //   this.user = this.authService.getLoggedInUser();
     //   this.isCurrentUser = true;
-    // }
-    this.wins = this.user.wins
-    this.losses = this.user.losses;
-    this.ratio = this.user.ratio;
-    this.timeplayed = this.user.timeplayed;
+    //}
    }
 
   addWin() {
     this.playerService.addWin(this.user.id).subscribe((updateUser: UserI) => {
       this.user = updateUser;
       this.wins = updateUser.wins;
-
+      this.losses = updateUser.losses;
+      this.ratio = updateUser.ratio;
     });
 
     console.table(this.user);

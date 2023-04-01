@@ -1,7 +1,7 @@
 .container {
   display: table;
-  margin: 50px auto;
-  margin-left: 120px;
+margin: 0 auto;
+margin-left: 120px;
 }
 
 .block {
@@ -40,7 +40,7 @@ progress {
   display: inline-block;
   vertical-align: baseline;
   margin: 10px;
-  width: -webkit-fill-available;
+  width: 80%;
   accent-color: hotpink;
   height: 20px;
 }
@@ -50,7 +50,7 @@ width: 70%;
 }
 
 .badge {
-width: 30%;
+
 }
 
 
@@ -112,7 +112,8 @@ h2 {
   stroke: green;
   stroke-width: 2.8;
   stroke-linecap: square;
-  transition: stroke-dasharray 0.3s ease;
+  transition: stroke-dasharray 0.5s ease-in-out;
+  stroke-dasharray: ;
 }
 
 .progress-label {
@@ -140,4 +141,11 @@ td {
 
 tr {
   margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
 }

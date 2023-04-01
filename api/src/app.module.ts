@@ -23,32 +23,32 @@ import { AuthMiddleware } from './middleware/auth.middleware';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule implements NestModule {
-	configure(consumer: MiddlewareConsumer) {
-	  consumer
-		.apply(AuthMiddleware)
-		.exclude(
-			{path: '/api/users', method: RequestMethod.POST},
-			{path: '/api/users/login', method: RequestMethod.POST},
-			{path: '/api/users/api-login', method: RequestMethod.POST},
-			{path: '/api/users/qr-code', method: RequestMethod.GET},
-			{path: '/api/users/verify', method: RequestMethod.POST},
-			{path: '/api/users/check-email', method: RequestMethod.GET},
-			{path: '/api/colyseus', method: RequestMethod.GET},
-		)
-		.forRoutes('')
-		.apply((req, res, next) => {
-			res.setHeader('Access-Control-Allow-Origin', '*');
-			res.setHeader(
-			  'Access-Control-Allow-Methods',
-			  'GET, POST, PUT, DELETE, OPTIONS',
-			);
-			res.setHeader(
-			  'Access-Control-Allow-Headers',
-			  'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-			);
-			next();
-		  })
-		  .forRoutes('*');
-	}
+export class AppModule {
+	// configure(consumer: MiddlewareConsumer) {
+	//   consumer
+	// 	.apply(AuthMiddleware)
+	// 	.exclude(
+	// 		{path: '/api/users', method: RequestMethod.POST},
+	// 		{path: '/api/users/login', method: RequestMethod.POST},
+	// 		{path: '/api/users/api-login', method: RequestMethod.POST},
+	// 		{path: '/api/users/qr-code', method: RequestMethod.GET},
+	// 		{path: '/api/users/verify', method: RequestMethod.POST},
+	// 		{path: '/api/users/check-email', method: RequestMethod.GET},
+	// 		{path: '/api/colyseus', method: RequestMethod.GET},
+	// 	)
+	// 	.forRoutes('')
+	// 	.apply((req, res, next) => {
+	// 		res.setHeader('Access-Control-Allow-Origin', '*');
+	// 		res.setHeader(
+	// 		  'Access-Control-Allow-Methods',
+	// 		  'GET, POST, PUT, DELETE, OPTIONS',
+	// 		);
+	// 		res.setHeader(
+	// 		  'Access-Control-Allow-Headers',
+	// 		  'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+	// 		);
+	// 		next();
+	// 	  })
+	// 	  .forRoutes('*');
+	// }
 }

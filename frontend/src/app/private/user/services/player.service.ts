@@ -22,6 +22,9 @@ export class PlayerService {
     return this.httpClient.post(`api/users/${id}/addwins/`, null);
   }
 
+  addLosses(id: number) {
+    return this.httpClient.post(`api/users/${id}/addlosses/`, null);
+  }
 }
 
 

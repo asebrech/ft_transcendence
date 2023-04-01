@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { userInfo } from "os";
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, ManyToOne, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Double, Entity, ManyToMany, ManyToOne, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserI } from "./user.interface";
+import { ParseFloatPipe } from "@nestjs/common";
 
 @Entity()
 export class UserEntity {
@@ -30,13 +31,13 @@ export class UserEntity {
 	@Column({default: 0})
 	losses : number;
 
-	@Column({default: 0})
+	@Column('double precision', {default: 0})
 	ratio : number;
 
 	@Column({default: 0})
-	timePlayed: number;
+	timeplayed : number;
 
 	@ManyToOne(() => UserEntity, user => user.friend)
-	friend: UserEntity[];
+	friend : UserEntity[];
 
 }

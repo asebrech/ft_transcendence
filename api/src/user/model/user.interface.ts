@@ -12,6 +12,6 @@ export interface UserI {
 	wins? : number;
 	losses? : number;
 	ratio? : number;
-	timePlayed?: number;
+	timeplayed?: number;
 	friend?: UserEntity[];
 }
