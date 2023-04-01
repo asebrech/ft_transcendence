@@ -53,9 +53,9 @@ export class LoginComponent {
 		return this.form.get('password') as FormControl;
 	}
 
-	checkEmail(mail: string) {
-    this.user.mail = mail;
-		this.http.get(`api/users/check-email?mail=${mail}`)
+	checkEmail() {
+    this.user.mail = this.form.get('email').value;
+		this.http.get(`api/users/check-email?mail=${this.user.mail}`)
 		.subscribe(res => {
 			if (res) {
 				// email exists, show password field

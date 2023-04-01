@@ -1,7 +1,10 @@
+.general {
+margin-top: 70px;
+padding-left: 120px;
+}
+
 .container {
   display: table;
-margin: 0 auto;
-margin-left: 120px;
 }
 
 .block {
@@ -48,11 +51,6 @@ progress {
 .profile {
 width: 70%;
 }
-
-.badge {
-
-}
-
 
 .col {
 display: inline-block;
@@ -113,7 +111,6 @@ h2 {
   stroke-width: 2.8;
   stroke-linecap: square;
   transition: stroke-dasharray 0.5s ease-in-out;
-  stroke-dasharray: ;
 }
 
 .progress-label {
