@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
 import { AuthService } from 'src/auth/service/auth.service';
+import { RoomI } from 'src/chat/model/room/room.interface';
 import { UserEntity } from 'src/user/model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';

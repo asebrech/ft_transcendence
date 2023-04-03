@@ -1,19 +1,19 @@
 <div class="main" [ngClass]="{'mainBis': !dashService.channel}">
 		<ul>
-			<li *ngFor="let user of (rooms$ | async)" class="list"
-			(click)="message(user)"
+			<li *ngFor="let room of (rooms$ | async)" class="list"
+			(click)="message(room)"
 			(mousedown)="isClicked = true"
-			(mousedown)="selectedUser = user"
+			(mousedown)="selectedRoom = room"
 			(mouseup)="isClicked = false"
 			(mouseleave)="isClicked = false"
-			[ngStyle]="{ 'background-color': selectedUser === user && isClicked ? 'rgba(217, 217, 217, 0.25)' : '',
-			'transition': selectedUser === user && !isClicked ?'ease-in 0.1s': '' }"
-			[ngClass]="{'selected': selectedUser === user}"
+			[ngStyle]="{ 'background-color': selectedRoom === room.id && isClicked ? 'rgba(217, 217, 217, 0.25)' : '',
+			'transition': selectedRoom === room && !isClicked ?'ease-in 0.1s': '' }"
+			[ngClass]="{'selected': selectedRoom.id === room.id}"
 			>
 			<img src="../../../../../../assets/images/astronaut.png">
 			<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}"></div>
 			<div class="name">
-				{{ user.name }}
+				{{ room.name }}
 			</div>
 		</li>
 	</ul>

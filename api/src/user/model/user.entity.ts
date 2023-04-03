@@ -2,6 +2,7 @@ import { ConnectedUserEntity } from "src/chat/model/connected-user/connected-use
 import { JoinedRoomEntity } from "src/chat/model/joined-room/joined-room.entity";
 import { MessageEntity } from "src/chat/model/message/message.entity";
 import { RoomEntity } from "src/chat/model/room/room.entity";
+import { RoomI } from "src/chat/model/room/room.interface";
 import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -18,6 +19,9 @@ export class UserEntity {
 
 	@Column({select: false})
 	password: string;
+
+	@Column({default: null})
+	selectedRoom: number;
 
 	@Column({default: false})
 	google_auth: boolean;

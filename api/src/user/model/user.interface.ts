@@ -1,3 +1,4 @@
+import { RoomI } from "src/chat/model/room/room.interface";
 import { boolean } from "yargs";
 
 export interface UserI {
@@ -5,6 +6,7 @@ export interface UserI {
 	username?: string;
 	email: string;
 	password?: string;
+	selectedRoom?: number;
 	google_auth?: boolean;
 	google_auth_secret?: string;
 }

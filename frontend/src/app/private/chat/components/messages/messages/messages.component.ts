@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
 import { MessageI } from 'src/app/model/message.interface';
 import { ChatService } from '../../../services/chat-service/chat.service';
-import { Observable } from 'rxjs';
+import { Observable, delay, tap } from 'rxjs';
 import { room } from 'src/app/private/game/components/game.front/game.front.component';
 
 @Component({
@@ -46,10 +46,16 @@ export class MessagesComponent implements OnInit {
 	}
 
   ngOnInit(): void {
-	setTimeout(() => {
-        this.scrollToBottom();
-      });
-  }
+	this.messages$.pipe(
+        tap(() => {
+          setTimeout(() => {
+            this.scrollToBottom();
+          });
+        }),
+        delay(500)
+      )
+      .subscribe();
+}
 
   ngAfterViewInit(): void {
     this.ajusterLargeurInput(this.inputElementRef.nativeElement, null);
@@ -60,14 +66,23 @@ export class MessagesComponent implements OnInit {
   }
 
   onSubmit() {
-
 	this.chatService.sendMessage({text: this.message, room: this.chatService.selectedRoom});
-	console.log(this.message, 'ID', this.chatService.selectedRoom.id);
 	this.message = '';
+	this.messages$.pipe(
+        tap(() => {
+          setTimeout(() => {
+            this.scrollToBottom();
+          });
+        }),
+        delay(500)
+      )
+      .subscribe();
   }
 
   scrollToBottom(): void {
-    this.messageList.nativeElement.scrollTop = this.messageList.nativeElement.scrollHeight;
+	try {
+		this.messageList.nativeElement.scrollTop = this.messageList.nativeElement.scrollHeight;
+	  } catch(err) { }
   }
 
   members() {
@@ -88,7 +103,6 @@ export class MessagesComponent implements OnInit {
       this.placeholderText = this.inputText;
 
 	  this.ChannelName = this.placeholderText;
-	  console.log(this.ChannelName);
     }
 	this.ajusterLargeurInput(inputElement, this.placeholderText);
     this.inputText = "";

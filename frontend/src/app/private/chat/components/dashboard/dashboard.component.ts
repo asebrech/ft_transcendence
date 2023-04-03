@@ -13,7 +13,7 @@ import { DashboardService } from '../../services/dashboard-service/dashboard-ser
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
 	find: boolean = false;
 
@@ -56,9 +56,9 @@ export class DashboardComponent implements OnInit {
 		}
 	}
 
-	ngOnInit() {
-
-	}
+	// ngOnInit() {
+	// 	this.chatService.emitPaginateRooms(10, 0);
+	// }
 
 	// ngAfterViewInit() {
 	// 	this.chatService.emitPaginateRooms(10, 0);

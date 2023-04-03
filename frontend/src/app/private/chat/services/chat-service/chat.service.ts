@@ -12,7 +12,6 @@ import { UserI } from 'src/app/model/user.interface';
 export class ChatService {
 
 	selectedRoom: RoomI = null;
-	selectedRoomName: string = null;
 
 	constructor(private socket: CustomSocket, private snackbar: MatSnackBar) { }
 
@@ -26,7 +25,6 @@ export class ChatService {
 
 	joinRoom(room: RoomI) {
 		this.selectedRoom = room;
-		this.selectedRoomName = room.name;
 		return this.socket.emit('joinRoom', room);
 	}
 

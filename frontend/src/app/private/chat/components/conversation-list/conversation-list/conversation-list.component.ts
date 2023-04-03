@@ -4,6 +4,7 @@ import { RoomI } from 'src/app/model/room.interface';
 import { ChatService } from '../../../services/chat-service/chat.service';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/model/user.interface';
+import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 
 @Component({
   selector: 'app-conversation-list',
@@ -11,17 +12,24 @@ import { UserI } from 'src/app/model/user.interface';
   styleUrls: ['./conversation-list.component.scss']
 })
 export class ConversationListComponent implements OnInit {
-	selectedUser: UserI;
+	selectedRoom: RoomI;
 	isClicked = false;
 	connected: boolean = true;
 
 	rooms$: Observable<RoomI[]>= this.chatService.getMyRooms();
+	rooms: RoomI[];
 
-
-  constructor(public dashService: DashboardService, private chatService: ChatService){ }
+  constructor(public dashService: DashboardService, private chatService: ChatService, private authService: AuthService){ }
 
   ngOnInit() {
-	this.chatService.emitPaginateRooms(10, 0);
+	  this.chatService.emitPaginateRooms(10, 0);
+	const storedData = localStorage.getItem('room');
+		  if (storedData) {
+			  const myData = JSON.parse(storedData);
+			  this.selectedRoom = myData;
+			  console.log(this.selectedRoom);
+			  this.chatService.joinRoom(this.selectedRoom);
+		  }
 }
 
 	ngOnDestroy() {
@@ -31,6 +39,8 @@ export class ConversationListComponent implements OnInit {
   message(room: RoomI) {
 	this.chatService.leaveRoom();
 	this.chatService.joinRoom(room);
+	localStorage.setItem('room', JSON.stringify(room));
+	this.selectedRoom = room;
   }
 
 }
