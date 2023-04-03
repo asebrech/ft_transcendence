@@ -54,3 +54,19 @@ h1 {
 
 // CSS "flex-grow: 1" sur chaque div pour que chacune
 //prenne autant de place que possible dans le conteneur parent.
+
+input {
+    align-self: center;
+    background-color: #110720;
+    font-family: "nasalization";
+    text-indent: 10%;
+    width: 50%;
+    border-style: solid;
+    border-color: white;
+    border-radius: 50px;
+    border-width: 1px;
+    color: white;
+    padding-bottom: 5px;
+    font-size: 20px;
+    margin-bottom: 5px;
+}

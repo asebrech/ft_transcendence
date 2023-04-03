@@ -3,9 +3,12 @@
   <div class="profil">
     <h1>Profil</h1>
     <img src="../../../../../assets/images/astronaut.png" alt="profilePicture">
-    <button>Change username</button>
-    <button>Change email</button>
-    <button>reset password</button>
+    <button (click)="changeUsername()">Change username</button>
+    <button (click)="changeEmail()">Change email</button>
+    <button (click)="changePwd()">reset password</button>
+    <div class="popup" *ngIf="usernamePopup">
+      <input type="text">
+    </div>
   </div>
   <div class="skin">
     <h1>Skin</h1>

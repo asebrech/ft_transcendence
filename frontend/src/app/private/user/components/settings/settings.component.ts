@@ -17,12 +17,26 @@ export class SettingsComponent implements OnInit {
 	},
 		{ validators: CustomValidators.passwordsMatching }
 	);
-
   email: string;
+  usernamePopup: boolean = false;
+  pwdPopup: boolean = false;
+  emailPopup: boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  changeUsername() {
+    this.usernamePopup = true;
+  }
+  changePwd() {
+    this.pwdPopup = true;
+  }
+  changeEmail() {
+    this.emailPopup = true;
+  }
+  closePopup() {
+    this.emailPopup, this.pwdPopup, this.usernamePopup = false;
+  }
 }
