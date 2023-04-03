@@ -2,20 +2,47 @@
   display: flex;
   justify-content: center;
   flex-direction: row;
-  
+  margin-top: 70px;
+  padding-left: 120px;
 }
 
 .profil {
   display: flex;
+  flex-direction: column;
   padding-bottom: 150px;
   backdrop-filter: blur(3px);
   align-items: center;
+  padding-left: -120px;
+  img {
+    width: 40%;
+    margin: 20px;
+  }
+
+}
+
+button {
+  padding: 8px;
+  margin: 5px;
+  border-radius: 20px;
+  font-family: 'nasalization';
+  text-transform: uppercase;
+  background: #110720;
+  color: white;
+  border-color: white;
+  width: 50%;
 }
 
 .skin {
   display: flex;
+  flex-direction: column;
   padding-bottom: 150px;
   backdrop-filter: blur(3px);
+}
+
+h1 {
+  font-family: 'nasalization';
+  text-transform: uppercase;
+  font-size: 20px;
 }
 
 @media screen and (max-width: 768px) {

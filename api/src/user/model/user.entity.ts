@@ -25,6 +25,9 @@ export class UserEntity {
 	@Column({select: false, default: null})
 	google_auth_secret: string;
 
+	@Column({})
+	profilePicture: string;
+
 	@Column({default: 0})
 	wins : number;
 
@@ -37,7 +40,7 @@ export class UserEntity {
 	@Column({default: 0})
 	timeplayed : number;
 
-	@ManyToOne(() => UserEntity, user => user.friend)
-	friend : UserEntity[];
+	@Column({default: []})
+	friendId : number[];
 
 }
