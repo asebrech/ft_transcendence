@@ -41,6 +41,13 @@ export class RoomService {
 		room.users.push(creator);
 		return room;
 	}
+
+	async chaneNameRoom(name: string, room: RoomI): Promise<RoomI> {
+		const roomUpdate = await this.getRoom(room.id);
+		roomUpdate.name = name;
+		return this.roomRepository.save(roomUpdate);
+	}
+
 	async addUsersToRoom(room: RoomI, users: UserI[]): Promise<RoomI> {
 		for (const user of users) {
 			room.users.push(user);

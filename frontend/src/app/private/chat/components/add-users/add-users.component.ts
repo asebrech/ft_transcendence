@@ -14,7 +14,7 @@ import { ChatService } from '../../services/chat-service/chat.service';
 export class AddUsersComponent implements OnInit {
 
   searchTerm: string;
-	searchResults$: Observable<UserI[]>= this.userService.finAll();
+	searchResults$: Observable<UserI[]>= this.chatService.getUsers();
 
 
 	filteredResults: any[] = [];
@@ -36,6 +36,7 @@ export class AddUsersComponent implements OnInit {
 	}
 
 	search() {
+		this.chatService.listUsers();
 		if (!this.searchTerm) {
 			this.searchResults$.subscribe(user => this.filteredResults = user);
 		} else {

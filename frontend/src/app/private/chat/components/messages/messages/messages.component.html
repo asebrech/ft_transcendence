@@ -10,7 +10,7 @@
 					[(ngModel)]="inputText" (focus)="onFocus()" (blur)="validerPlaceholder(inputElement)"
 					(keydown.enter)="validerPlaceholderEnter(inputElement)" (input)="onInput(inputElement)">
 				</div>
-				<h1 *ngIf="!dashService.channel" >{{ChannelName}}</h1>
+				<h1 *ngIf="!dashService.channel" >{{(ChannelName$ | async)}}</h1>
 			</div>
 		</div>
 	</div>

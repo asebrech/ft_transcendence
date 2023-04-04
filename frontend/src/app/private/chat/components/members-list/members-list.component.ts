@@ -1,6 +1,9 @@
 import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DashboardService } from '../../services/dashboard-service/dashboard-service';
 import { Console } from 'console';
+import { ChatService } from '../../services/chat-service/chat.service';
+import { UserI } from 'src/app/model/user.interface';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-members-list',
@@ -12,7 +15,7 @@ export class MembersListComponent implements OnInit {
 	imagePath1 = "../../../../../../assets/images/close.png";
 	imagePath2 = "../../../../../../assets/images/arrow-down-sign-to-navigate.png";
 
-	selectedUser: any;
+	selectedUser: UserI;
 	isClicked = false;
 	connected: boolean = true;
 	showOverlay = false;
@@ -20,33 +23,18 @@ export class MembersListComponent implements OnInit {
 	overlayPosition = { left: 0, top: 0 };
 	selectedIndex: number | null = null;
 
-	users = [
-		{ name: 'Mago' },
-		{ name: 'Ramzi' },
-		{ name: 'Wanis' },
-		{ name: 'Mago' },
-		{ name: 'Ramzi' },
-		{ name: 'Wanis' },
-		{ name: 'Mago' },
-		{ name: 'Ramzi' },
-		{ name: 'Wanis' },
-		{ name: 'Mago' },
-		{ name: 'Ramzi' },
-		{ name: 'Wanis' },
-		{ name: 'Mago' },
-		{ name: 'Ramzi' },
-		{ name: 'Wanis' }
-	  ];
+	users: Observable<UserI[]> = this.chatservice.getMember();
 
 	  @ViewChild('option') option: ElementRef;
 
-  constructor(private elementRef: ElementRef, public dashService: DashboardService) { 
+  constructor(private elementRef: ElementRef, public dashService: DashboardService, private chatservice: ChatService) { 
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+	this.chatservice.listMember();
+  }
 
   ngOnDestroy() {
-	console.log('test1');
 	this.hide();
   }
 
@@ -56,7 +44,6 @@ export class MembersListComponent implements OnInit {
 
   uncheckResize() {
     // Supprimez le gestionnaire d'événements de défilement lorsque le composant est détruit
-	console.log('test');
     window.removeEventListener('resize', this.onResize.bind(this));
   }
 
@@ -77,7 +64,7 @@ export class MembersListComponent implements OnInit {
 	  }
 
   test() {
-	console.log('fonctionne');
+	console.log(this.selectedUser);
   }
 
   hide() {

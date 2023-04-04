@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CustomSocket } from '../../sockets/custom-socket';
 import { RoomI, RoomPaginateI } from 'src/app/model/room.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, tap } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { MessageI, MessagePaginatedI } from 'src/app/model/message.interface';
 import { UserI } from 'src/app/model/user.interface';
 
@@ -12,6 +12,10 @@ import { UserI } from 'src/app/model/user.interface';
 export class ChatService {
 
 	selectedRoom: RoomI = null;
+	private roomName = new Subject<RoomI>();
+	roomName$ = this.roomName.asObservable();
+	private messages = new Subject<MessageI[]>();
+	messages$ = this.messages.asObservable()
 
 	constructor(private socket: CustomSocket, private snackbar: MatSnackBar) { }
 
@@ -24,7 +28,6 @@ export class ChatService {
 	}
 
 	joinRoom(room: RoomI) {
-		this.selectedRoom = room;
 		return this.socket.emit('joinRoom', room);
 	}
 
@@ -32,12 +35,25 @@ export class ChatService {
 		return this.socket.emit('leaveRoom', this.selectedRoom);
 	}
 
-	getMessages(): Observable<MessageI[]> {
-		return this.socket.fromEvent<MessageI[]>('messages');
+	getMessages(): Observable<{messages: MessageI[], room: RoomI}> {
+		return this.socket.fromEvent<{messages: MessageI[], room: RoomI}>('messages').pipe( tap(object => {
+			this.selectedRoom = object.room;
+			this.roomName.next(object.room);
+			this.messages.next(object.messages);
+		}));
 	}
 
 	getMyRooms(): Observable<RoomI[]> {
 		return this.socket.fromEvent<RoomI[]>('rooms');
+	}
+
+	getSelectedRoom(): Observable<RoomI> {
+		return this.socket.fromEvent<RoomI>('selectedRoom').pipe(tap(
+			room => {
+				this.roomName.next(room);
+				this.selectedRoom = room;
+				localStorage.setItem('room', JSON.stringify(room));
+			}));
 	}
 
 	emitPaginateRooms(limit: number, page: number) {
@@ -51,8 +67,27 @@ export class ChatService {
 		});
 	}
 
-	addUsers(users: UserI[]) {
-		this.socket.emit('addUsers', {users: users, room: this.selectedRoom});
+	changeName(name: string, room: RoomI) {
+		this.socket.emit('changeName', { name, room });
 	}
 
+	listUsers() {
+		return this.socket.emit('listUsers', this.selectedRoom);
+	}
+
+	listMember() {
+		return this.socket.emit('listMember', this.selectedRoom);
+	}
+
+	getUsers(): Observable<UserI[]> {
+		return this.socket.fromEvent<UserI[]>('getUsers');
+	}
+
+	getMember(): Observable<UserI[]> {
+		return this.socket.fromEvent<UserI[]>('getMember');
+	}
+
+	addUsers(users: UserI[]) {
+		this.socket.emit('addUsers', { users: users, room: this.selectedRoom });
+	}
 }

@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
   styleUrls: ['./conversation-list.component.scss']
 })
 export class ConversationListComponent implements OnInit {
-	selectedRoom: RoomI;
+	selectedRoom: RoomI = {};
 	isClicked = false;
 	connected: boolean = true;
 
@@ -27,7 +27,6 @@ export class ConversationListComponent implements OnInit {
 		  if (storedData) {
 			  const myData = JSON.parse(storedData);
 			  this.selectedRoom = myData;
-			  console.log(this.selectedRoom);
 			  this.chatService.joinRoom(this.selectedRoom);
 		  }
 }

@@ -15,7 +15,7 @@
 </div>
 <div class="main"  >
 	<ul class="test">
-		<li *ngFor="let user of users; let i = index" class="list" (click)="getElementPosition(i, $event)"
+		<li *ngFor="let user of (users | async); let i = index" class="list" (click)="getElementPosition(i, $event)"
 		(click)="test()"
 		(mousedown)="isClicked = true"
 		(mousedown)="selectedUser = user"
@@ -28,7 +28,7 @@
 		<img src="../../../../../../assets/images/astronaut.png">
 		<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}"></div>
 		<div class="name">
-			{{ user.name }}
+			{{ user.username }}
 		</div>
 	</li>
 </ul>
