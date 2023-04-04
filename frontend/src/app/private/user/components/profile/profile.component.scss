@@ -146,3 +146,69 @@ tr {
     align-items: center;
   }
 }
+
+
+$color-black: hsl(0, 0%, 5%);
+$color-color: hsl(0, 0%, 100%);
+$color-angular: hsl(0, 100%, 60%);
+$porcent-angular: 5;
+
+@function strokeDashoffset($num) {
+	@return 440 - (440 * $num) / 100;
+}
+
+@keyframes anim_circle-angular {
+	to {
+		stroke-dashoffset: strokeDashoffset($porcent-angular);
+	}
+}
+
+.progressbar__text {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	padding: 0.25em 0.5em;
+	color: hsl(0, 0%, 100%);
+	font-family: Arial, Helvetica, sans-serif;
+	border-radius: 0.25em;
+	transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.shadow {
+	&-angular {
+		filter: drop-shadow(0 0 5px $color-angular);
+	}
+}
+
+.circle {
+		&-angular {
+			animation: anim_circle-angular 1s ease-in-out forwards;
+		}
+}
+
+.progressbar__svg-circle {
+	width: 100%;
+	height: 100%;
+	fill: none;
+	stroke-width: 10;
+	stroke-dasharray: 440;
+	stroke-dashoffset: 440;
+	stroke: hsl(0, 0%, 100%);
+	stroke-linecap: round;
+	transform: translate(5px, 5px); // stroke-width / 2
+}
+
+.progressbar {
+	position: relative;
+	width: 170px;
+	height: 170px;
+	margin: 1em;
+	transform: rotate(-90deg);
+}
+
+.progressbar__svg {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
