@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserService } from 'src/app/public/services/user-service/user.service';
 import { PlayerService } from '../../services/player.service';
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -18,9 +19,10 @@ export class ProfileComponent {
   losses: number;
   ratio: number;
   timeplayed: number;
-  isCurrentUser: boolean;
+  circumference: number = 2 * Math.PI * 52;
 
-  constructor(private authService : AuthService, private userService: UserService, private playerService: PlayerService, private route: ActivatedRoute) { }
+  constructor(private authService : AuthService, private userService: UserService, private playerService: PlayerService, private route: ActivatedRoute) {
+  }
 
   ngOnInit() {
     this.user = this.playerService.user;
@@ -28,51 +30,15 @@ export class ProfileComponent {
     this.timeplayed = this.user.timeplayed;
     this.wins = this.user.wins;
     this.losses = this.user.losses;
-    this.ratio = this.user.ratio;
-    // const username = this.route.snapshot.params['username'];
-    // if (username) {
-    //   // Si le username est présent dans l'URL, récupérez les informations de l'utilisateur correspondant
-    // //  this.user = this.userService.findByUsername(username);
-    //   this.isCurrentUser = false;
-    // } else {
-    //   // Sinon, récupérez les informations de l'utilisateur connecté
-    //   this.user = this.authService.getLoggedInUser();
-    //   this.isCurrentUser = true;
-    //}
+    this.ratio = (this.wins / (this.wins + this.losses));
    }
-
-   getPercentage(): number {
-    const total = this.wins + this.losses;
-    return total === 0 ? 0 : Math.round((this.wins / total) * 100);
-  }
-
-  // Renvoie la couleur de fond de la barre en fonction du pourcentage de victoires
-  getBackgroundColor(): string {
-    const percentage = this.getPercentage();
-    if (percentage >= 50) {
-      return "#4caf50";
-    } else {
-      return "#f44336";
-    }
-  }
-
-  // Renvoie la couleur de la barre en fonction du pourcentage de victoires
-  getCircleColor(): string {
-    const percentage = this.getPercentage();
-    if (percentage >= 50) {
-      return "#f44336";
-    } else {
-      return "#4caf50";
-    }
-  }
-
 
   addWin() {
     this.playerService.addWin(this.user.id).subscribe((updateUser: UserI) => {
       this.user = updateUser;
       this.wins = updateUser.wins;
       this.losses = updateUser.losses;
-      this.ratio = updateUser.ratio;
+      this.ratio = (this.wins / (this.wins + this.losses));
     });
    }
 
@@ -81,7 +47,7 @@ export class ProfileComponent {
       this.user = updateUser;
       this.wins = updateUser.wins;
       this.losses = updateUser.losses;
-      this.ratio = updateUser.ratio;
+      this.ratio = (this.wins / (this.wins + this.losses));
     });
   }
 }

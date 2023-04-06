@@ -6,8 +6,22 @@
     <button (click)="changeUsername()">Change username</button>
     <button (click)="changeEmail()">Change email</button>
     <button (click)="changePwd()">reset password</button>
-    <div class="popup" *ngIf="usernamePopup">
-      <input type="text">
+    <div class="username-popup" *ngIf="usernamePopup">
+      <h1>Please enter new username</h1>
+      <input type="text" placeholder="NEW USERNAME">
+      <button (click)="closePopup(2)">CONFIRM</button>
+    </div>
+    <div class="username-popup" *ngIf="pwdPopup">
+      <h1>Please enter new password</h1>
+      <input type="text" placeholder="NEW PASSWORD">
+      <input type="text"placeholder="CONFIRM NEW PASSWORD">
+      <button (click)="closePopup(1)">CONFIRM</button>
+    </div>
+    <div class="username-popup" *ngIf="emailPopup">
+      <h1>Please enter new email</h1>
+      <input type="text" placeholder="NEW EMAIL">
+      <input type="text" placeholder="CONFIRM NEW EMAIL">
+      <button (click)="closePopup(0)">CONFIRM</button>
     </div>
   </div>
   <div class="skin">

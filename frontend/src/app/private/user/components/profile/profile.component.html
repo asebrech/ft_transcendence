@@ -25,13 +25,12 @@
             <p>{{ timeplayed }}</p>
           </div>
         </div>
-        <div class="progressbar">
-          <svg class="progressbar__svg">
-            <circle cx="80" cy="80" r="70" class="progressbar__svg-circle circle-angular shadow-angular"> </circle>
-          </svg>
-          <span class="progressbar__text shadow-angular">Ratio</span>
-        </div>
-      
+        <div class="dashboard">
+        <svg>
+          <circle class="bg" cx="57" cy="57" r="52"/>
+          <circle class="meter-1" cx="57" cy="57" r="52" [style.stroke-dasharray]="circumference + ' ' + circumference * ratio"/>
+        </svg>
+      </div>
     </div>
     <div class="block">
       <h1>HISTORY</h1>

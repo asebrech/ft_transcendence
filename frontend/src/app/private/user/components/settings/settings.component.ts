@@ -10,10 +10,11 @@ import { CustomValidators } from 'src/app/public/_helpers/custom-validators';
 export class SettingsComponent implements OnInit {
 
   form: FormGroup = new FormGroup ({
-		email: new FormControl(null, [Validators.required, Validators.email]),
+		newEmail: new FormControl(null, [Validators.required, Validators.email]),
 		username: new FormControl(null, [Validators.required]),
-		password: new FormControl(null, [Validators.required]),
-		passwordConfirm: new FormControl(null, [Validators.required])
+    newPassword: new FormControl(null, [Validators.required]),
+    oldPasswordConfirm: new FormControl(null, [Validators.required]),
+		newPasswordConfirm: new FormControl(null, [Validators.required])
 	},
 		{ validators: CustomValidators.passwordsMatching }
 	);
@@ -36,7 +37,12 @@ export class SettingsComponent implements OnInit {
   changeEmail() {
     this.emailPopup = true;
   }
-  closePopup() {
-    this.emailPopup, this.pwdPopup, this.usernamePopup = false;
+  closePopup(num : number) {
+    if (num == 0)
+      this.emailPopup = false;
+    else if (num == 1)
+      this.pwdPopup = false;
+    else
+      this.usernamePopup = false;
   }
 }
