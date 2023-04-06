@@ -90,6 +90,10 @@ export class GameFrontComponent implements OnInit, DoCheck
         }
       });
     })
+    room?.onMessage("end", () =>
+    {
+      this.playScene.destroy(true);
+    });
   }
 
   ngOnInit()

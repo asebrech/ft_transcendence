@@ -1,6 +1,6 @@
-import { inWidth, inHeight, player_left } from "../components/game.front/game.front.component";
+import { player_left } from "../components/game.front/game.front.component";
 import * as Phaser from "phaser";
-import { room } from "../components/game.front/game.front.component";
+import { room } from "../components/live/live.component";
 
 let start : boolean;
 let right_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
@@ -8,8 +8,10 @@ let left_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
 let ball : Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
 let ball_velocity_x : number;
 let ball_velocity_y : number;
+let inWidth : number = 1920;
+let inHeight : number = 1080;
 
-export class PlayScene extends Phaser.Scene 
+export class LiveScene extends Phaser.Scene 
 {
   left_score : number;
   right_score : number;
@@ -41,13 +43,13 @@ export class PlayScene extends Phaser.Scene
   }
 
   
-   getRandomInt(min : number, max: number) 
-   {
+  getRandomInt(min : number, max: number) 
+  {
     min = Math.ceil(min);
     max = Math.floor(max);
     let result = (Math.floor(Math.random() * (max - min)) + min);
     return result
-    }
+  }
 
   async preload() 
   {
@@ -129,11 +131,9 @@ export class PlayScene extends Phaser.Scene
     ////////////////////////////////////////////
     var buttonOn = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
     var buttonOff = this.add.image(inWidth - 30 , 30, 'fullscreenOff', 0).setInteractive().setScrollFactor(0);
-    var readyButton = this.add.image(inWidth / 2 , inHeight / 2, 'readyButton', 0).setInteractive().setScrollFactor(0);
     buttonOff.setVisible(false);
     buttonOff.scale = 0.3;
     buttonOn.scale = 0.3;
-    readyButton.scale = 0.3;
     buttonOn.on('pointerup', function () 
     {
       this.scale.startFullscreen();
@@ -146,94 +146,28 @@ export class PlayScene extends Phaser.Scene
       buttonOn.setVisible(true);
       buttonOff.setVisible(false);
     }, this);
-    readyButton.on('pointerup', function () 
+    room?.onMessage("paddle_left", ({x, y})=>
     {
-      room?.send("ready");
-      readyButton.setVisible(false);
-    }, this);
-    //////////////////////////////////////////
-    this.input.on('pointermove', function (pointer)
+      left_pad.setVisible(true).setPosition(x, y);
+    })
+    room?.onMessage("paddle_right", ({x, y}) =>
     {
-      if(player_left == true)
-      {
-        left_pad.setVisible(true).setPosition(30, pointer.y);
-        room?.send("move_left_pad", {x : left_pad.x, y : left_pad.y});
-      }
-      else if (player_left == false)
-      {
-        right_pad.setVisible(true).setPosition(inWidth - 30, pointer.y);
-        room?.send("move_right_pad", {x : right_pad.x, y :right_pad.y});
-      }
-      room?.onMessage("paddle_left", ({x, y})=>
-      {
-        if(player_left == false)
-        {
-          left_pad.setVisible(true).setPosition(x, y);
-        }
-      })
-      room?.onMessage("paddle_right", ({x, y}) =>
-      {
-        if(player_left == true)
-        {
-          right_pad.setVisible(true).setPosition(x, y);
-        }
-      })
-    }, this);
-    room?.onMessage("launch", ({x, y}) =>{
-        ball.setVelocity(x, y);
-        start = true;
-    });
+      right_pad.setVisible(true).setPosition(x, y);
+    })
   }
-  
+
   override update()
   {
-    if (start == true)
-    room?.send("ball_position", ({x : ball.x, y : ball.y}))
-
     room?.onMessage("set_ball_position", ({x, y})=>
     {
-      if(player_left == false)
-      {
-        let newX = Phaser.Math.Interpolation.Linear([ball.x, x], 1);
-        let newY = Phaser.Math.Interpolation.Linear([ball.y, y], 1);
-        ball.setPosition(newX, newY);
-      }
+      ball.setPosition(x, y)
     })
-    if (ball.x > inWidth || ball.x < 0)
-    {
-      if (player_left == true)
-      {
-        if (ball.x > inWidth)
-        {
-          this.right_score += 1;
-          this.score.setText(this.left_score + ' | ' + this.right_score)
-        }
-        else
-        {
-          this.left_score += 1;
-          this.score.setText(this.left_score + ' | ' + this.right_score)
-        }
-        ball.setPosition(inWidth / 2, inHeight / 2);
-        room?.send("score_update", ({score_left : this.left_score, score_right : this.right_score}));
-      };
-    }
     room?.onMessage("updated_score", (message) =>
     {
-      if (player_left == false)
-      {
-        this.left_score = message.s_l;
-        this.right_score = message.s_r;
-        this.score.setText(this.left_score + ' | ' + this.right_score)
-      }
+      this.left_score = message.s_l;
+      this.right_score = message.s_r;
+      this.score.setText(this.left_score + ' | ' + this.right_score);
     });
-
-    if (player_left == true)
-    {
-      if ((this.right_score || this.left_score) > 9)
-      {
-        room?.send("game_finished", ({score_left : this.left_score, score_right : this.right_score}));
-      }
-    }
     ///////////////////////////////////////////////////////////////
     this.bg.x += 1;
     this.bg.y += 1;
@@ -242,5 +176,5 @@ export class PlayScene extends Phaser.Scene
     this.stars.tilePositionX += 1;
     this.stars.tilePositionY += 1;
     /////////////////////////////////////////////////////////////
-  }
+  } 
 }

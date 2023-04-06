@@ -5,12 +5,13 @@
         <img class="sat" src="../../../../../assets/images/satellite_1.png" alt="satellite_logo">
     </div>
     <div class="line-sep"></div>
-    <div (click)="this.getAvailableRooms()" class="room">
+    <div id="liveScreen" style="background-color: red;"></div>
+    <div *ngFor="let roomId of myArray" class="room" (click)="joinLive(roomId.roomId)">
         <div class="red-dot red_dot_animation"></div>
-        <p class="user-name">test <span> VS </span> test</p>
+        <p class="user-name">{{ roomId.player_left }}<span> VS </span> {{ roomId.player_right}}</p>
         <div class="score-board">
-            <span class="s_l">4</span>
-            <span class="s_r">10</span>
+            <span class="s_l">{{roomId.score_left}}</span>
+            <span class="s_r">{{roomId.score_right}}</span>
         <div class="line-score"></div>
         </div>
     </div>
