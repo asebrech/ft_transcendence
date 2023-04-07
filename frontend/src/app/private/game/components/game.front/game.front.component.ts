@@ -98,9 +98,15 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnInit()
   {
+	  this.starsService.setActive(false);
+    ///////////////////////
+    let audio = new Audio()
+    audio.src = "../../../../assets/background.wav";
+    audio.load();
+    audio.play();
+    //////////////////////
     inWidth = 1920;
     inHeight = 1080;
-	  this.starsService.setActive(false);
     client = new Client("ws://" + location.hostname + ":3000");
     this.playSceneConfig = {
       type: Phaser.AUTO,

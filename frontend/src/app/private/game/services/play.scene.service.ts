@@ -25,6 +25,18 @@ export class PlayScene extends Phaser.Scene
   last_bg_y : number;
   speed : number;
   camera1 : Phaser.Cameras.Scene2D.Camera;
+  particle : Phaser.GameObjects.Particles.ParticleEmitterManager;
+  emitter : any;
+  positions: number[][] = [
+    [5345, 327], // 0 
+    [6369, 1351],// 1
+    [512, 680], // 2
+    [2833, 1246], // 3
+    [3875, 531], // 4
+    [908, 3922], // 5
+    [3140, 2974], // 6 
+    [6052, 4280] // 7
+  ];
 
   constructor() 
   {
@@ -35,20 +47,21 @@ export class PlayScene extends Phaser.Scene
     ball_velocity_x = 300;
     ball_velocity_y = 300;
     ///////////////TODO : REGLER L APPARITION ALEATOIR
-    this.last_bg_x = 5345 + 1024;
-    this.last_bg_y = 327 + 1024;
+    let pos = this.getRandomInt(0, 7);
+    this.last_bg_x = this.positions[pos][0];
+    this.last_bg_y = this.positions[pos][1];
     this.speed = 300;
   }
-
   
-   getRandomInt(min : number, max: number) 
-   {
+  
+  getRandomInt(min : number, max: number) 
+  {
     min = Math.ceil(min);
     max = Math.floor(max);
     let result = (Math.floor(Math.random() * (max - min)) + min);
     return result
-    }
-
+  }
+  
   async preload() 
   {
     this.load.image('right_pad', 'assets/images/pad.png');
@@ -61,11 +74,13 @@ export class PlayScene extends Phaser.Scene
     this.load.image('fullscreen', 'assets/images/fullscreenOff.png');
     this.load.image('fullscreenOff', 'assets/images/fullscreen.png');
     this.load.image('readyButton', 'assets/images/readyButton.png');
+    this.load.image('blue', 'assets/images/blue.png');
+    this.load.audio('collide', 'assets/collisionSound.wav');
   }
-
+  
   async create() 
   {
-    
+    let collisionSound = this.sound.add('collide');
     //  World size is 8000 x 6000
     this.bg = this.add.tileSprite(this.last_bg_x, this.last_bg_y, inWidth, inHeight, 'background');
     //  Add our planets, etc
@@ -92,11 +107,11 @@ export class PlayScene extends Phaser.Scene
     this.camera1.startFollow(this.bg)
     this.camera1.centerOn(inWidth,inHeight);
     //////////////////////////////////////////////////    
-    this.score = this.add.text(inWidth / 2, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'}).setScrollFactor(0);
+    this.score = this.add.text(inWidth / 2 - 30, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'}).setScrollFactor(0);
     this.wall_bottom = this.add.rectangle(inWidth / 2, -5, inWidth, 10 , 0xff0000).setScrollFactor(0);
     this.wall_top = this.add.rectangle(inWidth / 2, inHeight + 5, inWidth, 10 , 0xff0000).setScrollFactor(0);
-    right_pad = this.physics.add.image(inWidth - 30, 350, 'right_pad').setCollideWorldBounds(true).setScrollFactor(0);
-    left_pad = this.physics.add.image(30, 350, 'left_pad').setCollideWorldBounds(true).setScrollFactor(0);
+    right_pad = this.physics.add.image(inWidth - 30, inHeight / 2, 'right_pad').setCollideWorldBounds(true).setScrollFactor(0);
+    left_pad = this.physics.add.image(30, inHeight / 2, 'left_pad').setCollideWorldBounds(true).setScrollFactor(0);
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
     //////////////////////////////////////////////////
     ball.scale = 0.03;
@@ -119,13 +134,36 @@ export class PlayScene extends Phaser.Scene
     this.physics.add.collider(left_pad, ball, () =>
     {
       this.speed += 100;
+      collisionSound.play();
+      room?.send("collision");
       ball.body.velocity.normalize().scale(this.speed);
     });
     this.physics.add.collider(right_pad, ball, () =>
     {
       this.speed += 100;
+      collisionSound.play();
+      room?.send("collision");
       ball.body.velocity.normalize().scale(this.speed);
     });
+    
+    room?.onMessage("collisionSound", (message)=>
+    {
+      if( player_left == false)
+        collisionSound.play();
+    })
+
+    this.particle = this.add.particles('space').setInteractive();
+
+    this.emitter = this.particle.createEmitter({
+      frame: 'blue',
+      speed: ball.body.speed,
+      lifespan: 400,
+      alpha: 300,
+      scale: { start: 1.0, end: 0 },
+      blendMode: 'ADD'
+    });
+
+
     ////////////////////////////////////////////
     var buttonOn = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
     var buttonOff = this.add.image(inWidth - 30 , 30, 'fullscreenOff', 0).setInteractive().setScrollFactor(0);
@@ -133,7 +171,7 @@ export class PlayScene extends Phaser.Scene
     buttonOff.setVisible(false);
     buttonOff.scale = 0.3;
     buttonOn.scale = 0.3;
-    readyButton.scale = 0.3;
+    readyButton.scale = 0.5;
     buttonOn.on('pointerup', function () 
     {
       this.scale.startFullscreen();
@@ -188,7 +226,7 @@ export class PlayScene extends Phaser.Scene
   override update()
   {
     if (start == true)
-    room?.send("ball_position", ({x : ball.x, y : ball.y}))
+      room?.send("ball_position", ({x : ball.x, y : ball.y}))
 
     room?.onMessage("set_ball_position", ({x, y})=>
     {
@@ -227,6 +265,10 @@ export class PlayScene extends Phaser.Scene
       }
     });
 
+    if ((this.right_score || this.left_score) > 5)
+    {
+      this.emitter.startFollow(ball).setScrollFactor(0);
+    }
     if (player_left == true)
     {
       if ((this.right_score || this.left_score) > 9)
