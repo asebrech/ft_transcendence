@@ -2,9 +2,9 @@
 <div class="top">
 	<div class="main">
 		<img src="../../../../../../assets/images/transmitter_1.png">
-		<div class="header">
-			<div class="username">
-				<div [ngClass]="{'hidden': !dashService.channel}" >
+		<div class="header" [ngClass]="{'hidden': placeholderText === null}">
+			<div class="username" >
+				<div  >
 
 					<input class="channelName" type="text" #inputElement [placeholder]="placeholderText"
 					[(ngModel)]="inputText" (focus)="onFocus()" (blur)="validerPlaceholder(inputElement)"

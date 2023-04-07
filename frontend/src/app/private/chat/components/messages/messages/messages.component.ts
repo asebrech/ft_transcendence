@@ -31,7 +31,7 @@ export class MessagesComponent implements OnInit {
 	constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef,
 		private elementRef: ElementRef, public chatService: ChatService) {
 
-		this.ChannelName$.subscribe(name => this.placeholderText = name.name);
+		this.ChannelName$.subscribe(name =>{if(name){ this.placeholderText = name.name}});
 	}
 
 	@HostListener('document:click', ['$event'])
@@ -46,7 +46,7 @@ export class MessagesComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.chatService.getMessages().subscribe();
-		this.ChannelName$.subscribe(name => this.ajusterLargeurInput(this.inputElementRef.nativeElement, name.name));
+		this.ChannelName$.subscribe(name =>{ if(name){this.ajusterLargeurInput(this.inputElementRef.nativeElement, name.name)}});
 		this.chatService.getSelectedRoom().subscribe(() => this.placeTmp = 'toto');
 		this.messages$.pipe(
 			tap(() => {
@@ -68,8 +68,11 @@ export class MessagesComponent implements OnInit {
 	}
 
 	onSubmit() {
-		this.chatService.sendMessage({ text: this.message, room: this.chatService.selectedRoom });
-		this.message = '';
+		if (this.message) {
+			
+			this.chatService.sendMessage({ text: this.message, room: this.chatService.selectedRoom });
+			this.message = '';
+		}
 		this.messages$.pipe(
 			tap(() => {
 				setTimeout(() => {

@@ -40,6 +40,9 @@ export class ChatService {
 			this.selectedRoom = object.room;
 			this.roomName.next(object.room);
 			this.messages.next(object.messages);
+			// localStorage.setItem('room', JSON.stringify(object));
+			if (this.selectedRoom)
+				this.listMember();
 		}));
 	}
 
