@@ -27,6 +27,8 @@ export class LiveScene extends Phaser.Scene
   last_bg_y : number;
   speed : number;
   camera1 : Phaser.Cameras.Scene2D.Camera;
+  particle : Phaser.GameObjects.Particles.ParticleEmitterManager;
+  emitter : any;
 
   constructor() 
   {
@@ -63,11 +65,13 @@ export class LiveScene extends Phaser.Scene
     this.load.image('fullscreen', 'assets/images/fullscreenOff.png');
     this.load.image('fullscreenOff', 'assets/images/fullscreen.png');
     this.load.image('readyButton', 'assets/images/readyButton.png');
+    this.load.image('blue', 'assets/images/blue.png');
+    this.load.audio('collide', 'assets/collisionSound.wav');
   }
 
   async create() 
   {
-    
+    let collisionSound = this.sound.add('collide');
     //  World size is 8000 x 6000
     this.bg = this.add.tileSprite(this.last_bg_x, this.last_bg_y, inWidth, inHeight, 'background');
     //  Add our planets, etc
@@ -128,6 +132,23 @@ export class LiveScene extends Phaser.Scene
       this.speed += 100;
       ball.body.velocity.normalize().scale(this.speed);
     });
+
+    room?.onMessage("collisionSound", (message)=>
+    {
+      if( player_left == false)
+        collisionSound.play();
+    })
+
+    this.particle = this.add.particles('space').setInteractive();
+    this.emitter = this.particle.createEmitter({
+      frame: 'blue',
+      speed: ball.body.speed,
+      lifespan: 400,
+      alpha: 300,
+      scale: { start: 1.0, end: 0 },
+      blendMode: 'ADD'
+    });
+
     ////////////////////////////////////////////
     var buttonOn = this.add.image(inWidth - 30 , 30, 'fullscreen', 0).setInteractive().setScrollFactor(0);
     var buttonOff = this.add.image(inWidth - 30 , 30, 'fullscreenOff', 0).setInteractive().setScrollFactor(0);

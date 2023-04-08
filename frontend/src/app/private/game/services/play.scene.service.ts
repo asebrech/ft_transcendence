@@ -1,6 +1,7 @@
 import { inWidth, inHeight, player_left } from "../components/game.front/game.front.component";
 import * as Phaser from "phaser";
 import { room } from "../components/game.front/game.front.component";
+import { finished } from "stream";
 
 let start : boolean;
 let right_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
@@ -104,7 +105,7 @@ export class PlayScene extends Phaser.Scene
     });
     this.stars = this.add.tileSprite(0, 0, inWidth, inHeight, 'stars').setScrollFactor(0);
     this.camera1 = this.cameras.add(0,0, inWidth, inHeight);
-    this.camera1.startFollow(this.bg)
+    this.camera1.startFollow(this.bg);
     this.camera1.centerOn(inWidth,inHeight);
     //////////////////////////////////////////////////    
     this.score = this.add.text(inWidth / 2 - 30, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'}).setScrollFactor(0);
@@ -131,13 +132,18 @@ export class PlayScene extends Phaser.Scene
     //////////////////////////////////////////////////
     this.physics.add.collider(ball, this.wall_bottom); // Ajoute la collision entre l'object cree avec phaser et un autre objet
     this.physics.add.collider(ball, this.wall_top);
+
     this.physics.add.collider(left_pad, ball, () =>
     {
-      this.speed += 100;
+      if (this.speed < 600)
+      {
+        this.speed += 100;
+        ball.body.velocity.normalize().scale(this.speed);
+      }
       collisionSound.play();
       room?.send("collision");
-      ball.body.velocity.normalize().scale(this.speed);
     });
+
     this.physics.add.collider(right_pad, ball, () =>
     {
       this.speed += 100;
@@ -145,7 +151,7 @@ export class PlayScene extends Phaser.Scene
       room?.send("collision");
       ball.body.velocity.normalize().scale(this.speed);
     });
-    
+
     room?.onMessage("collisionSound", (message)=>
     {
       if( player_left == false)
@@ -153,7 +159,6 @@ export class PlayScene extends Phaser.Scene
     })
 
     this.particle = this.add.particles('space').setInteractive();
-
     this.emitter = this.particle.createEmitter({
       frame: 'blue',
       speed: ball.body.speed,
@@ -243,12 +248,12 @@ export class PlayScene extends Phaser.Scene
       {
         if (ball.x > inWidth)
         {
-          this.right_score += 1;
+          this.left_score += 1;
           this.score.setText(this.left_score + ' | ' + this.right_score)
         }
         else
         {
-          this.left_score += 1;
+          this.right_score += 1;
           this.score.setText(this.left_score + ' | ' + this.right_score)
         }
         ball.setPosition(inWidth / 2, inHeight / 2);
@@ -273,7 +278,10 @@ export class PlayScene extends Phaser.Scene
     {
       if ((this.right_score || this.left_score) > 9)
       {
-        room?.send("game_finished", ({score_left : this.left_score, score_right : this.right_score}));
+        if (this.left_score > this.right_score)
+          room?.send("game_finished", ({score_left : this.left_score, score_right : this.right_score, winner : "won"}));
+        else
+          room?.send("game_finished", ({score_left : this.left_score, score_right : this.right_score, winner : "lost"}));
       }
     }
     ///////////////////////////////////////////////////////////////

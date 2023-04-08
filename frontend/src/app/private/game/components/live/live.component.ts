@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit, ɵɵqueryRefresh } from '@angular/core';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
 import { Client } from 'colyseus.js';
@@ -31,6 +31,8 @@ export class LiveComponent implements OnInit, DoCheck {
   inHeight : number = 1080;
   liveScene: Phaser.Game;
   liveSceneConfig: Phaser.Types.Core.GameConfig;
+  watchingLive : boolean;
+  screen : boolean;
 
 
   ngDoCheck() 
@@ -38,12 +40,24 @@ export class LiveComponent implements OnInit, DoCheck {
     room?.onMessage("end", () =>
     {
       this.liveScene.destroy(true);
-    });
+      this.screen = false;
+      this.watchingLive = true;
 
+    });
+    room?.onMessage("emptyRoom", () =>
+    {
+      this.liveScene.destroy(true);
+      this.screen = false;
+      this.watchingLive = true;
+    });
   }
   
   async ngOnInit()
   {
+    this.starsService.setActive(false);
+
+    this.screen = false;
+    this.watchingLive = true;
     this.showLive = 1;
     this.showGame = 0;
     this.client = new Client("ws://" + location.hostname + ":3000");
@@ -66,7 +80,6 @@ export class LiveComponent implements OnInit, DoCheck {
     };
 
     this.getAvailableRooms();
-    this.starsService.setActive(false);    
   }
   
   async getAvailableRooms()
@@ -74,10 +87,10 @@ export class LiveComponent implements OnInit, DoCheck {
     const rooms = await this.client.getAvailableRooms("my_room");
     if(rooms.length > 0)
     {
+      this.myArray = [];
       console.log("test");
       for (let i : number = 0 ; i < rooms.length; i++)
       {
-        console.log("myRoom")
         const metadata = rooms[i].metadata;
         this.myArray.push({
           roomId: rooms[i].roomId,
@@ -94,12 +107,21 @@ export class LiveComponent implements OnInit, DoCheck {
   {
     try {
       room = await this.client?.joinById(roomId, { });
-      this.liveScene = new Phaser.Game(this.liveSceneConfig);
+      this.screen = true;
+      this.watchingLive = false;
+      setTimeout(() => {
+        this.liveScene = new Phaser.Game(this.liveSceneConfig);
+      }, 2000);
       console.log(room);
     } catch (e) {
       console.error("join error", e);
     }  
   }
+  refresh()
+  {
+    this.getAvailableRooms();
+  }
 }
+
 
 

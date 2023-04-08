@@ -3,6 +3,7 @@
   <div *ngIf="checkIfGameFoundRet()" #gameContainer id="gameContainer">
   </div>
   <button *ngIf="callButtonStatus()" (click)="launchBotPlay()" class="playBotScene">Play vs Bot while waiting</button>
+  <app-end-game-page *ngIf="gameEnded"></app-end-game-page>
   <app-stars-blow *ngIf="switchToBotPlay()"></app-stars-blow>
 </div>
 

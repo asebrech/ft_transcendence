@@ -7,6 +7,7 @@ import { PrivateModule } from '../private.module';
 import { LiveComponent } from './components/live/live.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { StarsBlowComponent } from './components/stars-blow/stars.blow/stars.blow.component';
+import { EndGamePageComponent } from './components/end-game-page/end-game-page.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { StarsBlowComponent } from './components/stars-blow/stars.blow/stars.blo
 	GameFrontComponent,
  LiveComponent,
  SettingsComponent,
- StarsBlowComponent
+ StarsBlowComponent,
+ EndGamePageComponent
   ],
   imports: [
     CommonModule,

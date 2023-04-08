@@ -16,6 +16,7 @@ export let client : Client;
 export let inWidth : number;
 export let inHeight : number;
 export let player_left : boolean;
+export let gameWon : boolean;
 
 @Component({
   selector: 'app-game.front',
@@ -39,6 +40,8 @@ export class GameFrontComponent implements OnInit, DoCheck
   botGameLaunched = false;
   user : any ;
   username : string;
+  gameEnded : boolean;
+
   
   constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService) 
   {
@@ -90,14 +93,33 @@ export class GameFrontComponent implements OnInit, DoCheck
         }
       });
     })
-    room?.onMessage("end", () =>
+    room?.onMessage("end", (message) =>
     {
+      if (message == "won")
+      {
+        if (player_left == true)
+          gameWon = true;
+        else
+          gameWon = false;
+        this.gameEnded = true;
+      }
+      else if (message == "lost")
+      {
+        if (player_left == true)
+          gameWon = false;
+        else
+          gameWon = true;
+        this.gameEnded = true;
+      }
       this.playScene.destroy(true);
     });
   }
 
   ngOnInit()
   {
+    gameWon = false;
+    ///////////////////////
+    this.gameEnded = false;
 	  this.starsService.setActive(false);
     ///////////////////////
     let audio = new Audio()

@@ -1,0 +1,24 @@
+<div class="main">
+    <!-- IN CASE OF WIN -->
+    <div *ngIf="WonGame" class="resultWin"><h1>{{resultWin}}</h1></div>
+    <!-- IN CASE OF LOSE -->
+    <div *ngIf="LostGame" class="resultLose"><h1>{{resultLose}}</h1></div>
+
+    <div class="levelUP">
+        <h1 class="pop-outin">YOUR NEW RANK !</h1>
+        <div class="newLevel">LEVEL {{level}}</div>
+        <!-- IN CASE OF WIN -->
+        <div *ngIf="WonGame" class="container">
+            <div #progressBar class="skills xp_up"></div>
+        </div>
+        <!-- IN CASE OF LOSE -->
+        <div *ngIf="LostGame" class="container">
+            <div #degressBar class="skills xp_down"></div>
+        </div>
+    </div>
+
+   <div class="displayStats">
+       <div class="opponentInfo"><p class="myName"> {{you}} </p><p class="myScore"> {{your_score}} </p> </div>
+       <div class="myInfo"> <p class="opponentName">{{opponent}}</p> <p class="opponentScore">{{opponent_score}}</p> </div>
+   </div>
+</div>

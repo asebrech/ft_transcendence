@@ -12,6 +12,7 @@ export class MyRoom extends Room<Schema>
   right_score : number = 0;
   left_score : number = 0;
   rdyPlayer = 2;
+  playing : number = 2;
 
   constructor() {
     super();
@@ -97,7 +98,6 @@ export class MyRoom extends Room<Schema>
       }
     });
 
-
     this.onMessage("ready" , (client, message) =>
     {
       this.rdyPlayer--;
@@ -135,7 +135,7 @@ export class MyRoom extends Room<Schema>
     });
     this.onMessage("game_finished", (client, message)=>
     {
-      this.broadcast("end", ({}));
+      this.broadcast("end", (message.winner));
     });
     this.onMessage("score_update", (client , message) =>
     {
@@ -150,8 +150,14 @@ export class MyRoom extends Room<Schema>
   // When a client leaves the room
   onLeave (client: Client, consented: boolean) 
   {
+    if (player.get(client.sessionId) == "player_left" || player.get(client.sessionId) == "player_right")
+    {
+      this.playing--;
+    }
     client.leave();
     player.delete(client.sessionId);
+    if (this.playing == 0)
+      this.broadcast("emptyRoom");
     console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length)
     //appeler service pour rentre les donner de la partie.
   }
