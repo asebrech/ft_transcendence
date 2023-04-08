@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserService } from 'src/app/public/services/user-service/user.service';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-friends',
@@ -18,8 +19,12 @@ export class FriendsComponent implements OnInit {
   resultats: string[] = [];
   username: string;
   message : string;
+  showContextMenu: boolean = false;
+  contextMenuTop: number = 0;
+  contextMenuLeft: number = 0;
+  isMyFriend: boolean = false;
 
-  constructor(private authService: AuthService, private userService: UserService) { }
+  constructor(private authService: AuthService, private userService: UserService, private route : Router) { }
 
   ngOnInit(): void {
     if (!this.amis.length)
@@ -34,7 +39,26 @@ export class FriendsComponent implements OnInit {
     this.resultats = [];
   }
 
-  test() {
-    console.log("ca marche");
+  goToProfileOf(user: string) {
+    this.route.navigate(['/private/user/profile', user]);
+  }
+
+  onContextMenu(event: MouseEvent){
+    event.preventDefault();
+    this.showContextMenu = true;
+    this.contextMenuTop = event.clientY;
+    this.contextMenuLeft = event.clientX;
+  }
+
+  option1() {
+    console.log("ajouter un ami")
+  }
+
+  option2() {
+    console.log("supprimer ami");
+  }
+
+  option3() {
+    console.log("envoyer msg");
   }
 }

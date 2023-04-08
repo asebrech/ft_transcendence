@@ -24,11 +24,17 @@
     <p *ngIf="message">{{message}}</p>
     <div class="main">
       <ul>
-        <li *ngFor="let user of amis; let i = index" (click)="test()">
+        <li *ngFor="let user of amis; let i = index" (click)="goToProfileOf(user)" (contextmenu)="onContextMenu($event)">
           <img src="../../../../../../assets/images/astronaut.png">
           {{ amis[ i % amis.length] }}
         </li>
         </ul>
     </div>
   </div>
+</div>
+
+<div *ngIf="showContextMenu" class="context-menu" [style.top.px]="contextMenuTop" [style.left.px]="contextMenuLeft">
+  <button *ngIf="isMyFriend" (click)="option1()">add friend</button>
+  <button (click)="option2()">send message</button>
+  <button (click)="option3()">delete friend</button>
 </div>

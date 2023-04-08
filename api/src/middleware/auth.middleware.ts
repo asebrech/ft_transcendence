@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Injectable, NestMiddleware } from "@nestjs/common";
 import { NextFunction } from "express";
 import { AuthService } from "src/auth/service/auth.service";

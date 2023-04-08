@@ -1,4 +1,4 @@
-import { Ball_dataService } from './game/rooms/ball_data.service';
+/* eslint-disable prettier/prettier */
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,7 +7,6 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
-import { ChatModule } from './chat/chat.module';
 
 @Module({
 	imports: [
@@ -23,8 +22,7 @@ import { ChatModule } from './chat/chat.module';
 		ChatModule
 	],
 	controllers: [AppController],
-	providers: [
-		Ball_dataService, AppService],
+	providers: [AppService],
 })
 export class AppModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {

@@ -23,7 +23,7 @@ const routes: Routes = [
 		redirectTo: 'game',
 		pathMatch: 'full'
 	}
-	
+
 ];
 
 @NgModule({

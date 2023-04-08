@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserI } from 'src/user/model/user.interface';
@@ -83,5 +84,6 @@ export class AuthService {
 			.toString("hex")
 			.slice(0, length);
 	}
+	
 
 }

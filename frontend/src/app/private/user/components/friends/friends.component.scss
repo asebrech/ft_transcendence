@@ -31,7 +31,7 @@ h1 {
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  padding-bottom: 18em;
+  padding-bottom: 12em;
 }
 
 img {
@@ -134,6 +134,7 @@ align-items: center;
 	align-items: center;
 	margin-bottom:10px;
   flex-basis: 20%;
+  font-family: 'nasalization';
 	//background-color: grey;
 }
 
@@ -149,4 +150,47 @@ align-items: center;
 	margin-right: 15px;
 }
 
+.context-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #2f3136;
+  //color:#2b2d31;
+  border: 1px solid #4f545c;
+  border-radius: 3px;
+  padding: 5px;
+  z-index: 1;
+}
 
+/* CSS pour les éléments du menu */
+.context-menu button {
+  display: flex;
+  align-items:flex-start;
+  border: 1px solid #4f545c;
+  border-radius: 3px;
+  color: white;
+  background-color: #2b2d31;
+  font-family: 'nasalization';
+  padding: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.context-menu button:hover {
+  background-color: #40444b;
+}
+
+.context-menu button:not(:first-child) {
+border-top: 1px solid #4f545c;
+  margin-top: 4px;
+  padding-top: 4px;
+
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+}

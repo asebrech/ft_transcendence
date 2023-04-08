@@ -1,8 +1,8 @@
-import { ConnectedUserEntity } from "src/chat/model/connected-user/connected-user.entity";
-import { JoinedRoomEntity } from "src/chat/model/joined-room/joined-room.entity";
-import { MessageEntity } from "src/chat/model/message/message.entity";
-import { RoomEntity } from "src/chat/model/room/room.entity";
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+/* eslint-disable prettier/prettier */
+import { userInfo } from "os";
+import { BeforeInsert, BeforeUpdate, Column, Double, Entity, ManyToMany, ManyToOne, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { UserI } from "./user.interface";
+import { ParseFloatPipe } from "@nestjs/common";
 
 @Entity()
 export class UserEntity {
@@ -16,7 +16,7 @@ export class UserEntity {
 	@Column({unique: true})
 	email: string;
 
-	@Column({select: false})
+	@Column({})
 	password: string;
 
 	@Column({default: false})
@@ -24,23 +24,25 @@ export class UserEntity {
 
 	@Column({select: false, default: null})
 	google_auth_secret: string;
-	
-	@ManyToMany(() => RoomEntity, room => room.users)
-	rooms: RoomEntity[];
 
-	@OneToMany(() => ConnectedUserEntity, connection => connection.user)
-	connections: ConnectedUserEntity[];
+	@Column({default: ''})
+	profilePicture: string;
 
-	@OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
-	joinedRooms: JoinedRoomEntity[];
+	@Column({default: 0})
+	wins : number;
 
-	@OneToMany(() => MessageEntity, message => message.user)
-	messages: MessageEntity[] ;
+	@Column({default: 0})
+	losses : number;
 
-	@BeforeInsert()
-	@BeforeUpdate( )
-	emailToLowerCase() {
-		this.email = this.email.toLocaleLowerCase();
-		this.username = this.username.toLocaleLowerCase(); 
-	}
+	@Column('double precision', {default: 0})
+	ratio : number;
+
+	@Column({default: 0})
+	timeplayed : number;
+
+	@Column({default: 0})
+	level: number;
+
+	@ManyToOne(() => UserEntity)
+	friend : UserEntity[];
 }

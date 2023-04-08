@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SettingsComponent } from '../user/components/settings/settings.component';
 import { GameFrontComponent } from './components/game.front/game.front.component';
 import { LiveComponent } from './components/live/live.component';
-import { SettingsComponent } from './components/settings/settings.component';
 
 const routes: Routes = [
 	{
@@ -12,10 +12,6 @@ const routes: Routes = [
 	{
 		path: 'live',
 		component: LiveComponent
-	},
-	{
-		path: 'settings',
-		component: SettingsComponent
 	},
 	{
 		path: '**',
