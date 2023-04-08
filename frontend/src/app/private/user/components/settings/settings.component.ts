@@ -48,7 +48,7 @@ export class SettingsComponent implements OnInit {
     this.emailPopup = true;
   }
 
-  closePopup(num : number, old: string , newO: string): void{
+  closePopup(num : number, old: string ,newO: string): void{
     if (num == 0) {
       this.playerService.updateEmail(this.user.id, old, newO).pipe(
         catchError(error => {
@@ -75,7 +75,7 @@ export class SettingsComponent implements OnInit {
       this.pwdPopup = false;
     }
     else {
-      this.playerService.updateUsername(this.user.id, old, newO).pipe(
+      this.playerService.updateUsername(this.user.id, newO).pipe(
         catchError(error => {
           console.log('An error occurred:', error);
           throw('Something went wrong; please try again later.');

@@ -2,7 +2,7 @@
 <div class="general">
   <div class="container">
     <div class="block">
-      <h1>{{ user.username}}</h1>
+      <h1>{{ (user$ | async).username}}</h1>
       <img class="profile" src="../../../../../assets/images/astronaut.png" alt="astronaut">
       <label>Level</label>
       <progress max="100" value="70">
@@ -14,22 +14,22 @@
         <div class="row">
           <div class="col">
             <h2>VICTORY</h2>
-            <p>{{wins}}</p>
+            <p>{{ (user$ | async).wins}}</p>
           </div>
           <div class="col">
             <h2>LOSS</h2>
-            <p>{{losses}}</p>
+            <p>{{(user$ | async).losses}}</p>
           </div>
           <div class="col">
             <h2>PLAYTIME</h2>
-            <p>{{ timeplayed }}</p>
+            <p>{{ (user$ | async).timeplayed }}</p>
           </div>
         </div>
         <div class="dashboard">
-        <svg>
-          <circle class="bg" cx="57" cy="57" r="52"/>
-          <circle class="meter-1" cx="57" cy="57" r="52" [style.stroke-dasharray]="circumference + ' ' + circumference * ratio"/>
-        </svg>
+          <div class="stat-bar">
+            <div class="losses" [style.width.%]="lossPercentage"></div>
+            <div class="wins" [style.width.%]="winPercentage"></div>
+          </div>
       </div>
     </div>
     <div class="block">

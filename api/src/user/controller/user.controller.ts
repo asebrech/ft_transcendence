@@ -129,14 +129,14 @@ export class UserController {
 
 	@Put(':id/change-username')
 	//@UseGuards(JwtAuthGuard)
-	async changeUsername(@Param('id') userId : number, @Body() { oldUsername, newUsername }: ChangeUsernameDto) {
-		await this.userService.updateUsername(userId, oldUsername, newUsername);
+	async changeUsername(@Param('id') userId : number, @Body() { newUsername }: ChangeUsernameDto) {
+		await this.userService.updateUsername(userId, newUsername);
 	}
 
 	@Put(':id/change-email')
 	//@UseGuards(JwtAuthGuard)
-	async changeEmail(@Param('id') userId : number, @Body() { oldEmail, newEmail }: ChangeEmailDto) {
-		await this.userService.updateEmail(userId, oldEmail, newEmail);
+	async changeEmail(@Param('id') userId : number, @Body() { newEmail }: ChangeEmailDto) {
+		await this.userService.updateEmail(userId, newEmail);
 	}
 
 	@Post(':id/add-friend')	

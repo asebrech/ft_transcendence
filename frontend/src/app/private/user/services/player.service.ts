@@ -14,6 +14,13 @@ export class PlayerService {
 
   constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient) { }
 
+
+  getUser(): Observable<UserI> {
+    const userId = this.authService.getLoggedInUser().id;
+    return this.httpClient.get<UserI>(`/api/users/${userId}`);
+  }
+
+
   addWin(id: number) {
     return this.httpClient.post(`api/users/${id}/addwins/`, null);
   }
@@ -30,8 +37,8 @@ export class PlayerService {
     return this.httpClient.put<UserI>(`api/users/${userId}/change-email`,{oldEmail, newEmail});
   }
   
-  updateUsername(userId: number, oldUsername: string, newUsername: string): Observable<UserI> {
-    return this.httpClient.put<UserI>(`api/users/${userId}/change-username`,{oldUsername, newUsername});
+  updateUsername(userId: number, newUsername: string): Observable<UserI> {
+    return this.httpClient.put<UserI>(`api/users/${userId}/change-username`,{newUsername});
   }
   
 }

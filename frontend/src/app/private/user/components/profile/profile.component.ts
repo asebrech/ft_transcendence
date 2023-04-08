@@ -4,6 +4,7 @@ import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserService } from 'src/app/public/services/user-service/user.service';
 import { PlayerService } from '../../services/player.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -13,41 +14,33 @@ import { PlayerService } from '../../services/player.service';
 })
 
 export class ProfileComponent {
-  user : UserI;
+  user$ : Observable<UserI>;
   username : string;
   wins: number;
   losses: number;
   ratio: number;
   timeplayed: number;
-  circumference: number = 2 * Math.PI * 52;
+  winPercentage: number;
+  lossPercentage: number;
 
   constructor(private authService : AuthService, private userService: UserService, private playerService: PlayerService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.user = this.playerService.user;
-    this.username = this.user.username;
-    this.timeplayed = this.user.timeplayed;
-    this.wins = this.user.wins;
-    this.losses = this.user.losses;
-    this.ratio = (this.wins / (this.wins + this.losses));
+    this.user$ = this.playerService.getUser();
+    this.winPercentage = (this.wins / (this.wins + this.losses)) * 100;
+    this.lossPercentage = (this.losses / (this.wins + this.losses)) * 100;
    }
 
   addWin() {
-    this.playerService.addWin(this.user.id).subscribe((updateUser: UserI) => {
-      this.user = updateUser;
+    this.playerService.addWin(this.authService.getLoggedInUser().id).subscribe((updateUser: UserI) => {
       this.wins = updateUser.wins;
-      this.losses = updateUser.losses;
-      this.ratio = (this.wins / (this.wins + this.losses));
     });
    }
 
    addLosses() {
-    this.playerService.addLosses(this.user.id).subscribe((updateUser: UserI) => {
-      this.user = updateUser;
-      this.wins = updateUser.wins;
+    this.playerService.addLosses(this.authService.getLoggedInUser().id).subscribe((updateUser: UserI) => {
       this.losses = updateUser.losses;
-      this.ratio = (this.wins / (this.wins + this.losses));
     });
   }
 }
