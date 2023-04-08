@@ -4,10 +4,9 @@ import { CommonModule } from '@angular/common';
 import { PrivateRoutingModule } from './private-routing.module';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
-
 @NgModule({
   declarations: [
-    NavBarComponent
+    NavBarComponent,
 
   ],
   exports: [
@@ -15,7 +14,8 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
   ],
   imports: [
     CommonModule,
-    PrivateRoutingModule
+    PrivateRoutingModule,
+
   ]
 })
 export class PrivateModule { }

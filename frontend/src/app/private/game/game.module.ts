@@ -5,7 +5,6 @@ import { GameRoutingModule } from './game-routing.module';
 import { GameFrontComponent } from './components/game.front/game.front.component';
 import { PrivateModule } from '../private.module';
 import { LiveComponent } from './components/live/live.component';
-import { SettingsComponent } from './components/settings/settings.component';
 import { StarsBlowComponent } from './components/stars-blow/stars.blow/stars.blow.component';
 import { EndGamePageComponent } from './components/end-game-page/end-game-page.component';
 
@@ -14,7 +13,6 @@ import { EndGamePageComponent } from './components/end-game-page/end-game-page.c
   declarations: [
 	GameFrontComponent,
  LiveComponent,
- SettingsComponent,
  StarsBlowComponent,
  EndGamePageComponent
   ],

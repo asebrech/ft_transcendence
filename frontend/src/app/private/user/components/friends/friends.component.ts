@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserService } from 'src/app/public/services/user-service/user.service';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-friends',
@@ -9,10 +12,53 @@ import { UserService } from 'src/app/public/services/user-service/user.service';
 })
 export class FriendsComponent implements OnInit {
 
-  constructor(private authService: AuthService, private userService: UserService) { }
+  amis = ["alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi", "alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi"];
+  suggestions: any[] = [];
+  search : string;
+  displayList: boolean = false;
+  resultats: string[] = [];
+  username: string;
+  message : string;
+  showContextMenu: boolean = false;
+  contextMenuTop: number = 0;
+  contextMenuLeft: number = 0;
+  isMyFriend: boolean = false;
+
+  constructor(private authService: AuthService, private userService: UserService, private route : Router) { }
 
   ngOnInit(): void {
-
+    if (!this.amis.length)
+      this.message = "Liste d'amis vide !";
   }
 
+  chercher(username: string) {
+    this.resultats = this.amis.filter(ami => ami.toLowerCase().includes(username.toLowerCase()));
+  }
+
+  selectionner(suggestion: string) {
+    this.resultats = [];
+  }
+
+  goToProfileOf(user: string) {
+    this.route.navigate(['/private/user/profile', user]);
+  }
+
+  onContextMenu(event: MouseEvent){
+    event.preventDefault();
+    this.showContextMenu = true;
+    this.contextMenuTop = event.clientY;
+    this.contextMenuLeft = event.clientX;
+  }
+
+  option1() {
+    console.log("ajouter un ami")
+  }
+
+  option2() {
+    console.log("supprimer ami");
+  }
+
+  option3() {
+    console.log("envoyer msg");
+  }
 }
