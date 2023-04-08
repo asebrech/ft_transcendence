@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { ReturnStatement } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, catchError, tap, throwError } from 'rxjs';
@@ -35,8 +36,4 @@ export class UserService {
 		})
 	);
   }
-
-  // getUser(id: number): UserI | undefined {
-  //   return this.users.find(user => user.id === id);
-  // }
 }

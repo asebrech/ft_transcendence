@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
@@ -11,6 +11,10 @@ import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
 import { RequestModel } from 'src/middleware/auth.middleware';
 import { UserEntity } from '../model/user.entity';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
+import { ChangePasswordDto } from '../model/dto/change-password.dto';
+import { ChangeUsernameDto } from '../model/dto/change-username.dto';
+import { ChangeEmailDto } from '../model/dto/change-email.dto';
 
 
 @Controller('users')
@@ -115,6 +119,24 @@ export class UserController {
 	@Get('check-email')
 	async checkEmail(@Query('mail') mail :string ) : Promise<boolean> {
 		return this.userService.checkEmail(mail);
+	}
+
+	@Put(':id/change-password')
+	//@UseGuards(JwtAuthGuard)
+	async changePassword(@Param('id') userId : number, @Body() { oldPassword, newPassword }: ChangePasswordDto) {
+		await this.userService.updatePassword(userId, oldPassword, newPassword);
+	}
+
+	@Put(':id/change-username')
+	//@UseGuards(JwtAuthGuard)
+	async changeUsername(@Param('id') userId : number, @Body() { oldUsername, newUsername }: ChangeUsernameDto) {
+		await this.userService.updateUsername(userId, oldUsername, newUsername);
+	}
+
+	@Put(':id/change-email')
+	//@UseGuards(JwtAuthGuard)
+	async changeEmail(@Param('id') userId : number, @Body() { oldEmail, newEmail }: ChangeEmailDto) {
+		await this.userService.updateEmail(userId, oldEmail, newEmail);
 	}
 
 	@Post(':id/add-friend')	
