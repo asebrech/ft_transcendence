@@ -100,6 +100,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		}
 	}
 
+	@SubscribeMessage('listAllChannels')
+	async listAllChannels(socket: Socket) {
+		const rooms: RoomI[] = await this.roomService.getAllRoom();
+		return this.server.to(socket.id).emit('getAllChannels', rooms);
+	}
+
+
 	@SubscribeMessage('listUsers')
 	async listUsers(socket: Socket, room: RoomI) {
 		let users: UserI[] = await this.userService.findAll();
@@ -140,6 +147,31 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		// substract page -1 to match the angular material paginator
 		//rooms.meta.currentPage = rooms.meta.currentPage - 1;
 		return this.server.to(socket.id).emit('rooms', rooms);
+	}
+
+	@SubscribeMessage('addUserToRoom')
+	async addUserToRoom(socket: Socket, room: RoomI) {
+
+		let users: UserI[] = [];
+		users.push(socket.data.user);
+		const upRoom = await this.roomService.getRoom(room.id);
+
+		if (upRoom.users.find(user => user.id === socket.data.user.id)) {
+			this.onJoinRoom(socket, room);
+		}
+		else {
+			const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(upRoom, users);
+	
+			for (const user of addUsersRoom.users) {
+				const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
+				const rooms = await this.roomService.getRoomsForUser(user.id, { page: 1, limit: 10 });
+				// substract page -1 to match the angular material paginator
+				for (const connection of connections) {
+					await this.server.to(connection.socketId).emit('rooms', rooms);
+				}
+			}
+		}
+
 	}
 
 	@SubscribeMessage('joinRoom')

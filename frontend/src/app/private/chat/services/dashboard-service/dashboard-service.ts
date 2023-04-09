@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 	providedIn: 'root'
 })
 export class DashboardService {
+	find: boolean = false;
 	channel: boolean = true;
 	create: boolean = false;
 	members: boolean = false;

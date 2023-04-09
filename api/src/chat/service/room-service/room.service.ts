@@ -19,8 +19,12 @@ export class RoomService {
 		return this.roomRepository.save(newRoom);
 	}
 
+	async getAllRoom(): Promise<RoomI[]> {
+		return this.roomRepository.find();
+	}
+
 	async getRoom(roomId: number): Promise<RoomI> {
-		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users'] });;
+		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users'] });
 	}
 
 	async getRoomsForUser(userId: number, options: IPaginationOptions): Promise<RoomEntity[]> {
@@ -48,7 +52,7 @@ export class RoomService {
 		return this.roomRepository.save(roomUpdate);
 	}
 
-	async addUsersToRoom(room: RoomI, users: UserI[]): Promise<RoomI> {
+	async addUsersToRoom(room: RoomI, users: UserI[]): Promise<RoomI> {		
 		for (const user of users) {
 			room.users.push(user);
 		}

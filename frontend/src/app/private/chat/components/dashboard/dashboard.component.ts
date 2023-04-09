@@ -15,15 +15,12 @@ import { DashboardService } from '../../services/dashboard-service/dashboard-ser
 })
 export class DashboardComponent {
 
-	find: boolean = false;
-
-
 	findChannel() {
-		this.find = true;
+		this.dashService.find = true;
 	}
 
 	HideChannel() {
-		this.find = false;
+		this.dashService.find = false;
 	}
 
 	createChannel() {
@@ -42,10 +39,10 @@ export class DashboardComponent {
 
 	@HostListener('document:click', ['$event'])
 	onClick(event: MouseEvent) {
-		if (!this.find && this.elementRef.nativeElement.querySelector('.search-container') && this.elementRef.nativeElement.querySelector('.search-container').contains(event.target)) {
+		if (!this.dashService.find && this.elementRef.nativeElement.querySelector('.search-container') && this.elementRef.nativeElement.querySelector('.search-container').contains(event.target)) {
 			this.findChannel();
 		}
-		else if (this.find && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.findChannel').contains(event.target)) {
+		else if (this.dashService.find && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.findChannel').contains(event.target)) {
 			this.HideChannel();
 		}
 		if (!this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && this.elementRef.nativeElement.querySelector('.add').contains(event.target)) {

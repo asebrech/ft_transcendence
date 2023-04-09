@@ -27,12 +27,20 @@ export class ChatService {
 		return this.socket.emit('addMessage', message);
 	}
 
+	addUserToRoom(room: RoomI) {
+		return this.socket.emit('addUserToRoom', room);
+	}
+
 	joinRoom(room: RoomI) {
 		return this.socket.emit('joinRoom', room);
 	}
 
 	leaveRoom() {
 		return this.socket.emit('leaveRoom', this.selectedRoom);
+	}
+
+	getAllChannels(): Observable<RoomI[]> {
+		return this.socket.fromEvent<RoomI[]>('getAllChannels');
 	}
 
 	getMessages(): Observable<{messages: MessageI[], room: RoomI}> {
@@ -80,6 +88,10 @@ export class ChatService {
 
 	listMember() {
 		return this.socket.emit('listMember', this.selectedRoom);
+	}
+
+	listAllChannels() {
+		return this.socket.emit('listAllChannels');
 	}
 
 	getUsers(): Observable<UserI[]> {
