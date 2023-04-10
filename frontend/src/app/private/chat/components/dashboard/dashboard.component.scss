@@ -21,6 +21,35 @@
 	overflow-x: visible;
 }
 
+.main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.title {
+	display: flex;
+	justify-content: center;
+	font-family: 'nasalization';
+	font-size: 30px;
+	color: white;
+	margin-top: 10px;
+	cursor: 	default;
+	user-select: none;
+}
+
+.separator {
+	content: '';
+	position: absolute;
+	top: 60px;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 150px;
+	height: 1px;
+	background-color: white;
+}
+
+
 .conversation {
 	position: absolute;
 	top: 0;

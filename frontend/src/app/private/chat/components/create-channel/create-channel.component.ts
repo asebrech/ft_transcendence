@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
-import { ChatService } from '../../../services/chat-service/chat.service';
+import { DashboardService } from '../../services/dashboard-service/dashboard-service';
+import { ChatService } from '../../services/chat-service/chat.service';
 
 @Component({
 	selector: 'app-create-channel',

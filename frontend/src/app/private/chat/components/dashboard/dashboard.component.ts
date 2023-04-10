@@ -15,58 +15,22 @@ import { DashboardService } from '../../services/dashboard-service/dashboard-ser
 })
 export class DashboardComponent {
 
-	findChannel() {
-		this.dashService.find = true;
-	}
-
-	HideChannel() {
-		this.dashService.find = false;
-	}
-
-	createChannel() {
-		this.dashService.create = true;
-	}
-
-	createHide() {
-		this.dashService.create = false;
-	}
-	// rooms$: Observable<RoomPaginateI>= this.chatService.getMyRooms();
-	// selectedRoom = null;
-	// user: UserI = this.authService.getLoggedInUser();
 	constructor(public dashService: DashboardService, private elementRef: ElementRef, private chatService: ChatService) { }
-
-	//constructor(private chatService: ChatService, private authService: AuthService) { }
 
 	@HostListener('document:click', ['$event'])
 	onClick(event: MouseEvent) {
 		if (!this.dashService.find && this.elementRef.nativeElement.querySelector('.search-container') && this.elementRef.nativeElement.querySelector('.search-container').contains(event.target)) {
-			this.findChannel();
+			this.dashService.find = true;
 		}
 		else if (this.dashService.find && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.findChannel').contains(event.target)) {
-			this.HideChannel();
+			this.dashService.find = false;
 		}
 		if (!this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && this.elementRef.nativeElement.querySelector('.add').contains(event.target)) {
-			this.createChannel();
+			this.dashService.create = true;
 		}
 		else if (this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && !this.elementRef.nativeElement.querySelector('.createChannel').contains(event.target)) {
-			this.createHide();
+			this.dashService.create = false;
 		}
 	}
-
-	// ngOnInit() {
-	// 	this.chatService.emitPaginateRooms(10, 0);
-	// }
-
-	// ngAfterViewInit() {
-	// 	this.chatService.emitPaginateRooms(10, 0);
-	// }
-
-	// onSelectRoom(event: MatSelectionListChange) {
-	// 	this.selectedRoom = event.source.selectedOptions.selected[0].value;
-	// }
-
-	// onPaginateRooms(pageEvent : PageEvent) {
-	// 	this.chatService.emitPaginateRooms(pageEvent.pageSize, pageEvent.pageIndex);
-	// }
 
 }

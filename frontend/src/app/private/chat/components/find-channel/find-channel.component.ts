@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Observable, Subject, debounceTime } from 'rxjs';
-import { ChatService } from '../../../services/chat-service/chat.service';
+import { ChatService } from '../../services/chat-service/chat.service';
 import { RoomI } from 'src/app/model/room.interface';
 import { UserI } from 'src/app/model/user.interface';
-import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
+import { DashboardService } from '../../services/dashboard-service/dashboard-service';
 
 @Component({
 	selector: 'app-find-channel',

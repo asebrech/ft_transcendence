@@ -48,7 +48,7 @@ export class ChatService {
 			this.selectedRoom = object.room;
 			this.roomName.next(object.room);
 			this.messages.next(object.messages);
-			// localStorage.setItem('room', JSON.stringify(object));
+			//localStorage.setItem('room', JSON.stringify(object));
 			if (this.selectedRoom)
 				this.listMember();
 		}));
@@ -63,7 +63,7 @@ export class ChatService {
 			room => {
 				this.roomName.next(room);
 				this.selectedRoom = room;
-				localStorage.setItem('room', JSON.stringify(room));
+				//localStorage.setItem('room', JSON.stringify(room));
 			}));
 	}
 

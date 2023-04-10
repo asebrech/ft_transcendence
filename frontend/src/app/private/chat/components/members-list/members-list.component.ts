@@ -106,7 +106,6 @@ export class MembersListComponent implements OnInit {
 
   onResize(event: Event) {
     // Vérifiez si la fenêtre est visible
-	console.log('hello');
     if (this.showOverlay && this.selectedIndex !== null) {
       // Calculez la hauteur de défilement
 	  const selectedElement = document.querySelector('.selected') as HTMLAnchorElement;

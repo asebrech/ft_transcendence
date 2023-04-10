@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DashboardService } from '../../../services/dashboard-service/dashboard-service';
+import { DashboardService } from '../../services/dashboard-service/dashboard-service';
 import { MessageI } from 'src/app/model/message.interface';
-import { ChatService } from '../../../services/chat-service/chat.service';
+import { ChatService } from '../../services/chat-service/chat.service';
 import { Observable, delay, tap } from 'rxjs';
 import { room } from 'src/app/private/game/components/game.front/game.front.component';
 import { RoomI } from 'src/app/model/room.interface';
