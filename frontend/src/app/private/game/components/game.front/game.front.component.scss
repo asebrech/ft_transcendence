@@ -47,5 +47,16 @@
     background-color: rgb(255, 255, 255, 0.3);
 }
 
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) 
+{
+    .playBotScene
+    {
+        left: 25vw;
+    }
+    #gameContainer
+    {
+        margin-left: 5%;
+    }
+}
 
 

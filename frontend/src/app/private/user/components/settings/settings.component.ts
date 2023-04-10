@@ -5,7 +5,7 @@ import { PlayerService } from '../../services/player.service';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { catchError, throwError } from 'rxjs';
-import Swal from 'sweetalert2';
+import { StarsService } from 'src/app/services/stars-service/stars.service';
 
 @Component({
   selector: 'app-settings',
@@ -31,9 +31,10 @@ export class SettingsComponent implements OnInit {
   newO: string;
   old: string;
 
-  constructor(private playerService: PlayerService, private authService: AuthService ) {}
+  constructor(private starsService: StarsService, private playerService: PlayerService, private authService: AuthService ) {}
 
   ngOnInit(): void {
+    this.starsService.setActive(false);
   }
 
   changeUsername() : void {
@@ -90,20 +91,4 @@ export class SettingsComponent implements OnInit {
   }
 
 
-  simpleNotification() {
-    Swal.fire({
-      title: 'Do you want to save the changes?',
-      showDenyButton: true,
-      showCancelButton: true,
-      confirmButtonText: 'Save',
-      denyButtonText: `Don't save`,
-    }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        Swal.fire('Saved!', '', 'success')
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
-      }
-    })
-  }
 }

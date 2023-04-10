@@ -113,6 +113,7 @@ export class PlayScene extends Phaser.Scene
     this.wall_top = this.add.rectangle(inWidth / 2, inHeight + 5, inWidth, 10 , 0xff0000).setScrollFactor(0);
     right_pad = this.physics.add.image(inWidth - 30, inHeight / 2, 'right_pad').setCollideWorldBounds(true).setScrollFactor(0);
     left_pad = this.physics.add.image(30, inHeight / 2, 'left_pad').setCollideWorldBounds(true).setScrollFactor(0);
+    
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
     //////////////////////////////////////////////////
     ball.scale = 0.03;
@@ -123,6 +124,7 @@ export class PlayScene extends Phaser.Scene
     left_pad.scale = 0.3;
     left_pad.setBounce(1,1);
     left_pad.setPushable(false);
+    console.log(right_pad.width, right_pad.height);
     //////////////////////////////////////////////////
     this.physics.add.existing(this.wall_top, true); // Ajoute la physique au rectangle cree avec phaser
     this.physics.add.existing(this.wall_bottom, true); // Ajoute la physique au rectangle cree avec phaser

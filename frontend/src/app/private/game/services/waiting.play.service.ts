@@ -1,7 +1,7 @@
 import * as Phaser from "phaser";
 import { inWidth, inHeight } from "../components/game.front/game.front.component";
 
-let computerPad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
+let right_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
 let left_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
 let ball : Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
 let ball_velocity_x : number;
@@ -52,9 +52,11 @@ export class WaitingScene extends Phaser.Scene
     this.load.image('background', 'assets/images/tests/nebula.jpg');
     this.load.image('stars', 'assets/images/tests/stars.png');
     this.load.image('wing', 'assets/images/tests/wing.png');
+    ///////////////TEXTURE//////////////////////////
     this.load.image('ball', 'assets/images/ball.png');
-    this.load.image('computerPad', 'assets/images/pad.png')
-    this.load.image('leftPad', 'assets/images/pad.png')
+    this.load.image('right_pad', 'assets/images/pad.png');
+    this.load.image('leftPad', 'assets/images/pad.png');
+    ///////////////////////////////////////////////
     this.load.image('fullscreen', 'assets/images/fullscreenOff.png')
     this.load.image('fullscreenOff', 'assets/images/fullscreen.png')
   }
@@ -91,16 +93,18 @@ export class WaitingScene extends Phaser.Scene
     this.score = this.add.text(inWidth / 2, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'}).setScrollFactor(0);
     this.wall_bottom = this.add.rectangle(inWidth / 2, -5, inWidth, 10 , 0xff0000).setScrollFactor(0);
     this.wall_top = this.add.rectangle(inWidth / 2, inHeight + 5, inWidth, 10 , 0xff0000).setScrollFactor(0);
-    computerPad = this.physics.add.image(inWidth - 30, 350, 'computerPad').setCollideWorldBounds(true).setScrollFactor(0);
+
+    right_pad = this.physics.add.image(inWidth - 30, 350, 'right_pad').setCollideWorldBounds(true).setScrollFactor(0);
     left_pad = this.physics.add.image(30, 350, 'leftPad').setCollideWorldBounds(true).setScrollFactor(0);
+    
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
     //////////////////////////////////////////////////
     ball.scale = 0.05;
     ball.setVelocity(ball_velocity_x,ball_velocity_y);
     ball.setBounce(1,1);
-    computerPad.scale = 0.3;
-    computerPad.setBounce(1,1);
-    computerPad.setPushable(false);
+    right_pad.scale = 0.3;
+    right_pad.setBounce(1,1);
+    right_pad.setPushable(false);
     left_pad.scale = 0.3;
     left_pad.setBounce(1,1);
     left_pad.setPushable(false);
@@ -109,7 +113,7 @@ export class WaitingScene extends Phaser.Scene
     this.physics.add.existing(this.wall_bottom, true); // Ajoute la physique au rectangle cree avec phaser
     this.physics.add.existing(ball, true);
     this.physics.add.existing(left_pad, true);
-    this.physics.add.existing(computerPad, true);
+    this.physics.add.existing(right_pad, true);
     //////////////////////////////////////////////////
     this.physics.add.collider(ball, this.wall_bottom); // Ajoute la collision entre l'object cree avec phaser et un autre objet
     this.physics.add.collider(ball, this.wall_top);
@@ -119,7 +123,7 @@ export class WaitingScene extends Phaser.Scene
       ball.body.velocity.normalize().scale(this.speed);
     });
 
-    this.physics.add.collider(ball, computerPad, () =>
+    this.physics.add.collider(ball, right_pad, () =>
     {
       this.speed += 100;
       ball.body.velocity.normalize().scale(this.speed);
@@ -158,9 +162,9 @@ export class WaitingScene extends Phaser.Scene
     //////////////////////////////////////////////////////////////
     if (ball.body.newVelocity.x > 0)
     {
-      if ((computerPad.y < inHeight && computerPad.y > 0) && (ball.y < inHeight - 100 && ball.y > 100))
+      if ((right_pad.y < inHeight && right_pad.y > 0) && (ball.y < inHeight - 100 && ball.y > 100))
       {
-        computerPad.setY(ball.y);
+        right_pad.setY(ball.y);
       }
     }
     ///////////////////////////////////////////////////////////////

@@ -44,32 +44,27 @@ h1 {
   font-size: 20px;
 }
 
-@media screen and (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
 // CSS "flex-grow: 1" sur chaque div pour que chacune
 //prenne autant de place que possible dans le conteneur parent.
 
-input {
-    align-self: center;
-    background-color: #110720;
-    font-family: "nasalization";
-    text-indent: 10%;
-    width: 80%;
-    border-style: solid;
-    border-color: white;
-    border-radius: 50px;
-    border-width: 1px;
-    color: white;
-    font-size: 20px;
-    margin-bottom: 2%;
+input 
+{
+  align-self: center;
+  background-color: #110720;
+  font-family: "nasalization";
+  text-indent: 10%;
+  width: 80%;
+  border-style: solid;
+  border-color: white;
+  border-radius: 50px;
+  border-width: 1px;
+  color: white;
+  font-size: 20px;
+  margin-bottom: 2%;
 }
 
-.username-popup {
+.username-popup 
+{
   position: fixed;
   top: 0;
   left: 0;
@@ -92,7 +87,8 @@ input {
   }
 }
 
-button.changes {
+button.changes 
+{
   padding: 8px;
   margin: 5px;
   font-family: "nasalization";

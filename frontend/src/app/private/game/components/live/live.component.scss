@@ -152,3 +152,49 @@
 {
     margin-right: 52vw;
 }
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) 
+{
+    .title
+    {
+        border: none;
+        margin-top: 0;
+        margin-right: 0;
+        width: auto;
+        height: auto;
+    }
+    .main-div
+    {
+        margin-left: 6.5vw;
+    }
+    .line-sep
+    {
+        margin-top: -3vh;
+    }
+    .refresh
+    {
+        right: 37vw;
+        top: -4vh;
+    }
+    .red-dot
+    {
+        display: none;
+    }
+    .score-board
+    {
+        display: none;
+    }
+    .divRoom
+    {
+        margin-right: 0;
+    }
+    .room
+    {
+        background: rgba(217, 217, 217, 0.3);
+        width: 70vw;
+        margin-left: 0;
+    }
+    .user-name
+    {
+        margin-right: 0;
+    }
+}
