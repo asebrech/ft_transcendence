@@ -3,12 +3,12 @@
 			<li *ngFor="let room of (rooms$ | async)" class="list"
 			(click)="message(room)"
 			(mousedown)="isClicked = true"
-			(mousedown)="selectedRoom = room"
+			(mousedown)="chatService.selectedRoomId= room.id"
 			(mouseup)="isClicked = false"
 			(mouseleave)="isClicked = false"
-			[ngStyle]="{ 'background-color': selectedRoom === room.id && isClicked ? 'rgba(217, 217, 217, 0.25)' : '',
-			'transition': selectedRoom === room && !isClicked ?'ease-in 0.1s': '' }"
-			[ngClass]="{'selected': selectedRoom.id === room.id}"
+			[ngStyle]="{ 'background-color': chatService.selectedRoomId === room.id && isClicked ? 'rgba(217, 217, 217, 0.25)' : '',
+			'transition': chatService.selectedRoomId === room.id && !isClicked ?'ease-in 0.1s': '' }"
+			[ngClass]="{'selected': chatService.selectedRoomId === room.id}"
 			>
 			<img src="../../../../../../assets/images/astronaut.png">
 			<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}"></div>

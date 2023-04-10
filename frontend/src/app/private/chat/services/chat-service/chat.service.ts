@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject, tap } from 'rxjs';
 import { MessageI, MessagePaginatedI } from 'src/app/model/message.interface';
 import { UserI } from 'src/app/model/user.interface';
+import { DashboardService } from '../dashboard-service/dashboard-service';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,12 +13,13 @@ import { UserI } from 'src/app/model/user.interface';
 export class ChatService {
 
 	selectedRoom: RoomI = null;
+	selectedRoomId: number = null;
 	private roomName = new Subject<RoomI>();
 	roomName$ = this.roomName.asObservable();
 	private messages = new Subject<MessageI[]>();
 	messages$ = this.messages.asObservable()
 
-	constructor(private socket: CustomSocket, private snackbar: MatSnackBar) { }
+	constructor(private socket: CustomSocket, private snackbar: MatSnackBar, private dashService: DashboardService) { }
 
 	getAddedMessage(): Observable<MessageI> {
 		return this.socket.fromEvent<MessageI>('messageAdded');
@@ -31,8 +33,8 @@ export class ChatService {
 		return this.socket.emit('addUserToRoom', room);
 	}
 
-	joinRoom(room: RoomI) {
-		return this.socket.emit('joinRoom', room);
+	joinRoom(roomId: number) {
+		return this.socket.emit('joinRoom', roomId);
 	}
 
 	leaveRoom() {
@@ -46,10 +48,11 @@ export class ChatService {
 	getMessages(): Observable<{messages: MessageI[], room: RoomI}> {
 		return this.socket.fromEvent<{messages: MessageI[], room: RoomI}>('messages').pipe( tap(object => {
 			this.selectedRoom = object.room;
+			this.selectedRoomId = this.selectedRoom.id;
 			this.roomName.next(object.room);
 			this.messages.next(object.messages);
-			//localStorage.setItem('room', JSON.stringify(object));
-			if (this.selectedRoom)
+			localStorage.setItem('room', JSON.stringify(object.room.id));
+			if (this.selectedRoom && this.dashService.members)
 				this.listMember();
 		}));
 	}
@@ -59,12 +62,7 @@ export class ChatService {
 	}
 
 	getSelectedRoom(): Observable<RoomI> {
-		return this.socket.fromEvent<RoomI>('selectedRoom').pipe(tap(
-			room => {
-				this.roomName.next(room);
-				this.selectedRoom = room;
-				//localStorage.setItem('room', JSON.stringify(room));
-			}));
+		return this.socket.fromEvent<RoomI>('selectedRoom');
 	}
 
 	emitPaginateRooms(limit: number, page: number) {

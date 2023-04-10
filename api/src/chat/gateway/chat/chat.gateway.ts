@@ -157,7 +157,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		const upRoom = await this.roomService.getRoom(room.id);
 
 		if (upRoom.users.find(user => user.id === socket.data.user.id)) {
-			this.onJoinRoom(socket, room);
+			this.onJoinRoom(socket, room.id);
 		}
 		else {
 			const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(upRoom, users);
@@ -170,20 +170,21 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 					await this.server.to(connection.socketId).emit('rooms', rooms);
 				}
 			}
+			this.onJoinRoom(socket, room.id);
 		}
 
 	}
 
 	@SubscribeMessage('joinRoom')
-	async onJoinRoom(socket: Socket, room: RoomI) {
-		const updatedRoom: RoomI = await this.roomService.getRoom(room.id);
+	async onJoinRoom(socket: Socket, roomId: number) {
+		const updatedRoom: RoomI = await this.roomService.getRoom(roomId);
 		const rooms: RoomI[] = await this.roomService.getRoomsForUser(socket.data.user.id, {limit: 10, page: 1})
-		if (!rooms.find(toto => toto.id === updatedRoom.id))
-			return this.server.to(socket.id).emit('messages', {messages: null, room: null});
+		if (updatedRoom == null || !rooms.find(toto => toto.id === updatedRoom.id))
+			return;
 		const messages = await this.messageService.findMessagesForRoom(updatedRoom, { limit: 10, page: 1 });
 		// messages.meta.currentPage -= 1; 
 		// Save connection to Room
-		await this.joinedRoomService.create({ socketId: socket.id, user: socket.data.user, room });
+		await this.joinedRoomService.create({ socketId: socket.id, user: socket.data.user, room: updatedRoom});
 		// Send last messages from Room to User
 		await this.server.to(socket.id).emit('messages', {messages: messages, room: updatedRoom});
 	}
