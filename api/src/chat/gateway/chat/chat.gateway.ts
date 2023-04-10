@@ -177,6 +177,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('joinRoom')
 	async onJoinRoom(socket: Socket, roomId: number) {
+		this.onLeaveRoom(socket);
 		const updatedRoom: RoomI = await this.roomService.getRoom(roomId);
 		const rooms: RoomI[] = await this.roomService.getRoomsForUser(socket.data.user.id, {limit: 10, page: 1})
 		if (updatedRoom == null || !rooms.find(toto => toto.id === updatedRoom.id))

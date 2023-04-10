@@ -62,7 +62,9 @@ export class ChatService {
 	}
 
 	getSelectedRoom(): Observable<RoomI> {
-		return this.socket.fromEvent<RoomI>('selectedRoom');
+		return this.socket.fromEvent<RoomI>('selectedRoom').pipe(tap((room) => {
+			this.roomName.next(room);
+		}));
 	}
 
 	emitPaginateRooms(limit: number, page: number) {

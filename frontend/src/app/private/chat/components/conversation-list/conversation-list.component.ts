@@ -34,7 +34,6 @@ export class ConversationListComponent implements OnInit {
 	}
 
   message(room: RoomI) {
-	this.chatService.leaveRoom();
 	this.chatService.joinRoom(room.id);
 	this.chatService.selectedRoomId = room.id;
   }

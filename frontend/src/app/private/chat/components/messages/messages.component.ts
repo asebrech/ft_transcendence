@@ -47,7 +47,7 @@ export class MessagesComponent implements OnInit {
 	ngOnInit(): void {
 		this.chatService.getMessages().subscribe();
 		this.ChannelName$.subscribe(name =>{ if(name){this.ajusterLargeurInput(this.inputElementRef.nativeElement, name.name)}});
-		this.chatService.getSelectedRoom().subscribe(() => this.placeTmp = 'toto');
+		this.chatService.getSelectedRoom().subscribe();
 		this.messages$.pipe(
 			tap(() => {
 				setTimeout(() => {
