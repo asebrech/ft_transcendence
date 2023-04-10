@@ -21,7 +21,7 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     StarsComponent,
-    StarsInteractiveComponent
+    StarsInteractiveComponent,
   ],
   imports: [
     BrowserModule,

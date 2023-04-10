@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
+import { throwError } from 'rxjs';
 import { AuthService } from 'src/auth/service/auth.service';
 import { UserEntity } from 'src/user/model/user.entity';
 import { UserI } from 'src/user/model/user.interface';
@@ -116,6 +117,10 @@ export class UserService {
 		})
 	}
 
+	async getAllUsers(): Promise<UserI[]> {
+		return this.userRepository.find();
+	}
+
 	returnSession(user: UserI): string {
 		return this.authService.createSession(user);
 	}
@@ -127,8 +132,6 @@ export class UserService {
 	private async findByEmail(email: string): Promise<UserI> {
 		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth', 'google_auth_secret'] });
 	}
-
-
 
 	private async hashPassword(password: string): Promise<string> {
 		return this.authService.hashPassword(password);
@@ -191,19 +194,24 @@ export class UserService {
 			return false;
 	}
 
-	async addFriend(id : number, newFriend : UserEntity) : Promise<UserI> {
+	async addFriend(id : number, newFriend : string) : Promise<UserI> {
 		const user = await this.userRepository.findOneBy({id});
-		if (!user.friend.includes(newFriend)) {
-			user.friend.push(newFriend);
-			await this.userRepository.save(user);
-		}
+		if (user.friend.includes(newFriend))
+			throw new Error(`${newFriend} is already is already on friendlist.`);
+		user.friend.push(newFriend);
+		await this.userRepository.save(user);
 		return user;
 	}
 
-	async removeFriend(id: number, friendId: number): Promise<UserI> {
-		const user = await this.userRepository.findOneBy({id});
-		user.friend = user.friend.filter((friend) => friend.id !== friendId);
-		return this.userRepository.save(user);
+	async removeFriend(id: number, friendUsername: string): Promise<UserI> {
+		const user = await this.userRepository.findOneBy({ id });
+		const friendIndex = user.friend.indexOf(friendUsername);
+		if (friendIndex !== -1) {
+		  user.friend.splice(friendIndex, 1);
+		  return this.userRepository.save(user);
+		} else {
+		  throw new Error('Friend not found');
+		}
 	  }
 
 	async addWinOrLoss(id: number, isWin: boolean): Promise<UserEntity> {
@@ -221,5 +229,3 @@ export class UserService {
 		return user;
 	  }
 }
-
-

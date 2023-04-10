@@ -5,9 +5,10 @@ export interface UserI {
 	email?: string,
 	username?: string,
 	password?: string;
- 	friend?: UserI[];
-  wins?: number;
-  losses?: number;
-  ratio?: number;
-  timeplayed?: number;
+	friend?: string[];
+	wins?: number;
+	losses?: number;
+	ratio?: number;
+	total?: number;
+	level?:number;
 }

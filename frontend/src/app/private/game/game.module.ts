@@ -7,7 +7,6 @@ import { PrivateModule } from '../private.module';
 import { LiveComponent } from './components/live/live.component';
 import { StarsBlowComponent } from './components/stars-blow/stars.blow/stars.blow.component';
 
-
 @NgModule({
   declarations: [
 	GameFrontComponent,

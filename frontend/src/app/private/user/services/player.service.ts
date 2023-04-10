@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserService } from 'src/app/public/services/user-service/user.service';
@@ -11,15 +11,23 @@ import { UserService } from 'src/app/public/services/user-service/user.service';
 export class PlayerService {
 
   user : UserI = this.authService.getLoggedInUser();
-
-  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient) { }
-
+  friend : string[];
+  user$ : Observable<UserI>
+  usersList: Observable<UserI[]>;
+  
+  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient) {
+    this.user$ = this.getUser().pipe(
+      map((user: UserI) => {
+        this.friend = user.friend;
+        return user;
+      })
+    );
+  }
 
   getUser(): Observable<UserI> {
     const userId = this.authService.getLoggedInUser().id;
     return this.httpClient.get<UserI>(`/api/users/${userId}`);
   }
-
 
   addWin(id: number) {
     return this.httpClient.post(`api/users/${id}/addwins/`, null);
@@ -41,6 +49,9 @@ export class PlayerService {
     return this.httpClient.put<UserI>(`api/users/${userId}/change-username`,{newUsername});
   }
   
+  getUserList() : Observable<UserI[]> {
+    return this.httpClient.get<UserI[]>(`api/users/all`);
+  }
 }
 
 

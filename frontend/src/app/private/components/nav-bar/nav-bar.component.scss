@@ -32,7 +32,6 @@ nav {
 	//scrollbar-width: none;
 }
 
-
 ul {
 	background: transparent;
 	width: 100%;
@@ -109,3 +108,7 @@ nav a.active img {
 nav a.activeGame img {
 	transform: scale(1.2);
 }
+
+div.profile_pic {
+	margin: 20px 0;
+  }

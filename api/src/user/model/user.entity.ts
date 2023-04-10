@@ -38,11 +38,11 @@ export class UserEntity {
 	ratio : number;
 
 	@Column({default: 0})
-	timeplayed : number;
+	total : number;
 
-	@Column({default: 0})
+	@Column({default: 1})
 	level: number;
 
-	@ManyToOne(() => UserEntity)
-	friend : UserEntity[];
+	@Column({array: true, default: [], type: 'text'})
+	friend : string[];
 }

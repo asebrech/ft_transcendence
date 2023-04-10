@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/public/services/auth-service/auth.service';
-import { UserService } from 'src/app/public/services/user-service/user.service';
-import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { PlayerService } from '../../services/player.service';
+import { UserI } from 'src/app/model/user.interface';
 
 @Component({
   selector: 'app-friends',
@@ -12,32 +10,41 @@ import { Router } from '@angular/router';
 })
 export class FriendsComponent implements OnInit {
 
-  amis = ["alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi", "alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi","alois", "Mago", "Aloise", "Magro", "Ramzi", "Zizi"];
-  suggestions: any[] = [];
-  search : string;
-  displayList: boolean = false;
-  resultats: string[] = [];
-  username: string;
-  message : string;
-  showContextMenu: boolean = false;
-  contextMenuTop: number = 0;
-  contextMenuLeft: number = 0;
-  isMyFriend: boolean = false;
+    users: UserI[] = [];
+  filteredUsers: UserI[] = [];
+  searchTerm: string = '';
+  friends: string[] = ['mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago'];
+  message: string;
+  showContextMenu: boolean;
+  contextMenuTop: number;
+  contextMenuLeft: number;
+  isMyFriend: boolean = true;
 
-  constructor(private authService: AuthService, private userService: UserService, private route : Router) { }
+  constructor(private route : Router, private playerService: PlayerService) { }
 
   ngOnInit(): void {
-    if (!this.amis.length)
+    if (!this.friends.length)
       this.message = "Liste d'amis vide !";
+    this.playerService.getUserList().subscribe( users => {
+      this.users = users;
+      this.filteredUsers = [];
+    });
   }
 
-  chercher(username: string) {
-    this.resultats = this.amis.filter(ami => ami.toLowerCase().includes(username.toLowerCase()));
+  searchUsers() {
+    if (this.searchTerm.trim() !== '') {
+      this.filteredUsers = this.users.filter((user: UserI) => {
+        return user.username.toLowerCase().startsWith(this.searchTerm.toLowerCase());
+      });
+    } else {
+      this.filteredUsers = [];
+    }
   }
 
-  selectionner(suggestion: string) {
-    this.resultats = [];
-  }
+  // selectionner(user: UserI) {
+  //  this.username = user.username; 
+  //   this.resultats = [];
+  // }
 
   goToProfileOf(user: string) {
     this.route.navigate(['/private/user/profile', user]);

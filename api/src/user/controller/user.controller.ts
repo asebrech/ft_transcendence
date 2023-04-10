@@ -140,13 +140,13 @@ export class UserController {
 	}
 
 	@Post(':id/add-friend')	
-	async addFriend(@Param('id') userId : number, @Body('friendId') newFriend : UserEntity) : Promise<UserI> {
+	async addFriend(@Param('id') userId : number, @Body() newFriend : string) : Promise<UserI> {
 		return this.userService.addFriend(userId, newFriend);
 	}
 
 	@Post(':id/remove-friend')
-	async removeFriend(@Param('id') userId : number, @Body('friendId') friend : UserI) : Promise<UserI> {
-		return this.userService.removeFriend(userId, friend.id);
+	async removeFriend(@Param('id') userId : number, @Body() friend : string) : Promise<UserI> {
+		return this.userService.removeFriend(userId, friend);
 	}
 
 	@Post(':id/addwins')
@@ -157,6 +157,11 @@ export class UserController {
 	@Post(':id/addlosses')
 	async addLoss(@Param('id') userId: number) {
 	  return this.userService.addWinOrLoss(userId, false);
+	}
+
+	@Get('all')
+	async getAllUsers() {
+		return this.userService.getAllUsers();
 	}
 
 	@Get(':id')
