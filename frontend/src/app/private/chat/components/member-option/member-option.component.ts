@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { ChatService } from '../../services/chat-service/chat.service';
 
 @Component({
   selector: 'app-member-option',
@@ -14,9 +15,11 @@ export class MemberOptionComponent implements OnInit {
 	isAdmin: boolean = true;
 
 
-  constructor() { }
+  constructor(private chatService: ChatService) { }
 
   ngOnInit(): void {
+	if (this.chatService.selectedRoomOwner === null)
+		this.isAdmin = false;
 }
 
 ngAfterViewInit() {

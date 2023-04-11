@@ -14,7 +14,7 @@
 	<div class="separator"></div>
 </div>
 <div class="main"  >
-	<ul class="test">
+	<ul >
 		<li *ngFor="let user of (users | async); let i = index" class="list" (click)="getElementPosition(i, $event)"
 		(click)="test()"
 		(mousedown)="isClicked = true"
