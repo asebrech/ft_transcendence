@@ -47,7 +47,6 @@ export class FindChannelComponent implements OnInit {
 
 	onClick(room: RoomI) {
 		this.dashService.find = false;
-		this.chatService.leaveRoom();
 		this.chatService.addUserToRoom(room);
 	}
 

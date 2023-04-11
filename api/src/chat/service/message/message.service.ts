@@ -18,7 +18,7 @@ export class MessageService {
 		return	this.messageRepository.save(this.messageRepository.create(message));
 	}
 
-	async findMessagesForRoom(room: RoomI, options: IPaginationOptions) {
+	async findMessagesForRoom(room: RoomI) {
 		const query = this.messageRepository
 		.createQueryBuilder('message')
 		.leftJoin('message.room', 'room')

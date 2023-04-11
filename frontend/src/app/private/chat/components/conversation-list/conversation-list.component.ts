@@ -20,12 +20,11 @@ export class ConversationListComponent implements OnInit {
   constructor(public dashService: DashboardService, public chatService: ChatService, private authService: AuthService){ }
 
   ngOnInit() {
-	  this.chatService.emitPaginateRooms(10, 0);
+	  this.chatService.emitPaginateRooms();
 	const storedData = localStorage.getItem('room');
 		  if (storedData) {
 			  const myData = JSON.parse(storedData);
-			  this.chatService.selectedRoomId = myData;
-			  this.chatService.joinRoom(this.chatService.selectedRoomId);
+			  this.chatService.joinRoom(myData);
 		  }
 }
 
@@ -35,7 +34,6 @@ export class ConversationListComponent implements OnInit {
 
   message(room: RoomI) {
 	this.chatService.joinRoom(room.id);
-	this.chatService.selectedRoomId = room.id;
   }
 
 }

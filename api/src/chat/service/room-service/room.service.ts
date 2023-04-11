@@ -27,7 +27,7 @@ export class RoomService {
 		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users'] });
 	}
 
-	async getRoomsForUser(userId: number, options: IPaginationOptions): Promise<RoomEntity[]> {
+	async getRoomsForUser(userId: number): Promise<RoomEntity[]> {
 		const query = this.roomRepository
 		.createQueryBuilder('room')
 		.leftJoin('room.users', 'users')
