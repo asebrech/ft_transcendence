@@ -48,7 +48,6 @@ export class CreateChannelComponent implements OnInit {
 
 
 	onSubmit() {
-		console.log(this.channelForm.getRawValue());
 		this.chatService.createRoom(this.channelForm.getRawValue());
 		this.dashService.create = false;
 	}

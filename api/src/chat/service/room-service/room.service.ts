@@ -24,7 +24,14 @@ export class RoomService {
 	}
 
 	async getRoom(roomId: number): Promise<RoomI> {
-		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users'] });
+		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner'] });
+	}
+
+	getRoomCredential(user: UserI, room: RoomI): RoomI {
+		if (user.id != room.owner.id) {
+			room.owner = null;
+		}
+		return room;
 	}
 
 	async getRoomsForUser(userId: number): Promise<RoomEntity[]> {
@@ -42,6 +49,7 @@ export class RoomService {
 		if (!room.users){
 			room.users = [];
 		}
+		room.owner = creator;
 		room.users.push(creator);
 		return room;
 	}

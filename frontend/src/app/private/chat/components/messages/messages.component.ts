@@ -36,16 +36,17 @@ export class MessagesComponent implements OnInit {
 
 	@HostListener('document:click', ['$event'])
 	onClick(event: MouseEvent) {
-		if (!this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.enableAddUser').contains(event.target)) {
+		if (this.chatService.selectedRoomOwner !== null && !this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.enableAddUser').contains(event.target)) {
 			this.dashService.addUsers = true;
 		}
-		else if (this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.addUser') && !this.elementRef.nativeElement.querySelector('.addUser').contains(event.target)) {
+		else if (this.chatService.selectedRoom !== null && this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.addUser') && !this.elementRef.nativeElement.querySelector('.addUser').contains(event.target)) {
 			this.dashService.addUsers = false;
 		}
 	}
 
 	ngOnInit(): void {
 		this.chatService.getMessages().subscribe();
+		this.chatService.getAddedMessages().subscribe();
 		this.ChannelName$.subscribe(name =>{ if(name){this.ajusterLargeurInput(this.inputElementRef.nativeElement, name.name)}});
 		this.chatService.getSelectedRoom().subscribe();
 		this.messages$.pipe(

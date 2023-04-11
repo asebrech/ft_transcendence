@@ -22,6 +22,8 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	padding-bottom: 20px;
+	padding-top: 20px;
 }
 
 .switch label {
@@ -29,13 +31,8 @@
 	font-size: 18px;
 }
 
-.pass {
-	margin-top: 20px;
-}
-
 .delete {
 	color: red;
-	margin-bottom: 20px;
 }
 
 .separator {

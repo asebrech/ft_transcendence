@@ -28,9 +28,21 @@ export class UserEntity {
 
 	@Column({select: false, default: null})
 	google_auth_secret: string;
+
+	@OneToMany(() => RoomEntity, room => room.owner)
+	roomsOwner: RoomEntity[];
 	
 	@ManyToMany(() => RoomEntity, room => room.users)
 	rooms: RoomEntity[];
+
+	@ManyToMany(() => RoomEntity, room => room.admins)
+	roomsAdmin: RoomEntity[];
+
+	@ManyToMany(() => RoomEntity, room => room.muted)
+	roomsMuted: RoomEntity[];
+
+	@ManyToMany(() => RoomEntity, room => room.baned)
+	roomsBaned: RoomEntity[];
 
 	@OneToMany(() => ConnectedUserEntity, connection => connection.user)
 	connections: ConnectedUserEntity[];
