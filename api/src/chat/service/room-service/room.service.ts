@@ -5,13 +5,17 @@ import { RoomEntity } from 'src/chat/model/room/room.entity';
 import { RoomI } from 'src/chat/model/room/room.interface';
 import { UserI } from 'src/user/model/user.interface';
 import { Repository } from 'typeorm';
+import { JoinedRoomService } from '../joined-room/joined-room.service';
+import { MessageService } from '../message/message.service';
 
 @Injectable()
 export class RoomService {
 
 	constructor(
 		@InjectRepository(RoomEntity)
-		private readonly roomRepository: Repository<RoomEntity>
+		private readonly roomRepository: Repository<RoomEntity>,
+		private joinedRoomService: JoinedRoomService,
+		private messagesService: MessageService
 	) {}
 
 	async createRoom(room: RoomI, creator: UserI): Promise<RoomI> {
@@ -71,5 +75,11 @@ export class RoomService {
 			const index = room.users.indexOf(userToRemove);
   			room.users.splice(index, 1);
  			return this.roomRepository.save(room);
+	}
+
+	async deleteRoom(roomId: number){
+		this.messagesService.deleteByRoomId(roomId);
+		this.joinedRoomService.deleteByroomId(roomId);
+		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner'] }));
 	}
 }

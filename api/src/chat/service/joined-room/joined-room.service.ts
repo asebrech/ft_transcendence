@@ -18,18 +18,27 @@ export class JoinedRoomService {
 		return this.joinedRoomRepository.save(joinedRoom);
 	}
 
-	async findByUser(user: UserI): Promise<JoinedRoomI[]>  {
+	async findByUser(user: UserI): Promise<JoinedRoomI[]> {
 		return this.joinedRoomRepository.find({ where: { user } })
 	}
 
 	async findByRoom(roomId: number): Promise<JoinedRoomI[]> {
 		return this.joinedRoomRepository.find({
 			where: { room: { id: roomId } }
-		  });
+		});
 	}
 
 	async deleteBySocketId(socketId: string) {
 		return this.joinedRoomRepository.delete({ socketId });
+	}
+
+	async deleteByroomId(roomId: number) {
+		await this.joinedRoomRepository
+			.createQueryBuilder()
+			.delete()
+			.from('joined_room_entity')
+			.where('roomId = :roomId', { roomId })
+			.execute();
 	}
 
 	async deleteAll() {

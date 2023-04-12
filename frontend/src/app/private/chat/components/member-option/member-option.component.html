@@ -41,8 +41,8 @@
 		</div>
 	</div>
 	<div class="separator" *ngIf="isAdmin"></div>
-	<div class="labelContainer" *ngIf="isAdmin" (click)="onClick()">
-		<label (click)="deleteChannel()" class="red" >Kick</label>
+	<div class="labelContainer" *ngIf="isAdmin" (click)="onClick(); kick();">
+		<label  class="red" >Kick</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-logout-90_1.png">
 		</div>

@@ -42,8 +42,9 @@ export class ChatService {
 		return this.socket.emit('leaveRoom', this.selectedRoom);
 	}
 
-	quitRoom() {
-		return this.socket.emit('quitRoom', this.selectedRoom);
+	quitRoom(user: UserI) {
+		const room: RoomI = this.selectedRoom;
+		return this.socket.emit('quitRoom', {room, user});
 	}
 
 	getAllChannels(): Observable<RoomI[]> {
@@ -93,9 +94,13 @@ export class ChatService {
 
 	createRoom(room: RoomI) {
 		this.socket.emit('createRoom', room);
-		this.snackbar.open(`User ${room.name} created successfuly`, 'Close', {
-			duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
-		});
+		// this.snackbar.open(`User ${room.name} created successfuly`, 'Close', {
+		// 	duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
+		// });
+	}
+
+	deleteRoom() {
+		this.socket.emit('deleteRoom', this.selectedRoom);
 	}
 
 	changeName(name: string, room: RoomI) {

@@ -3,6 +3,7 @@
   *ngIf="showOverlay"
   [style.left.px]="overlayPosition.left"
   [style.top.px]="overlayPosition.top"
+  [selectedUser]="selectedUserInput"
   class="overlay"
   (valueChanged)="onValueChanged($event)"
   (divHeight)="divHeight($event)"

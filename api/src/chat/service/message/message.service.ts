@@ -28,4 +28,13 @@ export class MessageService {
 
 		return (query.getMany());
 	}
+
+	async deleteByRoomId(roomId: number) {
+		await this.messageRepository
+    		.createQueryBuilder()
+    		.delete()
+   	 		.from('message_entity')
+    		.where('roomId = :roomId', { roomId })
+    		.execute();
+	}
 }

@@ -49,7 +49,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	}
 
 	async handleDisconnect(socket: Socket) {
-		//remove connection from DB
 		await this.connectedUserService.deleteBySocketId(socket.id);
 		socket.disconnect();
 	}
@@ -150,26 +149,26 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	async addUserToRoom(socket: Socket, room: RoomI) {
 
 		const upRoom = await this.roomService.getRoom(room.id);
-		
+
 		if (upRoom.users.find(user => user.id === socket.data.user.id)) {
 			this.onJoinRoom(socket, room.id);
 		}
 		else {
 			let users: UserI[] = [];
 			users.push(socket.data.user);
-		const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(upRoom, users);
-		const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addUsersRoom.id);
-		
-		this.onJoinRoom(socket, room.id);
-		for (const user of addUsersRoom.users) {
-			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			const rooms = await this.roomService.getRoomsForUser(user.id);
-			for (const connection of connections) {
-				await this.server.to(connection.socketId).emit('rooms', rooms);
-				if (joinedUsers.find(toto => toto.socketId === connection.socketId))
-					await this.server.to(connection.socketId).emit('getMember', addUsersRoom.users);
+			const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(upRoom, users);
+			const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addUsersRoom.id);
+
+			this.onJoinRoom(socket, room.id);
+			for (const user of addUsersRoom.users) {
+				const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
+				const rooms = await this.roomService.getRoomsForUser(user.id);
+				for (const connection of connections) {
+					await this.server.to(connection.socketId).emit('rooms', rooms);
+					if (joinedUsers.find(toto => toto.socketId === connection.socketId))
+						await this.server.to(connection.socketId).emit('getMember', addUsersRoom.users);
+				}
 			}
-		}
 		}
 
 	}
@@ -182,9 +181,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		if (updatedRoom == null || !rooms.find(toto => toto.id === updatedRoom.id))
 			return;
 		const messages = await this.messageService.findMessagesForRoom(updatedRoom);
-		await this.joinedRoomService.create({ socketId: socket.id, user: socket.data.user, room: updatedRoom});
+		await this.joinedRoomService.create({ socketId: socket.id, user: socket.data.user, room: updatedRoom });
 		const credentialRoom = this.roomService.getRoomCredential(socket.data.user, updatedRoom);
-		await this.server.to(socket.id).emit('messages', {messages: messages, room: credentialRoom});
+		await this.server.to(socket.id).emit('messages', { messages: messages, room: credentialRoom });
 	}
 
 	@SubscribeMessage('leaveRoom')
@@ -193,15 +192,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	}
 
 	@SubscribeMessage('quitRoom')
-	async onQuitRoom(socket: Socket, room: RoomI) {
-		const userToRemove = room.users.find(user => user.id === socket.data.user.id);
+	async onQuitRoom(socket: Socket, object: {room: RoomI, user: UserI }) {
+		object.room = await this.roomService.getRoom(object.room.id);
+		let userToRemove: UserI;
+		if (object.user === null)
+		userToRemove = object.room.users.find(user => user.id === socket.data.user.id);
+		else
+		userToRemove = object.room.users.find(user => user.id === object.user.id);
 		if (!userToRemove)
 			return socket.emit('Error', new UnauthorizedException());
-		const updatedRoom: RoomI = await this.roomService.getRoom(room.id);
-		const quitedRoom: RoomI = await this.roomService.quitRoom(socket.data.user.id, updatedRoom);
-		await this.joinedRoomService.deleteBySocketId(socket.id);
-		this.onPaginatieRoom(socket);
-		await this.server.to(socket.id).emit('messages', {messages: null, room: null});
+		const updatedRoom: RoomI = await this.roomService.getRoom(object.room.id);
+		const quitedRoom: RoomI = await this.roomService.quitRoom(userToRemove, updatedRoom);
+		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(object.room.id);
+		const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(userToRemove);
+		const rooms = await this.roomService.getRoomsForUser(userToRemove.id);
+		for (const connection of connections) {
+			await this.server.to(connection.socketId).emit('rooms', rooms);
+			if (joined.find(toto => toto.socketId === connection.socketId)) {
+				await this.server.to(connection.socketId).emit('messages', { messages: null, room: null });
+				await this.joinedRoomService.deleteBySocketId(connection.socketId);
+			}
+		}
 		const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(quitedRoom.id);
 
 		for (const user of quitedRoom.users) {
@@ -211,6 +222,30 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 				await this.server.to(connection.socketId).emit('rooms', rooms);
 				if (joinedUsers.find(toto => toto.socketId === connection.socketId))
 					await this.server.to(connection.socketId).emit('getMember', quitedRoom.users);
+			}
+		}
+	}
+
+	@SubscribeMessage('deleteRoom')
+	async onDeleteRoom(socket: Socket, room: RoomI) {
+		room = await this.roomService.getRoom(room.id);
+		const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room.id);
+		for (const user of room.users) {
+			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
+			for (const connection of connections) {
+				if (joinedUsers.find(toto => toto.socketId === connection.socketId)) {
+					await this.server.to(connection.socketId).emit('messages', { messages: null, room: null });
+					await this.joinedRoomService.deleteBySocketId(connection.socketId);
+				}
+			}
+		}
+		await this.roomService.deleteRoom(room.id);		
+		
+		for (const user of room.users) {
+			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
+			const rooms = await this.roomService.getRoomsForUser(user.id);
+			for (const connection of connections) {
+				await this.server.to(connection.socketId).emit('rooms', rooms);
 			}
 		}
 	}

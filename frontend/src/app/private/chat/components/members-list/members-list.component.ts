@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DashboardService } from '../../services/dashboard-service/dashboard-service';
 import { Console } from 'console';
 import { ChatService } from '../../services/chat-service/chat.service';
@@ -25,6 +25,7 @@ export class MembersListComponent implements OnInit {
 
 	users: Observable<UserI[]> = this.chatservice.getMember();
 
+	@Input() selectedUserInput: UserI;
 	  @ViewChild('option') option: ElementRef;
 
   constructor(private elementRef: ElementRef, public dashService: DashboardService, private chatservice: ChatService) { 
@@ -64,7 +65,8 @@ export class MembersListComponent implements OnInit {
 	  }
 
   test() {
-	console.log(this.selectedUser);
+	this.selectedUserInput = this.selectedUser;
+	//console.log(this.selectedUser);
   }
 
   hide() {

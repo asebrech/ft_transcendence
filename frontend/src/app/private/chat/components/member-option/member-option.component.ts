@@ -1,5 +1,6 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ChatService } from '../../services/chat-service/chat.service';
+import { UserI } from 'src/app/model/user.interface';
 
 @Component({
   selector: 'app-member-option',
@@ -10,6 +11,7 @@ export class MemberOptionComponent implements OnInit {
 
 	@Output() valueChanged = new EventEmitter<boolean>();
 	@Output() divHeight = new EventEmitter<number>();
+	@Input() selectedUser: UserI;
 	@ViewChild('maDiv') maDiv: ElementRef;
 
 	isAdmin: boolean = true;
@@ -40,6 +42,10 @@ leaveChannel() {
 
 deleteChannel() {
 	console.log('deleteChannel');
+}
+
+kick() {
+	this.chatService.quitRoom(this.selectedUser)
 }
 
 }
