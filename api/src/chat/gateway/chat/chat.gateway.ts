@@ -63,7 +63,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	async onCreateRoom(socket: Socket, room: RoomI) {
 		const createdRoom: RoomI = await this.roomService.createRoom(room, socket.data.user);
 
-		Logger.log(createdRoom);
 		for (const user of createdRoom.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
 			const rooms = await this.roomService.getRoomsForUser(user.id);
@@ -77,8 +76,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('changeName')
 	async changeName(socket: Socket, object: { name: string, room: RoomI }) {
+		if (socket.data.user.id !== object.room.owner.id) {
+			return socket.emit('Error', new UnauthorizedException());
+		}
 		const room: RoomI = await this.roomService.chaneNameRoom(object.name, object.room);
-
 		for (const user of room.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
 			const rooms = await this.roomService.getRoomsForUser(user.id);
@@ -114,20 +115,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('listMember')
 	async listMember(socket: Socket, room: RoomI) {
+		if (!room)
+			return this.server.to(socket.id).emit('getMember', null);
 		const updatedRoom = await this.roomService.getRoom(room.id);
 		return this.server.to(socket.id).emit('getMember', updatedRoom.users);
 	}
 
 	@SubscribeMessage('addUsers')
 	async addUsers(socket: Socket, object: { users: UserI[], room: RoomI }) {
-
+		if (socket.data.user.id !== object.room.owner.id) {
+			return socket.emit('Error', new UnauthorizedException());
+		}
 		const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(object.room, object.users);
+		const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addUsersRoom.id);
 
 		for (const user of addUsersRoom.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
 			const rooms = await this.roomService.getRoomsForUser(user.id);
 			for (const connection of connections) {
 				await this.server.to(connection.socketId).emit('rooms', rooms);
+				if (joinedUsers.find(toto => toto.socketId === connection.socketId))
+					await this.server.to(connection.socketId).emit('getMember', addUsersRoom.users);
 			}
 		}
 	}
@@ -141,24 +149,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	@SubscribeMessage('addUserToRoom')
 	async addUserToRoom(socket: Socket, room: RoomI) {
 
-		let users: UserI[] = [];
-		users.push(socket.data.user);
 		const upRoom = await this.roomService.getRoom(room.id);
-
+		
 		if (upRoom.users.find(user => user.id === socket.data.user.id)) {
 			this.onJoinRoom(socket, room.id);
 		}
 		else {
-			const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(upRoom, users);
-	
-			for (const user of addUsersRoom.users) {
-				const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-				const rooms = await this.roomService.getRoomsForUser(user.id);
-				for (const connection of connections) {
-					await this.server.to(connection.socketId).emit('rooms', rooms);
-				}
+			let users: UserI[] = [];
+			users.push(socket.data.user);
+		const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(upRoom, users);
+		const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addUsersRoom.id);
+		
+		this.onJoinRoom(socket, room.id);
+		for (const user of addUsersRoom.users) {
+			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
+			const rooms = await this.roomService.getRoomsForUser(user.id);
+			for (const connection of connections) {
+				await this.server.to(connection.socketId).emit('rooms', rooms);
+				if (joinedUsers.find(toto => toto.socketId === connection.socketId))
+					await this.server.to(connection.socketId).emit('getMember', addUsersRoom.users);
 			}
-			this.onJoinRoom(socket, room.id);
+		}
 		}
 
 	}
@@ -179,6 +190,29 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	@SubscribeMessage('leaveRoom')
 	async onLeaveRoom(socket: Socket) {
 		await this.joinedRoomService.deleteBySocketId(socket.id);
+	}
+
+	@SubscribeMessage('quitRoom')
+	async onQuitRoom(socket: Socket, room: RoomI) {
+		const userToRemove = room.users.find(user => user.id === socket.data.user.id);
+		if (!userToRemove)
+			return socket.emit('Error', new UnauthorizedException());
+		const updatedRoom: RoomI = await this.roomService.getRoom(room.id);
+		const quitedRoom: RoomI = await this.roomService.quitRoom(socket.data.user.id, updatedRoom);
+		await this.joinedRoomService.deleteBySocketId(socket.id);
+		this.onPaginatieRoom(socket);
+		await this.server.to(socket.id).emit('messages', {messages: null, room: null});
+		const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(quitedRoom.id);
+
+		for (const user of quitedRoom.users) {
+			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
+			const rooms = await this.roomService.getRoomsForUser(user.id);
+			for (const connection of connections) {
+				await this.server.to(connection.socketId).emit('rooms', rooms);
+				if (joinedUsers.find(toto => toto.socketId === connection.socketId))
+					await this.server.to(connection.socketId).emit('getMember', quitedRoom.users);
+			}
+		}
 	}
 
 	@SubscribeMessage('addMessage')

@@ -66,4 +66,10 @@ export class RoomService {
 		}
 		return this.roomRepository.save(room);
 	} 
+
+	async quitRoom(userToRemove: UserI, room: RoomI): Promise<RoomI> {
+			const index = room.users.indexOf(userToRemove);
+  			room.users.splice(index, 1);
+ 			return this.roomRepository.save(room);
+	}
 }

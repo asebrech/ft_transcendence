@@ -31,7 +31,7 @@ export class MessagesComponent implements OnInit {
 	constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef,
 		private elementRef: ElementRef, public chatService: ChatService) {
 
-		this.ChannelName$.subscribe(name =>{if(name){ this.placeholderText = name.name}});
+		this.ChannelName$.subscribe(name =>{if(name){ this.placeholderText = name.name} else {this.placeholderText = null}});
 	}
 
 	@HostListener('document:click', ['$event'])

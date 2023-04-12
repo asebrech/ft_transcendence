@@ -42,6 +42,10 @@ export class ChatService {
 		return this.socket.emit('leaveRoom', this.selectedRoom);
 	}
 
+	quitRoom() {
+		return this.socket.emit('quitRoom', this.selectedRoom);
+	}
+
 	getAllChannels(): Observable<RoomI[]> {
 		return this.socket.fromEvent<RoomI[]>('getAllChannels');
 	}
@@ -52,12 +56,22 @@ export class ChatService {
 
 	getMessages(): Observable<{messages: MessageI[], room: RoomI}> {
 		return this.socket.fromEvent<{messages: MessageI[], room: RoomI}>('messages').pipe( tap(object => {
-			this.selectedRoom = object.room;
-			this.selectedRoomId = this.selectedRoom.id;
-			this.selectedRoomOwner = this.selectedRoom.owner;
-			this.roomName.next(object.room);
-			this.messages.next(object.messages);
-			localStorage.setItem('room', JSON.stringify(object.room.id));
+			if (object.room === null) {
+				this.selectedRoom = object.room;
+				this.selectedRoomId = null;
+				this.selectedRoomOwner = null;
+				this.roomName.next(object.room);
+				this.messages.next(object.messages);
+				localStorage.removeItem('room');
+			}
+			else {
+				this.selectedRoom = object.room;
+				this.selectedRoomId = this.selectedRoom.id;
+				this.selectedRoomOwner = this.selectedRoom.owner;
+				this.roomName.next(object.room);
+				this.messages.next(object.messages);
+				localStorage.setItem('room', JSON.stringify(object.room.id));
+			}
 			if (this.dashService.members)
 				this.listMember();
 		}));

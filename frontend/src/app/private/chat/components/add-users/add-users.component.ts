@@ -64,6 +64,5 @@ export class AddUsersComponent implements OnInit {
 	}
 	this.chatService.addUsers(selectedUsers);
 	this.dashService.addUsers = false;
-	this.chatService.listMember();
   }
 }
