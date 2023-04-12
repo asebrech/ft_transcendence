@@ -10,8 +10,8 @@ import { UserService } from 'src/app/public/services/user-service/user.service';
 })
 export class PlayerService {
 
-  user : UserI = this.authService.getLoggedInUser();
-  friend : string[];
+  user : UserI;
+  friend : string[] = [];
   user$ : Observable<UserI>
   usersList: Observable<UserI[]>;
   
@@ -19,9 +19,17 @@ export class PlayerService {
     this.user$ = this.getUser().pipe(
       map((user: UserI) => {
         this.friend = user.friend;
+        this.user = user;
         return user;
       })
     );
+    this.user$.subscribe((user : UserI) => {
+    console.log(this.user.id);
+    });
+  }
+
+  getFriends(): string[] {
+    return this.friend;
   }
 
   getUser(): Observable<UserI> {

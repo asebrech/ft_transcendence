@@ -10,25 +10,27 @@ import { UserI } from 'src/app/model/user.interface';
 })
 export class FriendsComponent implements OnInit {
 
-    users: UserI[] = [];
+  users: UserI[] = [];
   filteredUsers: UserI[] = [];
   searchTerm: string = '';
-  friends: string[] = ['mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago','mago'];
+  friends: string[];
   message: string;
   showContextMenu: boolean;
   contextMenuTop: number;
   contextMenuLeft: number;
-  isMyFriend: boolean = true;
+  isMyFriend: boolean = false;
 
   constructor(private route : Router, private playerService: PlayerService) { }
 
   ngOnInit(): void {
-    if (!this.friends.length)
+    this.friends = this.playerService.getFriends();
+    if (!this.playerService.friend.length)
       this.message = "Liste d'amis vide !";
     this.playerService.getUserList().subscribe( users => {
       this.users = users;
       this.filteredUsers = [];
     });
+    console.log(this.friends);
   }
 
   searchUsers() {
@@ -41,16 +43,11 @@ export class FriendsComponent implements OnInit {
     }
   }
 
-  // selectionner(user: UserI) {
-  //  this.username = user.username; 
-  //   this.resultats = [];
-  // }
-
   goToProfileOf(user: string) {
     this.route.navigate(['/private/user/profile', user]);
   }
 
-  onContextMenu(event: MouseEvent){
+  onContextMenu(event: MouseEvent, user: string){
     event.preventDefault();
     this.showContextMenu = true;
     this.contextMenuTop = event.clientY;
