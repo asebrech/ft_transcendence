@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserService } from 'src/app/public/services/user-service/user.service';
+import { UserModule } from '../user.module';
 
 @Injectable({
   providedIn: 'root'
@@ -12,25 +13,9 @@ export class PlayerService {
 
   user : UserI;
   friend : string[] = [];
-  user$ : Observable<UserI>
   usersList: Observable<UserI[]>;
-  
-  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient) {
-    this.user$ = this.getUser().pipe(
-      map((user: UserI) => {
-        this.friend = user.friend;
-        this.user = user;
-        return user;
-      })
-    );
-    this.user$.subscribe((user : UserI) => {
-    console.log(this.user.id);
-    });
-  }
 
-  getFriends(): string[] {
-    return this.friend;
-  }
+  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient) {}
 
   getUser(): Observable<UserI> {
     const userId = this.authService.getLoggedInUser().id;
@@ -45,6 +30,14 @@ export class PlayerService {
     return this.httpClient.post(`api/users/${id}/addlosses/`, null);
   }
 
+  addFriend(userId: number, newFriend: string) : Observable<string[]> {
+    return this.httpClient.post<string[]>(`api/users/${userId}/addfriend`,{newFriend});
+  }
+
+  removeFriend(userId: number, friend: string) : Observable<string[]> {
+    return this.httpClient.post<string[]>(`api/users/${userId}/remove-friend`,{friend});
+  }
+
   updatePassword(userId: number, oldPassword: string, newPassword: string): Observable<UserI> {
     return this.httpClient.put<UserI>(`api/users/${userId}/change-password`,{oldPassword, newPassword});
   }
@@ -52,14 +45,16 @@ export class PlayerService {
   updateEmail(userId: number, oldEmail: string, newEmail: string): Observable<UserI> {
     return this.httpClient.put<UserI>(`api/users/${userId}/change-email`,{oldEmail, newEmail});
   }
-  
+
   updateUsername(userId: number, newUsername: string): Observable<UserI> {
     return this.httpClient.put<UserI>(`api/users/${userId}/change-username`,{newUsername});
   }
-  
+
   getUserList() : Observable<UserI[]> {
     return this.httpClient.get<UserI[]>(`api/users/all`);
   }
+
+
 }
 
 

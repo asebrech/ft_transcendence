@@ -1,5 +1,5 @@
 <app-nav-bar></app-nav-bar>
-<div class="container">
+<div class="container" (click)="closeContextMenu()">
   <div class="search">
     <div class="title">
       <h1>Chercher</h1>
@@ -15,7 +15,7 @@
             {{user.username}}
           </li>
         </ul>
-      </div>
+      </div> 
     </div>
   </div>
   <div class="friend-list">
@@ -27,9 +27,9 @@
     <p *ngIf="message">{{message}}</p>
     <div class="main">
       <ul>
-        <li *ngFor="let user of friends; let i = index" (click)="goToProfileOf(user)" (contextmenu)="onContextMenu($event, user)">
+        <li *ngFor="let friend of friends; let i = index" (click)="goToProfileOf(friend)" (contextmenu)="onContextMenu($event, friend)">
           <img src="../../../../../../assets/images/astronaut.png">
-          {{ friends[ i % friends.length] }} 
+          {{ friend }}
         </li>
         </ul>
     </div>
@@ -38,7 +38,82 @@
 
 
 <div *ngIf="showContextMenu" class="context-menu" [style.top.px]="contextMenuTop" [style.left.px]="contextMenuLeft">
-  <button *ngIf="isMyFriend" (click)="option1()">add friend</button>
-  <button (click)="option2()">send message</button>
-  <button (click)="option3()">delete friend</button>
+  <button *ngIf="isMyFriend" (click)="addFriend(user.id, selectedUser)">add friend</button>
+  <button >send message</button>
+  <button (click)="removeFriend(user.id, selectedUser)">delete friend</button>
 </div>
+
+
+<!--
+export class PlayerService {
+
+  user$: Observable<UserI>;
+  friends$: Observable<string[]>;
+
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,
+    private httpClient : HttpClient
+  ) {
+    const userId = this.authService.getLoggedInUser().id;
+    this.user$ = this.httpClient.get<UserI>(`/api/users/${userId}`);
+
+    this.friends$ = this.user$.pipe(
+      map(user => user.friend)
+    );
+  }
+
+  getUser(): Observable<UserI> {
+    const userId = this.authService.getLoggedInUser().id;
+    return this.httpClient.get<UserI>(`/api/users/${userId}`);
+  }
+
+  addWin(id: number) {
+    return this.httpClient.post(`api/users/${id}/addwins/`, null);
+  }
+
+  addLosses(id: number) {
+    return this.httpClient.post(`api/users/${id}/addlosses/`, null);
+  }
+
+  addFriend(id: number, username: string) {
+    return this.httpClient.post(`api/users/${id}/add-friend/`,null);
+  }
+
+  updatePassword(userId: number, oldPassword: string, newPassword: string): Observable<UserI> {
+    return this.httpClient.put<UserI>(`api/users/${userId}/change-password`,{oldPassword, newPassword});
+  }
+
+  updateEmail(userId: number, oldEmail: string, newEmail: string): Observable<UserI> {
+    return this.httpClient.put<UserI>(`api/users/${userId}/change-email`,{oldEmail, newEmail});
+  }
+
+  updateUsername(userId: number, newUsername: string): Observable<UserI> {
+    return this.httpClient.put<UserI>(`api/users/${userId}/change-username`,{newUsername});
+  }
+
+  getUserList() : Observable<UserI[]> {
+    return this.httpClient.get<UserI[]>(`api/users/all`);
+  }
+}
+Et voici la partie HTML améliorée pour afficher la liste d'amis :
+
+php
+Copy code
+<div class="friend-list">
+  <div class="title">
+    <h1>Amis</h1>
+    <img src="../../../../../assets/images/src.png" alt="amis-logo">
+  </div>
+  <hr>
+  <p *ngIf="message">{{message}}</p>
+  <div class="main">
+    <ul>
+      <li *ngFor="let friend of friends$ | async; let i = index" (click)="goToProfileOf(friend)" (contextmenu)="onContextMenu($event, friend)">
+        <img src="../../../../../../assets/images/astronaut.png">
+        {{ friend }}
+      </li>
+    </ul>
+  </div>
+</div>
+Dans cette version, nous avons créé un observable friends$ qui émettra un tableau de chaînes de caractères représentant la liste d'amis à chaque fois que l'utilisateur sera chargé. Pour afficher cette liste, nous utilisons une directive async qui prend l'observable friends$ et qui automatiquement s'abonne et se désabonne en fonction du cycle de vie du composant. Nous pouvons donc facilement afficher les amis de l'utilisateur en utilisant un simple *ngFor qui parcourt les chaînes de caractères émises par l'observable. -->

@@ -139,14 +139,14 @@ export class UserController {
 		await this.userService.updateEmail(userId, newEmail);
 	}
 
-	@Post(':id/add-friend')	
-	async addFriend(@Param('id') userId : number, @Body() newFriend : string) : Promise<UserI> {
-		return this.userService.addFriend(userId, newFriend);
+	@Post(':id/addfriend')	
+	async addFriend(@Param('id') userId : number, @Body('newFriend') newFriend : string) {
+		await this.userService.addFriend(userId, newFriend);
 	}
 
 	@Post(':id/remove-friend')
-	async removeFriend(@Param('id') userId : number, @Body() friend : string) : Promise<UserI> {
-		return this.userService.removeFriend(userId, friend);
+	async removeFriend(@Param('id') userId : number, @Body('friend') friend : string) {
+		await this.userService.removeFriend(userId, friend);
 	}
 
 	@Post(':id/addwins')
