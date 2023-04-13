@@ -28,7 +28,7 @@ export class MembersListComponent implements OnInit {
 	@Input() selectedUserInput: UserI;
 	  @ViewChild('option') option: ElementRef;
 
-  constructor(private elementRef: ElementRef, public dashService: DashboardService, private chatservice: ChatService) { 
+  constructor(private elementRef: ElementRef, public dashService: DashboardService, public chatservice: ChatService) { 
   }
 
   ngOnInit(): void {
@@ -77,32 +77,39 @@ export class MembersListComponent implements OnInit {
   }
 
   getElementPosition(index: number, event: MouseEvent) {
-
-	if (index === this.selectedIndex && this.showOverlay) {
-		this.hide();
-		return;
-	}
-    // Récupérer l'élément DOM à partir de l'événement de clic
-    const domElement = event.target as HTMLElement;
-
-    // Récupérer la position de l'élément en utilisant getBoundingClientRect()
-    const rect = domElement.getBoundingClientRect();
-
-	this.selectedIndex = index;
-
-	this.overlayPosition.left = -260;
-	
-	const windowHeight = window.innerHeight;
-  	const overlayHeight = this.heightOverlay + 100;//domElement.offsetHeight;
-
-	  if (rect.top + this.heightOverlay > windowHeight) {
-		this.overlayPosition.top = windowHeight - overlayHeight;
-	  } else {
-		this.overlayPosition.top = rect.top -95;
-	  }
-
-    // Afficher la div de 100x100
-    this.showOverlay = true;
+	  
+// 	if (this.selectedUser.id === this.chatservice.currentUser.id){
+// 		this.hide();
+// 		this.showOverlay = false;
+// 		this.isClicked = false;
+// 		return;
+//   }
+	  if (index === this.selectedIndex && this.showOverlay) {
+		  this.hide();
+		  return;
+		}
+		// Récupérer l'élément DOM à partir de l'événement de clic
+		const domElement = event.target as HTMLElement;
+		
+		// Récupérer la position de l'élément en utilisant getBoundingClientRect()
+		const rect = domElement.getBoundingClientRect();
+		
+		this.selectedIndex = index;
+		
+		this.overlayPosition.left = -260;
+		
+		const windowHeight = window.innerHeight;
+		const overlayHeight = this.heightOverlay + 100;//domElement.offsetHeight;
+		
+		if (rect.top + this.heightOverlay > windowHeight) {
+			this.overlayPosition.top = windowHeight - overlayHeight;
+		} else {
+			this.overlayPosition.top = rect.top -95;
+		}
+		
+		// Afficher la div de 100x100
+		
+		this.showOverlay = true;
 	this.checkResize();
   }
 

@@ -3,9 +3,9 @@ import { ChatService } from '../../services/chat-service/chat.service';
 import { UserI } from 'src/app/model/user.interface';
 
 @Component({
-  selector: 'app-member-option',
-  templateUrl: './member-option.component.html',
-  styleUrls: ['./member-option.component.scss']
+	selector: 'app-member-option',
+	templateUrl: './member-option.component.html',
+	styleUrls: ['./member-option.component.scss']
 })
 export class MemberOptionComponent implements OnInit {
 
@@ -14,38 +14,59 @@ export class MemberOptionComponent implements OnInit {
 	@Input() selectedUser: UserI;
 	@ViewChild('maDiv') maDiv: ElementRef;
 
+	isOwner: boolean = true;
 	isAdmin: boolean = true;
 
 
-  constructor(private chatService: ChatService) { }
 
-  ngOnInit(): void {
-	if (this.chatService.selectedRoomOwner === null)
-		this.isAdmin = false;
-}
 
-ngAfterViewInit() {
-	  this.divHeight.emit(this.maDiv.nativeElement.offsetHeight);
-  }
+	constructor(public chatService: ChatService) { }
 
-  onClick() {
-	this.valueChanged.emit(false);
-}
+	ngOnInit(): void {
+		if (!this.chatService.selectedRoomOwner)
+			this.isOwner = false;
+		if (!this.chatService.selectedRoomAdmin)
+			this.isAdmin = false;
+	}
 
-  changePass() {
-	console.log('changePass');
-}
+	ngAfterViewInit() {
+		this.divHeight.emit(this.maDiv.nativeElement.offsetHeight);
+	}
 
-leaveChannel() {
-	console.log('leaveChannel');
-}
+	onClick() {
+		this.valueChanged.emit(false);
+	}
 
-deleteChannel() {
-	console.log('deleteChannel');
-}
+	checkUser() {
+		return (this.chatService.selectedRoomOwner || this.chatService.selectedRoomAdmin)
+			&& this.selectedUser.id !== this.chatService.currentUser.id
+			&& this.selectedUser.id !== this.chatService.selectedRoom.owner.id
+	}
 
-kick() {
-	this.chatService.quitRoom(this.selectedUser)
-}
+	checkUserOwnerOnly() {
+		return this.chatService.selectedRoomOwner && this.selectedUser.id !== this.chatService.currentUser.id
+	}
+
+	changePass() {
+		console.log('changePass');
+	}
+
+	leaveChannel() {
+		console.log('leaveChannel');
+	}
+
+	deleteChannel() {
+		console.log('deleteChannel');
+	}
+
+	promote() {
+		this.chatService.addAdmin(this.selectedUser);
+	}
+	
+	kick() {
+		this.chatService.quitRoom(this.selectedUser);
+	}
+
+
 
 }

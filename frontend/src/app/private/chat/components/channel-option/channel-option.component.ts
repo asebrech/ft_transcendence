@@ -42,7 +42,7 @@ export class ChannelOptionComponent {
 	}
 
 	leaveChannel() {
-		this.chatService.quitRoom(null);
+		this.chatService.quitRoom(this.chatService.currentUser);
 	}
 
 	deleteChannel() {

@@ -12,9 +12,11 @@ import { DashboardService } from '../dashboard-service/dashboard-service';
 })
 export class ChatService {
 
+	currentUser: UserI = null;
 	selectedRoom: RoomI = null;
 	selectedRoomId: number = null;
-	selectedRoomOwner: UserI = null;
+	selectedRoomOwner: boolean = false;
+	selectedRoomAdmin: boolean = false;
 	private roomName = new Subject<RoomI>();
 	roomName$ = this.roomName.asObservable();
 	private messages = new Subject<MessageI[]>();
@@ -55,12 +57,14 @@ export class ChatService {
 		return this.socket.fromEvent<MessageI[]>('addedMessages').pipe(tap (value => {this.messages.next(value);}));
 	}
 
-	getMessages(): Observable<{messages: MessageI[], room: RoomI}> {
-		return this.socket.fromEvent<{messages: MessageI[], room: RoomI}>('messages').pipe( tap(object => {
+	getMessages(): Observable<{messages: MessageI[], room: RoomI, user: UserI}> {
+		return this.socket.fromEvent<{messages: MessageI[], room: RoomI, user: UserI}>('messages').pipe( tap(object => {
 			if (object.room === null) {
 				this.selectedRoom = object.room;
 				this.selectedRoomId = null;
-				this.selectedRoomOwner = null;
+				this.currentUser = null;
+				this.selectedRoomOwner = false;
+				this.selectedRoomAdmin = false;
 				this.roomName.next(object.room);
 				this.messages.next(object.messages);
 				localStorage.removeItem('room');
@@ -68,7 +72,15 @@ export class ChatService {
 			else {
 				this.selectedRoom = object.room;
 				this.selectedRoomId = this.selectedRoom.id;
-				this.selectedRoomOwner = this.selectedRoom.owner;
+				this.currentUser = object.user;
+				if (this.selectedRoom.owner.id === object.user.id)
+					this.selectedRoomOwner = true;
+				else
+					this.selectedRoomOwner = false;
+				if (this.selectedRoom.admins && this.selectedRoom.admins.find(toto => toto.id === object.user.id))
+					this.selectedRoomAdmin = true;
+				else
+					this.selectedRoomAdmin = false;
 				this.roomName.next(object.room);
 				this.messages.next(object.messages);
 				localStorage.setItem('room', JSON.stringify(object.room.id));
@@ -129,5 +141,9 @@ export class ChatService {
 
 	addUsers(users: UserI[]) {
 		this.socket.emit('addUsers', { users: users, room: this.selectedRoom });
+	}
+
+	addAdmin(user: UserI) {
+		this.socket.emit('addAdmin', { user: user, room: this.selectedRoom });
 	}
 }

@@ -28,7 +28,7 @@ export class RoomService {
 	}
 
 	async getRoom(roomId: number): Promise<RoomI> {
-		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner'] });
+		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins'] });
 	}
 
 	getRoomCredential(user: UserI, room: RoomI): RoomI {
@@ -69,17 +69,26 @@ export class RoomService {
 			room.users.push(user);
 		}
 		return this.roomRepository.save(room);
+	}
+	
+	async addAdminToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
+		if (!room.admins){
+			room.admins = [];
+		}
+		room.admins.push(user);
+		return this.roomRepository.save(room);
 	} 
 
 	async quitRoom(userToRemove: UserI, room: RoomI): Promise<RoomI> {
-			const index = room.users.indexOf(userToRemove);
-  			room.users.splice(index, 1);
+			const index = room.users.findIndex(obj => obj.id === userToRemove.id);
+			if (index !== -1)
+  				room.users.splice(index, 1);
  			return this.roomRepository.save(room);
 	}
 
 	async deleteRoom(roomId: number){
 		this.messagesService.deleteByRoomId(roomId);
 		this.joinedRoomService.deleteByroomId(roomId);
-		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner'] }));
+		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins'] }));
 	}
 }

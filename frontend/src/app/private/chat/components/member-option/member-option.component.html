@@ -1,54 +1,54 @@
 <div class="main" #maDiv>
-	<div class="labelContainer" (click)="onClick()">
+	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id" (click)="onClick()">
 		<label (click)="changePass()" >Invite to a game</label>
 		<div class="image">
 			<img src="../../../../../assets/images/rocket.png">
 		</div>
 	</div>
-	<div class="separator"></div>
+	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id"></div>
 	<div class="labelContainer"  (click)="onClick()">
 		<label  (click)="leaveChannel()" >User Profile</label>
 		<div class="image">
 			<img src="../../../../../assets/images/utilisateur-astronaute_1.png">
 		</div>
 	</div>
-	<div class="separator"></div>
-	<div class="labelContainer" (click)="onClick()">
+	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id"></div>
+	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id" (click)="onClick()">
 		<label (click)="deleteChannel()" >Add Friend</label>
 		<div class="image">
 			<img src="../../../../../assets/images/add-user.png">
 		</div>
 	</div>
-	<div class="separator" *ngIf="isAdmin"></div>
-	<div class="labelContainer" *ngIf="isAdmin" (click)="onClick()">
-		<label (click)="leaveChannel()" >Promote</label>
+	<div class="separator" *ngIf="checkUserOwnerOnly()"></div>
+	<div class="labelContainer" *ngIf="checkUserOwnerOnly()" (click)="onClick()">
+		<label (click)="promote()" >Promote</label>
 		<div class="image">
 			<img src="../../../../../assets/images/promote-user.png">
 		</div>
 	</div>
-	<div class="separator"></div>
-	<div class="labelContainer" (click)="onClick()">
+	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id"></div>
+	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id" (click)="onClick()">
 		<label (click)="deleteChannel()" class="red" >Block</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-denied-90_1.png">
 		</div>
 	</div>
-	<div class="separator" *ngIf="isAdmin"></div>
-	<div class="labelContainer" *ngIf="isAdmin" (click)="onClick()">
+	<div class="separator" *ngIf="checkUser()"></div>
+	<div class="labelContainer" *ngIf="checkUser()" (click)="onClick()">
 		<label (click)="leaveChannel()" class="red" >Mute</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-denied-90_1.png">
 		</div>
 	</div>
-	<div class="separator" *ngIf="isAdmin"></div>
-	<div class="labelContainer" *ngIf="isAdmin" (click)="onClick(); kick();">
+	<div class="separator" *ngIf="checkUser()"></div>
+	<div class="labelContainer" *ngIf="checkUser()" (click)="onClick(); kick();">
 		<label  class="red" >Kick</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-logout-90_1.png">
 		</div>
 	</div>
-	<div class="separator" *ngIf="isAdmin"></div>
-	<div class="labelContainer"*ngIf="isAdmin" (click)="onClick()">
+	<div class="separator" *ngIf="checkUser()"></div>
+	<div class="labelContainer"*ngIf="checkUser()" (click)="onClick()">
 		<label (click)="deleteChannel()" class="red" >Ban</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-logout-90_1.png">

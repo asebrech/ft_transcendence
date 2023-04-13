@@ -36,7 +36,7 @@ export class MessagesComponent implements OnInit {
 
 	@HostListener('document:click', ['$event'])
 	onClick(event: MouseEvent) {
-		if (this.chatService.selectedRoomOwner !== null && !this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.enableAddUser').contains(event.target)) {
+		if ((this.chatService.selectedRoomOwner || this.chatService.selectedRoomAdmin)&& !this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.enableAddUser').contains(event.target)) {
 			this.dashService.addUsers = true;
 		}
 		else if (this.chatService.selectedRoom !== null && this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.addUser') && !this.elementRef.nativeElement.querySelector('.addUser').contains(event.target)) {
