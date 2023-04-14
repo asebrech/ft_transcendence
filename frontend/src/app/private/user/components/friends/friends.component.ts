@@ -31,7 +31,7 @@ export class FriendsComponent implements OnInit {
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
       this.friends = user.friend;
-      if (user.friend.length === 0)
+      if (!user.friend)
        this.message = "Liste d'amis vide !";
        console.table(this.friends);
     });
@@ -67,6 +67,7 @@ export class FriendsComponent implements OnInit {
     //     this.isMyFriend = true;
     // });
     this.selectedUser = userId;
+    console.log(this.selectedUser);
   }
 
   closeContextMenu(){

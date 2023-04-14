@@ -141,6 +141,7 @@ export class UserController {
 
 	@Post(':id/addfriend')	
 	async addFriend(@Param('id') userId : number, @Body('newFriend') newFriendId : number) {
+		console.log(newFriendId);
 		await this.userService.addFriend(userId, newFriendId);
 	}
 

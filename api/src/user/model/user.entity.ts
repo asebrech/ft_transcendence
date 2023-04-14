@@ -43,6 +43,6 @@ export class UserEntity {
 	@Column({default: 1})
 	level: number;
 
-	@Column({array: true, type: 'simple-array'})
+	@Column({type: 'simple-array', default: []})
 	friend : number[];
 }
