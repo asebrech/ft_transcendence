@@ -1,10 +1,8 @@
 {
   "dependencies": {
     "@colyseus/monitor": "^0.14.22",
-    "@sweetalert2/ngx-sweetalert2": "^12.1.0",
     "jquery": "^3.6.3",
-    "ng-circle-progress": "^1.7.1",
-    "sweetalert2": "^11.7.3"
+    "ng-circle-progress": "^1.7.1"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.16"

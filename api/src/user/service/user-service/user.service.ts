@@ -83,8 +83,9 @@ export class UserService {
 
 	async handleVerifyToken(token: string, sessionId: string): Promise<UserI> {
 		const session = this.authService.getSession(sessionId);
-		if (!session)
+		if (!session) {
 			throw new HttpException('Login was not successful, invalid session', HttpStatus.UNAUTHORIZED);
+		}
 		const foundUser: UserI =  await this.findByEmail(session.email);
 		if (!token)
 		{
@@ -95,8 +96,9 @@ export class UserService {
 		if (check) {
 			this.authService.deleteSession(sessionId);
 			return foundUser;
-		} else
+		} else {
 			throw new HttpException('Login was not successful, invalid token', HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 	async returnJwt(apiUser: UserI): Promise<string> {
@@ -124,11 +126,10 @@ export class UserService {
 		return this.mailExists(mail);
 	}
 
+	// also returns the password
 	private async findByEmail(email: string): Promise<UserI> {
 		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth', 'google_auth_secret'] });
 	}
-
-
 
 	private async hashPassword(password: string): Promise<string> {
 		return this.authService.hashPassword(password);
@@ -136,35 +137,6 @@ export class UserService {
 
 	private async validatePassword(password: string, storedPasswordHash: string): Promise<any> {
 		return this.authService.comparePassword(password, storedPasswordHash);
-	}
-
-	async updatePassword(userId: number, oldPassword: string, newPassword: string): Promise<UserI> {
-		const user = await this.findOne(userId);
-		const passwordMatches = await this.authService.comparePassword(oldPassword, user.password);
-		if (!passwordMatches)
-			throw new HttpException('Old password is incorrect', HttpStatus.UNAUTHORIZED);
-		const newPasswordHash = await this.authService.hashPassword(newPassword);
-		await this.userRepository.update(userId, { password: newPasswordHash });
-		const updatedUser = await this.findOne(userId);
-		return updatedUser;
-	}
-
-	async updateEmail(userId: number, oldEmail: string, newEmail: string): Promise<UserI> {
-		const user = await this.findOne(userId);
-		if (this.checkEmail(newEmail))
-			throw new HttpException('This email address is already used', HttpStatus.UNAUTHORIZED);
-		await this.userRepository.update(userId, { email: newEmail });
-		const updatedUser = await this.findOne(userId);
-		return updatedUser;
-	}
-
-	async updateUsername(userId: number, oldUsername: string, newUsername: string): Promise<UserI> {
-		const user = await this.findOne(userId);
-		if (this.usernameExists(newUsername))
-			throw new HttpException('This username is already taken', HttpStatus.UNAUTHORIZED);
-		await this.userRepository.update(userId, { username: newUsername });
-		const updatedUser = await this.findOne(userId);
-		return updatedUser;
 	}
 
 	private async findOne(id: number): Promise<UserI> {
@@ -177,18 +149,11 @@ export class UserService {
 
 	private async mailExists(email: string): Promise<boolean> {
 		const user = await this.userRepository.findOneBy({ email });
-		if (user)
+		if (user) {
 			return true;
-		else
+		} else {
 			return false;
-	}
-
-	private async usernameExists(username: string): Promise<boolean> {
-		const user = await this.userRepository.findOneBy({ username });
-		if (user)
-			return true;
-		else
-			return false;
+		}
 	}
 
 	async addFriend(id : number, newFriend : UserEntity) : Promise<UserI> {
@@ -208,16 +173,19 @@ export class UserService {
 
 	async addWinOrLoss(id: number, isWin: boolean): Promise<UserEntity> {
 		const user = await this.userRepository.findOneBy({id});
-		if (isWin)
+		if (isWin) {
 		  user.wins += 1;
-		else
+		} else {
 		  user.losses += 1;
+		}
 		user.ratio = user.wins / user.losses;
 		return this.userRepository.save(user);
 	  }
 
-	async getUserInfo(id: number): Promise<UserEntity> {
+	  async getUserInfo(id: number): Promise<UserEntity> {
+		// Récupérer l'utilisateur correspondant à l'ID fourni avec ses amis
 		const user = await this.userRepository.findOneBy({id});
+		// Retourner l'utilisateur avec toutes ses informations
 		return user;
 	  }
 }

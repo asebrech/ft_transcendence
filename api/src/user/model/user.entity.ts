@@ -16,7 +16,7 @@ export class UserEntity {
 	@Column({unique: true})
 	email: string;
 
-	@Column({})
+	@Column({select: false})
 	password: string;
 
 	@Column({default: false})
@@ -39,9 +39,6 @@ export class UserEntity {
 
 	@Column({default: 0})
 	timeplayed : number;
-
-	@Column({default: 0})
-	level: number;
 
 	@ManyToOne(() => UserEntity)
 	friend : UserEntity[];

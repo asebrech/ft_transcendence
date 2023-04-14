@@ -8,21 +8,20 @@
     <button (click)="changePwd()">reset password</button>
     <div class="username-popup" *ngIf="usernamePopup">
       <h1>Please enter new username</h1>
-      <input type="text" placeholder="USERNAME" [(ngModel)]="old">
-      <input type="text" placeholder="NEW USERNAME" [(ngModel)]="newO">
-      <button class="changes" (click)="closePopup(2, old, newO)">SAVE CHANGES</button>
+      <input type="text" placeholder="NEW USERNAME">
+      <button (click)="closePopup(2)">CONFIRM</button>
     </div>
     <div class="username-popup" *ngIf="pwdPopup">
       <h1>Please enter new password</h1>
-      <input type="password" placeholder="OLD PASSWORD" [(ngModel)]="old">
-      <input type="password"placeholder="NEW PASSWORD"  [(ngModel)]="newO">
-      <button class="changes" (click)="closePopup(1, old, newO)">SAVE CHANGES</button>
+      <input type="text" placeholder="NEW PASSWORD">
+      <input type="text"placeholder="CONFIRM NEW PASSWORD">
+      <button (click)="closePopup(1)">CONFIRM</button>
     </div>
     <div class="username-popup" *ngIf="emailPopup">
       <h1>Please enter new email</h1>
-      <input type="email" placeholder="OLD EMAIL" [(ngModel)]="old">
-      <input type="email" placeholder="NEW EMAIL"  [(ngModel)]="newO">
-      <button class="changes" (click)="closePopup(0, old, newO)">SAVE CHANGES</button>
+      <input type="text" placeholder="NEW EMAIL">
+      <input type="text" placeholder="CONFIRM NEW EMAIL">
+      <button (click)="closePopup(0)">CONFIRM</button>
     </div>
   </div>
   <div class="skin">
