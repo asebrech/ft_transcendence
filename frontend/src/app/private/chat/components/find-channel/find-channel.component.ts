@@ -50,7 +50,7 @@ export class FindChannelComponent implements OnInit {
 		if (result.username) {
 			delete result.name;
 			const user: UserI = result;
-			console.log(user);
+			this.chatService.privateMessage(user);
 		}
 		else {
 			const room: RoomI = result;

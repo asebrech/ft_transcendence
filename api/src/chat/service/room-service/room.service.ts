@@ -24,8 +24,23 @@ export class RoomService {
 		return this.roomRepository.save(newRoom);
 	}
 
+	async createPrivateMessage(users: UserI[]): Promise<RoomI> {
+		
+		const newRoom: RoomI = {
+			name: 'privateMessage',
+			privateMessage: true,
+			owner: null,
+			users: users
+		};
+		return this.roomRepository.save(newRoom);
+	}
+
 	async getAllRoom(): Promise<RoomI[]> {
 		return this.roomRepository.find({relations: ['baned']});
+	}
+
+	async getAllRoomWithUsers(): Promise<RoomI[]> {
+		return this.roomRepository.find({relations: ['users']});
 	}
 
 	async getRoom(roomId: number): Promise<RoomI> {

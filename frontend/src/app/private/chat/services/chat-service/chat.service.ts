@@ -78,7 +78,7 @@ export class ChatService {
 				this.selectedRoom = object.room;
 				this.selectedRoomId = this.selectedRoom.id;
 				this.currentUser = object.user;
-				if (this.selectedRoom.owner.id === object.user.id)
+				if (this.selectedRoom.owner && this.selectedRoom.owner.id === object.user.id)
 					this.selectedRoomOwner = true;
 				else
 					this.selectedRoomOwner = false;
@@ -114,6 +114,10 @@ export class ChatService {
 		// this.snackbar.open(`User ${room.name} created successfuly`, 'Close', {
 		// 	duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
 		// });
+	}
+
+	privateMessage(user: UserI) {
+		this.socket.emit('privateMessage', user);
 	}
 
 	deleteRoom() {

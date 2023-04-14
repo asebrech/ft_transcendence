@@ -72,6 +72,26 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		this.onJoinRoom(socket, createdRoom.id);
 	}
 
+	@SubscribeMessage('privateMessage')
+	async privateMessage(socket: Socket, user: UserI) {
+		const rooms: RoomI[] = await this.roomService.getAllRoomWithUsers();
+		for (const room of rooms) {
+			if (room.privateMessage) {
+				if (room.users && room.users.find(toto => toto.id === user.id) && room.users.find(toto => toto.id === socket.data.user.id)) {
+					return this.onJoinRoom(socket, room.id);
+				}
+			}
+		}
+		const newRoom: RoomI = await this.roomService.createPrivateMessage([user, socket.data.user]);
+		for (const user of newRoom.users) {
+			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
+			const rooms = await this.roomService.getRoomsForUser(user.id);
+			for (const connection of connections) {
+				await this.server.to(connection.socketId).emit('rooms', rooms);
+			}
+		}
+		return this.onJoinRoom(socket, newRoom.id);
+	}
 
 	@SubscribeMessage('changeName')
 	async changeName(socket: Socket, object: { name: string, room: RoomI }) {
@@ -112,6 +132,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		for (const user of users) {
 			user.name = user.username;
 		}
+		for (let i = 0; i < rooms.length; i++) {
+			if(rooms[i].privateMessage === true) {
+					rooms.splice(i, 1);
+					i--;
+			}
+		}
+
 		const merged = [...rooms, ...users];
 		merged.sort((a, b) => {
 			const nameA = a.name.toLowerCase();

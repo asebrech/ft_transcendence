@@ -4,6 +4,7 @@ export interface RoomI {
 	id?: number;
 	name?: string;
 	description?: string;
+	privateMessage?: boolean;
 	owner?: UserI;
 	users?: UserI[];
 	admins?: UserI[];

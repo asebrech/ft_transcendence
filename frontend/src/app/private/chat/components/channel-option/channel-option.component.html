@@ -5,11 +5,11 @@
 				<label (click)="switch()" (click)="changePass()" >Change Password</label>
 			</div>
 			<div class="separator" *ngIf="chatService.selectedRoomOwner"></div>
-			<div class="leave" *ngIf="!chatService.selectedRoomOwner">
+			<div class="leave" *ngIf="!chatService.selectedRoomOwner && !chatService.selectedRoom.privateMessage">
 				<label (click)="switch()" (click)="leaveChannel()" >Leave Channel</label>
 			</div>
 			<!-- <div class="separator" *ngIf="chatService.selectedRoomOwner !== null"></div> -->
-			<div class="delete" *ngIf="chatService.selectedRoomOwner">
+			<div class="delete" *ngIf="chatService.selectedRoomOwner || chatService.selectedRoom.privateMessage">
 
 				<label (click)="switch()" (click)="deleteChannel()" >Delete Channel</label>
 			</div>
