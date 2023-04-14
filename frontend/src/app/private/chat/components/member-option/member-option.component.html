@@ -48,7 +48,7 @@
 		</div>
 	</div>
 	<div class="separator" *ngIf="checkUser()"></div>
-	<div class="labelContainer"*ngIf="checkUser()" (click)="onClick()">
+	<div class="labelContainer"*ngIf="checkUser()" (click)="onClick(); ban()">
 		<label (click)="deleteChannel()" class="red" >Ban</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-logout-90_1.png">

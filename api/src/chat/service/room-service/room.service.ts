@@ -24,11 +24,11 @@ export class RoomService {
 	}
 
 	async getAllRoom(): Promise<RoomI[]> {
-		return this.roomRepository.find();
+		return this.roomRepository.find({relations: ['baned']});
 	}
 
 	async getRoom(roomId: number): Promise<RoomI> {
-		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins'] });
+		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned'] });
 	}
 
 	getRoomCredential(user: UserI, room: RoomI): RoomI {
@@ -86,9 +86,17 @@ export class RoomService {
  			return this.roomRepository.save(room);
 	}
 
+	async addBannedUser(room: RoomI, user: UserI): Promise<RoomI> {		
+		if (!room.baned){
+			room.baned = [];
+		}
+		room.baned.push(user);
+		return this.roomRepository.save(room);
+	} 
+
 	async deleteRoom(roomId: number){
 		this.messagesService.deleteByRoomId(roomId);
 		this.joinedRoomService.deleteByroomId(roomId);
-		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins'] }));
+		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned'] }));
 	}
 }

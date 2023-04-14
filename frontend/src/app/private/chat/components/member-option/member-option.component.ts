@@ -55,10 +55,11 @@ export class MemberOptionComponent implements OnInit {
 		console.log('leaveChannel');
 	}
 
+	
 	deleteChannel() {
 		console.log('deleteChannel');
 	}
-
+	
 	promote() {
 		this.chatService.addAdmin(this.selectedUser);
 	}
@@ -66,7 +67,11 @@ export class MemberOptionComponent implements OnInit {
 	kick() {
 		this.chatService.quitRoom(this.selectedUser);
 	}
+	
+	ban() {
+		this.chatService.banFromRoom(this.selectedUser);
 
+	}
 
 
 }

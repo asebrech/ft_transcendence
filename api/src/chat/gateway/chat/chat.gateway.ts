@@ -95,7 +95,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	@SubscribeMessage('listAllChannels')
 	async listAllChannels(socket: Socket) {
 		const rooms: RoomI[] = await this.roomService.getAllRoom();
-		return this.server.to(socket.id).emit('getAllChannels', rooms);
+		const checkedRooms = rooms;
+		for (const room of rooms) {
+			const banned = room.baned.find(toto => toto.id === socket.data.user.id)
+			if (banned) {
+				const index = checkedRooms.findIndex(toto => toto.id === room.id)
+				if (index !== -1) {
+					checkedRooms.splice(index, 1);
+				}
+			}
+		}
+		return this.server.to(socket.id).emit('getAllChannels', checkedRooms);
 	}
 
 
@@ -126,6 +136,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		// 	return socket.emit('Error', new UnauthorizedException());
 		// }
 		object.room = await this.roomService.getRoom(object.room.id);
+		for (const user of object.users) {
+			if (object.room.baned.find(toto => toto.id === user.id)) {
+				const index = object.room.baned.findIndex(obj => obj.id === user.id);
+				if (index !== -1)
+  					object.room.baned.splice(index, 1);
+			}
+		}
 		const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(object.room, object.users);
 		const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addUsersRoom.id);
 
@@ -168,6 +185,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 		const upRoom = await this.roomService.getRoom(room.id);
 
+		if (upRoom.baned.find(toto => toto.id === socket.data.user.id))
+			return socket.emit('Error', new UnauthorizedException());
+
 		if (upRoom.users.find(user => user.id === socket.data.user.id)) {
 			this.onJoinRoom(socket, room.id);
 		}
@@ -209,7 +229,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	}
 
 	@SubscribeMessage('quitRoom')
-	async onQuitRoom(socket: Socket, object: {room: RoomI, user: UserI }) {
+	async onQuitRoom(socket: Socket, object: {room: RoomI, user: UserI }): Promise<RoomI> {
 		// const userToRemove = object.room.users.find(user => user.id === object.user.id);
 		// if (!userToRemove)
 		// return socket.emit('Error', new UnauthorizedException());
@@ -237,6 +257,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 					await this.server.to(connection.socketId).emit('getMember', quitedRoom.users);
 			}
 		}
+		return quitedRoom;
+	}
+
+	@SubscribeMessage('banFromRoom')
+	async onBanFromRoom(socket: Socket, object: {room: RoomI, user: UserI }) {
+		// const userToRemove = object.room.users.find(user => user.id === object.user.id);
+		// if (!userToRemove)
+		// return socket.emit('Error', new UnauthorizedException());
+		const updatedRoom = await this.onQuitRoom(socket, {room: object.room, user: object.user});
+		await this.roomService.addBannedUser(updatedRoom, object.user);
 	}
 
 	@SubscribeMessage('deleteRoom')
