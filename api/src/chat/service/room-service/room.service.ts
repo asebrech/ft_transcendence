@@ -20,6 +20,7 @@ export class RoomService {
 
 	async createRoom(room: RoomI, creator: UserI): Promise<RoomI> {
 		const newRoom = await this.addCreatorToRoom(room, creator);
+		newRoom.privateMessage = false;
 		return this.roomRepository.save(newRoom);
 	}
 

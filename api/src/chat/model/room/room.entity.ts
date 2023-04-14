@@ -15,6 +15,9 @@ export class RoomEntity {
 	@Column({nullable: true})
 	description: string;
 
+	@Column({nullable: true})
+	privateMessage: boolean;
+
 	@ManyToOne(() => UserEntity, user => user.roomsOwner)
 	@JoinColumn()
 	owner: UserEntity;

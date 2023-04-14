@@ -94,7 +94,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('listAllChannels')
 	async listAllChannels(socket: Socket) {
-		const rooms: RoomI[] = await this.roomService.getAllRoom();
+		const rooms: any[] = await this.roomService.getAllRoom();
+		const users: any[] = await this.userService.findAll();
 		const checkedRooms = rooms;
 		for (const room of rooms) {
 			const banned = room.baned.find(toto => toto.id === socket.data.user.id)
@@ -105,7 +106,26 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 				}
 			}
 		}
-		return this.server.to(socket.id).emit('getAllChannels', checkedRooms);
+		const index = users.findIndex(obj => obj.id === socket.data.user.id);
+		if (index !== -1)
+			  users.splice(index, 1);
+		for (const user of users) {
+			user.name = user.username;
+		}
+		const merged = [...rooms, ...users];
+		merged.sort((a, b) => {
+			const nameA = a.name.toLowerCase();
+			const nameB = b.name.toLowerCase();
+		  
+			if (nameA < nameB) {
+			  return -1;
+			} else if (nameA > nameB) {
+			  return 1;
+			} else {
+			  return 0;
+			}
+		  });
+		return this.server.to(socket.id).emit('getAllChannels', merged);
 	}
 
 

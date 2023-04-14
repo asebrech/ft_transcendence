@@ -54,8 +54,8 @@ export class ChatService {
 		return this.socket.emit('banFromRoom', {room, user});
 	}
 
-	getAllChannels(): Observable<RoomI[]> {
-		return this.socket.fromEvent<RoomI[]>('getAllChannels');
+	getAllChannels(): Observable<any[]> {
+		return this.socket.fromEvent<any[]>('getAllChannels');
 	}
 
 	getAddedMessages(): Observable<MessageI[]> {

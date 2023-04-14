@@ -12,8 +12,8 @@ import { DashboardService } from '../../services/dashboard-service/dashboard-ser
 })
 export class FindChannelComponent implements OnInit {
 	searchTerm: string;
-	searchResults$: Observable<RoomI[]> = this.chatService.getAllChannels();
-	filteredResults: RoomI[];
+	searchResults$: Observable<any[]> = this.chatService.getAllChannels();
+	filteredResults: any[];
 
 	private searchTerms = new Subject<string>();
 
@@ -45,9 +45,17 @@ export class FindChannelComponent implements OnInit {
 		this.searchTerms.next(term);
 	}
 
-	onClick(room: RoomI) {
+	onClick(result: any) {
 		this.dashService.find = false;
-		this.chatService.addUserToRoom(room);
+		if (result.username) {
+			delete result.name;
+			const user: UserI = result;
+			console.log(user);
+		}
+		else {
+			const room: RoomI = result;
+			this.chatService.addUserToRoom(room);
+		}
 	}
 
 }
