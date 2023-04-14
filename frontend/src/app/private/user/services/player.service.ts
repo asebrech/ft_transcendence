@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserService } from 'src/app/public/services/user-service/user.service';
-import { UserModule } from '../user.module';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +21,10 @@ export class PlayerService {
     return this.httpClient.get<UserI>(`/api/users/${userId}`);
   }
 
+  getUserById(userId: number) : Observable<UserI> {
+    return this.httpClient.get<UserI>(`api/users/${userId}`);
+  }
+
   addWin(id: number) {
     return this.httpClient.post(`api/users/${id}/addwins/`, null);
   }
@@ -30,12 +33,12 @@ export class PlayerService {
     return this.httpClient.post(`api/users/${id}/addlosses/`, null);
   }
 
-  addFriend(userId: number, newFriend: string) : Observable<string[]> {
-    return this.httpClient.post<string[]>(`api/users/${userId}/addfriend`,{newFriend});
+  addFriend(userId: number, newFriendId: number) : Observable<number[]> {
+    return this.httpClient.post<number[]>(`api/users/${userId}/addfriend`,{newFriendId});
   }
 
-  removeFriend(userId: number, friend: string) : Observable<string[]> {
-    return this.httpClient.post<string[]>(`api/users/${userId}/remove-friend`,{friend});
+  removeFriend(userId: number, friendId: number) : Observable<number[]> {
+    return this.httpClient.post<number[]>(`api/users/${userId}/remove-friend`,{friendId});
   }
 
   updatePassword(userId: number, oldPassword: string, newPassword: string): Observable<UserI> {
@@ -53,7 +56,6 @@ export class PlayerService {
   getUserList() : Observable<UserI[]> {
     return this.httpClient.get<UserI[]>(`api/users/all`);
   }
-
 
 }
 

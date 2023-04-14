@@ -140,13 +140,13 @@ export class UserController {
 	}
 
 	@Post(':id/addfriend')	
-	async addFriend(@Param('id') userId : number, @Body('newFriend') newFriend : string) {
-		await this.userService.addFriend(userId, newFriend);
+	async addFriend(@Param('id') userId : number, @Body('newFriend') newFriendId : number) {
+		await this.userService.addFriend(userId, newFriendId);
 	}
 
 	@Post(':id/remove-friend')
-	async removeFriend(@Param('id') userId : number, @Body('friend') friend : string) {
-		await this.userService.removeFriend(userId, friend);
+	async removeFriend(@Param('id') userId : number, @Body('friend') friendId : number) {
+		await this.userService.removeFriend(userId, friendId);
 	}
 
 	@Post(':id/addwins')

@@ -16,24 +16,24 @@ export class FriendsComponent implements OnInit {
   user$ : Observable<UserI>
   filteredUsers: UserI[] = [];
   searchTerm: string = '';
-  friends: string[];
+  friends: number[];
   message: string;
   showContextMenu: boolean;
   contextMenuTop: number;
   contextMenuLeft: number;
   isMyFriend: boolean = true;
-  selectedUser: string;
+  selectedUser: number;
   user : UserI = this.authService.getLoggedInUser();
 
   constructor(private route : Router, private playerService: PlayerService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    console.table(this.user);
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
       this.friends = user.friend;
       if (user.friend.length === 0)
        this.message = "Liste d'amis vide !";
+       console.table(this.friends);
     });
     this.playerService.getUserList().subscribe(users => {
       this.filteredUsers = users;
@@ -41,7 +41,7 @@ export class FriendsComponent implements OnInit {
     });
   }
 
-  searchUsers() {
+  searchUsers() { // bon
     if (this.searchTerm.trim() !== '') {
       this.filteredUsers = this.users.filter((user: UserI) => {
         return user.username.toLowerCase().startsWith(this.searchTerm.toLowerCase());
@@ -53,11 +53,11 @@ export class FriendsComponent implements OnInit {
     }
   }
 
-  goToProfileOf(user: string) {
-    this.route.navigate(['/private/user/profile', user]);
+  goToProfileOf(userId: number) {
+    this.route.navigate(['/private/user/profile', userId]);
   }
 
-  onContextMenu(event: MouseEvent, username: string){
+  onContextMenu(event: MouseEvent, userId: number){
     event.preventDefault();
     this.showContextMenu = true;
     this.contextMenuTop = event.clientY;
@@ -66,7 +66,7 @@ export class FriendsComponent implements OnInit {
     //   if (!user.friend.includes(username))
     //     this.isMyFriend = true;
     // });
-    this.selectedUser = username;
+    this.selectedUser = userId;
   }
 
   closeContextMenu(){
@@ -77,8 +77,8 @@ export class FriendsComponent implements OnInit {
     console.log("supprimer ami");
   }
 
-  removeFriend(id: number, username: string) {
-    this.playerService.removeFriend(id, username).pipe(
+  removeFriend(id: number, friendId: number) { 
+    this.playerService.removeFriend(id, friendId).pipe(
       catchError(error => {
         console.log('An error occurred:', error);
         throw('Something went wrong; please try again later.');
@@ -93,8 +93,8 @@ export class FriendsComponent implements OnInit {
     this.showContextMenu = false;
   }
 
-  addFriend(id: number, username: string){
-    this.playerService.addFriend(id, username).pipe(
+  addFriend(id: number, friendId: number){
+    this.playerService.addFriend(id, friendId).pipe(
       catchError(error => {
         console.log('An error occurred:', error);
         throw('Something went wrong; please try again later.');
@@ -109,8 +109,8 @@ export class FriendsComponent implements OnInit {
     this.showContextMenu = false;
   }
 
-  selectUser(user: string) {
-    console.log(user);
-    this.selectedUser = user;
+  selectUser(userId: number) {
+    console.log(userId);
+    this.selectedUser = userId;
   }
 }

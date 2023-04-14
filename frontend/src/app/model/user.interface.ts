@@ -5,7 +5,7 @@ export interface UserI {
 	email?: string,
 	username?: string,
 	password?: string;
-	friend?: string[];
+	friend?: number[];
 	wins?: number;
 	losses?: number;
 	ratio?: number;

@@ -194,21 +194,21 @@ export class UserService {
 			return false;
 	}
 
-	async addFriend(id: number, newFriend: string): Promise<UserI> {
+	async addFriend(id: number, newFriendId: number): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({ id });
-		if (user.friend.includes(newFriend)) {
-		  throw new Error(`${newFriend} is already on friend list.`);
+		if (user.friend.includes(newFriendId)) {
+		  throw new Error(`Friend of id : ${newFriendId} is already on friend list.`);
 		}
-		user.friend.push(newFriend);
+		user.friend.push(newFriendId);
 		await this.userRepository.save(user);
 		return user;
 	  }
 
-	async removeFriend(id: number, friendUsername: string): Promise<UserI> {
+	async removeFriend(id: number, friendId: number): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({ id });
-		console.log(friendUsername);
+		console.log(friendId);
 		console.table(user.friend);
-		const friendIndex = user.friend.indexOf(friendUsername);
+		const friendIndex = user.friend.indexOf(friendId);
 		console.log(friendIndex);
 		if (friendIndex !== -1) {
 		  user.friend.splice(friendIndex, 1);

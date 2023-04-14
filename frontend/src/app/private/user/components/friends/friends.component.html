@@ -10,7 +10,7 @@
     <div class="main">
       <div class="suggestions" *ngIf="filteredUsers.length > 0">
         <ul>
-          <li *ngFor="let user of filteredUsers" (contextmenu)="onContextMenu($event, user.username)">
+          <li *ngFor="let user of filteredUsers" (contextmenu)="onContextMenu($event, user.id)">
             <img src="../../../../../../assets/images/astronaut.png" alt="Photo de profil de {{user.username}}" >
             {{user.username}}
           </li>
@@ -27,7 +27,7 @@
     <p *ngIf="message">{{message}}</p>
     <div class="main">
       <ul>
-        <li *ngFor="let friend of friends; let i = index" (click)="goToProfileOf(friend)" (contextmenu)="onContextMenu($event, friend)">
+        <li *ngFor="let friend of friends" (contextmenu)="onContextMenu($event, friend)">
           <img src="../../../../../../assets/images/astronaut.png">
           {{ friend }}
         </li>
