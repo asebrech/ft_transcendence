@@ -47,6 +47,26 @@ export class MemberOptionComponent implements OnInit {
 		return this.chatService.selectedRoomOwner && this.selectedUser.id !== this.chatService.currentUser.id
 	}
 
+	checkIfAdmin() {
+		if (this.chatService.selectedRoom.admins.find(toto => toto.id === this.selectedUser.id))
+			return true
+		else
+			return false
+	}
+
+	checkIfMuted() {
+		if (this.chatService.selectedRoom.muted.find(toto => toto.id === this.selectedUser.id))
+			return true
+		else
+			return false
+	}
+
+	checklvl() {
+		if (this.isOwner)
+			return true
+		return !this.checkIfAdmin();
+	}
+
 	changePass() {
 		console.log('changePass');
 	}
@@ -62,6 +82,18 @@ export class MemberOptionComponent implements OnInit {
 	
 	promote() {
 		this.chatService.addAdmin(this.selectedUser);
+	}
+
+	demote() {
+		this.chatService.removeAdmin(this.selectedUser);
+	}
+
+	mute() {
+		this.chatService.addMuted(this.selectedUser);
+	}
+
+	unMute() {
+		this.chatService.removeMuted(this.selectedUser);
 	}
 	
 	kick() {

@@ -151,4 +151,17 @@ export class ChatService {
 	addAdmin(user: UserI) {
 		this.socket.emit('addAdmin', { user: user, room: this.selectedRoom });
 	}
+
+	removeAdmin(user: UserI) {
+		this.socket.emit('removeAdmin', { user: user, room: this.selectedRoom });
+	}
+
+	addMuted(user: UserI) {
+		this.socket.emit('addMuted', { user: user, room: this.selectedRoom });
+	}
+
+	removeMuted(user: UserI) {
+		this.socket.emit('removeMuted', { user: user, room: this.selectedRoom });
+	}
+
 }

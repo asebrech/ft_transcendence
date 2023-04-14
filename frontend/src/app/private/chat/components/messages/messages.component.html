@@ -28,7 +28,7 @@
 			</div>
 		</div>
 	</div>
-	<form class="input" (submit)="onSubmit()">
+	<form class="input" (submit)="onSubmit()" *ngIf="chatService.selectedRoom !== null">
 		<input placeholder="Send Message..." [ngModelOptions]="{standalone: true}" autofocus [(ngModel)]="message" required>
 		<img src="../../../../../../assets/images/rocket.png" (click)="onSubmit()" *ngIf="message" class="send">
 		<img src="../../../../../../assets/images/rocket.png" *ngIf="!message">

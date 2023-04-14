@@ -28,7 +28,7 @@ export class RoomService {
 	}
 
 	async getRoom(roomId: number): Promise<RoomI> {
-		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned'] });
+		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned', 'muted'] });
 	}
 
 	getRoomCredential(user: UserI, room: RoomI): RoomI {
@@ -79,6 +79,28 @@ export class RoomService {
 		return this.roomRepository.save(room);
 	} 
 
+	async removeAdminToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
+		const index = room.admins.findIndex(obj => obj.id === user.id);
+			if (index !== -1)
+  				room.admins.splice(index, 1);
+ 			return this.roomRepository.save(room);
+	} 
+
+	async addMutedToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
+		if (!room.muted){
+			room.muted = [];
+		}
+		room.muted.push(user);
+		return this.roomRepository.save(room);
+	} 
+
+	async removeMutedToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
+		const index = room.muted.findIndex(obj => obj.id === user.id);
+			if (index !== -1)
+  				room.muted.splice(index, 1);
+ 			return this.roomRepository.save(room);
+	} 
+
 	async quitRoom(userToRemove: UserI, room: RoomI): Promise<RoomI> {
 			const index = room.users.findIndex(obj => obj.id === userToRemove.id);
 			if (index !== -1)
@@ -97,6 +119,6 @@ export class RoomService {
 	async deleteRoom(roomId: number){
 		this.messagesService.deleteByRoomId(roomId);
 		this.joinedRoomService.deleteByroomId(roomId);
-		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned'] }));
+		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned', 'muted'] }));
 	}
 }
