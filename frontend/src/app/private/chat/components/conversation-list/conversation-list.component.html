@@ -10,8 +10,9 @@
 			'transition': chatService.selectedRoomId === room.id && !isClicked ?'ease-in 0.1s': '' }"
 			[ngClass]="{'selected': chatService.selectedRoomId === room.id}"
 			>
-			<img src="../../../../../../assets/images/astronaut.png">
-			<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}"></div>
+			<img src="../../../../../../assets/images/astronaut.png" *ngIf="room.privateMessage">
+			<img src="../../../../../../assets/images/src.png" *ngIf="!room.privateMessage">
+			<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}" *ngIf="room.privateMessage"></div>
 			<div class="name">
 				{{ room.name }}
 			</div>

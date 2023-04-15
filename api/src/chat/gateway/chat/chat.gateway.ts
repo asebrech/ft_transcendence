@@ -64,7 +64,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 		for (const user of createdRoom.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			const rooms = await this.roomService.getRoomsForUser(user.id);
+			let rooms: RoomI[] = await this.roomService.getRoomsForUser(user.id);
+			rooms = this.roomService.formatPrivateRooms(user, rooms);
 			for (const connection of connections) {
 				await this.server.to(connection.socketId).emit('rooms', rooms);
 			}
@@ -85,7 +86,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		const newRoom: RoomI = await this.roomService.createPrivateMessage([user, socket.data.user]);
 		for (const user of newRoom.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			const rooms = await this.roomService.getRoomsForUser(user.id);
+			let rooms: RoomI[] = await this.roomService.getRoomsForUser(user.id);
+			rooms = this.roomService.formatPrivateRooms(user, rooms);
 			for (const connection of connections) {
 				await this.server.to(connection.socketId).emit('rooms', rooms);
 			}
@@ -101,7 +103,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		const room: RoomI = await this.roomService.chaneNameRoom(object.name, object.room);
 		for (const user of room.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			const rooms = await this.roomService.getRoomsForUser(user.id);
+			let rooms: RoomI[] = await this.roomService.getRoomsForUser(user.id);
+			rooms = this.roomService.formatPrivateRooms(user, rooms);
 			for (const connection of connections) {
 				await this.server.to(connection.socketId).emit('rooms', rooms);
 			}
@@ -195,7 +198,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 		for (const user of addUsersRoom.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			const rooms = await this.roomService.getRoomsForUser(user.id);
+			let rooms: RoomI[] = await this.roomService.getRoomsForUser(user.id);
+			rooms = this.roomService.formatPrivateRooms(user, rooms);
 			for (const connection of connections) {
 				await this.server.to(connection.socketId).emit('rooms', rooms);
 				if (joinedUsers.find(toto => toto.socketId === connection.socketId))
@@ -218,7 +222,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
 			for (const connection of connections) {
 				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						await this.server.to(connection.socketId).emit('messages', { messages: messages, room: addAdminRoom, user: user});
+						const formatRoom = this.roomService.formatPrivateRoom(user, addAdminRoom);
+						await this.server.to(connection.socketId).emit('messages', { messages: messages, room: formatRoom, user: user});
 					}
 			}
 		}
@@ -238,7 +243,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
 			for (const connection of connections) {
 				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						await this.server.to(connection.socketId).emit('messages', { messages: messages, room: addAdminRoom, user: user});
+						const formatRoom = this.roomService.formatPrivateRoom(user, addAdminRoom);
+						await this.server.to(connection.socketId).emit('messages', { messages: messages, room: formatRoom, user: user});
 					}
 			}
 		}
@@ -258,7 +264,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
 			for (const connection of connections) {
 				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						await this.server.to(connection.socketId).emit('messages', { messages: messages, room: addAdminRoom, user: user});
+						const formatRoom = this.roomService.formatPrivateRoom(user, addAdminRoom);
+						await this.server.to(connection.socketId).emit('messages', { messages: messages, room: formatRoom, user: user});
 					}
 			}
 		}
@@ -278,7 +285,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
 			for (const connection of connections) {
 				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						await this.server.to(connection.socketId).emit('messages', { messages: messages, room: addAdminRoom, user: user});
+						const formatRoom = this.roomService.formatPrivateRoom(user, addAdminRoom);
+						await this.server.to(connection.socketId).emit('messages', { messages: messages, room: formatRoom, user: user});
 					}
 			}
 		}
@@ -286,7 +294,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('paginateRooms')
 	async onPaginatieRoom(socket: Socket) {
-		const rooms = await this.roomService.getRoomsForUser(socket.data.user.id);
+		let rooms: RoomI[] = await this.roomService.getRoomsForUser(socket.data.user.id);
+		rooms = this.roomService.formatPrivateRooms(socket.data.user, rooms);
 		return this.server.to(socket.id).emit('rooms', rooms);
 	}
 
@@ -310,7 +319,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 			this.onJoinRoom(socket, room.id);
 			for (const user of addUsersRoom.users) {
 				const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-				const rooms = await this.roomService.getRoomsForUser(user.id);
+				let rooms: RoomI[] = await this.roomService.getRoomsForUser(user.id);
+				rooms = this.roomService.formatPrivateRooms(user, rooms);
 				for (const connection of connections) {
 					await this.server.to(connection.socketId).emit('rooms', rooms);
 					if (joinedUsers.find(toto => toto.socketId === connection.socketId))
@@ -325,12 +335,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	async onJoinRoom(socket: Socket, roomId: number) {
 		this.onLeaveRoom(socket);
 		const updatedRoom: RoomI = await this.roomService.getRoom(roomId);
-		const rooms: RoomI[] = await this.roomService.getRoomsForUser(socket.data.user.id)
+		let rooms: RoomI[] = await this.roomService.getRoomsForUser(socket.data.user.id)
+		rooms = this.roomService.formatPrivateRooms(socket.data.user, rooms);
 		if (updatedRoom === null || !rooms.find(toto => toto.id === updatedRoom.id))
 			return;
 		const messages = await this.messageService.findMessagesForRoom(updatedRoom);
 		await this.joinedRoomService.create({ socketId: socket.id, user: socket.data.user, room: updatedRoom });
-		await this.server.to(socket.id).emit('messages', { messages: messages, room: updatedRoom, user: socket.data.user});
+		const formatRoom = this.roomService.formatPrivateRoom(socket.data.user, updatedRoom);
+		await this.server.to(socket.id).emit('messages', { messages: messages, room: formatRoom, user: socket.data.user});
 	}
 
 	@SubscribeMessage('leaveRoom')
@@ -348,7 +360,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(object.room.id);
 		const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(object.user);
-		const rooms = await this.roomService.getRoomsForUser(object.user.id);
+		let rooms: RoomI[] = await this.roomService.getRoomsForUser(object.user.id);
+		rooms = this.roomService.formatPrivateRooms(object.user, rooms);
 		for (const connection of connections) {
 			await this.server.to(connection.socketId).emit('rooms', rooms);
 			if (joined.find(toto => toto.socketId === connection.socketId)) {
@@ -360,7 +373,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(quitedRoom.id);
 		for (const user of quitedRoom.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			const rooms = await this.roomService.getRoomsForUser(user.id);
+			let rooms: RoomI[] = await this.roomService.getRoomsForUser(user.id);
+			rooms = this.roomService.formatPrivateRooms(user, rooms);
 			for (const connection of connections) {
 				await this.server.to(connection.socketId).emit('rooms', rooms);
 				if (joinedUsers.find(toto => toto.socketId === connection.socketId))
@@ -396,7 +410,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		
 		for (const user of room.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			const rooms = await this.roomService.getRoomsForUser(user.id);
+			let rooms: RoomI[] = await this.roomService.getRoomsForUser(user.id);
+			rooms = this.roomService.formatPrivateRooms(user, rooms);
 			for (const connection of connections) {
 				await this.server.to(connection.socketId).emit('rooms', rooms);
 			}

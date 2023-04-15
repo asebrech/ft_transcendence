@@ -65,6 +65,32 @@ export class RoomService {
 		return query.getMany();
 	}
 
+	formatPrivateRooms(user: UserI, rooms: RoomI[]): RoomI[] {
+		for (let i = 0; i < rooms.length; i++) {
+			if (rooms[i].privateMessage === true) {
+				for (const toto of rooms[i].users) {
+					if (toto.id !== user.id) {
+						rooms[i].name = toto.username;
+						break;
+					}
+				}
+			}
+		}
+		return rooms;
+	}
+
+	formatPrivateRoom(user: UserI, room: RoomI): RoomI {
+			if (room.privateMessage === true) {
+				for (const toto of room.users) {
+					if (toto.id !== user.id) {
+						room.name = toto.username;
+						break;
+					}
+				}
+			}
+		return room;
+	}
+
 	async addCreatorToRoom(room: RoomI, creator: UserI): Promise<RoomI> {
 		if (!room.users){
 			room.users = [];
