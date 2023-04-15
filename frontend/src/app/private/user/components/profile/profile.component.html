@@ -14,7 +14,7 @@
         <div class="row">
           <div class="col">
             <h2>VICTORY</h2>
-            <p>{{ user.wins}}</p>
+            <p>{{user.wins}}</p>
           </div>
           <div class="col">
             <h2>LOSS</h2>
@@ -22,20 +22,19 @@
           </div>
           <div class="col">
             <h2>PLAYTIME</h2>
-            <p>{{ user.total }}</p>
+            <p>{{user.total }}</p>
           </div>
         </div>
-        <circle-progress
-        [radius]="100"
-        [outerStrokeWidth]="16"
-        [innerStrokeWidth]="8"
-        [outerStrokeColor]="'#78C000'"
-        [innerStrokeColor]="'#C7E596'"
-        [animation]="true"
-        [animationDuration]="300">,
-        [percent] = "75",
-
-        </circle-progress>
+        <div class="circle">
+          <circle-progress
+          [radius]="80"
+          [outerStrokeColor]="'#39A78E'"
+          [innerStrokeColor]="'#FE7C73'"
+          [animation]="true"
+          [animationDuration]="300"
+          [percent]="win"
+          ></circle-progress>
+        </div>
     </div>
     <div class="block">
       <h1>HISTORY</h1>

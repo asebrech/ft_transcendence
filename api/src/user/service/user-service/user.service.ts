@@ -216,7 +216,8 @@ export class UserService {
 
 	async removeFriend(id: number, friend: UserI): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({ id });
-		const friendIndex = user.friends.indexOf(friend);
+		const friendIndex = user.friends.findIndex(f => f.id === friend.id);
+		console.table(friend);
 		if (friendIndex !== -1) {
 		  user.friends.splice(friendIndex, 1);
 		  return this.userRepository.save(user);

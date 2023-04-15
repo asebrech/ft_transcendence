@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 export class FriendsComponent implements OnInit {
 
   users: UserI[] = [];
-  user$ : Observable<UserI>
+  user$ : Observable<UserI>;
   filteredUsers: UserI[] = [];
   searchTerm: string = '';
   message: string;
@@ -49,10 +49,6 @@ export class FriendsComponent implements OnInit {
       });
     } else
       this.filteredUsers = this.users;
-  }
-
-  goToProfileOf(userId: number) {
-    this.route.navigate(['/private/user/profile', userId]);
   }
 
   onContextMenu(event: MouseEvent, user: UserI){
@@ -107,5 +103,9 @@ export class FriendsComponent implements OnInit {
   selectUser(user: UserI) {
     console.table(user);
     this.selectedUser = user;
+  }
+
+  goToProfileOf(user: UserI) {
+    this.playerService.goToProfileOf(user);
   }
 }

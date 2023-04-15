@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
@@ -14,7 +15,7 @@ export class PlayerService {
   friend : string[] = [];
   usersList: Observable<UserI[]>;
 
-  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient) {}
+  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient, private route: Router) {}
 
   getUser(): Observable<UserI> {
     const userId = this.authService.getLoggedInUser().id;
@@ -33,12 +34,12 @@ export class PlayerService {
     return this.httpClient.post(`api/users/${id}/addlosses/`, null);
   }
 
-  addFriend(userId: number, newFriend: UserI) : Observable<number[]> {
-    return this.httpClient.post<number[]>(`api/users/${userId}/addfriend`,{newFriend});
+  addFriend(userId: number, newFriend: UserI) : Observable<UserI> {
+    return this.httpClient.post<UserI>(`api/users/${userId}/addfriend`,{newFriend});
   }
 
-  removeFriend(userId: number, friend: UserI) : Observable<number[]> {
-    return this.httpClient.post<number[]>(`api/users/${userId}/remove-friend`,{friend});
+  removeFriend(userId: number, friend: UserI) : Observable<UserI> {
+    return this.httpClient.post<UserI>(`api/users/${userId}/remove-friend`,{friend});
   }
 
   updatePassword(userId: number, oldPassword: string, newPassword: string): Observable<UserI> {
@@ -55,6 +56,10 @@ export class PlayerService {
 
   getUserList() : Observable<UserI[]> {
     return this.httpClient.get<UserI[]>(`api/users/all`);
+  }
+
+  goToProfileOf(user: UserI) {
+    this.route.navigate(['/private/user/profile', user.id]);
   }
 }
 
