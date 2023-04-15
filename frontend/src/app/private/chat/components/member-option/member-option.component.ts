@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ChatService } from '../../services/chat-service/chat.service';
 import { UserI } from 'src/app/model/user.interface';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-member-option',
@@ -16,6 +17,7 @@ export class MemberOptionComponent implements OnInit {
 
 	isOwner: boolean = true;
 	isAdmin: boolean = true;
+	isBlocked: boolean = null;
 
 
 
@@ -23,6 +25,7 @@ export class MemberOptionComponent implements OnInit {
 	constructor(public chatService: ChatService) { }
 
 	ngOnInit(): void {
+		this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
 		if (!this.chatService.selectedRoomOwner)
 			this.isOwner = false;
 		if (!this.chatService.selectedRoomAdmin)
@@ -99,7 +102,15 @@ export class MemberOptionComponent implements OnInit {
 	kick() {
 		this.chatService.quitRoom(this.selectedUser);
 	}
+
+	block() {
+		this.chatService.blockUser(this.selectedUser);
+	}
 	
+	unBlock() {
+		this.chatService.unBlockUser(this.selectedUser);
+	}
+
 	ban() {
 		this.chatService.banFromRoom(this.selectedUser);
 

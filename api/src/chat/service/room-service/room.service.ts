@@ -7,6 +7,7 @@ import { UserI } from 'src/user/model/user.interface';
 import { Repository } from 'typeorm';
 import { JoinedRoomService } from '../joined-room/joined-room.service';
 import { MessageService } from '../message/message.service';
+import { MessageI } from 'src/chat/model/message/message.interface';
 
 @Injectable()
 export class RoomService {
@@ -89,6 +90,25 @@ export class RoomService {
 				}
 			}
 		return room;
+	}
+
+	formatMessage(user: UserI, messages: MessageI[]): MessageI[] {
+
+		// for (let i = 0; i < messages.length; i++) {
+		// 	for(const blocked of user.blockedUsers) {
+		// 		if (blocked.id === messages[i].user.id) {
+		// 			messages[i].text = 'Message Blocked';
+		// 			break;
+		// 		}
+		// 	}
+		// }
+		// return messages;
+
+		const filteredMessages = messages.filter(message => {
+			return !user.blockedUsers.some(blocked => blocked.id === message.user.id);
+		  });
+		  
+		  return filteredMessages;
 	}
 
 	async addCreatorToRoom(room: RoomI, creator: UserI): Promise<RoomI> {

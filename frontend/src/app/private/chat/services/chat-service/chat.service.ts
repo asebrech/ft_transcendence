@@ -168,4 +168,19 @@ export class ChatService {
 		this.socket.emit('removeMuted', { user: user, room: this.selectedRoom });
 	}
 
+	blockUser(user: UserI) {
+		this.socket.emit('blockUser', { user: user, room: this.selectedRoom });
+	}
+
+	unBlockUser(user: UserI) {
+		this.socket.emit('unBlockUser', { user: user, room: this.selectedRoom });
+	}
+
+	checkIfBlocked(user: UserI) {
+		this.socket.emit('checkIfBlocked', user);
+	}
+
+	getIfBlocked(): Observable<boolean> {
+		return this.socket.fromEvent<boolean>('isBlocked');
+	}
 }

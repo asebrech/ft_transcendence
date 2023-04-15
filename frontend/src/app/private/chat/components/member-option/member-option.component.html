@@ -33,9 +33,23 @@
 			<img src="../../../../../assets/images/promote-user.png">
 		</div>
 	</div>
-	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id"></div>
-	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id" (click)="onClick()">
+	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id && isBlocked !== null && !isBlocked"></div>
+	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id && isBlocked !== null && !isBlocked" (click)="onClick(); block()">
 		<label  class="red" >Block</label>
+		<div class="image">
+			<img src="../../../../../assets/images/icons8-denied-90_1.png">
+		</div>
+	</div>
+	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id &&  isBlocked !== null && isBlocked"></div>
+	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id &&  isBlocked !== null && isBlocked" (click)="onClick(); unBlock()">
+		<label  class="red" >Unblock</label>
+		<div class="image">
+			<img src="../../../../../assets/images/icons8-denied-90_1.png">
+		</div>
+	</div>
+	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id &&  isBlocked === null"></div>
+	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id &&  isBlocked === null" (click)="onClick();">
+		<label  class="red" >.</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-denied-90_1.png">
 		</div>

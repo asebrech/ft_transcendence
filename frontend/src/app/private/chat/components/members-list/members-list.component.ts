@@ -64,7 +64,10 @@ export class MembersListComponent implements OnInit {
 		this.heightOverlay = newValue;
 	  }
 
-  test() {
+  select() {
+	if (this.selectedUser) {
+		this.chatservice.checkIfBlocked(this.selectedUser);
+	}
 	this.selectedUserInput = this.selectedUser;
 	//console.log(this.selectedUser);
   }

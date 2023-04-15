@@ -17,7 +17,7 @@
 <div class="main"  >
 	<ul >
 		<li *ngFor="let user of (users | async); let i = index" class="list" (click)="getElementPosition(i, $event)"
-		(click)="test()"
+		(click)="select()"
 		(mousedown)="isClicked = true"
 		(mousedown)="selectedUser = user"
 		(mouseup)="isClicked = false"

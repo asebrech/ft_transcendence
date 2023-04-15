@@ -3,7 +3,7 @@ import { JoinedRoomEntity } from "src/chat/model/joined-room/joined-room.entity"
 import { MessageEntity } from "src/chat/model/message/message.entity";
 import { RoomEntity } from "src/chat/model/room/room.entity";
 import { RoomI } from "src/chat/model/room/room.interface";
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class UserEntity {
@@ -28,6 +28,10 @@ export class UserEntity {
 
 	@Column({select: false, default: null})
 	google_auth_secret: string;
+
+	@ManyToMany(() => UserEntity, user => user.blockedUsers)
+	@JoinTable()
+	blockedUsers: UserEntity[];
 
 	@OneToMany(() => RoomEntity, room => room.owner)
 	roomsOwner: RoomEntity[];

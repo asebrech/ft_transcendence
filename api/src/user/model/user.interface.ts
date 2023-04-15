@@ -6,6 +6,7 @@ export interface UserI {
 	username?: string;
 	email: string;
 	password?: string;
+	blockedUsers?: UserI[];
 	selectedRoom?: number;
 	google_auth?: boolean;
 	google_auth_secret?: string;
