@@ -1,3 +1,4 @@
+import { RoomI } from "src/chat/model/room/room.interface";
 /* eslint-disable prettier/prettier */
 import { boolean } from "yargs";
 import { UserEntity } from "./user.entity";
@@ -7,6 +8,8 @@ export interface UserI {
 	username?: string;
 	email?: string;
 	password?: string;
+	blockedUsers?: UserI[];
+	selectedRoom?: number;
 	google_auth?: boolean;
 	google_auth_secret?: string;
 	wins? : number;

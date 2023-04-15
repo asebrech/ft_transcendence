@@ -8,7 +8,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress/lib/ng-circle-progres
 
 @NgModule({
   declarations: [
-    NavBarComponent,
+    NavBarComponent,,
   ],
   exports: [
 	NavBarComponent

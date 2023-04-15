@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
 import { throwError } from 'rxjs';
 import { AuthService } from 'src/auth/service/auth.service';
+import { RoomI } from 'src/chat/model/room/room.interface';
 import { UserEntity } from 'src/user/model/user.entity';
 import { Friend, UserI } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';
@@ -105,8 +106,8 @@ export class UserService {
 		return this.authService.generateJwt(payload);
 	}
 
-	async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
-		return paginate<UserEntity>(this.userRepository, options);
+	async findAll(): Promise<UserI[]> {
+		return this.userRepository.find({relations: ['blockedUsers']});
 	}
 
 	async findAllByUsername(username: string): Promise<UserI[]> {
@@ -174,8 +175,13 @@ export class UserService {
 		return this.userRepository.findOneBy({ id });
 	}
 
-	public getOne(id: number): Promise<UserI> {
-		return this.userRepository.findOneByOrFail({ id });
+	public async getOne(id: number): Promise<UserI> {
+		const user = await this.userRepository.findOne({ where: {id}, relations: ['blockedUsers'] });
+		if (!user) {
+			throw new NotFoundException(`User with id ${id} not found`);
+		  }
+		  
+		  return user;
 	}
 
 	private async mailExists(email: string): Promise<boolean> {
@@ -240,4 +246,19 @@ export class UserService {
 		const user = await this.userRepository.findOneBy({id});
 		return user;
 	  }
+
+	async addBlockedUser(userToBlock: UserI, user: UserI): Promise<UserI> {		
+		if (!user.blockedUsers){
+			user.blockedUsers = [];
+		}
+		user.blockedUsers.push(userToBlock);
+		return this.userRepository.save(user);
+	} 
+
+	async removeBlockedUser(userToBlock: UserI, user: UserI): Promise<UserI> {		
+		const index = user.blockedUsers.findIndex(obj => obj.id === userToBlock.id);
+			if (index !== -1)
+  				user.blockedUsers.splice(index, 1);
+ 			return this.userRepository.save(user);
+	} 
 }

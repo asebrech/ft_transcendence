@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { userInfo } from "os";
-import { BeforeInsert, BeforeUpdate, Column, Double, Entity, ManyToMany, ManyToOne, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { RoomI } from "src/chat/model/room/room.interface";
+import { BeforeInsert, BeforeUpdate, Column, Double, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Friend, UserI } from "./user.interface";
 import { ParseFloatPipe } from "@nestjs/common";
 
@@ -19,11 +20,21 @@ export class UserEntity {
 	@Column({})
 	password: string;
 
+	@Column({default: null})
+	selectedRoom: number;
+
 	@Column({default: false})
 	google_auth: boolean;
 
 	@Column({select: false, default: null})
 	google_auth_secret: string;
+
+	@ManyToMany(() => UserEntity, user => user.blockedUsers)
+	@JoinTable()
+	blockedUsers: UserEntity[];
+
+	@OneToMany(() => RoomEntity, room => room.owner)
+	roomsOwner: RoomEntity[];
 
 	@Column({default: ''})
 	profilePicture: string;
@@ -33,6 +44,15 @@ export class UserEntity {
 
 	@Column({default: 0})
 	losses : number;
+
+	@ManyToMany(() => RoomEntity, room => room.admins)
+	roomsAdmin: RoomEntity[];
+
+	@ManyToMany(() => RoomEntity, room => room.muted)
+	roomsMuted: RoomEntity[];
+
+	@ManyToMany(() => RoomEntity, room => room.baned)
+	roomsBaned: RoomEntity[];
 
 	@Column('double precision', {default: 0})
 	ratio : number;

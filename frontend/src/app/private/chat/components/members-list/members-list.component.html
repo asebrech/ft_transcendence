@@ -1,0 +1,36 @@
+
+<app-member-option
+  *ngIf="showOverlay"
+  [style.left.px]="overlayPosition.left"
+  [style.top.px]="overlayPosition.top"
+  [selectedUser]="selectedUserInput"
+  class="overlay"
+  (valueChanged)="onValueChanged($event)"
+  (divHeight)="divHeight($event)"
+  #option
+></app-member-option>
+
+<div class="header">
+	<h1 class="title">Members</h1>
+	<div class="separator"></div>
+</div>
+<div class="main"  >
+	<ul >
+		<li *ngFor="let user of (users | async); let i = index" class="list" (click)="getElementPosition(i, $event)"
+		(click)="select()"
+		(mousedown)="isClicked = true"
+		(mousedown)="selectedUser = user"
+		(mouseup)="isClicked = false"
+		(mouseleave)="isClicked = false"
+		[ngStyle]="{ 'background-color': selectedUser === user && isClicked ? 'rgba(217, 217, 217, 0.25)' : '',
+		'transition': selectedUser === user && !isClicked ?'ease-in 0.1s': '' }"
+		[ngClass]="{'selected': selectedUser === user}"
+		>
+		<img src="../../../../../../assets/images/astronaut.png">
+		<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}"></div>
+		<div class="name">
+			{{ user.username }}
+		</div>
+	</li>
+</ul>
+</div>
