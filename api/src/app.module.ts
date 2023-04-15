@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
+import { Ball_dataService } from './game/rooms/ball_data.service';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
 	imports: [
@@ -18,12 +20,14 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 		}),
 		UserModule,
 		AuthModule,
-		ChatModule
+		ChatModule,
 	],
 	controllers: [AppController],
 	providers: [
 		Ball_dataService, AppService],
 })
+
+
 export class AppModule {
 	configure(consumer: MiddlewareConsumer) {
 		consumer

@@ -56,8 +56,8 @@ import { CheckPassComponent } from './components/check-pass/check-pass.component
 		MatChipsModule,
 		MatAutocompleteModule,
 		MatIconModule,
+		FormsModule,
 		PrivateModule,
-		FormsModule
 	]
 })
 export class ChatModule { }

@@ -4,6 +4,10 @@ import { RoomI } from "src/chat/model/room/room.interface";
 import { BeforeInsert, BeforeUpdate, Column, Double, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Friend, UserI } from "./user.interface";
 import { ParseFloatPipe } from "@nestjs/common";
+import { RoomEntity } from "src/chat/model/room/room.entity";
+import { ConnectedUserEntity } from "src/chat/model/connected-user/connected-user.entity";
+import { JoinedRoomEntity } from "src/chat/model/joined-room/joined-room.entity";
+import { MessageEntity } from "src/chat/model/message/message.entity";
 
 @Entity()
 export class UserEntity {
@@ -53,6 +57,15 @@ export class UserEntity {
 
 	@ManyToMany(() => RoomEntity, room => room.baned)
 	roomsBaned: RoomEntity[];
+
+	@OneToMany(() => ConnectedUserEntity, connection => connection.user)
+	connections: ConnectedUserEntity[];
+
+	@OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
+	joinedRooms: JoinedRoomEntity[];
+
+	@OneToMany(() => MessageEntity, message => message.user)
+	messages: MessageEntity[] ;
 
 	@Column('double precision', {default: 0})
 	ratio : number;

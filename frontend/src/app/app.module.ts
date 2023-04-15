@@ -26,17 +26,17 @@ export function tokenGetter() {
   imports: [
     BrowserModule,
     AppRoutingModule,
-	HttpClientModule,
- 	BrowserAnimationsModule,
-	MatSnackBarModule,
-	JwtModule.forRoot({
-		config: {
-		  tokenGetter: tokenGetter,
-		  allowedDomains: ["localhost:3000"]
-		}
-	  }),
-    SweetAlert2Module.forRoot()
-  ],
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:3000"]
+      }
+	    }),
+      SweetAlert2Module.forRoot()
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
