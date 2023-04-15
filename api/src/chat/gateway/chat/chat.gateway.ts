@@ -177,7 +177,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		if (!room)
 			return this.server.to(socket.id).emit('getMember', null);
 		const updatedRoom = await this.roomService.getRoom(room.id);
-		return this.server.to(socket.id).emit('getMember', updatedRoom.users);
+		//if (updatedRoom)
+			return this.server.to(socket.id).emit('getMember', updatedRoom.users);
 	}
 
 	@SubscribeMessage('addUsers')
@@ -470,7 +471,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('unBlockUser')
 	async UnBlockUser(socket: Socket, object: {room: RoomI, user: UserI }) {
-		Logger.log('hello')
 		await this.userService.removeBlockedUser(object.user, socket.data.user);
 		const upRoom: RoomI = await this.roomService.getRoom(object.room.id);
 		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(upRoom.id);

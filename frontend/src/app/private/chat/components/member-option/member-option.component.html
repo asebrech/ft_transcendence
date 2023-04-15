@@ -1,19 +1,19 @@
 <div class="main" #maDiv>
-	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id" (click)="onClick()">
+	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id" (click)="onClick(); inviteToGame();">
 		<label >Invite to a game</label>
 		<div class="image">
 			<img src="../../../../../assets/images/rocket.png">
 		</div>
 	</div>
 	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id"></div>
-	<div class="labelContainer"  (click)="onClick()">
+	<div class="labelContainer"  (click)="onClick(); userProfile()">
 		<label >User Profile</label>
 		<div class="image">
 			<img src="../../../../../assets/images/utilisateur-astronaute_1.png">
 		</div>
 	</div>
 	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id"></div>
-	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id" (click)="onClick()">
+	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id" (click)="onClick(); addFriend()">
 		<label >Add Friend</label>
 		<div class="image">
 			<img src="../../../../../assets/images/add-user.png">

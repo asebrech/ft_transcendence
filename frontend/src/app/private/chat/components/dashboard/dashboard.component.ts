@@ -12,7 +12,7 @@ import { DashboardService } from '../../services/dashboard-service/dashboard-ser
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
 
 	constructor(public dashService: DashboardService, private elementRef: ElementRef, private chatService: ChatService) { }
 
@@ -29,6 +29,14 @@ export class DashboardComponent {
 		}
 		else if (this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && !this.elementRef.nativeElement.querySelector('.createChannel').contains(event.target)) {
 			this.dashService.create = false;
+		}
+	}
+
+	ngOnInit(): void {
+		const storedData = localStorage.getItem('members');
+		if (storedData) {
+			const myData = JSON.parse(storedData);
+			this.dashService.members = myData;
 		}
 	}
 

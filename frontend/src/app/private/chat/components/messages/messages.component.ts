@@ -93,6 +93,7 @@ export class MessagesComponent implements OnInit {
 
 	members() {
 		this.dashService.members = !this.dashService.members;
+		localStorage.setItem('members', JSON.stringify(this.dashService.members));
 	}
 
 	onFocus(): void {

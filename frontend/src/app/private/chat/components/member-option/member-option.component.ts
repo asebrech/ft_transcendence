@@ -70,19 +70,6 @@ export class MemberOptionComponent implements OnInit {
 		return !this.checkIfAdmin();
 	}
 
-	changePass() {
-		console.log('changePass');
-	}
-
-	leaveChannel() {
-		console.log('leaveChannel');
-	}
-
-	
-	deleteChannel() {
-		console.log('deleteChannel');
-	}
-	
 	promote() {
 		this.chatService.addAdmin(this.selectedUser);
 	}
@@ -105,6 +92,8 @@ export class MemberOptionComponent implements OnInit {
 
 	block() {
 		this.chatService.blockUser(this.selectedUser);
+		// if (this.chatService.selectedRoom.privateMessage)
+		// 	this.chatService.deleteRoom();
 	}
 	
 	unBlock() {
@@ -116,5 +105,16 @@ export class MemberOptionComponent implements OnInit {
 
 	}
 
+	inviteToGame() {
+		console.log('Invite to Game', this.selectedUser);
+	}
+
+	userProfile() {
+		console.log('User Profile', this.selectedUser);
+	}
+
+	addFriend() {
+		console.log('Add Friend', this.selectedUser);
+	}
 
 }
