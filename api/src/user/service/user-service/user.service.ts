@@ -163,6 +163,14 @@ export class UserService {
 		return updatedUser;
 	}
 
+	private async usernameExists(username: string): Promise<boolean> {
+		const user = await this.userRepository.findOneBy({ username });
+		if (user)
+			return true;
+		else
+			return false;
+	}
+
 	async updateUsername(userId: number, newUsername: string): Promise<UserI> {
 		const user = await this.findOne(userId);
 		const usernameExists = await this.usernameExists(newUsername);

@@ -34,7 +34,6 @@ export function tokenGetter() {
         allowedDomains: ["localhost:3000"]
       }
 	    }),
-      SweetAlert2Module.forRoot()
     ],
   providers: [],
   bootstrap: [AppComponent]

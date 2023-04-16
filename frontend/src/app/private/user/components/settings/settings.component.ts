@@ -69,7 +69,18 @@ export class SettingsComponent implements OnInit {
         console.log('Email updated successfully:', response);
       });
       this.emailPopup = false;
-    else if (num == 1)
+    }
+    else if (num == 1){
+      console.log(this.user.password);
+      this.playerService.updatePassword(this.user.id, old, newO).pipe(
+        catchError(error => {
+          console.log('An error occurred:', error);
+          throw('Something went wrong; please try again later.');
+        })
+      )
+      .subscribe(response => {
+        console.log('Password updated successfully:', response);
+      });
       this.pwdPopup = false;
     }
     else {
