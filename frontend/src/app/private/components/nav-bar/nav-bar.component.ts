@@ -70,5 +70,11 @@ export class NavBarComponent implements OnInit
 		}
 		this.currentUrl = this.router.url;
 	}
+
+	deconnection() {
+		console.log('deco');
+		localStorage.removeItem('access_token');
+		location.reload();
+	}
 	
   }

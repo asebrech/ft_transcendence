@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 
 
@@ -22,7 +23,7 @@ import { MatInputModule } from '@angular/material/input';
     GoogleAuthComponent,
     ProfileComponent,
     FriendsComponent,
-    SettingsComponent
+    SettingsComponent,
   ],
   imports: [
     CommonModule,
@@ -35,7 +36,23 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-    NgxColorsModule
-  ]
+    NgxColorsModule,
+    NgCircleProgressModule.forRoot({
+      "radius": 60,
+      "space": -10,
+      "outerStrokeWidth": 10,
+      "innerStrokeWidth": 10,
+      "title": "RATIO",
+      "subtitle":"",
+      "titleFontSize": "30",
+      "animateTitle": false,
+      "animationDuration": 2000,
+      "outerStrokeLinecap": "square",
+      "showUnits": false,
+      "showBackground": false,
+      "clockwise": false,
+      "startFromZero": false,
+      "lazy": true})
+    ],
 })
 export class UserModule { }

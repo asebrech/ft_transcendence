@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { PrivateRoutingModule } from './private-routing.module';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { NgCircleProgressModule } from 'ng-circle-progress/lib/ng-circle-progress.module';
+
 
 @NgModule({
   declarations: [
     NavBarComponent,
-
   ],
   exports: [
 	NavBarComponent
@@ -15,7 +16,6 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
   imports: [
     CommonModule,
     PrivateRoutingModule,
-
   ]
 })
 export class PrivateModule { }

@@ -3,7 +3,6 @@ import { ChatService } from '../../services/chat-service/chat.service';
 import { MatSelectionListChange } from '@angular/material/list';
 import { PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
-import { RoomPaginateI } from 'src/app/model/room.interface';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { DashboardService } from '../../services/dashboard-service/dashboard-service';
@@ -13,64 +12,35 @@ import { DashboardService } from '../../services/dashboard-service/dashboard-ser
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {//implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit{
 
-	find: boolean = false;
-
-
-	findChannel() {
-		this.find = true;
-	}
-
-	HideChannel() {
-		this.find = false;
-	}
-
-	createChannel() {
-		this.dashService.create = true;
-	}
-
-	createHide() {
-		this.dashService.create = false;
-	}
-	// rooms$: Observable<RoomPaginateI>= this.chatService.getMyRooms();
-	// selectedRoom = null;
-	// user: UserI = this.authService.getLoggedInUser();
-	constructor(public dashService: DashboardService, private elementRef: ElementRef) { }
-
-	//constructor(private chatService: ChatService, private authService: AuthService) { }
+	constructor(public dashService: DashboardService, private elementRef: ElementRef, private chatService: ChatService) { }
 
 	@HostListener('document:click', ['$event'])
 	onClick(event: MouseEvent) {
-		if (!this.find && this.elementRef.nativeElement.querySelector('.search-container') && this.elementRef.nativeElement.querySelector('.search-container').contains(event.target)) {
-			this.findChannel();
+		if (!this.dashService.find && this.elementRef.nativeElement.querySelector('.search-container') && this.elementRef.nativeElement.querySelector('.search-container').contains(event.target)) {
+			this.dashService.find = true;
 		}
-		else if (this.find && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.findChannel').contains(event.target)) {
-			this.HideChannel();
+		else if (this.dashService.find && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.findChannel').contains(event.target)) {
+			this.dashService.find = false;
+		}
+		if (this.dashService.checkPass && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.checkPass').contains(event.target)) {
+			this.dashService.checkPass = false;
 		}
 		if (!this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && this.elementRef.nativeElement.querySelector('.add').contains(event.target)) {
-			this.createChannel();
+			this.dashService.create = true;
 		}
 		else if (this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && !this.elementRef.nativeElement.querySelector('.createChannel').contains(event.target)) {
-			this.createHide();
+			this.dashService.create = false;
 		}
 	}
 
-	// ngOnInit() {
-	// 	this.chatService.emitPaginateRooms(10, 0);
-
-	// }
-
-	// ngAfterViewInit() {
-	// 	this.chatService.emitPaginateRooms(10, 0);
-	// }
-
-	// onSelectRoom(event: MatSelectionListChange) {
-	// 	this.selectedRoom = event.source.selectedOptions.selected[0].value;
-	// }
-
-	// onPaginateRooms(pageEvent : PageEvent) {
-	// 	this.chatService.emitPaginateRooms(pageEvent.pageSize, pageEvent.pageIndex);
-	// }
+	ngOnInit(): void {
+		const storedData = localStorage.getItem('members');
+		if (storedData) {
+			const myData = JSON.parse(storedData);
+			this.dashService.members = myData;
+		}
+	}
 
 }

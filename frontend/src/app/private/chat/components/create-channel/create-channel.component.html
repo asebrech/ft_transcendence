@@ -1,0 +1,35 @@
+<div class="main">
+	<h3 class="title">New Channel</h3>
+	<div class="separator"></div>
+	<form [formGroup]="channelForm" (ngSubmit)="onSubmit()" class="form">
+		<div>
+			<input #name type="text" id="name" formControlName="name" placeholder="Channel Name" class="inputCustom">
+		</div>
+
+		<div class="checkbox">
+			<label>
+				Private
+			</label>
+			<label>
+				<input type="checkbox" formControlName="isPrivate" style="cursor: pointer;">
+			</label>
+		</div>
+		<div *ngIf="channelForm.get('isPrivate').value">
+			<input type="password" id="channelPassword" formControlName="channelPassword" placeholder="Password" class="inputCustom">
+		</div>
+		<div *ngIf="channelForm.get('isPrivate').value">
+			<input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="ConfirmPassword" class="inputCustom">
+		</div>
+		<div
+			*ngIf="channelForm.hasError('passwordMismatch') && (channelForm.get('channelPassword').dirty || channelForm.get('confirmPassword').dirty)" class="error">
+			<label>
+				Passwords must match
+			</label>
+		</div>
+		<div class="submit">
+			<button type="submit" [disabled]="channelForm.invalid || channelForm.get('name').value === ''">
+				Create Channel
+			</button>
+		</div>
+	</form>
+</div>

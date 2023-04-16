@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
+import { throwError } from 'rxjs';
 import { AuthService } from 'src/auth/service/auth.service';
+import { RoomI } from 'src/chat/model/room/room.interface';
 import { UserEntity } from 'src/user/model/user.entity';
-import { UserI } from 'src/user/model/user.interface';
+import { Friend, UserI } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';
 
 @Injectable()
@@ -104,8 +106,8 @@ export class UserService {
 		return this.authService.generateJwt(payload);
 	}
 
-	async findAll(options: IPaginationOptions): Promise<Pagination<UserI>> {
-		return paginate<UserEntity>(this.userRepository, options);
+	async findAll(): Promise<UserI[]> {
+		return this.userRepository.find({relations: ['blockedUsers']});
 	}
 
 	async findAllByUsername(username: string): Promise<UserI[]> {
@@ -114,6 +116,10 @@ export class UserService {
 				username: Like(`%${username}%`.toLowerCase())
 			}
 		})
+	}
+
+	async getAllUsers(): Promise<UserI[]> {
+		return this.userRepository.find();
 	}
 
 	returnSession(user: UserI): string {
@@ -127,8 +133,6 @@ export class UserService {
 	private async findByEmail(email: string): Promise<UserI> {
 		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth', 'google_auth_secret'] });
 	}
-
-
 
 	private async hashPassword(password: string): Promise<string> {
 		return this.authService.hashPassword(password);
@@ -171,8 +175,13 @@ export class UserService {
 		return this.userRepository.findOneBy({ id });
 	}
 
-	public getOne(id: number): Promise<UserI> {
-		return this.userRepository.findOneByOrFail({ id });
+	public async getOne(id: number): Promise<UserI> {
+		const user = await this.userRepository.findOne({ where: {id}, relations: ['blockedUsers'] });
+		if (!user) {
+			throw new NotFoundException(`User with id ${id} not found`);
+		  }
+		  
+		  return user;
 	}
 
 	private async mailExists(email: string): Promise<boolean> {
@@ -191,19 +200,36 @@ export class UserService {
 			return false;
 	}
 
-	async addFriend(id : number, newFriend : UserEntity) : Promise<UserI> {
-		const user = await this.userRepository.findOneBy({id});
-		if (!user.friend.includes(newFriend)) {
-			user.friend.push(newFriend);
-			await this.userRepository.save(user);
+	async addFriend(id: number, newFriend: UserI): Promise<UserI> {
+		const user = await this.userRepository.findOneBy({ id });
+		const friend: Friend = {
+			id: newFriend.id,
+			username: newFriend.username,
+			profilPic: newFriend.profilPic, 
+			win: newFriend.wins, 
+			losses: newFriend.losses,
+		  };
+		if (!user.friends)
+			user.friends = [];
+		const existingFriend = user.friends.find(friend => friend.id === newFriend.id);
+  		if (existingFriend) {
+		  throw new Error(`Friend of id : ${newFriend.id} is already on friend list.`);
 		}
+		user.friends.push(friend);
+		await this.userRepository.save(user);
 		return user;
-	}
+	  }
 
-	async removeFriend(id: number, friendId: number): Promise<UserI> {
-		const user = await this.userRepository.findOneBy({id});
-		user.friend = user.friend.filter((friend) => friend.id !== friendId);
-		return this.userRepository.save(user);
+	async removeFriend(id: number, friend: UserI): Promise<UserI> {
+		const user = await this.userRepository.findOneBy({ id });
+		const friendIndex = user.friends.findIndex(f => f.id === friend.id);
+		console.table(friend);
+		if (friendIndex !== -1) {
+		  user.friends.splice(friendIndex, 1);
+		  return this.userRepository.save(user);
+		} else {
+		  throw new Error('Friend not found');
+		}
 	  }
 
 	async addWinOrLoss(id: number, isWin: boolean): Promise<UserEntity> {
@@ -221,11 +247,24 @@ export class UserService {
 		return user;
 	  }
 
+	async addBlockedUser(userToBlock: UserI, user: UserI): Promise<UserI> {		
+		if (!user.blockedUsers){
+			user.blockedUsers = [];
+		}
+		user.blockedUsers.push(userToBlock);
+		return this.userRepository.save(user);
+	} 
+
+	async removeBlockedUser(userToBlock: UserI, user: UserI): Promise<UserI> {		
+		const index = user.blockedUsers.findIndex(obj => obj.id === userToBlock.id);
+			if (index !== -1)
+  				user.blockedUsers.splice(index, 1);
+ 			return this.userRepository.save(user);
+	} 
+
 	async updateColorPad(id : number, color: string) : Promise<UserI> {
 		const user = await this.userRepository.findOneBy({id});
 		user.colorPad = color;
 		return this.userRepository.save(user);
 	}
 }
-
-

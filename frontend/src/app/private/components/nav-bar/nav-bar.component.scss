@@ -29,9 +29,7 @@ nav {
 	background-color: #16072D;
 	box-shadow: 10px 0px 39px rgba(0, 0, 0, 0.25);
 	overflow-y: auto;
-	//scrollbar-width: none;
 }
-
 
 ul {
 	background: transparent;
@@ -109,6 +107,11 @@ nav a.active img {
 nav a.activeGame img {
 	transform: scale(1.2);
 }
+
+div.profile_pic {
+	margin: 20px 0;
+  }
+
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) 
 {

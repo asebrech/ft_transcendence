@@ -1,36 +1,40 @@
 <app-nav-bar></app-nav-bar>
 <div class="general">
   <div class="container">
-    <div class="block">
-      <h1>{{ (user$ | async).username}}</h1>
+    <div class="block" *ngIf="(user$ | async) as user">
+      <h1>{{ user.username}}</h1>
       <img class="profile" src="../../../../../assets/images/astronaut.png" alt="astronaut">
-      <label>Level</label>
-      <progress max="100" value="70">
-        70%</progress>
+      <label>Level {{ user.level}}</label>
+      <progress max="100" value="50">
+        50%</progress>
         <div><img src="../../../../../assets/images/master-chief.png" alt="badge" class="badge"></div>
       </div>
-      <div class="block">
+      <div class="block" *ngIf="user$ | async as user">
         <h1>STATISTIC</h1>
         <div class="row">
           <div class="col">
             <h2>VICTORY</h2>
-            <p>{{ (user$ | async).wins}}</p>
+            <p>{{user.wins}}</p>
           </div>
           <div class="col">
             <h2>LOSS</h2>
-            <p>{{(user$ | async).losses}}</p>
+            <p>{{user.losses}}</p>
           </div>
           <div class="col">
             <h2>PLAYTIME</h2>
-            <p>{{ (user$ | async).timeplayed }}</p>
+            <p>{{user.total }}</p>
           </div>
         </div>
-        <div class="dashboard">
-          <div class="stat-bar">
-            <div class="losses" [style.width.%]="lossPercentage"></div>
-            <div class="wins" [style.width.%]="winPercentage"></div>
-          </div>
-      </div>
+        <div class="circle">
+          <circle-progress
+          [radius]="80"
+          [outerStrokeColor]="'#39A78E'"
+          [innerStrokeColor]="'#FE7C73'"
+          [animation]="true"
+          [animationDuration]="300"
+          [percent]="win"
+          ></circle-progress>
+        </div>
     </div>
     <div class="block">
       <h1>HISTORY</h1>
@@ -45,8 +49,7 @@
           <td>V/D</td>
           <td>Score</td>
         </tr>
-        <button (click)="addWin()"></button>
-        <button (click)="addLosses()"></button>
+
       </table>
     </div>
   </div>

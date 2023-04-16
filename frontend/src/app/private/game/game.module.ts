@@ -8,7 +8,6 @@ import { LiveComponent } from './components/live/live.component';
 import { StarsBlowComponent } from './components/stars-blow/stars.blow/stars.blow.component';
 import { EndGamePageComponent } from './components/end-game-page/end-game-page.component';
 
-
 @NgModule({
   declarations: [
 	GameFrontComponent,

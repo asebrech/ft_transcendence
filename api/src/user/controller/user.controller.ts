@@ -32,10 +32,8 @@ export class UserController {
 	}
 
 	@Get()
-	async findAll(
-		@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<Pagination<UserI>> {
-		limit = limit > 100 ? 100 : limit;
-		return this.userService.findAll({ page, limit, route: 'http://localhost:3000/api/users' });
+	async findAll(@Req() req: RequestModel): Promise<UserI[]> {
+		return this.userService.findAll();
 	}
 
 	@Get('/find-by-username')
@@ -139,14 +137,14 @@ export class UserController {
 		await this.userService.updateEmail(userId, newEmail);
 	}
 
-	@Post(':id/add-friend')	
-	async addFriend(@Param('id') userId : number, @Body('friendId') newFriend : UserEntity) : Promise<UserI> {
-		return this.userService.addFriend(userId, newFriend);
-	}
+	@Post(':id/addfriend')	
+	async addFriend(@Param('id') userId : number, @Body('newFriend') newFriend : UserI) {
+		await this.userService.addFriend(userId, newFriend);
+	} 
 
 	@Post(':id/remove-friend')
-	async removeFriend(@Param('id') userId : number, @Body('friendId') friend : UserI) : Promise<UserI> {
-		return this.userService.removeFriend(userId, friend.id);
+	async removeFriend(@Param('id') userId : number, @Body('friend') friend : UserI) {
+		await this.userService.removeFriend(userId, friend);
 	}
 
 	@Post(':id/addwins')
@@ -157,6 +155,11 @@ export class UserController {
 	@Post(':id/addlosses')
 	async addLoss(@Param('id') userId: number) {
 	  return this.userService.addWinOrLoss(userId, false);
+	}
+
+	@Get('all')
+	async getAllUsers() {
+		return this.userService.getAllUsers();
 	}
 
 	@Get(':id')
