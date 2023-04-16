@@ -111,12 +111,13 @@ export class PlayScene extends Phaser.Scene
     this.score = this.add.text(inWidth / 2 - 30, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'}).setScrollFactor(0);
     this.wall_bottom = this.add.rectangle(inWidth / 2, -5, inWidth, 10 , 0xff0000).setScrollFactor(0);
     this.wall_top = this.add.rectangle(inWidth / 2, inHeight + 5, inWidth, 10 , 0xff0000).setScrollFactor(0);
+    
     right_pad = this.physics.add.image(inWidth - 30, inHeight / 2, 'right_pad').setCollideWorldBounds(true).setScrollFactor(0);
     left_pad = this.physics.add.image(30, inHeight / 2, 'left_pad').setCollideWorldBounds(true).setScrollFactor(0);
     
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
     //////////////////////////////////////////////////
-    ball.scale = 0.03;
+    ball.scale = 0.1;
     ball.setBounce(1,1);
     right_pad.scale = 0.3;
     right_pad.setBounce(1,1);

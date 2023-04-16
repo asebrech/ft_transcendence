@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { CustomValidators } from 'src/app/public/_helpers/custom-validators';
 import { PlayerService } from '../../services/player.service';
 import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
-import { catchError, throwError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 
 @Component({
@@ -12,6 +12,7 @@ import { StarsService } from 'src/app/services/stars-service/stars.service';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
+
 export class SettingsComponent implements OnInit {
 
   form: FormGroup = new FormGroup ({
@@ -28,13 +29,22 @@ export class SettingsComponent implements OnInit {
   pwdPopup: boolean = false;
   emailPopup: boolean = false;
   user: UserI = this.authService.getLoggedInUser();
+  user$: Observable<UserI>;
   newO: string;
   old: string;
+  /////////////////////////////
+  colorBall : string;
+  colorPad : string;
+  /////////////////////////////
 
   constructor(private starsService: StarsService, private playerService: PlayerService, private authService: AuthService ) {}
 
   ngOnInit(): void {
     this.starsService.setActive(false);
+    this.user$ = this.playerService.getUser();
+    this.user$.subscribe(user => {
+      console.log(user.colorPad);
+    })
   }
 
   changeUsername() : void {
@@ -89,6 +99,42 @@ export class SettingsComponent implements OnInit {
     }
     //this.simpleNotification();
   }
+  ////////////////////////////////////////////////////////////////////
+  retrieveBallSkin(event: Event) 
+  {
+    const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
+    this.colorBall = clickedImageSrc,
+    console.log(clickedImageSrc); // Log the clicked image source to the console
+  }
 
+  retrievePaddleSkin(event: Event) 
+  {
+    const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
+    console.log(clickedImageSrc);
+    this.playerService.updateColorPad(this.user.id,clickedImageSrc).subscribe( response => { 
+        console.log("pad changed successfully:", response);
+      this.user$.subscribe( (user: UserI) => {
+        this.colorPad = user.colorPad;
+        console.log(user.colorPad);
+      })
+    });
+  }
+
+  onColorBallChange(newColor: string)
+  {
+    this.colorBall = newColor;
+    //console.log(newColor);
+  }
+
+  onPaddleColorChange(newColor : string)
+  {
+      this.colorPad = newColor;
+   // console.log(newColor);
+  }
+  /////////////////////////////
+  test()
+  {
+ 
+  }
 
 }

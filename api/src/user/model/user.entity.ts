@@ -45,4 +45,11 @@ export class UserEntity {
 
 	@ManyToOne(() => UserEntity)
 	friend : UserEntity[];
+
+	@Column({default: "default"})
+	colorPad: string;
+
+	@Column({default: "default"})
+	colorBall: string;
+
 }

@@ -41,6 +41,9 @@ export class PlayerService {
     return this.httpClient.put<UserI>(`api/users/${userId}/change-username`,{newUsername});
   }
   
+  updateColorPad(userId: number, color: string) : Observable<UserI> {
+    return this.httpClient.put<UserI>(`api/users/${userId}/update-color-pad`, {color});
+  }
 }
 
 

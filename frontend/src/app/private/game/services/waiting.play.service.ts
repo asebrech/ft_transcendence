@@ -24,6 +24,7 @@ export class WaitingScene extends Phaser.Scene
   last_bg_x : number;
   last_bg_y : number;
   speed : number;
+  
 
   constructor() 
   {
@@ -99,7 +100,7 @@ export class WaitingScene extends Phaser.Scene
     
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
     //////////////////////////////////////////////////
-    ball.scale = 0.05;
+    ball.scale = 0.1;
     ball.setVelocity(ball_velocity_x,ball_velocity_y);
     ball.setBounce(1,1);
     right_pad.scale = 0.3;

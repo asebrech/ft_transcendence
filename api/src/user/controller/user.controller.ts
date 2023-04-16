@@ -167,4 +167,9 @@ export class UserController {
     return user;
   }
 
+  	@Put(':id/update-color-pad')
+  	async updateColorPad(@Param('id') id: number, @Body('colorPad') color: string) {
+		await this.userService.updateColorPad(id, color);
+  }
+
 }

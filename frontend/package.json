@@ -11,7 +11,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^15.0.0",
     "@angular/cdk": "^15.0.3",
     "@angular/common": "^15.0.0",
     "@angular/compiler": "^15.0.0",
@@ -33,6 +32,7 @@
     "howler": "^2.2.3",
     "jquery": "^3.6.3",
     "ng-circle-progress": "^1.7.1",
+    "ngx-colors": "^3.5.2",
     "ngx-socket-io": "^4.4.0",
     "phaser": "^3.55.2",
     "qrcode": "^1.5.1",

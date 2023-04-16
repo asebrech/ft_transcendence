@@ -11,6 +11,7 @@ let ball_velocity_y : number;
 let inWidth : number = 1920;
 let inHeight : number = 1080;
 
+
 export class LiveScene extends Phaser.Scene 
 {
   left_score : number;
@@ -105,7 +106,7 @@ export class LiveScene extends Phaser.Scene
     left_pad = this.physics.add.image(30, 350, 'left_pad').setCollideWorldBounds(true).setScrollFactor(0);
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
     //////////////////////////////////////////////////
-    ball.scale = 0.03;
+    ball.scale = 0.1;
     ball.setBounce(1,1);
     right_pad.scale = 0.3;
     right_pad.setBounce(1,1);

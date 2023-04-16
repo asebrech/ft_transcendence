@@ -220,6 +220,12 @@ export class UserService {
 		const user = await this.userRepository.findOneBy({id});
 		return user;
 	  }
+
+	async updateColorPad(id : number, color: string) : Promise<UserI> {
+		const user = await this.userRepository.findOneBy({id});
+		user.colorPad = color;
+		return this.userRepository.save(user);
+	}
 }
 
 

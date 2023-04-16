@@ -15,4 +15,5 @@ export interface UserI {
 	timeplayed?: number;
 	level?: number;
 	friend?: UserEntity[];
+	colorPad?: string;
 }

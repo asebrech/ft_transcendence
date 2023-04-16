@@ -10,4 +10,5 @@ export interface UserI {
   losses?: number;
   ratio?: number;
   timeplayed?: number;
+  colorPad?: string;
 }
