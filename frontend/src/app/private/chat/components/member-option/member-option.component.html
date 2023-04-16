@@ -49,7 +49,7 @@
 	</div>
 	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id &&  isBlocked === null"></div>
 	<div class="labelContainer" *ngIf="chatService.currentUser.id !== selectedUser.id &&  isBlocked === null" (click)="onClick();">
-		<label  class="red" >.</label>
+		<label  class="red" >. . .</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-denied-90_1.png">
 		</div>

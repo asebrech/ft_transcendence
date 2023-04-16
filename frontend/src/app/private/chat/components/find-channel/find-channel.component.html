@@ -2,11 +2,13 @@
 	<div class="search">
 		<input #searchInput type="text" placeholder="Search" [(ngModel)]="searchTerm" (keyup)="searchOnKeyUp($event)"/>
 		<div class="result">
-			<div *ngFor="let result of filteredResults">
-				<div (click)="onClick(result)">
-					<p >{{result.name}}</p>
-					<label *ngIf="result.username">Private Message</label>
-					<label *ngIf="!result.username">Channel</label>
+			<div *ngFor="let result of filteredResults" class="channels">
+				<div (click)="onClick(result)" class="channel">
+					<img src="../../../../../assets/images/add-user.png" *ngIf="result.username">
+					<img src="../../../../../assets/images/users.png" *ngIf="!result.username">
+						<div *ngIf="result.username">User</div>
+						<div *ngIf="!result.username">Channel</div>
+					<div class="ischannel" [ngClass]="{'isuser': result.username}">{{result.name}}</div>
 				</div>
 			</div>		  
 		</div>

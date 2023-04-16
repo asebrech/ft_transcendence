@@ -5,26 +5,19 @@
 		<div>
 			<input #name type="text" id="name" formControlName="name" placeholder="Channel Name" class="inputCustom">
 		</div>
+
 		<div class="checkbox">
 			<label>
-				Private Channel
+				Private
 			</label>
 			<label>
-				<input type="checkbox" formControlName="isPrivate">
+				<input type="checkbox" formControlName="isPrivate" style="cursor: pointer;">
 			</label>
 		</div>
-		<div class="checkbox">
-			<label>
-				Enable Password
-			</label>
-			<label>
-				<input type="checkbox" formControlName="hasPass">
-			</label>
-		</div>
-		<div *ngIf="channelForm.get('hasPass').value">
+		<div *ngIf="channelForm.get('isPrivate').value">
 			<input type="password" id="channelPassword" formControlName="channelPassword" placeholder="Password" class="inputCustom">
 		</div>
-		<div *ngIf="channelForm.get('hasPass').value">
+		<div *ngIf="channelForm.get('isPrivate').value">
 			<input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="ConfirmPassword" class="inputCustom">
 		</div>
 		<div

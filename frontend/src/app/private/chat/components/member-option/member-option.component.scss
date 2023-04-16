@@ -16,18 +16,18 @@
 	align-items: start;
 	width: 70%;
 	justify-content: space-between;
-	transition: ease-in-out 0.2s;
-	//cursor: pointer;
+	transition: ease-in-out 0.05s;
+	cursor: pointer;
 }
 
 .labelContainer:hover {
 	scale: (1.03);
-	transition: ease-in-out 0.1s;
+	transition: ease-in-out 0.05s;
 
 }
 
 .main label {
-	//cursor: pointer;
+	cursor: pointer;
 	font-size: 18px;
 }
 
@@ -45,7 +45,7 @@
 
 .image img {
 	position: absolute;
-	width: 30px;
-	height: 30px;
+	width: 25px;
+	height: 25px;
 	margin-left: -30px;
 }

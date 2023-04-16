@@ -15,8 +15,8 @@
 	</div>
 	<div class="shortcut">
 		<app-add-users class="addUser" *ngIf="dashService.addUsers"></app-add-users>
-		<img src="../../../../../../assets/images/add-user.png" class="enableAddUser" *ngIf="chatService.selectedRoomOwner || chatService.selectedRoomAdmin">
-		<img class="members" src="../../../../../../assets/images/users.png" (click)="members()" *ngIf="chatService.selectedRoom !== null">
+		<img src="../../../../../../assets/images/add-user.png" class="enableAddUser" style="cursor: pointer;" *ngIf="chatService.selectedRoomOwner || chatService.selectedRoomAdmin">
+		<img class="members" src="../../../../../../assets/images/users.png" style="cursor: pointer;" (click)="members()" *ngIf="chatService.selectedRoom !== null">
 		<app-channel-option class="channelOption" *ngIf="chatService.selectedRoom !== null"></app-channel-option>
 	</div>
 	<div #messageList class="message">

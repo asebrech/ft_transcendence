@@ -26,9 +26,19 @@
 	padding-top: 20px;
 }
 
-.switch label {
+.switch div {
+	transition: ease-in-out 0.05s;
+}
+
+.switch div label{
 	cursor: pointer;
 	font-size: 18px;
+	transition: ease-in-out 0.05s;
+}
+
+.switch div:hover {
+	scale: (1.03);
+	transition: ease-in-out 0.05s;
 }
 
 .delete {

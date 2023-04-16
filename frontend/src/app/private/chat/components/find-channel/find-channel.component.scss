@@ -48,14 +48,44 @@
 	margin: 10px;
 }
 
-.result div {
+.channels{
 	width: 90%;
 	border-radius: 5px;
 	display: flex;
-	justify-content: flex-start;
 	cursor: pointer;
+	justify-content: center;
+	align-items: center;
+	margin: 5px;
 }
 
-.result div:hover {
+.channels:hover {
 	background-color: #404249;
+}
+
+.channel {
+	width: 100%;
+	height: 40px;
+	display: flex;
+	justify-content:flex-start;
+	align-items: center;
+	gap: 15px;
+	margin-left: 5px;
+}
+
+.ischannel {
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-left: 90px;
+}
+
+.isuser {
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-left: 115px;
+
+}
+
+img {
+	width: 30px;
+	height: auto;
 }

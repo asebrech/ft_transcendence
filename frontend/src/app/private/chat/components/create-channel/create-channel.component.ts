@@ -19,7 +19,6 @@ export class CreateChannelComponent implements OnInit {
 		this.channelForm = this.fb.group({
 			name: ['', Validators.required],
 			isPrivate: [false],
-			hasPass: [false],
 			channelPassword: [''],
 			confirmPassword: ['']
 		}, {
@@ -35,11 +34,11 @@ export class CreateChannelComponent implements OnInit {
 		return (control: AbstractControl): ValidationErrors | null => {
 			const password = control.get('channelPassword').value;
 			const confirmPassword = control.get('confirmPassword').value;
-			const hasPass = control.get('hasPass').value;
-			if (hasPass && (!password || ! confirmPassword)) {
+			const isPrivate = control.get('isPrivate').value;
+			if (isPrivate && (!password || ! confirmPassword)) {
 				return { passwordMismatch: true };
 			}
-			else if (hasPass) {
+			else if (isPrivate) {
 				return password === confirmPassword ? null : { passwordMismatch: true };
 			}
 			return null;
