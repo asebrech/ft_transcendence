@@ -21,6 +21,7 @@ export class ChannelOptionComponent {
 
 	showSwitch() {
 		this.switchMenue = true;
+		this.dashService.changePass = false;
 	}
 
 	hideSwitch() {
@@ -38,7 +39,7 @@ export class ChannelOptionComponent {
 	}
 
 	changePass() {
-		console.log('changePass');
+		this.dashService.changePass = true;
 	}
 
 	leaveChannel() {

@@ -97,9 +97,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('changeName')
 	async changeName(socket: Socket, object: { name: string, room: RoomI }) {
-		// if (socket.data.user.id !== object.room.owner.id) {
-		// 	return socket.emit('Error', new UnauthorizedException());
-		// }
 		const room: RoomI = await this.roomService.chaneNameRoom(object.name, object.room);
 		for (const user of room.users) {
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
@@ -183,9 +180,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('addUsers')
 	async addUsers(socket: Socket, object: { users: UserI[], room: RoomI }) {
-		// if (socket.data.user.id !== object.room.owner.id) {
-		// 	return socket.emit('Error', new UnauthorizedException());
-		// }
 		object.room = await this.roomService.getRoom(object.room.id);
 		for (const user of object.users) {
 			if (object.room.baned.find(toto => toto.id === user.id)) {
@@ -211,94 +205,30 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('addAdmin')
 	async addAdmin(socket: Socket, object: { user: UserI, room: RoomI }) {
-		// if (socket.data.user.id !== object.room.owner.id) {
-		// 	return socket.emit('Error', new UnauthorizedException());
-		// }
 		object.room = await this.roomService.getRoom(object.room.id);
 		const addAdminRoom: RoomI = await this.roomService.addAdminToRoom(object.room, object.user);
-		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addAdminRoom.id);
-		const messages = await this.messageService.findMessagesForRoom(addAdminRoom);
-		for (const user of addAdminRoom.users)
-		{
-			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			for (const connection of connections) {
-				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						const formatRoom = this.roomService.formatPrivateRoom(user, addAdminRoom);
-						const upUser: UserI = await this.userService.getOne(user.id)
-						const formatMessages: MessageI[] = this.roomService.formatMessage(upUser, messages);
-						await this.server.to(connection.socketId).emit('messages', { messages: formatMessages, room: formatRoom, user: user});
-					}
-			}
-		}
+		this.displayChange(addAdminRoom);
 	}
 
 	@SubscribeMessage('removeAdmin')
 	async removeAdmin(socket: Socket, object: { user: UserI, room: RoomI }) {
-		// if (socket.data.user.id !== object.room.owner.id) {
-		// 	return socket.emit('Error', new UnauthorizedException());
-		// }
 		object.room = await this.roomService.getRoom(object.room.id);
 		const addAdminRoom: RoomI = await this.roomService.removeAdminToRoom(object.room, object.user);
-		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addAdminRoom.id);
-		const messages = await this.messageService.findMessagesForRoom(addAdminRoom);
-		for (const user of addAdminRoom.users)
-		{
-			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			for (const connection of connections) {
-				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						const formatRoom = this.roomService.formatPrivateRoom(user, addAdminRoom);
-						const upUser: UserI = await this.userService.getOne(socket.data.user.id)
-						const formatMessages: MessageI[] = this.roomService.formatMessage(upUser, messages);
-						await this.server.to(connection.socketId).emit('messages', { messages: formatMessages, room: formatRoom, user: user});
-					}
-			}
-		}
+		this.displayChange(addAdminRoom);
 	}
 
 	@SubscribeMessage('addMuted')
 	async addMuted(socket: Socket, object: { user: UserI, room: RoomI }) {
-		// if (socket.data.user.id !== object.room.owner.id) {
-		// 	return socket.emit('Error', new UnauthorizedException());
-		// }
 		object.room = await this.roomService.getRoom(object.room.id);
-		const addAdminRoom: RoomI = await this.roomService.addMutedToRoom(object.room, object.user);
-		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addAdminRoom.id);
-		for (const user of addAdminRoom.users)
-		{
-			const messages = await this.messageService.findMessagesForRoom(addAdminRoom);
-			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			for (const connection of connections) {
-				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						const formatRoom = this.roomService.formatPrivateRoom(user, addAdminRoom);
-						const upUser: UserI = await this.userService.getOne(user.id)
-						const formatMessages: MessageI[] = this.roomService.formatMessage(upUser, messages);
-						await this.server.to(connection.socketId).emit('messages', { messages: formatMessages, room: formatRoom, user: user});
-					}
-			}
-		}
+		const upRoom: RoomI = await this.roomService.addMutedToRoom(object.room, object.user);
+		this.displayChange(upRoom);
 	}
 
 	@SubscribeMessage('removeMuted')
 	async removeMuted(socket: Socket, object: { user: UserI, room: RoomI }) {
-		// if (socket.data.user.id !== object.room.owner.id) {
-		// 	return socket.emit('Error', new UnauthorizedException());
-		// }
 		object.room = await this.roomService.getRoom(object.room.id);
-		const addAdminRoom: RoomI = await this.roomService.removeMutedToRoom(object.room, object.user);
-		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addAdminRoom.id);
-		const messages = await this.messageService.findMessagesForRoom(addAdminRoom);
-		for (const user of addAdminRoom.users)
-		{
-			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
-			for (const connection of connections) {
-				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						const formatRoom = this.roomService.formatPrivateRoom(user, addAdminRoom);
-						const upUser: UserI = await this.userService.getOne(user.id)
-						const formatMessages: MessageI[] = this.roomService.formatMessage(upUser, messages);
-						await this.server.to(connection.socketId).emit('messages', { messages: formatMessages, room: formatRoom, user: user});
-					}
-			}
-		}
+		const upRoom: RoomI = await this.roomService.removeMutedToRoom(object.room, object.user);
+		this.displayChange(upRoom);
 	}
 
 	@SubscribeMessage('paginateRooms')
@@ -363,9 +293,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('quitRoom')
 	async onQuitRoom(socket: Socket, object: {room: RoomI, user: UserI }): Promise<RoomI> {
-		// const userToRemove = object.room.users.find(user => user.id === object.user.id);
-		// if (!userToRemove)
-		// return socket.emit('Error', new UnauthorizedException());
 		const updatedRoom: RoomI = await this.roomService.getRoom(object.room.id);
 		const quitedRoom: RoomI = await this.roomService.quitRoom(object.user, updatedRoom);
 
@@ -397,9 +324,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('banFromRoom')
 	async onBanFromRoom(socket: Socket, object: {room: RoomI, user: UserI }) {
-		// const userToRemove = object.room.users.find(user => user.id === object.user.id);
-		// if (!userToRemove)
-		// return socket.emit('Error', new UnauthorizedException());
 		const updatedRoom = await this.onQuitRoom(socket, {room: object.room, user: object.user});
 		await this.roomService.addBannedUser(updatedRoom, object.user);
 	}
@@ -453,47 +377,37 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	async blockUser(socket: Socket, object: {room: RoomI, user: UserI }) {
 		await this.userService.addBlockedUser(object.user, socket.data.user);
 		const upRoom: RoomI = await this.roomService.getRoom(object.room.id);
-		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(upRoom.id);
-		const messages: MessageI[] = await this.messageService.findMessagesForRoom(upRoom);
-		for (const userRoom of upRoom.users)
-		{
-			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(userRoom);
-			for (const connection of connections) {
-				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						const formatRoom = this.roomService.formatPrivateRoom(userRoom, upRoom);
-						const upUser: UserI = await this.userService.getOne(userRoom.id)
-						const formatMessages: MessageI[] = this.roomService.formatMessage(upUser, messages);
-						await this.server.to(connection.socketId).emit('messages', { messages: formatMessages, room: formatRoom, user: userRoom});
-					}
-			}
-		}
+		this.displayChange(upRoom);
 	}
 
 	@SubscribeMessage('unBlockUser')
 	async UnBlockUser(socket: Socket, object: {room: RoomI, user: UserI }) {
 		await this.userService.removeBlockedUser(object.user, socket.data.user);
 		const upRoom: RoomI = await this.roomService.getRoom(object.room.id);
-		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(upRoom.id);
-		const messages: MessageI[] = await this.messageService.findMessagesForRoom(upRoom);
-		for (const userRoom of upRoom.users)
+		this.displayChange(upRoom);
+	}
+
+	@SubscribeMessage('checkIfBlocked')
+	async checkIfBlocked(socket: Socket, user: UserI): Promise<boolean> {
+		const upUser: UserI = await this.userService.getOne(socket.data.user.id);
+		return this.server.to(socket.id).emit('isBlocked', upUser.blockedUsers.some(blocked => blocked.id === user.id));
+	}
+
+	async displayChange(room: RoomI) {
+		const joined: JoinedRoomI[] = await this.joinedRoomService.findByRoom(room.id);
+		const messages: MessageI[] = await this.messageService.findMessagesForRoom(room);
+		for (const userRoom of room.users)
 		{
 			const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(userRoom);
 			for (const connection of connections) {
 				if (joined.find(toto => toto.socketId === connection.socketId)) {
-						const formatRoom = this.roomService.formatPrivateRoom(userRoom, upRoom);
+						const formatRoom = this.roomService.formatPrivateRoom(userRoom, room);
 						const upUser: UserI = await this.userService.getOne(userRoom.id)
 						const formatMessages: MessageI[] = this.roomService.formatMessage(upUser, messages);
 						await this.server.to(connection.socketId).emit('messages', { messages: formatMessages, room: formatRoom, user: userRoom});
 					}
 			}
 		}
-	}
-
-
-	@SubscribeMessage('checkIfBlocked')
-	async checkIfBlocked(socket: Socket, user: UserI): Promise<boolean> {
-		const upUser: UserI = await this.userService.getOne(socket.data.user.id);
-		return this.server.to(socket.id).emit('isBlocked', upUser.blockedUsers.some(blocked => blocked.id === user.id));
 	}
 
 }

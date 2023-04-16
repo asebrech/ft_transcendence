@@ -9,6 +9,8 @@ export class DashboardService {
 	create: boolean = false;
 	members: boolean = false;
 	addUsers: boolean = false;
+	changePass: boolean = false;
+
 
 
 	constructor() { }

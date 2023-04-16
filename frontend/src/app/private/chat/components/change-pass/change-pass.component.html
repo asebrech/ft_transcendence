@@ -1,0 +1,23 @@
+<div class="main">
+	<h3 class="title">Password</h3>
+	<div class="separator"></div>
+	<form [formGroup]="passForm" (ngSubmit)="onSubmit()" class="form">
+		<div >
+			<input type="password" id="channelPassword" formControlName="channelPassword" placeholder="Password" class="inputCustom">
+		</div>
+		<div >
+			<input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="ConfirmPassword" class="inputCustom">
+		</div>
+		<div
+			*ngIf="passForm.hasError('passwordMismatch') && (passForm.get('channelPassword').dirty || passForm.get('confirmPassword').dirty)" class="error">
+			<label>
+				Passwords must match
+			</label>
+		</div>
+		<div class="submit">
+			<button type="submit" [disabled]="passForm.invalid">
+				Create Channel
+			</button>
+		</div>
+	</form>
+</div>

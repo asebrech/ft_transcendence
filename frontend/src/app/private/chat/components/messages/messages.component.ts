@@ -42,6 +42,10 @@ export class MessagesComponent implements OnInit {
 		else if (this.chatService.selectedRoom !== null && this.dashService.addUsers && this.elementRef.nativeElement.querySelector('.addUser') && !this.elementRef.nativeElement.querySelector('.addUser').contains(event.target)) {
 			this.dashService.addUsers = false;
 		}
+		if (this.dashService.changePass && this.elementRef.nativeElement.querySelector('.changePass') && !this.elementRef.nativeElement.querySelector('.changePass').contains(event.target)
+		&& !this.elementRef.nativeElement.querySelector('.channelOption').contains(event.target)) {
+			this.dashService.changePass = false;
+		}
 	}
 
 	ngOnInit(): void {
