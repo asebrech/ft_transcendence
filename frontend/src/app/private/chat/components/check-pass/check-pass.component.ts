@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheckPassComponent implements OnInit {
 
+	message: string = '';
+
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  onSubmit() {
+	if (this.message) {
+		console.log(this.message);
+		this.message = '';
+	}
+  }
 }

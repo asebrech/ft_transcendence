@@ -7,7 +7,7 @@
 			<div class="separator"></div>
 		</div>
 		<div class="search-container">
-			<label *ngIf="dashService.channel">Find a Channel</label>
+			<label *ngIf="dashService.channel">Find a Conversation</label>
 			<label *ngIf="!dashService.channel">Find a User</label>
 		</div>
 		<div class="create-container" *ngIf="dashService.channel">
@@ -29,4 +29,5 @@
 	</div>
 </div>
 <app-find-channel *ngIf="dashService.find" class="findChannel"></app-find-channel>
-<div *ngIf="dashService.find" class="overlay"></div>
+<app-check-pass *ngIf="dashService.checkPass" class="checkPass"></app-check-pass>
+<div *ngIf="dashService.find || dashService.checkPass" class="overlay"></div>

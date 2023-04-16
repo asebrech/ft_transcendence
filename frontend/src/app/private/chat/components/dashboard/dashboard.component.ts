@@ -24,6 +24,9 @@ export class DashboardComponent implements OnInit{
 		else if (this.dashService.find && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.findChannel').contains(event.target)) {
 			this.dashService.find = false;
 		}
+		if (this.dashService.checkPass && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.checkPass').contains(event.target)) {
+			this.dashService.checkPass = false;
+		}
 		if (!this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && this.elementRef.nativeElement.querySelector('.add').contains(event.target)) {
 			this.dashService.create = true;
 		}

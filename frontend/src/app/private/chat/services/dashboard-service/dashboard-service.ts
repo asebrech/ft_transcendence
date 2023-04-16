@@ -10,10 +10,8 @@ export class DashboardService {
 	members: boolean = false;
 	addUsers: boolean = false;
 	changePass: boolean = false;
-
-
+	checkPass: boolean = false;
 
 	constructor() { }
-
 
 }
