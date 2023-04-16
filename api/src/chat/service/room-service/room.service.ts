@@ -48,6 +48,11 @@ export class RoomService {
 		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned', 'muted'] });
 	}
 
+	async updateRoom(room: RoomI): Promise<RoomI> {
+		room.updated_at = new Date();
+		return this.roomRepository.save(room);
+	}
+
 	getRoomCredential(user: UserI, room: RoomI): RoomI {
 		if (user.id != room.owner.id) {
 			room.owner = null;

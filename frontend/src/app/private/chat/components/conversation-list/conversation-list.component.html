@@ -13,7 +13,7 @@
 			<img src="../../../../../../assets/images/astronaut.png" *ngIf="room.privateMessage">
 			<img src="../../../../../../assets/images/src.png" *ngIf="!room.privateMessage">
 			<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}" *ngIf="room.privateMessage"></div>
-			<div class="name">
+			<div class="name" class="name" [ngClass]="{'isuser': room.privateMessage}">
 				{{ room.name }}
 			</div>
 		</li>
