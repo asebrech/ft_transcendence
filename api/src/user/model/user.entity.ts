@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { userInfo } from "os";
 import { BeforeInsert, BeforeUpdate, Column, Double, Entity, ManyToMany, ManyToOne, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { UserI } from "./user.interface";
+import { Friend, UserI } from "./user.interface";
 import { ParseFloatPipe } from "@nestjs/common";
 
 @Entity()
@@ -43,6 +43,6 @@ export class UserEntity {
 	@Column({default: 1})
 	level: number;
 
-	@Column({type: 'simple-array', default: []})
-	friend : number[];
+	@Column({ type: 'jsonb', default: '[]' })
+	friends: Friend[];
 }

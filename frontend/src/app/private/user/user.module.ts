@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 
 @NgModule({
@@ -33,6 +34,23 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-  ]
+    NgCircleProgressModule.forRoot({
+      "radius": 60,
+      "space": -10,
+      "outerStrokeGradient": true,
+      "outerStrokeWidth": 10,
+      "outerStrokeColor": "#4882c2",
+      "outerStrokeGradientStopColor": "#53a9ff",
+      "innerStrokeColor": "#e7e8ea",
+      "innerStrokeWidth": 10,
+      "title": "UI",
+      "animateTitle": false,
+      "animationDuration": 1000,
+      "showUnits": false,
+      "showBackground": false,
+      "clockwise": false,
+      "startFromZero": false,
+      "lazy": true}) 
+  ],
 })
 export class UserModule { }

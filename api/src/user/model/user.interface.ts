@@ -14,5 +14,14 @@ export interface UserI {
 	ratio? : number;
 	total?: number;
 	level?: number;
-	friend?: number[];
+	profilPic?: string;
+	friends?: Friend[];
+}
+
+export interface Friend {
+	id?: number;
+	username?: string;
+	profilPic?: string;
+	win?: number;
+	losses?: number;
 }

@@ -4,6 +4,7 @@ import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { PlayerService } from '../../services/player.service';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @Component({
   selector: 'app-profile',

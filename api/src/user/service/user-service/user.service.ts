@@ -5,7 +5,7 @@ import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginat
 import { throwError } from 'rxjs';
 import { AuthService } from 'src/auth/service/auth.service';
 import { UserEntity } from 'src/user/model/user.entity';
-import { UserI } from 'src/user/model/user.interface';
+import { Friend, UserI } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';
 
 @Injectable()
@@ -194,24 +194,31 @@ export class UserService {
 			return false;
 	}
 
-	async addFriend(id: number, newFriendId: number): Promise<UserI> {
+	async addFriend(id: number, newFriend: UserI): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({ id });
-		if (user.friend.includes(newFriendId)) {
-		  throw new Error(`Friend of id : ${newFriendId} is already on friend list.`);
+		const friend: Friend = {
+			id: newFriend.id,
+			username: newFriend.username,
+			profilPic: newFriend.profilPic, 
+			win: newFriend.wins, 
+			losses: newFriend.losses,
+		  };
+		if (!user.friends)
+			user.friends = [];
+		const existingFriend = user.friends.find(friend => friend.id === newFriend.id);
+  		if (existingFriend) {
+		  throw new Error(`Friend of id : ${newFriend.id} is already on friend list.`);
 		}
-		user.friend.push(newFriendId);
+		user.friends.push(friend);
 		await this.userRepository.save(user);
 		return user;
 	  }
 
-	async removeFriend(id: number, friendId: number): Promise<UserI> {
+	async removeFriend(id: number, friend: UserI): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({ id });
-		console.log(friendId);
-		console.table(user.friend);
-		const friendIndex = user.friend.indexOf(friendId);
-		console.log(friendIndex);
+		const friendIndex = user.friends.indexOf(friend);
 		if (friendIndex !== -1) {
-		  user.friend.splice(friendIndex, 1);
+		  user.friends.splice(friendIndex, 1);
 		  return this.userRepository.save(user);
 		} else {
 		  throw new Error('Friend not found');

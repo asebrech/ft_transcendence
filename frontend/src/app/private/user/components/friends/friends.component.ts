@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PlayerService } from '../../services/player.service';
-import { UserI } from 'src/app/model/user.interface';
+import { Friend, UserI } from 'src/app/model/user.interface';
 import { Observable, catchError } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 
@@ -16,58 +16,51 @@ export class FriendsComponent implements OnInit {
   user$ : Observable<UserI>
   filteredUsers: UserI[] = [];
   searchTerm: string = '';
-  friends: number[];
   message: string;
   showContextMenu: boolean;
   contextMenuTop: number;
   contextMenuLeft: number;
   isMyFriend: boolean = true;
-  selectedUser: number;
+  selectedUser: UserI;
   user : UserI = this.authService.getLoggedInUser();
+  friends: Friend[];
 
   constructor(private route : Router, private playerService: PlayerService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
-      this.friends = user.friend;
-      if (!user.friend)
+      if (!user.friends)
        this.message = "Liste d'amis vide !";
-       console.table(this.friends);
+       this.friends = user.friends;
     });
     this.playerService.getUserList().subscribe(users => {
-      this.filteredUsers = users;
-      this.users = users;
+      this.filteredUsers = users; // affichera les utilisateurs selon l'input
+      this.users = users; // tout les users.
+      this.users = this.users.filter(users => users.id !== this.user.id);
+      this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
     });
   }
 
-  searchUsers() { // bon
+  searchUsers() {
     if (this.searchTerm.trim() !== '') {
       this.filteredUsers = this.users.filter((user: UserI) => {
         return user.username.toLowerCase().startsWith(this.searchTerm.toLowerCase());
       });
-    } else {
-      this.playerService.getUserList().subscribe(users => {
-        this.filteredUsers = users;
-      });
-    }
+    } else
+      this.filteredUsers = this.users;
   }
 
   goToProfileOf(userId: number) {
     this.route.navigate(['/private/user/profile', userId]);
   }
 
-  onContextMenu(event: MouseEvent, userId: number){
+  onContextMenu(event: MouseEvent, user: UserI){
     event.preventDefault();
     this.showContextMenu = true;
     this.contextMenuTop = event.clientY;
     this.contextMenuLeft = event.clientX;
-    // this.user$.subscribe( (user: UserI) => {
-    //   if (!user.friend.includes(username))
-    //     this.isMyFriend = true;
-    // });
-    this.selectedUser = userId;
-    console.log(this.selectedUser);
+    this.selectedUser = user; // le profil sur lequel on a fait clic droit.
   }
 
   closeContextMenu(){
@@ -78,8 +71,8 @@ export class FriendsComponent implements OnInit {
     console.log("supprimer ami");
   }
 
-  removeFriend(id: number, friendId: number) { 
-    this.playerService.removeFriend(id, friendId).pipe(
+  removeFriend(id: number, friend: UserI) {
+    this.playerService.removeFriend(id, friend).pipe(
       catchError(error => {
         console.log('An error occurred:', error);
         throw('Something went wrong; please try again later.');
@@ -88,14 +81,15 @@ export class FriendsComponent implements OnInit {
     .subscribe(response => {
       console.log('Friend removed successfully:', response);
       this.user$.subscribe((user: UserI) => {
-        this.friends = user.friend;
+        this.friends = user.friends;
       });
     });
     this.showContextMenu = false;
   }
 
-  addFriend(id: number, friendId: number){
-    this.playerService.addFriend(id, friendId).pipe(
+  addFriend(userId: number, selectedUser: UserI){
+    console.log(selectedUser);
+    this.playerService.addFriend(userId, selectedUser).pipe(
       catchError(error => {
         console.log('An error occurred:', error);
         throw('Something went wrong; please try again later.');
@@ -104,14 +98,14 @@ export class FriendsComponent implements OnInit {
     .subscribe(response => {
       console.log('Friend added successfully:', response);
       this.user$.subscribe((user: UserI) => {
-        this.friends = user.friend;
+        this.friends = user.friends;
       });
     });
     this.showContextMenu = false;
   }
 
-  selectUser(userId: number) {
-    console.log(userId);
-    this.selectedUser = userId;
+  selectUser(user: UserI) {
+    console.table(user);
+    this.selectedUser = user;
   }
 }

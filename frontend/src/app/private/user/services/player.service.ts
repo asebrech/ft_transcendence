@@ -33,12 +33,12 @@ export class PlayerService {
     return this.httpClient.post(`api/users/${id}/addlosses/`, null);
   }
 
-  addFriend(userId: number, newFriendId: number) : Observable<number[]> {
-    return this.httpClient.post<number[]>(`api/users/${userId}/addfriend`,{newFriendId});
+  addFriend(userId: number, newFriend: UserI) : Observable<number[]> {
+    return this.httpClient.post<number[]>(`api/users/${userId}/addfriend`,{newFriend});
   }
 
-  removeFriend(userId: number, friendId: number) : Observable<number[]> {
-    return this.httpClient.post<number[]>(`api/users/${userId}/remove-friend`,{friendId});
+  removeFriend(userId: number, friend: UserI) : Observable<number[]> {
+    return this.httpClient.post<number[]>(`api/users/${userId}/remove-friend`,{friend});
   }
 
   updatePassword(userId: number, oldPassword: string, newPassword: string): Observable<UserI> {
@@ -56,7 +56,6 @@ export class PlayerService {
   getUserList() : Observable<UserI[]> {
     return this.httpClient.get<UserI[]>(`api/users/all`);
   }
-
 }
 
 
