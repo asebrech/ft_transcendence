@@ -1,12 +1,17 @@
 <div class="main">
 	<img [src]="switchMenue ? imagePath1 : imagePath2" class="arrow">
 	<div class="switch" [ngClass]="{'hidden': !switchMenue}" >
-		<div *ngIf="dashService.channel">
-			<label *ngIf="dashService.channel" (click)="switch()" >Messages</label>
-		</div>
-		<div *ngIf="!dashService.channel">
+			<div class="pass" *ngIf="chatService.selectedRoomOwner">
+				<label (click)="switch()" (click)="changePass()" >Change Password</label>
+			</div>
+			<div class="separator" *ngIf="chatService.selectedRoomOwner"></div>
+			<div class="leave" *ngIf="!chatService.selectedRoomOwner && !chatService.selectedRoom.privateMessage">
+				<label (click)="switch()" (click)="leaveChannel()" >Leave Channel</label>
+			</div>
+			<!-- <div class="separator" *ngIf="chatService.selectedRoomOwner !== null"></div> -->
+			<div class="delete" *ngIf="chatService.selectedRoomOwner || chatService.selectedRoom.privateMessage">
 
-		</div>
-
+				<label (click)="switch()" (click)="deleteChannel()" >Delete Channel</label>
+			</div>
 	</div>
 </div>

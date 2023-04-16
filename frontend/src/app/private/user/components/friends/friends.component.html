@@ -1,17 +1,20 @@
 <app-nav-bar></app-nav-bar>
-<div class="container">
+<div class="container" (click)="closeContextMenu()">
   <div class="search">
     <div class="title">
       <h1>Chercher</h1>
       <img src="../../../../../assets/images/icons8-telescope-100_1.png" alt="icons8-telescope-100_1">
     </div>
     <hr>
-    <div class="autocomplete">
-      <input type="text" placeholder="Rechercher..." [(ngModel)]="username" (keyup)="chercher(username)">
-      <div class="suggestions" *ngIf="resultats.length > 0">
-        <div class="suggestion" *ngFor="let resultat of resultats" (click)="selectionner(resultat)">
-          {{ resultat }}
-        </div>
+    <input type="text" [(ngModel)]="searchTerm"  (ngModelChange)="searchUsers()" placeholder="Rechercher des utilisateurs">
+    <div class="main">
+      <div class="suggestions" *ngIf="filteredUsers.length > 0">
+        <ul>
+          <li *ngFor="let user of filteredUsers" (contextmenu)="onContextMenu($event, user)">
+            <img src="../../../../../../assets/images/astronaut.png" alt="Photo de profil de {{user.username}}" >
+            {{user.username}}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -24,9 +27,9 @@
     <p *ngIf="message">{{message}}</p>
     <div class="main">
       <ul>
-        <li *ngFor="let user of amis; let i = index" (click)="goToProfileOf(user)" (contextmenu)="onContextMenu($event)">
+        <li *ngFor="let friend of friends" (contextmenu)="onContextMenu($event, friend)" >
           <img src="../../../../../../assets/images/astronaut.png">
-          {{ amis[ i % amis.length] }}
+          {{ friend.username }}
         </li>
         </ul>
     </div>
@@ -34,7 +37,8 @@
 </div>
 
 <div *ngIf="showContextMenu" class="context-menu" [style.top.px]="contextMenuTop" [style.left.px]="contextMenuLeft">
-  <button *ngIf="isMyFriend" (click)="option1()">add friend</button>
-  <button (click)="option2()">send message</button>
-  <button (click)="option3()">delete friend</button>
+  <button (click)="addFriend(this.user.id, selectedUser)">add friend</button>
+  <button >send message</button>
+  <button (click)="removeFriend(this.user.id, selectedUser)">delete friend</button>
+  <button (click)="goToProfileOf(selectedUser)">Go to profil</button>
 </div>

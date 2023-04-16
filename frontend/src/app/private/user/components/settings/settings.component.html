@@ -1,6 +1,6 @@
 <app-nav-bar></app-nav-bar>
-<div class="container">
-  <div class="profil">
+<div class="container" >
+  <div class="profil" (click)="test()">
     <h1>Profil</h1>
     <img src="../../../../../assets/images/astronaut.png" alt="profilePicture">
     <button (click)="changeUsername()">Change username</button>
@@ -24,7 +24,38 @@
       <button (click)="closePopup(0)">CONFIRM</button>
     </div>
   </div>
-  <div class="skin">
+  <div class="skin" >
     <h1>Skin</h1>
+
+    <div class="ball">
+      <div class="ball_skin_container">
+        <div class="scrolable-content">
+          <img (click)="retrieveBallSkin($event)" src="../../../../../assets/images/ball/jupiter.png">
+          <img (click)="retrieveBallSkin($event)" src="../../../../../assets/images/ball/planet-red.png">
+          <img (click)="retrieveBallSkin($event)" src="../../../../../assets/images/ball/planet.png">
+          <img (click)="retrieveBallSkin($event)" src="../../../../../assets/images/ball/pluto.png">
+          <img (click)="retrieveBallSkin($event)" src="../../../../../assets/images/ball/neptune.png">
+          <img (click)="retrieveBallSkin($event)" src="../../../../../assets/images/ball/earth.png">
+        </div>
+      </div>
+      <ngx-colors ngx-colors-trigger [(ngModel)]="colorBall" (ngModelChange)="onColorBallChange($event)" ></ngx-colors>  
+    </div>
+
+    <div class="paddle">
+
+      <div ngx-colors-trigger [(ngModel)]="colorPad" [style.background-color]="colorPad" (ngModelChange)="onPaddleColorChange($event)" class="paddle_color_container"></div>
+
+      <div class="paddle_skin_container">
+        <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/black_star.png">
+        <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/halo.png">
+        <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/New Project.png">
+        <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/orangePaddle.png">
+        <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/rose_tapette.png">
+        <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/spacePong.png">
+        <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/stars.png">
+        <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/whiteP.png">
+      </div>
+
+    </div>
   </div>
 </div>

@@ -11,6 +11,10 @@ const routes: Routes = [
 		component: ProfileComponent,
 	},
 	{
+		path: 'profile/:id',
+		component: ProfileComponent,
+	},
+	{
 		path: 'friends',
 		component: FriendsComponent
 	},
@@ -18,10 +22,10 @@ const routes: Routes = [
 		path: 'google-auth',
 		component: GoogleAuthComponent
 	},
-  {
-    path: 'settings',
-    component: SettingsComponent
-  },
+	{
+		path: 'settings',
+		component: SettingsComponent
+	},
 	{
 		path: '**',
 		redirectTo: 'profile',

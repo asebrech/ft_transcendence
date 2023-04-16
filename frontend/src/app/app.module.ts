@@ -20,21 +20,22 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     StarsComponent,
-    StarsInteractiveComponent
+    StarsInteractiveComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-	HttpClientModule,
- 	BrowserAnimationsModule,
-	MatSnackBarModule,
-	JwtModule.forRoot({
-		config: {
-		  tokenGetter: tokenGetter,
-		  allowedDomains: ["localhost:3000"]
-		}
-	  })
-  ],
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:3000"]
+      }
+	    }),
+      SweetAlert2Module.forRoot()
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

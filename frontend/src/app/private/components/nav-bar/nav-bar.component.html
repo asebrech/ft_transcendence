@@ -1,41 +1,48 @@
-<nav>
+
+<nav *ngIf="hideMenu">
 	<ul>
 	  <li>
-		<a [routerLink]="['/private/game/spacepong']" title="Game" [ngClass]="{'activeGame': currentUrl === '/private/game/spacepong'}">
-		  <img src="../../../../assets/images/rocket.png" alt="Game" class="game">
-		</a>
-	  </li>
-	  <li>
+		  <a [routerLink]="['/private/game/spacepong']" title="Game" [ngClass]="{'activeGame': currentUrl === '/private/game/spacepong'}">
+			  <img src="../../../../assets/images/rocket.png" alt="Game" class="game">
+			</a>
+		</li>
+		<li>
 		<a [routerLink]="['/private/user/profile']" title="Profile" [ngClass]="{'active': currentUrl === '/private/user/profile'}">
-		  <img src="../../../../assets/images/utilisateur-astronaute_1.png" alt="Profile" class="profile">
+			<img src="../../../../assets/images/utilisateur-astronaute_1.png" alt="Profile" class="profile">
 		</a>
 	  </li>
 	  <li>
 		<a [routerLink]="['/private/chat/dashboard']" title="Chat" [ngClass]="{'active': currentUrl === '/private/chat/dashboard'}">
-		  <img src="../../../../assets/images/transmitter_1.png" alt="Chat" class="chat">
+			<img src="../../../../assets/images/transmitter_1.png" alt="Chat" class="chat">
 		</a>
-	  </li>
-	  <li>
+	</li>
+	<li>
 		<a [routerLink]="['/private/game/live']" title="Live" [ngClass]="{'active': currentUrl === '/private/game/live'}">
-		  <img src="../../../../assets/images/satellite_1.png" alt="Live" class="live">
+			<img src="../../../../assets/images/satellite_1.png" alt="Live" class="live">
 		</a>
-	  </li>
-	  <li>
+	</li>
+	<li>
 		<a [routerLink]="['/private/user/friends']" title="Friends" [ngClass]="{'active': currentUrl === '/private/user/friends'}">
 		  <img src="../../../../assets/images/src.png" alt="Friends" class="friends">
 		</a>
-	  </li>
-	  <li>
+	</li>
+	<li>
 		<a [routerLink]="['/private/user/settings']" title="Settings" [ngClass]="{'active': currentUrl === '/private/user/settings'}">
-		  <img src="../../../../assets/images/technical-support_1.png" alt="Settings" class="settings">
+			<img src="../../../../assets/images/technical-support_1.png" alt="Settings" class="settings">
 		</a>
-	  </li>
-	</ul>
-  </nav>
+	</li>
+</ul>
+</nav>
 
-  <header>
-	<a href="/public/home">
-	  <h1 class="title">SPACEPONG</h1>
+<div class="menu__mobile">
+	<div #menu__mobile_button class="menu__mobile_button">
+		<span></span>
+	</div>
+</div>
+
+<header>
+	<a>
+		<h1 [routerLink]="['/public/home']" style="cursor: pointer;" class="title">SPACEPONG</h1>
 	</a>
-  </header>
+</header>
 

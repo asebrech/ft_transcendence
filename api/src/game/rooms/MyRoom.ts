@@ -1,83 +1,169 @@
 import { Room, Client, Server } from "colyseus";
+import { matchMaker } from "colyseus";
 import { Schema } from "@colyseus/schema";
+import { IncomingMessage } from "http";
 
 let player = new Map<string, string>()
 
-interface screen_size 
-{
-  x : number;
-  y : number;
-};
-
-interface new_pos_ball
-{  
-  x : number;
-  y : number;
-};
-
 export class MyRoom extends Room<Schema> 
 {
-
+  right_player : string;
+  left_player : string;
+  right_score : number = 0;
+  left_score : number = 0;
   rdyPlayer = 2;
-  left_player_screen : screen_size = {x : 0, y : 0};
-  right_player_screen : screen_size = {x : 0, y : 0};
-  new_pos : new_pos_ball = {x : 0, y : 0};
+  playing : number = 2;
 
+  constructor() {
+    super();
 
+    // Set autoDispose to true
+    this.autoDispose = true;
+  }
   // When room is initialized
   onCreate (options: any) 
   {
     console.log("room " + this.roomId + " created successfully");
   }
 
-  // Authorize client based on provided options before WebSocket handshake is complete
-  // onAuth (client: Client, options: any, request: http.IncomingMessage) 
+  // onAuth(client: Client, options: any, request?: IncomingMessage) 
   // {
+  //   this.setSeatReservationTime(60);
   //   return true;
   // }
-  
+
   // When client successfully join the room
   onJoin (client: Client, options: any, auth: any) 
   {
     if (this.clients.length == 1)
+    {
+      try
+      {
+        this.left_player = options.clientId;
+        client.send("left_player");
+      }
+      catch
+      {
+        console.error("error could not send [request_left_player_screen]")
+      }
       player.set(client.sessionId, "player_left");
+    }
     else if (this.clients.length == 2)
     {
+      try
+      {
+        this.right_player = options.clientId;
+        client.send("right_player");
+      }
+      catch
+      {
+        console.error("error could not send [request_right_player_screen]")
+      }
       player.set(client.sessionId, "player_right");
+      this.broadcast("second_player_found");
     }
     else
       player.set(client.sessionId, "spectator");
-
     ///////////////////////////////////////////
-    console.log(player.get(client.sessionId))
     console.log(client.sessionId + " is connected to " + this.roomId + " , now this room has " + player.get(client.sessionId))
-    //////////////////////////////////////////
-    if (this.clients.length == 2)
-    {
-      this.broadcast("second_player_found");
-      console.log("[ROOM IS FULL]")
-    }
-    //////////////////////////////////////////
-    //--------------------------------------------//
-    this.onMessage("move", (client, message) =>
-    {
-      if (player.get(client.sessionId) == "player_left")
-        this.broadcast("paddle_left", message);
-      if (player.get(client.sessionId) == "player_right")
-        this.broadcast("paddle_right",message);
-    })
-    //--------------------------------------------//
+    
     ///////////////////////////////////////////
+    this.onMessage("move_left_pad", (client, message) =>
+    {
+      if (player.get(client.sessionId) == "player_left" || player.get(client.sessionId) == "spectator")
+      {
+        try
+        {
+          this.broadcast("paddle_left", ({x : message.x, y : message.y}));
+        }
+        catch
+        {
+          console.error("cannot send to right player paddle movement")
+        }
+      }
+    });
+
+    this.onMessage("move_right_pad", (client, message) =>
+    {
+      if (player.get(client.sessionId) == "player_right" || player.get(client.sessionId) == "spectator")
+      {
+        try
+        {
+          this.broadcast("paddle_right", ({x : message.x, y : message.y}));
+        }
+        catch
+        {
+          console.error("cannot send to left player paddle movement");
+        }
+      }
+    });
+
+    this.onMessage("ready" , (client, message) =>
+    {
+      this.rdyPlayer--;
+      if (this.rdyPlayer == 0)
+      {
+        try
+        {
+          this.clients[0].send("launch", ({x: 300, y : 300}));
+        }
+        catch
+        {
+          console.error("error could not send [launch]")
+        }
+      }
+    });
+    //////////////////////////////////////////
+    this.onMessage("ball_position", (client, message) =>
+    {
+      if (player.get(client.sessionId) == "player_left" || player.get(client.sessionId) == "spectator")
+      {
+        try 
+        {
+          this.broadcast("set_ball_position", ({x : message.x, y : message.y}));
+        }
+        catch 
+        {
+          console.error("error could not send [set_ball_position]")
+        }
+      }
+    });
+    ///////////////////////////////////////////
+    this.onMessage("collision", (client, message) =>
+    {
+      this.broadcast("collisionSound");
+    });
+    this.onMessage("game_finished", (client, message)=>
+    {
+      this.broadcast("end", (message.winner));
+    });
+    this.onMessage("score_update", (client , message) =>
+    {
+      this.left_score = message.score_left;
+      this.right_score = message.score_right;
+      this.broadcast("updated_score", ({s_l : this.left_score, s_r : this.right_score}));
+      this.setMetadata({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}})
+    });
+    this.setMetadata({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}})
   }
 
-
-
-    // When a client leaves the room
-    onLeave (client: Client, consented: boolean) 
+  // When a client leaves the room
+  onLeave (client: Client, consented: boolean) 
+  {
+    if (player.get(client.sessionId) == "player_left" || player.get(client.sessionId) == "player_right")
     {
-      client.leave();    
-      console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length)
+      this.playing--;
     }
-    // Cleanup callback, called after there are no more clients in the room. (see `autoDispose`)
-    onDispose () { }
+    client.leave();
+    player.delete(client.sessionId);
+    if (this.playing == 0)
+      this.broadcast("emptyRoom");
+    console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length)
+    //appeler service pour rentre les donner de la partie.
+  }
+  // Cleanup callback, called after there are no more clients in the room. (see `autoDispose`)
+  onDispose () 
+  {
+   
+  }
 }

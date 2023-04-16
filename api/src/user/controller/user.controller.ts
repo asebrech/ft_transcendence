@@ -28,10 +28,8 @@ export class UserController {
 	}
 
 	@Get()
-	async findAll(
-		@Query('page') page: number = 1, @Query('limit') limit: number = 10): Promise<Pagination<UserI>> {
-		limit = limit > 100 ? 100 : limit;
-		return this.userService.findAll({ page, limit, route: 'http://localhost:3000/api/users' });
+	async findAll(@Req() req: RequestModel): Promise<UserI[]> {
+		return this.userService.findAll();
 	}
 
 	@Get('/find-by-username')
@@ -117,14 +115,32 @@ export class UserController {
 		return this.userService.checkEmail(mail);
 	}
 
-	@Post(':id/add-friend')	
-	async addFriend(@Param('id') userId : number, @Body('friendId') newFriend : UserEntity) : Promise<UserI> {
-		return this.userService.addFriend(userId, newFriend);
+	@Put(':id/change-password')
+	//@UseGuards(JwtAuthGuard)
+	async changePassword(@Param('id') userId : number, @Body() { oldPassword, newPassword }: ChangePasswordDto) {
+		await this.userService.updatePassword(userId, oldPassword, newPassword);
 	}
 
+	@Put(':id/change-username')
+	//@UseGuards(JwtAuthGuard)
+	async changeUsername(@Param('id') userId : number, @Body() { newUsername }: ChangeUsernameDto) {
+		await this.userService.updateUsername(userId, newUsername);
+	}
+
+	@Put(':id/change-email')
+	//@UseGuards(JwtAuthGuard)
+	async changeEmail(@Param('id') userId : number, @Body() { newEmail }: ChangeEmailDto) {
+		await this.userService.updateEmail(userId, newEmail);
+	}
+
+	@Post(':id/addfriend')	
+	async addFriend(@Param('id') userId : number, @Body('newFriend') newFriend : UserI) {
+		await this.userService.addFriend(userId, newFriend);
+	} 
+
 	@Post(':id/remove-friend')
-	async removeFriend(@Param('id') userId : number, @Body('friendId') friend : UserI) : Promise<UserI> {
-		return this.userService.removeFriend(userId, friend.id);
+	async removeFriend(@Param('id') userId : number, @Body('friend') friend : UserI) {
+		await this.userService.removeFriend(userId, friend);
 	}
 
 	@Post(':id/addwins')
@@ -137,12 +153,22 @@ export class UserController {
 	  return this.userService.addWinOrLoss(userId, false);
 	}
 
+	@Get('all')
+	async getAllUsers() {
+		return this.userService.getAllUsers();
+	}
+
 	@Get(':id')
   	async getUserInfo(@Param('id') id: number): Promise<UserI> {
     // Récupérer les informations de l'utilisateur avec l'ID fourni
     const user = await this.userService.getUserInfo(id);
     // Retourner les informations de l'utilisateur
     return user;
+  }
+
+  	@Put(':id/update-color-pad')
+  	async updateColorPad(@Param('id') id: number, @Body('colorPad') color: string) {
+		await this.userService.updateColorPad(id, color);
   }
 
 }

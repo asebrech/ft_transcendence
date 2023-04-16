@@ -5,6 +5,7 @@
     justify-content: center;
     color: white;
     font-family: 'nasalization';
+    overflow-y: none;
 }
 .row 
 {
@@ -15,11 +16,13 @@
 #gameContainer
 {
     position: absolute;
-    height: 79vh;
-    width: 97vw;
-    margin-left: 3%;
+    // background-color: red;
+    height: 87vh;
+    width: 91vw;
+    margin-left: 9%;
     margin-top: 90vh;
     backdrop-filter: blur(4.5px);
+    z-index: -1;
 }
 .playBotScene
 {
@@ -44,5 +47,16 @@
     background-color: rgb(255, 255, 255, 0.3);
 }
 
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) 
+{
+    .playBotScene
+    {
+        left: 25vw;
+    }
+    #gameContainer
+    {
+        margin-left: 5%;
+    }
+}
 
 

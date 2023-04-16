@@ -22,18 +22,18 @@ import { HomeComponent } from './components/home/home.component';
     RegisterComponent,
     ApiLoginComponent,
     GoogleAuthComponent,
-	HomeComponent
+	  HomeComponent
   ],
   imports: [
     CommonModule,
     PublicRoutingModule,
-	MatSnackBarModule,
-	ReactiveFormsModule,
-	MatFormFieldModule,
-	MatInputModule,
-	MatButtonModule,
-	MatCardModule,
-	FormsModule
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    FormsModule
   ]
 })
 export class PublicModule { }

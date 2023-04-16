@@ -1,35 +1,38 @@
-.bdy, .ht 
-{ 
-	width: 1295px;
-	height: 740px;
-	margin-left: -160px;
+.ht
+{
+	display: flex;
+	justify-content: center;
+	height: 85vh;
+	width: 100vw;
 }
 .bdy {
-	background-color: rgba(25,25,25,1);
-}
-
-#blackhole {
-	
-	height: 100%;
-	width: 100%;
-	margin-left: 33%;
-	position: relative;
 	display: flex;
+	justify-content: center;
+	height: 90vh;
+	width: 100vh;
 }
 
-.centerHover {
-	width: 255px;
-	height: 255px;
+#blackhole 
+{	
+	height: 95%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.centerHover 
+{
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-top: 49vh;
+	transform: translate(-50%, 0);
+	width: 30%;
+	height: 30%;
 	background-color: transparent;
 	border-radius: 50%;
-	position: absolute;
-	left: 33%;
-	top: 26.5%;
-	margin-top: 50px;
-	margin-left: 50px;
 	z-index: 2;
 	cursor: pointer;
-	line-height: 255px;
 	text-align: center;
 	transition: all 500ms;
 	
@@ -55,8 +58,8 @@
 		&:before {
 			content: '';
 			display: inline-block;
-			height: 1px;
-			width: 16px;
+			height: 0.1vh;
+			width: 0.8vw;
 			margin-right: 12px;
 			margin-bottom: 4px;
 			background-color: #666;
@@ -65,8 +68,8 @@
 		&:after {
 			content: '';
 			display: inline-block;
-			height: 1px;
-			width: 16px;
+			height: 0.1vh;
+			width: 0.8vw;
 			margin-left: 12px;
 			margin-bottom: 4px;
 			background-color: #666;
@@ -75,19 +78,22 @@
 	}
 }
 canvas {
-	position: relative;
+	position: absolute;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
 }
 
 .waiting
 {	
 	position: absolute;
-	left: 47vw;
-	top: 54vh;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	border-left: solid 1px white;
 	border-right: solid 1px white;
 	padding-left: 5px;
 	padding-right: 5px;
-
 }
 
 .waiting_animation
@@ -108,5 +114,18 @@ canvas {
             opacity: 0;
         }
     }
-  
+}
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) 
+{
+	.centerHover
+	{
+		width: 50%;
+	}
+	canvas
+	{
+		top: 35vh;
+		width: 90vw;
+		height: 30vh;
+	}
+
 }

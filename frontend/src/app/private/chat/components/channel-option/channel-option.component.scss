@@ -3,23 +3,54 @@
 	height: 15px;
 	display: flex;
 	//margin-left: 85%;
-	margin-top: 20px;
+	margin-top: 10px;
 	cursor: pointer;
 }
 
 .switch {
 	z-index: 99999;
 	position: absolute;
-	margin-top: 15px;
-	margin-left: -200px;
+	margin-top: 20px;
+	margin-left: -220px;
 	width: 200px;
-	height: 60px;
 	border-radius: 9px;
 	background: rgba(22, 7, 45, 0.5);
 	box-shadow: 23px 0px 24px rgba(0, 0, 0, 0.25);
 	backdrop-filter: blur(15px);
 	opacity: 1;
 	transition: opacity 0.2s ease-in-out;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-bottom: 20px;
+	padding-top: 20px;
+}
+
+.switch div {
+	transition: ease-in-out 0.05s;
+}
+
+.switch div label{
+	cursor: pointer;
+	font-size: 18px;
+	transition: ease-in-out 0.05s;
+}
+
+.switch div:hover {
+	scale: (1.03);
+	transition: ease-in-out 0.05s;
+}
+
+.delete {
+	color: red;
+}
+
+.separator {
+	content: '';
+	width: 70%;
+	height: 1px;
+	background: white;
+	margin: 10px;
 }
 
 .hidden {
@@ -29,12 +60,12 @@
 
 }
 
-.switch label {
-	position: absolute;
-	top: 50%;
-  	left: 50%;
-	transform: translate(-50%, -50%);
-	cursor: pointer;
-	font-size: 18px;
-	color: white
-}
+// .switch label {
+// 	position: absolute;
+// 	top: 50%;
+//   	left: 50%;
+// 	transform: translate(-50%, -50%);
+// 	cursor: pointer;
+// 	font-size: 18px;
+// 	color: white
+// }

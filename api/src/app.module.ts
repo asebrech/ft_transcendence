@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,6 +6,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
 	imports: [
@@ -19,12 +19,14 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 		}),
 		UserModule,
 		AuthModule,
-		ChatModule
+		ChatModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
 })
-export class AppModule implements NestModule {
+
+
+export class AppModule {
 	configure(consumer: MiddlewareConsumer) {
 		consumer
 			.apply(AuthMiddleware)

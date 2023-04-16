@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { DashboardService } from '../../services/dashboard-service/dashboard-service';
+import { ChatService } from '../../services/chat-service/chat.service';
 
 @Component({
   selector: 'app-channel-option',
@@ -12,7 +13,7 @@ export class ChannelOptionComponent {
 	imagePath1 = "../../../../../../assets/images/close.png";
 	imagePath2 = "../../../../../../assets/images/arrow-down-sign-to-navigate.png";
 
-	constructor(private elementRef: ElementRef, public dashService: DashboardService) { }
+	constructor(private elementRef: ElementRef, public dashService: DashboardService, public chatService: ChatService) { }
 
 	switch() {
 		this.hideSwitch();
@@ -20,6 +21,7 @@ export class ChannelOptionComponent {
 
 	showSwitch() {
 		this.switchMenue = true;
+		this.dashService.changePass = false;
 	}
 
 	hideSwitch() {
@@ -36,4 +38,15 @@ export class ChannelOptionComponent {
 		}
 	}
 
+	changePass() {
+		this.dashService.changePass = true;
+	}
+
+	leaveChannel() {
+		this.chatService.quitRoom(this.chatService.currentUser);
+	}
+
+	deleteChannel() {
+		this.chatService.deleteRoom();
+	}
 }

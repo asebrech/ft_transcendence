@@ -31,7 +31,6 @@ nav {
 	overflow-y: auto;
 }
 
-
 ul {
 	background: transparent;
 	width: 100%;
@@ -107,4 +106,100 @@ nav a.active img {
 
 nav a.activeGame img {
 	transform: scale(1.2);
+}
+
+div.profile_pic {
+	margin: 20px 0;
+  }
+
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) 
+{
+	/* Styles pour cette Media Queries */
+	header
+	{
+		font-size: 3vh;
+	}
+	nav
+	{
+		width: 15vw;
+		height: 100%;
+	}
+	img
+	{
+		height: auto;
+		width: 6vw;
+	}
+	.live
+	{
+		height: auto;
+		width: 7vw;
+	}
+	.game
+	{
+		height: auto;
+		width: 7vw;
+	}
+	////////////////////////////////
+	.menu__mobile {
+		position: absolute;
+		top: 2vh;
+		right: 13vw;
+		height: 50vh;
+		
+		&_button {
+			position: absolute;
+			height: 4vh;
+			width: 10vw;
+			cursor: pointer;
+			background-color: transparrent;
+				
+			&.active {
+				span {
+					opacity: 0;
+				}
+				&.menu__mobile_button:before,
+				&.menu__mobile_button:after  {
+					top: 40%;
+				}
+				&.menu__mobile_button:before {
+					transform: rotate(45deg);
+				}
+				&.menu__mobile_button:after {
+					transform: rotate(-45deg);
+				}
+
+			}
+	
+			span,
+			&:before, 
+			&:after {
+				display: block;
+				position: absolute;
+				height: 6px;
+				width: 100%;
+				background-color: #f9f9f9;
+				border-radius: 6px;
+				opacity: 1;
+				z-index: 1;			
+			}
+			&:before, 
+			&:after {
+				content: "";
+				transition: top .35s cubic-bezier(.23,1,.32,1),transform .35s cubic-bezier(.23,1,.32,1);
+			}
+		
+			span {
+				top: 50%;
+				transform: translateY(-50%);
+			}
+			&:before {
+				top: 0;
+			}
+			&:after {
+				top: calc(100% - 6px);
+			}
+		}
+	}
+	//////////////////////////////////
 }

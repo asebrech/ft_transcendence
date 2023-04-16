@@ -1,19 +1,20 @@
-import { Injectable } from '@angular/core';
+import { HostListener, Injectable } from '@angular/core';
+
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class LaunchGameService 
 {
   hideW : number = 0;
   launch : number = 0;
   button_show : number = 0;
   found : number = 0;
-
+  
   constructor() 
   {
   }
-
   showButtonOn(nbr : number)
   {
     this.button_show = nbr;
@@ -26,7 +27,6 @@ export class LaunchGameService
   {
     return this.hideW;
   }
-
   hideWaiting(hideWaiting : number)
   {
     hideWaiting += 1;
@@ -41,7 +41,6 @@ export class LaunchGameService
   {
     return this.launch;
   }
-
   gameFound()
   {
     this.found = 1;

@@ -4,13 +4,14 @@ import { Injectable } from '@angular/core';
 	providedIn: 'root'
 })
 export class DashboardService {
+	find: boolean = false;
 	channel: boolean = true;
 	create: boolean = false;
 	members: boolean = false;
-
-
+	addUsers: boolean = false;
+	changePass: boolean = false;
+	checkPass: boolean = false;
 
 	constructor() { }
-
 
 }

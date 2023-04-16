@@ -5,9 +5,20 @@ export interface UserI {
 	email?: string,
 	username?: string,
 	password?: string;
- 	friend?: UserI[];
-  wins?: number;
-  losses?: number;
-  ratio?: number;
-  timeplayed?: number;
+	wins?: number;
+	losses?: number;
+	ratio?: number;
+	total?: number;
+	level?:number;
+	friends?: Friend[];
+	colorPad?: string;
+
+}
+
+export interface Friend {
+	id?: number;
+	username?: string;
+	photo?: string;
+	win?: number;
+	losses?: number;
 }

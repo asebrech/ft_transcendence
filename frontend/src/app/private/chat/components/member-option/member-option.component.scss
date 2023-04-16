@@ -1,0 +1,51 @@
+.main {
+	width: 100%;
+	height: 100%;
+	border-radius: 9px;
+	background: rgba(22, 7, 45, 0.5);
+	box-shadow: 23px 0px 24px rgba(0, 0, 0, 0.25);
+	backdrop-filter: blur(15px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.labelContainer {
+	margin: 10px;
+	display: flex;
+	align-items: start;
+	width: 70%;
+	justify-content: space-between;
+	transition: ease-in-out 0.05s;
+	cursor: pointer;
+}
+
+.labelContainer:hover {
+	scale: (1.03);
+	transition: ease-in-out 0.05s;
+
+}
+
+.main label {
+	cursor: pointer;
+	font-size: 18px;
+}
+
+.red {
+	color: red;
+}
+
+.separator {
+	content: '';
+	width: 70%;
+	height: 1px;
+	background: white;
+	//margin: 10px;
+}
+
+.image img {
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	margin-left: -30px;
+}

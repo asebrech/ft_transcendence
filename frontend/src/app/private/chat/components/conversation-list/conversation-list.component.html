@@ -1,0 +1,21 @@
+<div class="main" [ngClass]="{'mainBis': !dashService.channel}">
+		<ul>
+			<li *ngFor="let room of (rooms$ | async)" class="list"
+			(click)="message(room)"
+			(mousedown)="isClicked = true"
+			(mousedown)="chatService.selectedRoomId= room.id"
+			(mouseup)="isClicked = false"
+			(mouseleave)="isClicked = false"
+			[ngStyle]="{ 'background-color': chatService.selectedRoomId === room.id && isClicked ? 'rgba(217, 217, 217, 0.25)' : '',
+			'transition': chatService.selectedRoomId === room.id && !isClicked ?'ease-in 0.1s': '' }"
+			[ngClass]="{'selected': chatService.selectedRoomId === room.id}"
+			>
+			<img src="../../../../../../assets/images/astronaut.png" *ngIf="room.privateMessage">
+			<img src="../../../../../../assets/images/src.png" *ngIf="!room.privateMessage">
+			<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}" *ngIf="room.privateMessage"></div>
+			<div class="name" class="name" [ngClass]="{'isuser': room.privateMessage}">
+				{{ room.name }}
+			</div>
+		</li>
+	</ul>
+</div>
