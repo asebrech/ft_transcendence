@@ -1,7 +1,3 @@
-import { RoomI } from "src/chat/model/room/room.interface";
-/* eslint-disable prettier/prettier */
-import { boolean } from "yargs";
-import { UserEntity } from "./user.entity";
 
 export interface UserI {
 	id?: number;

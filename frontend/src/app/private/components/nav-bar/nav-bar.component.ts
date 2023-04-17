@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
-import { UserService } from 'src/app/public/services/user-service/user.service';
 
 @Component({
   selector: 'app-nav-bar',
