@@ -18,6 +18,11 @@ export class MemberOptionComponent implements OnInit {
 	isOwner: boolean = true;
 	isAdmin: boolean = true;
 	isBlocked: boolean = null;
+	myDateTimeValue: string;
+	banOption: boolean = false;
+	muteOption: boolean = false;
+
+
 
 
 
@@ -32,6 +37,13 @@ export class MemberOptionComponent implements OnInit {
 			this.isAdmin = false;
 	}
 
+	isValidDateTime() {
+	  const now = new Date();
+	  const selectedDateTime = new Date(this.myDateTimeValue);
+	  return selectedDateTime > now;
+	}
+
+
 	ngAfterViewInit() {
 		this.divHeight.emit(this.maDiv.nativeElement.offsetHeight);
 	}
@@ -39,6 +51,14 @@ export class MemberOptionComponent implements OnInit {
 	onClick() {
 		this.valueChanged.emit(false);
 	}
+
+	banTime() {
+		console.log('ban For:', new Date());
+	  }
+
+	  muteTime() {
+		console.log('mute for:', new Date());
+	  }
 
 	checkUser() {
 		return (this.chatService.selectedRoomOwner || this.chatService.selectedRoomAdmin)
@@ -98,6 +118,14 @@ export class MemberOptionComponent implements OnInit {
 	
 	unBlock() {
 		this.chatService.unBlockUser(this.selectedUser);
+	}
+
+	showban() {
+		this.banOption = true;
+	}
+
+	showmute() {
+		this.muteOption = true;
 	}
 
 	ban() {

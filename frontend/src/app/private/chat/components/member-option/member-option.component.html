@@ -55,11 +55,18 @@
 		</div>
 	</div>
 	<div class="separator" *ngIf="checkUser() && !checkIfMuted() && checklvl()"></div>
-	<div class="labelContainer" *ngIf="checkUser() && !checkIfMuted() && checklvl()" (click)="onClick(); mute()">
+	<div class="labelContainer" *ngIf="checkUser() && !checkIfMuted() && checklvl()" (click)=" showmute()" [ngClass]="{'hidden': muteOption}">
 		<label  class="red" >Mute</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-denied-90_1.png">
 		</div>
+	</div>
+	<div *ngIf="muteOption">
+		<form #myForm="ngForm" (ngSubmit)="muteTime()" class="ban">
+			<input type="datetime-local" id="myDateTime" name="myDateTime" [(ngModel)]="myDateTimeValue" required>
+			<button type="submit" [disabled]="!myForm.valid || !isValidDateTime()">Mute for a limited time</button>
+			<button type="submit" (click)="onClick(); mute();">Mute</button>
+		</form>
 	</div>
 	<div class="separator" *ngIf="checkUser() && checkIfMuted() && checklvl()"></div>
 	<div class="labelContainer" *ngIf="checkUser() && checkIfMuted() && checklvl()" (click)="onClick(); unMute()">
@@ -76,10 +83,17 @@
 		</div>
 	</div>
 	<div class="separator" *ngIf="checkUser() && checklvl()"></div>
-	<div class="labelContainer"*ngIf="checkUser() && checklvl()" (click)="onClick(); ban()">
+	<div class="labelContainer"*ngIf="checkUser() && checklvl()" (click)="showban()" [ngClass]="{'hidden': banOption}">
 		<label  class="red" >Ban</label>
 		<div class="image">
 			<img src="../../../../../assets/images/icons8-logout-90_1.png">
 		</div>
+	</div>
+	<div *ngIf="banOption">
+		<form #myForm="ngForm" (ngSubmit)="banTime()" class="ban">
+			<input type="datetime-local" id="myDateTime" name="myDateTime" [(ngModel)]="myDateTimeValue" required>
+			<button type="submit" [disabled]="!myForm.valid || !isValidDateTime()">Ban for a limited time</button>
+			<button type="submit" (click)="onClick(); ban();">Ban</button>
+		</form>
 	</div>
 </div>

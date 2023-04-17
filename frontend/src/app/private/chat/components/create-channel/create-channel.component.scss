@@ -85,11 +85,13 @@
 	color: white;
 	padding: 5px;
 	margin-bottom: 10px;
+	cursor: pointer;
 }
 
 .submit button:disabled {
 	color: #989aa2;
 	background: #AB3B71;
+	cursor: default;
 }
 
 .submit button:enabled {
