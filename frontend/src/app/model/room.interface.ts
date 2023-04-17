@@ -1,3 +1,4 @@
+import { BlockedUser } from "./blockedUser.interface";
 import { UserI } from "./user.interface";
 
 export interface RoomI {
@@ -10,7 +11,7 @@ export interface RoomI {
 	owner?: UserI;
 	users?: UserI[];
 	admins?: UserI[];
-	muted?: UserI[];
+	muted?: BlockedUser[];
 	Baned?: UserI[];
 	created_at?: Date;
 	updated_at?: Date;

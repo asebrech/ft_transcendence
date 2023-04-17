@@ -1,4 +1,5 @@
 import { UserI } from "src/user/model/user.interface";
+import { BlockedUser } from "../blockedUser.interface";
 
 export interface RoomI {
 	id?: number;
@@ -10,7 +11,7 @@ export interface RoomI {
 	owner?: UserI;
 	users?: UserI[];
 	admins?: UserI[];
-	muted?: UserI[];
+	muted?: BlockedUser[];
 	baned?: UserI[];
 	created_at?: Date;
 	updated_at?: Date;

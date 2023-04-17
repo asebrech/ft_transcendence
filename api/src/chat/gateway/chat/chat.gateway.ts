@@ -3,6 +3,7 @@ import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGa
 import console from 'console';
 import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/service/auth.service';
+import { BlockedUser } from 'src/chat/model/blockedUser.interface';
 import { ConnectedUserI } from 'src/chat/model/connected-user/connected-user.interface';
 import { JoinedRoomI } from 'src/chat/model/joined-room/joined-room.interface';
 import { MessageI } from 'src/chat/model/message/message.interface';
@@ -209,9 +210,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	}
 
 	@SubscribeMessage('addMuted')
-	async addMuted(socket: Socket, object: { user: UserI, room: RoomI }) {
+	async addMuted(socket: Socket, object: { muted: BlockedUser, room: RoomI }) {
 		object.room = await this.roomService.getRoom(object.room.id);
-		const upRoom: RoomI = await this.roomService.addMutedToRoom(object.room, object.user);
+		const upRoom: RoomI = await this.roomService.addMutedToRoom(object.room, object.muted);
 		this.displayChange(upRoom);
 	}
 
@@ -401,8 +402,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	@SubscribeMessage('addMessage')
 	async onAddMessage(socket: Socket, message: MessageI) {
 		message.room = await this.roomService.getRoom(message.room.id);
-		if (message.room.muted.find(toto => toto.id === socket.data.user.id)) {
-			return;
+		const muted: BlockedUser = message.room.muted.find(toto => toto.id === socket.data.user.id)
+		if (muted){
+			if (muted.date != null && new Date(muted.date) < new Date()) {
+				await this.removeMuted(socket, {user: socket.data.user, room: message.room})
+			}
+			else {
+				return;
+			}
 		}
 		const createdMessage: MessageI = await this.messageService.create({ ...message, user: socket.data.user });
 		let room: RoomI = await this.roomService.getRoom(createdMessage.room.id);
@@ -426,6 +433,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 			}
 		}
 	}
+
+	@SubscribeMessage('checkBlocked')
+	async checkBlocked(socket: Socket, room: RoomI) {
+		let upRoom: RoomI = await this.roomService.getRoom(room.id);
+		let okay: boolean = false;
+		for(const user of upRoom.users) {
+			const muted: BlockedUser = upRoom.muted.find(toto => toto.id === user.id)
+			if (muted){
+				if (muted.date != null && new Date(muted.date) < new Date()) {
+					upRoom = await this.roomService.removeMutedToRoom(upRoom, user)
+					okay = true;
+				}
+			}
+		}
+		if (okay)
+			this.displayChange(upRoom);
+	}
+
 
 	@SubscribeMessage('blockUser')
 	async blockUser(socket: Socket, object: { room: RoomI, user: UserI }) {

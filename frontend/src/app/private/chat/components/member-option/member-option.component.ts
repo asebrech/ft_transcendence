@@ -31,6 +31,7 @@ export class MemberOptionComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
+		this.chatService.checkBlocked();
 		if (!this.chatService.selectedRoomOwner)
 			this.isOwner = false;
 		if (!this.chatService.selectedRoomAdmin)
@@ -57,7 +58,7 @@ export class MemberOptionComponent implements OnInit {
 	  }
 
 	  muteTime() {
-		console.log('mute for:', new Date());
+		this.chatService.addMuted({id: this.selectedUser.id, date: new Date(this.myDateTimeValue)});
 	  }
 
 	checkUser() {
@@ -99,7 +100,7 @@ export class MemberOptionComponent implements OnInit {
 	}
 
 	mute() {
-		this.chatService.addMuted(this.selectedUser);
+		this.chatService.addMuted({id: this.selectedUser.id, date: null});
 	}
 
 	unMute() {

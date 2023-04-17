@@ -9,6 +9,7 @@ import { JoinedRoomService } from '../joined-room/joined-room.service';
 import { MessageService } from '../message/message.service';
 import { MessageI } from 'src/chat/model/message/message.interface';
 import { AuthService } from 'src/auth/service/auth.service';
+import { BlockedUser } from 'src/chat/model/blockedUser.interface';
 
 @Injectable()
 export class RoomService {
@@ -67,12 +68,12 @@ export class RoomService {
 	}
 
 	async getRoom(roomId: number): Promise<RoomI> {
-		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned', 'muted'] });
+		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned'] });
 	}
 
 	async getRoomWithPass(roomId: number): Promise<RoomI> {
 		return this.roomRepository.findOne({ where: { id: roomId },
-				relations: ['users', 'owner', 'admins', 'baned', 'muted'],
+				relations: ['users', 'owner', 'admins', 'baned'],
 				select: ['id', 'name', 'description','privateMessage', 'isPrivate', 'channelPassword', 'users', 'owner', 'admins', 'baned', 'muted', 'created_at', 'updated_at'] });
 	}
 
@@ -181,11 +182,17 @@ export class RoomService {
  			return this.roomRepository.save(room);
 	} 
 
-	async addMutedToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
+	async addMutedToRoom(room: RoomI, muted: BlockedUser): Promise<RoomI> {		
 		if (!room.muted){
 			room.muted = [];
 		}
-		room.muted.push(user);
+		const id = muted.id;
+		let date: Date;
+		if (muted.date)
+			date = muted.date
+		else
+			date = null;
+		room.muted.push({id, date});
 		return this.roomRepository.save(room);
 	} 
 

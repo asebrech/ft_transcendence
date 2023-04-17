@@ -2,6 +2,7 @@ import { UserEntity } from "src/user/model/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { JoinedRoomEntity } from "../joined-room/joined-room.entity";
 import { MessageEntity } from "../message/message.entity";
+import { BlockedUser } from "../blockedUser.interface";
 
 @Entity()
 export class RoomEntity {
@@ -36,9 +37,8 @@ export class RoomEntity {
 	@JoinTable()
 	admins: UserEntity[];
 
-	@ManyToMany(() => UserEntity)
-	@JoinTable()
-	muted: UserEntity[];
+	@Column({ type: 'jsonb', default: [] })
+	muted: BlockedUser[];
 
 	@ManyToMany(() => UserEntity)
 	@JoinTable()

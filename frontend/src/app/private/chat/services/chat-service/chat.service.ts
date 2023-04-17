@@ -6,6 +6,7 @@ import { Observable, Subject, tap } from 'rxjs';
 import { MessageI, MessagePaginatedI } from 'src/app/model/message.interface';
 import { UserI } from 'src/app/model/user.interface';
 import { DashboardService } from '../dashboard-service/dashboard-service';
+import { BlockedUser } from 'src/app/model/blockedUser.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -161,8 +162,8 @@ export class ChatService {
 		this.socket.emit('removeAdmin', { user: user, room: this.selectedRoom });
 	}
 
-	addMuted(user: UserI) {
-		this.socket.emit('addMuted', { user: user, room: this.selectedRoom });
+	addMuted(muted: BlockedUser) {
+		this.socket.emit('addMuted', { muted: muted, room: this.selectedRoom });
 	}
 
 	removeMuted(user: UserI) {
@@ -206,5 +207,9 @@ export class ChatService {
 	removePass(){
 		const room: RoomI = this.selectedRoom
 		this.socket.emit('removePass', this.selectedRoom);
+	}
+
+	checkBlocked() {
+		this.socket.emit('checkBlocked', this.selectedRoom);
 	}
 }
