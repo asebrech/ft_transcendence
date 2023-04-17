@@ -25,12 +25,14 @@ body {
 }
 
 .container {
-	background-color:#110720;
-	display: grid;
-	width: 45%;
-	align-self: right;
-	margin-right: 0px;
-	padding-top: 100px;
+  background-color: #110720;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  align-self: right;
+  margin-left: auto;
+  align-items: center;
+  justify-content: center;
 }
 
 .astronaut {
@@ -42,7 +44,6 @@ body {
 .general {
 	height: 100vh;
 	display: flex;
-
 }
 
 .form{
@@ -87,10 +88,7 @@ p {
 
 .img {
 	display: flex;
-	margin-block-start: auto;
-	height: 50%;
-	width: 50%;
-	justify-content: left;
+	align-items: flex-end;
 }
 
 app-api-login {
@@ -98,9 +96,14 @@ app-api-login {
 	padding-top: 30px;
 }
 
-// @media screen and (max-width: 768px) {
-//   .container {
-//     flex-direction: column;
-//     align-items: center;
-//   }
-// }
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px)
+{
+    .playBotScene
+    {
+        left: 25vw;
+    }
+    #gameContainer
+    {
+        margin-left: 5%;
+    }
+}

@@ -98,18 +98,18 @@ export class SettingsComponent implements OnInit {
     //this.simpleNotification();
   }
   ////////////////////////////////////////////////////////////////////
-  retrieveBallSkin(event: Event) 
+  retrieveBallSkin(event: Event)
   {
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
     this.colorBall = clickedImageSrc,
     console.log(clickedImageSrc); // Log the clicked image source to the console
   }
 
-  retrievePaddleSkin(event: Event) 
+  retrievePaddleSkin(event: Event)
   {
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
     console.log(clickedImageSrc);
-    this.playerService.updateColorPad(this.user.id,clickedImageSrc).subscribe( response => { 
+    this.playerService.updateColorPad(this.user.id,clickedImageSrc).subscribe( response => {
         console.log("pad changed successfully:", response);
       this.user$.subscribe( (user: UserI) => {
         this.colorPad = user.colorPad;
@@ -132,7 +132,7 @@ export class SettingsComponent implements OnInit {
   /////////////////////////////
   test()
   {
- 
+
   }
 
 }

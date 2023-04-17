@@ -3,18 +3,19 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Observable, Subject, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AccessTokenI } from 'src/app/model/access-token.interface';
 import { LoginResponseI } from 'src/app/model/login-response';
 import { UserI } from 'src/app/model/user.interface';
 import { environment } from 'src/environments/environment';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private snackbar: MatSnackBar, private jwtService: JwtHelperService, private router: Router) { }
+  constructor(private cookieService: CookieService, private http: HttpClient, private snackbar: MatSnackBar, private jwtService: JwtHelperService, private router: Router) { }
 
   login(user: UserI) {
 	const response = this.http.post<LoginResponseI>('api/users/login', user);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PlayerService } from '../../services/player.service';
 import { Friend, UserI } from 'src/app/model/user.interface';
@@ -23,15 +23,13 @@ export class FriendsComponent implements OnInit {
   isMyFriend: boolean = true;
   selectedUser: UserI;
   user : UserI = this.authService.getLoggedInUser();
-  friends: Friend[];
+  friends: Friend[] = [];
 
-  constructor(private route : Router, private playerService: PlayerService, private authService: AuthService) { }
+  constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
-      if (!user.friends)
-       this.message = "Liste d'amis vide !";
        this.friends = user.friends;
     });
     this.playerService.getUserList().subscribe(users => {
@@ -40,6 +38,7 @@ export class FriendsComponent implements OnInit {
       this.users = this.users.filter(users => users.id !== this.user.id);
       this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
     });
+    this.setMessage();
   }
 
   searchUsers() {
@@ -73,40 +72,51 @@ export class FriendsComponent implements OnInit {
         console.log('An error occurred:', error);
         throw('Something went wrong; please try again later.');
       })
-    )
-    .subscribe(response => {
-      console.log('Friend removed successfully:', response);
-      this.user$.subscribe((user: UserI) => {
-        this.friends = user.friends;
+      )
+      .subscribe(response => {
+        console.log('Friend removed successfully');
+        this.user$.subscribe((user: UserI) => {
+          const friendIndex = this.friends.findIndex(f => f.id === friend.id);
+          this.friends.splice(friendIndex, 1);
+          this.setMessage()
+        });
       });
-    });
-    this.showContextMenu = false;
-  }
+      this.showContextMenu = false;
+      if (this.friends.length === 0)
+        this.message = "Liste d'amis vide !";
+    }
 
-  addFriend(userId: number, selectedUser: UserI){
-    console.log(selectedUser);
-    this.playerService.addFriend(userId, selectedUser).pipe(
-      catchError(error => {
-        console.log('An error occurred:', error);
-        throw('Something went wrong; please try again later.');
-      })
-    )
-    .subscribe(response => {
-      console.log('Friend added successfully:', response);
-      this.user$.subscribe((user: UserI) => {
-        this.friends = user.friends;
-      });
-    });
-    this.showContextMenu = false;
-  }
+    addFriend(userId: number, selectedUser: UserI){
+      this.playerService.addFriend(userId, selectedUser).pipe(
+        catchError(error => {
+          console.log('An error occurred:', error);
+          throw('Something went wrong; please try again later.');
+        })
+        )
+        .subscribe((response : UserI) => {
+          console.log('Friend added successfully');
+          this.user$.subscribe((user: UserI) => {
+            this.friends = user.friends;
+            this.setMessage()
+          });
+        });
+        this.showContextMenu = false;
+      }
 
-  selectUser(user: UserI) {
-    console.table(user);
-    this.selectedUser = user;
+    selectUser(user: UserI) {
+      this.selectedUser = user;
   }
 
   goToProfileOf(user: UserI) {
     this.playerService.goToProfileOf(user);
+  }
+
+  private setMessage() {
+    if (this.friends.length === 0) {
+      this.message = "Liste d'amis vide !";
+    } else {
+      this.message = "";
+    }
   }
 }
 
