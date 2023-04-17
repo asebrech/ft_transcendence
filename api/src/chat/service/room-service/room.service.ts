@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { JoinedRoomService } from '../joined-room/joined-room.service';
 import { MessageService } from '../message/message.service';
 import { MessageI } from 'src/chat/model/message/message.interface';
+import { AuthService } from 'src/auth/service/auth.service';
 
 @Injectable()
 export class RoomService {
@@ -16,19 +17,27 @@ export class RoomService {
 		@InjectRepository(RoomEntity)
 		private readonly roomRepository: Repository<RoomEntity>,
 		private joinedRoomService: JoinedRoomService,
-		private messagesService: MessageService
+		private messagesService: MessageService,
+		private authService: AuthService
+
 	) {}
 
 	async createRoom(room: RoomI, creator: UserI): Promise<RoomI> {
 		const newRoom = await this.addCreatorToRoom(room, creator);
 		newRoom.privateMessage = false;
+		if (room.isPrivate)
+		newRoom.channelPassword = await this.authService.hashPassword(newRoom.channelPassword);
 		return this.roomRepository.save(newRoom);
+	}
+
+	async checkPass(room: RoomI, pass: string): Promise<boolean> {
+		return this.authService.comparePassword(pass, room.channelPassword);
 	}
 
 	async changePass(room: RoomI, pass: string): Promise<RoomI> {
 		if (!room.isPrivate)
 			room.isPrivate = true;
-		room.channelPassword = pass;
+		room.channelPassword = await this.authService.hashPassword(pass);
 		return this.roomRepository.save(room);
 	}
 
@@ -59,6 +68,12 @@ export class RoomService {
 
 	async getRoom(roomId: number): Promise<RoomI> {
 		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned', 'muted'] });
+	}
+
+	async getRoomWithPass(roomId: number): Promise<RoomI> {
+		return this.roomRepository.findOne({ where: { id: roomId },
+				relations: ['users', 'owner', 'admins', 'baned', 'muted'],
+				select: ['id', 'name', 'description','privateMessage', 'isPrivate', 'channelPassword', 'users', 'owner', 'admins', 'baned', 'muted', 'created_at', 'updated_at'] });
 	}
 
 	async updateRoom(room: RoomI): Promise<RoomI> {

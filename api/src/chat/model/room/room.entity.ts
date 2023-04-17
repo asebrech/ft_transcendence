@@ -21,7 +21,7 @@ export class RoomEntity {
 	@Column({nullable: true})
 	isPrivate: boolean;
 
-	@Column({nullable: true})
+	@Column({select: false, nullable: true})
 	channelPassword: string;
 
 	@ManyToOne(() => UserEntity, user => user.roomsOwner)

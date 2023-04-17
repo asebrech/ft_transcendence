@@ -267,7 +267,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('checkPass')
 	async checkpass(socket: Socket, object: {pass: string, room: RoomI}) {
-		if(object.pass === object.room.channelPassword) {
+		const upRoom = await this.roomService.getRoomWithPass(object.room.id);
+		if(await this.roomService.checkPass(upRoom, object.pass)) {
 			await this.addConfirmUser(socket, object.room);
 			socket.emit('confirmPass', false);
 		}
@@ -275,22 +276,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('changePass')
 	async changePass(socket: Socket, object: {pass: string, room: RoomI}) {
-		const upRoom = await this.roomService.getRoom(object.room.id);
+		const upRoom = await this.roomService.getRoomWithPass(object.room.id);
 		const wasPrivate = upRoom.isPrivate;
 		await this.roomService.changePass(upRoom, object.pass);
+		upRoom.channelPassword = null;
 		if (!wasPrivate)
 			this.displayChange(upRoom);
 	}
 
 	@SubscribeMessage('removePass')
 	async removePass(socket: Socket, room: RoomI) {
-		const upRoom = await this.roomService.getRoom(room.id);
+		const upRoom = await this.roomService.getRoomWithPass(room.id);
 		await this.roomService.removePass(upRoom);
+		upRoom.channelPassword = null;
 		this.displayChange(upRoom);
 	}
 
 	async addConfirmUser(socket: Socket, room: RoomI) {
-		const upRoom = await this.roomService.getRoom(room.id);
+		const upRoom = await this.roomService.getRoomWithPass(room.id);
 
 		let users: UserI[] = [];
 			users.push(socket.data.user);
