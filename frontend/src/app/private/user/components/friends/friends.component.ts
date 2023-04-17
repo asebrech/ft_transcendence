@@ -109,3 +109,6 @@ export class FriendsComponent implements OnInit {
     this.playerService.goToProfileOf(user);
   }
 }
+
+
+//tagueul
