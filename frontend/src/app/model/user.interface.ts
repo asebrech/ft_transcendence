@@ -10,7 +10,9 @@ export interface UserI {
 	ratio?: number;
 	total?: number;
 	level?:number;
-  friends?: Friend[];
+	friends?: Friend[];
+	colorPad?: string;
+
 }
 
 export interface Friend {

@@ -1,1 +1,21 @@
 <app-nav-bar></app-nav-bar>
+<div class="main-div">
+    <div class="title">
+        <h1 class="live">LIVE</h1>
+        <img class="sat" src="../../../../../assets/images/satellite_1.png" alt="satellite_logo">
+    </div>
+    <div (click)="refresh()" class="refresh"><img class="refresh_img" src="../../../../../assets/images/refresh.png" alt="refresh button"></div>
+    <div class="line-sep"></div>
+    <div *ngIf="screen" id="liveScreen"></div>
+    <div class="divRoom" *ngIf="watchingLive">
+        <div *ngFor="let roomId of myArray" class="room" (click)="joinLive(roomId.roomId)">
+            <div class="red-dot red_dot_animation"></div>
+            <p class="user-name">{{ roomId.player_left }}<span> VS </span> {{ roomId.player_right}}</p>
+            <div class="score-board">
+                <span class="s_l">{{roomId.score_left}}</span>
+                <span class="s_r">{{roomId.score_right}}</span>
+            <div class="line-score"></div>
+            </div>
+        </div>
+    </div>
+</div>

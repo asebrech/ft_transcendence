@@ -85,8 +85,9 @@ export class UserService {
 
 	async handleVerifyToken(token: string, sessionId: string): Promise<UserI> {
 		const session = this.authService.getSession(sessionId);
-		if (!session)
+		if (!session) {
 			throw new HttpException('Login was not successful, invalid session', HttpStatus.UNAUTHORIZED);
+		}
 		const foundUser: UserI =  await this.findByEmail(session.email);
 		if (!token)
 		{
@@ -97,8 +98,9 @@ export class UserService {
 		if (check) {
 			this.authService.deleteSession(sessionId);
 			return foundUser;
-		} else
+		} else {
 			throw new HttpException('Login was not successful, invalid token', HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 	async returnJwt(apiUser: UserI): Promise<string> {
@@ -130,6 +132,7 @@ export class UserService {
 		return this.mailExists(mail);
 	}
 
+	// also returns the password
 	private async findByEmail(email: string): Promise<UserI> {
 		return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'username', 'password', 'google_auth', 'google_auth_secret'] });
 	}
@@ -160,6 +163,14 @@ export class UserService {
 		return updatedUser;
 	}
 
+	private async usernameExists(username: string): Promise<boolean> {
+		const user = await this.userRepository.findOneBy({ username });
+		if (user)
+			return true;
+		else
+			return false;
+	}
+
 	async updateUsername(userId: number, newUsername: string): Promise<UserI> {
 		const user = await this.findOne(userId);
 		const usernameExists = await this.usernameExists(newUsername);
@@ -186,18 +197,11 @@ export class UserService {
 
 	private async mailExists(email: string): Promise<boolean> {
 		const user = await this.userRepository.findOneBy({ email });
-		if (user)
+		if (user) {
 			return true;
-		else
+		} else {
 			return false;
-	}
-
-	private async usernameExists(username: string): Promise<boolean> {
-		const user = await this.userRepository.findOneBy({ username });
-		if (user)
-			return true;
-		else
-			return false;
+		}
 	}
 
 	async addFriend(id: number, newFriend: UserI): Promise<UserI> {
@@ -234,16 +238,19 @@ export class UserService {
 
 	async addWinOrLoss(id: number, isWin: boolean): Promise<UserEntity> {
 		const user = await this.userRepository.findOneBy({id});
-		if (isWin)
+		if (isWin) {
 		  user.wins += 1;
-		else
+		} else {
 		  user.losses += 1;
+		}
 		user.ratio = user.wins / user.losses;
 		return this.userRepository.save(user);
 	  }
 
-	async getUserInfo(id: number): Promise<UserEntity> {
+	  async getUserInfo(id: number): Promise<UserEntity> {
+		// Récupérer l'utilisateur correspondant à l'ID fourni avec ses amis
 		const user = await this.userRepository.findOneBy({id});
+		// Retourner l'utilisateur avec toutes ses informations
 		return user;
 	  }
 
@@ -261,4 +268,10 @@ export class UserService {
   				user.blockedUsers.splice(index, 1);
  			return this.userRepository.save(user);
 	} 
+
+	async updateColorPad(id : number, color: string) : Promise<UserI> {
+		const user = await this.userRepository.findOneBy({id});
+		user.colorPad = color;
+		return this.userRepository.save(user);
+	}
 }

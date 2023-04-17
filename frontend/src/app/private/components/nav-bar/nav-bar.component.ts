@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserService } from 'src/app/public/services/user-service/user.service';
@@ -8,13 +8,67 @@ import { UserService } from 'src/app/public/services/user-service/user.service';
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss']
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent implements OnInit 
+{
 	currentUrl: string;
-  
-	constructor(private router: Router, private auth : AuthService) {}
-  
-	ngOnInit() {
-	  this.currentUrl = this.router.url;
+	isSmallScreen: boolean;
+	hideMenu : boolean;
+	menuShown : boolean = true;
+
+	constructor(private router: Router, private auth : AuthService) 
+	{
+		this.isSmallScreen = window.matchMedia("(min-device-width: 320px) and (max-device-width: 480px)").matches;
+
+		window.addEventListener("resize", () => 
+		{
+			this.isSmallScreen = window.matchMedia("(min-device-width: 320px) and (max-device-width: 480px)").matches;
+			if (this.isSmallScreen == true)
+			{
+				this.hideMenu = false;
+			}
+			else
+			{
+				this.hideMenu = true;
+			}				
+		});
+	}
+	
+	@ViewChild('menu__mobile_button', { static: false }) button!: ElementRef;
+	
+	ngAfterViewInit() 
+	{
+		this.button.nativeElement.addEventListener('click', () => 
+		{
+			this.button.nativeElement.classList.toggle('active');
+			if (this.hideMenu == true)
+				this.hideMenu = false;
+			else if (this.hideMenu == false)
+				this.hideMenu = true;
+		})	
+	}
+	
+	ngDoCheck() 
+	{
+		window.addEventListener("resize", () => {
+			this.isSmallScreen = window.matchMedia("(min-device-width: 320px) and (max-device-width: 480px)").matches;
+			if (this.isSmallScreen == true)
+				this.hideMenu = false;
+			else				
+				this.hideMenu = true;
+		});
+	}
+
+	ngOnInit() 
+	{
+		if (this.isSmallScreen == true)
+		{
+			this.hideMenu = false;
+		}
+		else
+		{
+			this.hideMenu = true;
+		}
+		this.currentUrl = this.router.url;
 	}
 
 	deconnection() {
@@ -22,4 +76,5 @@ export class NavBarComponent implements OnInit {
 		localStorage.removeItem('access_token');
 		location.reload();
 	}
+	
   }

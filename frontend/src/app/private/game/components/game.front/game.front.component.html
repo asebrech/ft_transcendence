@@ -1,9 +1,9 @@
 <app-nav-bar></app-nav-bar>
 <div id="main-div" class="row">
-  <div *ngIf="checkIfGameFoundRet()" id="gameContainer">
+  <div *ngIf="checkIfGameFoundRet()" #gameContainer id="gameContainer">
   </div>
   <button *ngIf="callButtonStatus()" (click)="launchBotPlay()" class="playBotScene">Play vs Bot while waiting</button>
-  <!-- <button (click)="join()" style="z-index: 999999;width: 100px;height: 100px;">join</button> -->
+  <app-end-game-page *ngIf="gameEnded"></app-end-game-page>
   <app-stars-blow *ngIf="switchToBotPlay()"></app-stars-blow>
 </div>
 

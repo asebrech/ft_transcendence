@@ -21,7 +21,7 @@ export class UserEntity {
 	@Column({unique: true})
 	email: string;
 
-	@Column({})
+	@Column({select: false})
 	password: string;
 
 	@Column({default: null})
@@ -78,4 +78,7 @@ export class UserEntity {
 
 	@Column({ type: 'jsonb', default: '[]' })
 	friends: Friend[];
+
+	@Column({default: 'default'})
+	colorPad: string;
 }

@@ -1,4 +1,4 @@
-import { Component, NgModule, OnDestroy, OnInit, SimpleChanges, HostListener, OnChanges, Input, DoCheck} from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, ViewChild, ElementRef, DoCheck} from '@angular/core';
 import { Location } from '@angular/common';
 import * as Phaser from 'phaser';
 import { Client } from 'colyseus.js';
@@ -6,13 +6,17 @@ import { PlayScene } from '../../services/play.scene.service';
 import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
-import { Lost } from '../../services/lost.scene.service';
+import { BehaviorSubject } from 'rxjs';
+import { GameService } from '../../services/game.service';
+import { PlayerService } from 'src/app/private/user/services/player.service';
+import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 
 export let room : any;
-
 export let client : Client;
 export let inWidth : number;
 export let inHeight : number;
+export let player_left : boolean;
+export let gameWon : boolean;
 
 @Component({
   selector: 'app-game.front',
@@ -22,25 +26,29 @@ export let inHeight : number;
 
 export class GameFrontComponent implements OnInit, DoCheck
 {
-  @HostListener('window:resize', ['$event'])
   //////////////////////////////////
   playScene: Phaser.Game;
   playSceneConfig: Phaser.Types.Core.GameConfig;
   ///////////////////////////////////
   waitingPlayScene: Phaser.Game;
   waitingPlaySceneConfig: Phaser.Types.Core.GameConfig;
-  //////////////////////////////////
-  endWinScene: Phaser.Game;
-  endWinSceneConfig: Phaser.Types.Core.GameConfig;
-  //////////////////////////////////
-  endLoseScene: Phaser.Game;
-  endLoseSceneConfig: Phaser.Types.Core.GameConfig;
-  //////////////////////////////////
-  constructor(private starsService: StarsService, private location : Location, private launch : LaunchGameService) 
+  ///////////////////////////////////
+  joined = false;
+  in = 0;
+  connected = false;
+  joinedVar = new BehaviorSubject<boolean> (this.joined);
+  botGameLaunched = false;
+  user : any ;
+  username : string;
+  gameEnded : boolean;
+
+  
+  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService) 
   {
+    this.user = this.authService.getLoggedInUser();
+    this.username = this.user.username;
   }
 
-  joined = false;
   ngDoCheck() 
   {
     if (this.launch.showButtonStats() == 1)
@@ -48,28 +56,80 @@ export class GameFrontComponent implements OnInit, DoCheck
       if (this.joined == false)
       {
         this.join()
-        room?.onMessage("second_player_found", ({}) =>
-        {
-          this.launch.gameFound();
-          this.addButtonStatus(0);
-          this.launch.launchGame();
-          this.playScene = new Phaser.Game(this.playSceneConfig);
-        })    
         this.joined = true;
+        this.joinedVar.next(this.joined);
       }
-    }
-
+    };
+    room?.onMessage("left_player", ()=>
+    {
+      player_left = true;
+    });
+    room?.onMessage("right_player", ()=>
+    {
+      player_left = false;
+    });
+    room?.onMessage("seat", (message) => 
+    {
+      this.joinGameSession(message.ticket);
+    });
+    room?.onMessage("second_player_found", () =>
+    {
+      this.joinedVar.subscribe((value) =>
+      {
+        if (value == true && this.in == 0)
+        {
+          if (this.botGameLaunched == false)
+          {
+            this.addButtonStatus(0);
+            this.launch.launchGame();
+          }
+          this.launch.gameFound();
+          if(this.botGameLaunched == true)
+            this.waitingPlayScene.destroy(true, false);
+          setTimeout(() => {
+            this.playScene = new Phaser.Game(this.playSceneConfig);
+          }, 2000);
+          this.in += 1;
+        }
+      });
+    })
+    room?.onMessage("end", (message) =>
+    {
+      if (message == "won")
+      {
+        if (player_left == true)
+          gameWon = true;
+        else
+          gameWon = false;
+        this.gameEnded = true;
+      }
+      else if (message == "lost")
+      {
+        if (player_left == true)
+          gameWon = false;
+        else
+          gameWon = true;
+        this.gameEnded = true;
+      }
+      this.playScene.destroy(true);
+    });
   }
+
   ngOnInit()
-  { 
-    this.ngDoCheck()
-    inWidth = window.innerWidth;
-    inHeight = window.innerHeight;
-    ////////////////BACKGROUND ANIMATION SET TO FALSE//////////////
+  {
+    gameWon = false;
+    ///////////////////////
+    this.gameEnded = false;
 	  this.starsService.setActive(false);
-    /////////////////INIT PLAYER SESSION//////////////////////////
+    ///////////////////////
+    let audio = new Audio()
+    audio.src = "../../../../assets/background.wav";
+    audio.load();
+    audio.play();
+    //////////////////////
+    inWidth = 1920;
+    inHeight = 1080;
     client = new Client("ws://" + location.hostname + ":3000");
-    /////////////////INIT PLAY SCENE CONFIG///////////////////////
     this.playSceneConfig = {
       type: Phaser.AUTO,
       scene: [PlayScene],
@@ -77,8 +137,8 @@ export class GameFrontComponent implements OnInit, DoCheck
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: 'gameContainer',
-        width: innerWidth,
-        height: innerHeight,
+        width: inWidth,
+        height:  inHeight,
       },
       physics: {
         default: 'arcade',
@@ -87,7 +147,6 @@ export class GameFrontComponent implements OnInit, DoCheck
         }
       }
     };
-    /////////////////INIT WAITING PLAY SCENE CONFIG/////////////////
     this.waitingPlaySceneConfig = {
       type: Phaser.AUTO,
       scene: [WaitingScene],
@@ -95,38 +154,34 @@ export class GameFrontComponent implements OnInit, DoCheck
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: 'gameContainer',
-        width: innerWidth,
-        height: innerHeight,
+        width: inWidth,
+        height: inHeight,
       },
       transparent: true,
       physics: {
         default: 'arcade',
         arcade: {
-          debug: true,
+          // debug: true,
           gravity: {y : 0, x: 0 }
         }
       }
     };
-    /////////////////LOST SCENE CONFIG////////////////////
-    this.endLoseSceneConfig = {
-      type: Phaser.AUTO,
-      scene: [Lost],
-      scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-        parent: 'gameContainer',
-        width: innerWidth,
-        height: innerHeight,
-      },
-      transparent: true,
-      physics: {
-        default: 'arcade',
-        arcade: {
-          debug: true,
-          gravity: {y : 0, x: 0 }
-        }
-      }
-    };
+  }
+
+  async joinGameSession(ticket) 
+  {
+    try 
+    {
+      room = await client?.consumeSeatReservation(ticket);
+    } catch (error) 
+    {
+      console.log('Failed to join game session:', error);
+    }
+  }
+  
+  IfGameFound()
+  {
+    this.launch.gameFound();
   }
   checkIfGameFoundRet()
   {
@@ -135,24 +190,24 @@ export class GameFrontComponent implements OnInit, DoCheck
   ///////////////////////////////////////
   addButtonStatus(nbr : number)
   {
-    //////THIS BUTTON HAS 2 STATS///////
-    //////0 = button not shown//////////
-    //////1 =  button shown ////////////
     this.launch.showButtonOn(nbr);
   }
   callButtonStatus()
   {
     return this.launch.showButtonStats();
   }
-
   launchBotPlay()
   {
+    this.botGameLaunched = true;
     this.addButtonStatus(0);
     this.launch.launchGame();
-    this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
-    // this.endLoseScene = new Phaser.Game(this.endLoseSceneConfig);
-    // this.playScene = new Phaser.Game(this.playSceneConfig);
-    // this.endWinScene = new Phaser.Game(this.endWinSceneConfig);
+    this.IfGameFound();
+    if (this.checkIfGameFoundRet)
+    {
+      setTimeout(() => {
+        this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
+      }, 1000);
+    }
   }
   switchToBotPlay()
   {
@@ -170,7 +225,8 @@ export class GameFrontComponent implements OnInit, DoCheck
   async join()
   {
     try {
-      room = await client?.joinOrCreate("my_room", { });
+      // TODO : USERNAME EST UNDEFINED 
+      room = await client?.joinOrCreate("ranked",  { rank : 10, numClientsToMatch : 2 , clientId : this.username });
       console.log(room);
       console.log(client.auth);
     } catch (e) {

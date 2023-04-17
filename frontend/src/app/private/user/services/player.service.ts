@@ -61,6 +61,10 @@ export class PlayerService {
   goToProfileOf(user: UserI) {
     this.route.navigate(['/private/user/profile', user.id]);
   }
+  
+  updateColorPad(userId: number, color: string) : Observable<UserI> {
+    return this.httpClient.put<UserI>(`api/users/${userId}/update-color-pad`, {color});
+  }
 }
 
 

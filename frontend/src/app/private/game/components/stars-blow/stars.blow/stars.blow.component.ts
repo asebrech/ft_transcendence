@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { LaunchGameService } from '../../../services/launch.game.service';
-import { room } from '../../game.front/game.front.component';
+import { inHeight, inWidth, room } from '../../game.front/game.front.component';
 
 
 @Component({
@@ -21,9 +21,6 @@ export class StarsBlowComponent implements OnInit {
     audio.src = "../../../../assets/test.wav";
     audio.load();
     audio.play();
-    // setTimeout(() => {
-    //   room?.
-    // }, 3000);
     this.hide_waiting = this.launch.hideWaiting(this.hide_waiting);
     this.launch.showButtonOn(1);
   }
@@ -33,15 +30,15 @@ export class StarsBlowComponent implements OnInit {
     blackhole('#blackhole');
 
     function blackhole(element) {
-      var h = $(element).height(),
-          w = $(element).width(),
+      var h = inHeight,
+          w = inWidth,
           cw = w,
           ch = h,
           maxorbit = 255, // distance from center
-          centery = 580 / 2,
-          centerx = 930 / 2 ;
-      var startTime = new Date().getTime();
-      var currentTime = 0;
+          centery = inHeight / 2,
+          centerx = inWidth / 2 ;
+          var startTime = new Date().getTime();
+          var currentTime = 0;
     
       var stars = [],
           collapse = false, // if hovered
@@ -54,13 +51,13 @@ export class StarsBlowComponent implements OnInit {
       function setDPI(canvas, dpi) {
         // Set up CSS size if it's not set up already
         if (!canvas.style.width)
-          canvas.style.width = 1250 + 'px';
+          canvas.style.width = inWidth;
         if (!canvas.style.height)
-          canvas.style.height = 740 + 'px';
-        canvas.width = 1250;
-        canvas.height = 740;
+          canvas.style.height = inHeight;
+        canvas.width = inWidth;
+        canvas.height = inHeight;
         var ctx = canvas.getContext('2d');
-        ctx.scale(1.3, 1.3);
+        ctx.scale(1, 1);      
       }
     
       function rotate(cx, cy, x, y, angle) {

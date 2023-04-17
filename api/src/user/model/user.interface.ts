@@ -19,6 +19,7 @@ export interface UserI {
 	level?: number;
 	profilPic?: string;
 	friends?: Friend[];
+	colorPad?: string;
 }
 
 export interface Friend {

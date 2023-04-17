@@ -11,7 +11,6 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { StarsComponent } from './components/stars/stars.component';
 import { StarsInteractiveComponent } from './components/stars-interactive/stars-interactive.component';
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 export function tokenGetter() {
 	return localStorage.getItem("access_token");
@@ -35,7 +34,6 @@ export function tokenGetter() {
         allowedDomains: ["localhost:3000"]
       }
 	    }),
-      SweetAlert2Module.forRoot()
     ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Logger, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards, Put } from '@nestjs/common';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
@@ -11,10 +11,9 @@ import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
 import { RequestModel } from 'src/middleware/auth.middleware';
 import { UserEntity } from '../model/user.entity';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { ChangePasswordDto } from '../model/dto/change-password.dto';
-import { ChangeUsernameDto } from '../model/dto/change-username.dto';
 import { ChangeEmailDto } from '../model/dto/change-email.dto';
+import { ChangeUsernameDto } from '../model/dto/change-username.dto';
 
 
 @Controller('users')
@@ -168,6 +167,11 @@ export class UserController {
     const user = await this.userService.getUserInfo(id);
     // Retourner les informations de l'utilisateur
     return user;
+  }
+
+  	@Put(':id/update-color-pad')
+  	async updateColorPad(@Param('id') id: number, @Body('colorPad') color: string) {
+		await this.userService.updateColorPad(id, color);
   }
 
 }
