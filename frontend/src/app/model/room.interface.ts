@@ -5,6 +5,8 @@ export interface RoomI {
 	name?: string;
 	description?: string;
 	privateMessage?: boolean;
+	isPrivate?: boolean;
+	channelPassword?: string;
 	owner?: UserI;
 	users?: UserI[];
 	admins?: UserI[];

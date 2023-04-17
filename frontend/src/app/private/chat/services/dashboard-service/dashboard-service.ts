@@ -12,6 +12,7 @@ export class DashboardService {
 	changePass: boolean = false;
 	checkPass: boolean = false;
 
+
 	constructor() { }
 
 }

@@ -241,6 +241,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 			this.onJoinRoom(socket, room.id);
 		}
 		else {
+			if (room.isPrivate) {
+				return socket.emit('checkPass', room);
+			}
 			let users: UserI[] = [];
 			users.push(socket.data.user);
 			const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(upRoom, users);
@@ -260,6 +263,53 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 				await this.server.to(joined.socketId).emit('getMember', this.AlphaOrderUser(addUsersRoom.users));
 			}
 		}
+	}
+
+	@SubscribeMessage('checkPass')
+	async checkpass(socket: Socket, object: {pass: string, room: RoomI}) {
+		if(object.pass === object.room.channelPassword) {
+			await this.addConfirmUser(socket, object.room);
+			socket.emit('confirmPass', false);
+		}
+	}
+
+	@SubscribeMessage('changePass')
+	async changePass(socket: Socket, object: {pass: string, room: RoomI}) {
+		const upRoom = await this.roomService.getRoom(object.room.id);
+		const wasPrivate = upRoom.isPrivate;
+		await this.roomService.changePass(upRoom, object.pass);
+		if (!wasPrivate)
+			this.displayChange(upRoom);
+	}
+
+	@SubscribeMessage('removePass')
+	async removePass(socket: Socket, room: RoomI) {
+		const upRoom = await this.roomService.getRoom(room.id);
+		await this.roomService.removePass(upRoom);
+		this.displayChange(upRoom);
+	}
+
+	async addConfirmUser(socket: Socket, room: RoomI) {
+		const upRoom = await this.roomService.getRoom(room.id);
+
+		let users: UserI[] = [];
+			users.push(socket.data.user);
+			const addUsersRoom: RoomI = await this.roomService.addUsersToRoom(upRoom, users);
+			const joinedUsers: JoinedRoomI[] = await this.joinedRoomService.findByRoom(addUsersRoom.id);
+
+			this.onJoinRoom(socket, room.id);
+
+			for (const user of users) {
+				let rooms: RoomI[] = await this.roomService.getRoomsForUser(user.id);
+				const connections: ConnectedUserI[] = await this.connectedUserService.findByUser(user);
+				rooms = this.roomService.formatPrivateRooms(user, rooms);
+				for (const connection of connections) {
+					await this.server.to(connection.socketId).emit('rooms', rooms);
+				}
+			}
+			for (const joined of joinedUsers) {
+				await this.server.to(joined.socketId).emit('getMember', this.AlphaOrderUser(addUsersRoom.users));
+			}
 	}
 
 	@SubscribeMessage('joinRoom')

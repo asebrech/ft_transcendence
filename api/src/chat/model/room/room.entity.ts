@@ -18,6 +18,12 @@ export class RoomEntity {
 	@Column({nullable: true})
 	privateMessage: boolean;
 
+	@Column({nullable: true})
+	isPrivate: boolean;
+
+	@Column({nullable: true})
+	channelPassword: string;
+
 	@ManyToOne(() => UserEntity, user => user.roomsOwner)
 	@JoinColumn()
 	owner: UserEntity;

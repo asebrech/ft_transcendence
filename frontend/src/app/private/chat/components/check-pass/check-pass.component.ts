@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ChatService } from '../../services/chat-service/chat.service';
 
 @Component({
   selector: 'app-check-pass',
@@ -10,14 +11,14 @@ export class CheckPassComponent implements OnInit {
 	message: string = '';
 
 
-  constructor() { }
+  constructor(private chatService: ChatService) { }
 
   ngOnInit(): void {
   }
 
   onSubmit() {
 	if (this.message) {
-		console.log(this.message);
+		this.chatService.checkPass(this.message);
 		this.message = '';
 	}
   }

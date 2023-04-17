@@ -42,6 +42,10 @@ export class ChannelOptionComponent {
 		this.dashService.changePass = true;
 	}
 
+	removePass() {
+		this.chatService.removePass();
+	}
+
 	leaveChannel() {
 		this.chatService.quitRoom(this.chatService.currentUser);
 	}

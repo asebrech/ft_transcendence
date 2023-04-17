@@ -21,6 +21,7 @@ export class ChatService {
 	roomName$ = this.roomName.asObservable();
 	private messages = new Subject<MessageI[]>();
 	messages$ = this.messages.asObservable()
+	roomToCheck: RoomI = null;
 
 	constructor(private socket: CustomSocket, private snackbar: MatSnackBar, private dashService: DashboardService) { }
 
@@ -182,5 +183,28 @@ export class ChatService {
 
 	getIfBlocked(): Observable<boolean> {
 		return this.socket.fromEvent<boolean>('isBlocked');
+	}
+
+	checkPass(pass: string){
+		const room: RoomI = this.roomToCheck
+		this.socket.emit('checkPass', {pass, room});
+	}
+
+	getIfCheckPass(): Observable<RoomI> {
+		return this.socket.fromEvent<RoomI>('checkPass');
+	}
+
+	getConfirmPass(): Observable<boolean> {
+		return this.socket.fromEvent<boolean>('confirmPass');
+	}
+
+	changePass(pass: string){
+		const room: RoomI = this.selectedRoom
+		this.socket.emit('changePass', {pass, room});
+	}
+
+	removePass(){
+		const room: RoomI = this.selectedRoom
+		this.socket.emit('removePass', this.selectedRoom);
 	}
 }

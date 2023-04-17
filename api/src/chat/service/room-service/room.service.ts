@@ -25,6 +25,19 @@ export class RoomService {
 		return this.roomRepository.save(newRoom);
 	}
 
+	async changePass(room: RoomI, pass: string): Promise<RoomI> {
+		if (!room.isPrivate)
+			room.isPrivate = true;
+		room.channelPassword = pass;
+		return this.roomRepository.save(room);
+	}
+
+	async removePass(room: RoomI): Promise<RoomI> {
+		room.isPrivate = false;
+		room.channelPassword = null;
+		return this.roomRepository.save(room);
+	}
+
 	async createPrivateMessage(users: UserI[]): Promise<RoomI> {
 		
 		const newRoom: RoomI = {
