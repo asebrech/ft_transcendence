@@ -7,6 +7,7 @@ import { MessageI, MessagePaginatedI } from 'src/app/model/message.interface';
 import { UserI } from 'src/app/model/user.interface';
 import { DashboardService } from '../dashboard-service/dashboard-service';
 import { BlockedUser } from 'src/app/model/blockedUser.interface';
+import { Router } from '@angular/router';
 
 @Injectable({
 	providedIn: 'root'
@@ -24,7 +25,7 @@ export class ChatService {
 	messages$ = this.messages.asObservable()
 	roomToCheck: RoomI = null;
 
-	constructor(private socket: CustomSocket, private snackbar: MatSnackBar, private dashService: DashboardService) { }
+	constructor(private socket: CustomSocket, private snackbar: MatSnackBar, private dashService: DashboardService, private route: Router) { }
 
 	getAddedMessage(): Observable<MessageI> {
 		return this.socket.fromEvent<MessageI>('messageAdded');
@@ -116,6 +117,12 @@ export class ChatService {
 		// this.snackbar.open(`User ${room.name} created successfuly`, 'Close', {
 		// 	duration: 2000, horizontalPosition: 'right', verticalPosition: 'top'
 		// });
+	}
+
+	async joinAndRpivateMessage(user: UserI) {
+		await this.route.navigate(['/private/chat/dashboard']);
+		localStorage.removeItem('room');
+		this.socket.emit('privateMessage', user);
 	}
 
 	privateMessage(user: UserI) {

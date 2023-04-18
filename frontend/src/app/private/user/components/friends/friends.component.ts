@@ -4,6 +4,7 @@ import { PlayerService } from '../../services/player.service';
 import { Friend, UserI } from 'src/app/model/user.interface';
 import { Observable, catchError } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
+import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
 
 @Component({
   selector: 'app-friends',
@@ -25,7 +26,7 @@ export class FriendsComponent implements OnInit {
   user : UserI = this.authService.getLoggedInUser();
   friends: Friend[];
 
-  constructor(private route : Router, private playerService: PlayerService, private authService: AuthService) { }
+  constructor(private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit(): void {
     this.user$ = this.playerService.getUser();
@@ -40,6 +41,10 @@ export class FriendsComponent implements OnInit {
       this.users = this.users.filter(users => users.id !== this.user.id);
       this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
     });
+  }
+
+  sendMessage(user: UserI) {
+	this.chatService.joinAndRpivateMessage(user);
   }
 
   searchUsers() {
