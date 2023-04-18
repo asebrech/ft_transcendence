@@ -15,6 +15,8 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { ChangePasswordDto } from '../model/dto/change-password.dto';
 import { ChangeUsernameDto } from '../model/dto/change-username.dto';
 import { ChangeEmailDto } from '../model/dto/change-email.dto';
+import { ChangeBallSkinDto } from '../model/dto/change-ball-skin.dto';
+import { ChangePadSkinDto } from '../model/dto/change-pad-skin.dto';
 
 
 @Controller('users')
@@ -171,8 +173,12 @@ export class UserController {
   }
 
   	@Put(':id/update-color-pad')
-  	async updateColorPad(@Param('id') id: number, @Body('colorPad') color: string) {
+  	async updateColorPad(@Param('id') id: number, @Body() { color } : ChangePadSkinDto) {
 		await this.userService.updateColorPad(id, color);
   }
 
+	@Put(':id/update-color-ball')
+	async updateColorBall(@Param('id') id: number, @Body() { color } : ChangeBallSkinDto) {
+		await this.userService.updateColorBall(id, color);
+}
 }

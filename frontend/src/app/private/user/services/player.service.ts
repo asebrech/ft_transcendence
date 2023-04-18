@@ -14,6 +14,8 @@ export class PlayerService {
   user : UserI;
   friend : string[] = [];
   usersList: Observable<UserI[]>;
+  colorBall : string;
+  colorPad : string;
 
   constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient, private route: Router) {}
 
@@ -65,6 +67,28 @@ export class PlayerService {
   updateColorPad(userId: number, color: string) : Observable<UserI> {
     return this.httpClient.put<UserI>(`api/users/${userId}/update-color-pad`, {color});
   }
+
+  updateColorBall(userId: number, color: string) : Observable<UserI> {
+    return this.httpClient.put<UserI>(`api/users/${userId}/update-color-ball`, {color});
+  }
+
+    getColorPad() : Observable<string> {
+      return this.getUser().pipe(map((user: UserI) => {
+        this.colorPad = user.colorPad;
+        return this.colorPad;
+      }));
+    }
+    
+    getColorBall() : Observable<string> {
+      return this.getUser().pipe(map((user: UserI) => {
+        this.colorBall = user.colorBall;
+        return this.colorBall;
+      }));
+    }
+
+  // setHistory(userId: number, opponentId: number, won: boolean) : Observable<UserI> {
+  //   return this.httpClient.post<UserI>(`api/users/${userId}/set-history`, { opponentId , won});
+  // }
 }
 
 

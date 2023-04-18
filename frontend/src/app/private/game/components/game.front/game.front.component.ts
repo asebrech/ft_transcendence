@@ -6,10 +6,11 @@ import { PlayScene } from '../../services/play.scene.service';
 import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, async } from 'rxjs';
 import { GameService } from '../../services/game.service';
 import { PlayerService } from 'src/app/private/user/services/player.service';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
+import { UserI } from 'src/app/model/user.interface';
 
 export let room : any;
 export let client : Client;
@@ -17,6 +18,10 @@ export let inWidth : number;
 export let inHeight : number;
 export let player_left : boolean;
 export let gameWon : boolean;
+export let skinPad : string;
+export let skinBall : string;
+export let opponentPad : string;
+
 
 @Component({
   selector: 'app-game.front',
@@ -43,10 +48,10 @@ export class GameFrontComponent implements OnInit, DoCheck
   gameEnded : boolean;
 
   
-  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService) 
+  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService) 
   {
     this.user = this.authService.getLoggedInUser();
-    this.username = this.user.username;
+    this.username = this.user.id;
   }
 
   ngDoCheck() 
@@ -72,6 +77,20 @@ export class GameFrontComponent implements OnInit, DoCheck
     {
       this.joinGameSession(message.ticket);
     });
+    if (player_left == true)
+    {
+      room?.onMessage("right_player_skin", (message) =>
+      {
+        opponentPad = message;
+      })
+    }
+    if (player_left == false)
+    {
+      room?.onMessage("left_player_skin", (message) =>
+      {
+        opponentPad = message;
+      })
+    }
     room?.onMessage("second_player_found", () =>
     {
       this.joinedVar.subscribe((value) =>
@@ -95,7 +114,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     })
     room?.onMessage("end", (message) =>
     {
-      if (message == "won")
+      if (message.winner == true)
       {
         if (player_left == true)
           gameWon = true;
@@ -103,7 +122,7 @@ export class GameFrontComponent implements OnInit, DoCheck
           gameWon = false;
         this.gameEnded = true;
       }
-      else if (message == "lost")
+      else if (message.winner == false)
       {
         if (player_left == true)
           gameWon = false;
@@ -117,15 +136,19 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnInit()
   {
+    this.playerService.getUser().subscribe((user: UserI) => {
+      skinPad = user.colorPad;
+      skinBall = user.colorBall;
+    });
     gameWon = false;
     ///////////////////////
     this.gameEnded = false;
 	  this.starsService.setActive(false);
     ///////////////////////
-    let audio = new Audio()
-    audio.src = "../../../../assets/background.wav";
-    audio.load();
-    audio.play();
+    // let audio = new Audio()
+    // audio.src = "../../../../assets/background.wav";
+    // audio.load();
+    // audio.play();
     //////////////////////
     inWidth = 1920;
     inHeight = 1080;
@@ -209,6 +232,7 @@ export class GameFrontComponent implements OnInit, DoCheck
       }, 1000);
     }
   }
+
   switchToBotPlay()
   {
     if (this.launch.launchGameRet() == 1)
@@ -225,8 +249,8 @@ export class GameFrontComponent implements OnInit, DoCheck
   async join()
   {
     try {
-      // TODO : USERNAME EST UNDEFINED 
-      room = await client?.joinOrCreate("ranked",  { rank : 10, numClientsToMatch : 2 , clientId : this.username });
+      // TODO : USERNAME EST UNDEFINED /// RAJOUTER LE RANK PAR DEFAUT 10
+      room = await client?.joinOrCreate("ranked",  { rank : 10, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
       console.log(room);
       console.log(client.auth);
     } catch (e) {

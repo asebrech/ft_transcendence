@@ -12,7 +12,8 @@ export interface UserI {
 	level?:number;
 	friends?: Friend[];
 	colorPad?: string;
-
+	history?: [];
+	colorBall?: string;
 }
 
 export interface Friend {
@@ -21,4 +22,5 @@ export interface Friend {
 	photo?: string;
 	win?: number;
 	losses?: number;
+	history?: [];
 }

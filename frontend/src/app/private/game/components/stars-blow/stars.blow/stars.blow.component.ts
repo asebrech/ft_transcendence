@@ -17,10 +17,10 @@ export class StarsBlowComponent implements OnInit {
 
   playSound()
   {
-    let audio = new Audio()
-    audio.src = "../../../../assets/test.wav";
-    audio.load();
-    audio.play();
+    // let audio = new Audio()
+    // audio.src = "../../../../assets/test.wav";
+    // audio.load();
+    // audio.play();
     this.hide_waiting = this.launch.hideWaiting(this.hide_waiting);
     this.launch.showButtonOn(1);
   }

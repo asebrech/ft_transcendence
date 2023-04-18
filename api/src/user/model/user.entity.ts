@@ -78,4 +78,10 @@ export class UserEntity {
 
 	@Column({default: 'default'})
 	colorPad: string;
+
+	@Column({default: 'default'})
+	colorBall: string;
+
+	@Column({ type: 'jsonb', default: '[]' })
+	history: [];
 }

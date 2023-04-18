@@ -263,8 +263,14 @@ export class UserService {
 	} 
 
 	async updateColorPad(id : number, color: string) : Promise<UserI> {
-		const user = await this.userRepository.findOneBy({id});
-		user.colorPad = color;
-		return this.userRepository.save(user);
+		await this.userRepository.update(id, {colorPad : color});
+		const updateUser = await this.findOne(id);
+		return updateUser;
+	}
+
+	async updateColorBall(id : number, color: string) : Promise<UserI> {
+		await this.userRepository.update(id, {colorBall : color});
+		const updateUser = await this.findOne(id);
+		return updateUser;
 	}
 }

@@ -9,7 +9,10 @@ import { gameWon } from '../game.front/game.front.component';
 })
 export class EndGamePageComponent implements OnInit {
 
-  constructor(private starsService: StarsService) { }
+  constructor(private starsService: StarsService) 
+  {
+    this.starsService.setActive(false);
+  }
 
   WonGame : boolean = false;
   LostGame : boolean = false;
@@ -31,15 +34,16 @@ export class EndGamePageComponent implements OnInit {
     {
       this.xpBar.nativeElement.addEventListener('animationend', () => {
           this.level++;
-      });    
-    };
-    if (this.LostGame == true)
-    {
-      this.degBar.nativeElement.addEventListener('animationend', () => {
+        });    
+      };
+      if (this.LostGame == true)
+      {
+        this.degBar.nativeElement.addEventListener('animationend', () => {
           if (this.level != 1)
             this.level--;
       });
     };
+    this.starsService.setActive(true);
   }
 
   ngOnInit(): void 

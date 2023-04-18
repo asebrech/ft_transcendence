@@ -7,13 +7,15 @@ import { PrivateModule } from '../private.module';
 import { LiveComponent } from './components/live/live.component';
 import { StarsBlowComponent } from './components/stars-blow/stars.blow/stars.blow.component';
 import { EndGamePageComponent } from './components/end-game-page/end-game-page.component';
+import { GameInviteComponent } from './components/game.invite/game.invite.component';
 
 @NgModule({
   declarations: [
 	GameFrontComponent,
  LiveComponent,
  StarsBlowComponent,
- EndGamePageComponent
+ EndGamePageComponent,
+ GameInviteComponent
   ],
   imports: [
     CommonModule,
