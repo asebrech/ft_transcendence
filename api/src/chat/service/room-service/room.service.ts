@@ -60,7 +60,7 @@ export class RoomService {
 	}
 
 	async getAllRoom(): Promise<RoomI[]> {
-		return this.roomRepository.find({relations: ['baned']});
+		return this.roomRepository.find();
 	}
 
 	async getAllRoomWithUsers(): Promise<RoomI[]> {
@@ -68,7 +68,7 @@ export class RoomService {
 	}
 
 	async getRoom(roomId: number): Promise<RoomI> {
-		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned'] });
+		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins'] });
 	}
 
 	async getRoomWithPass(roomId: number): Promise<RoomI> {
@@ -203,6 +203,13 @@ export class RoomService {
  			return this.roomRepository.save(room);
 	} 
 
+	async removeBanedToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
+		const index = room.baned.findIndex(obj => obj.id === user.id);
+			if (index !== -1)
+  				room.baned.splice(index, 1);
+ 			return this.roomRepository.save(room);
+	} 
+
 	async quitRoom(userToRemove: UserI, room: RoomI): Promise<RoomI> {
 			const index = room.users.findIndex(obj => obj.id === userToRemove.id);
 			if (index !== -1)
@@ -210,17 +217,23 @@ export class RoomService {
  			return this.roomRepository.save(room);
 	}
 
-	async addBannedUser(room: RoomI, user: UserI): Promise<RoomI> {		
+	async addBannedUser(room: RoomI, baned: BlockedUser): Promise<RoomI> {		
 		if (!room.baned){
 			room.baned = [];
 		}
-		room.baned.push(user);
+		const id = baned.id;
+		let date: Date;
+		if (baned.date)
+			date = baned.date
+		else
+			date = null;
+		room.baned.push({id, date});
 		return this.roomRepository.save(room);
 	} 
 
 	async deleteRoom(roomId: number){
 		this.messagesService.deleteByRoomId(roomId);
 		this.joinedRoomService.deleteByroomId(roomId);
-		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned', 'muted'] }));
+		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins'] }));
 	}
 }

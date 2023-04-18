@@ -54,7 +54,7 @@ export class MemberOptionComponent implements OnInit {
 	}
 
 	banTime() {
-		console.log('ban For:', new Date());
+		this.chatService.banFromRoom({baned: {id: this.selectedUser.id, date: new Date(this.myDateTimeValue)}, user: this.selectedUser});
 	  }
 
 	  muteTime() {
@@ -130,7 +130,7 @@ export class MemberOptionComponent implements OnInit {
 	}
 
 	ban() {
-		this.chatService.banFromRoom(this.selectedUser);
+		this.chatService.banFromRoom({baned: {id: this.selectedUser.id, date: null}, user: this.selectedUser});
 
 	}
 

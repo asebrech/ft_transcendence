@@ -77,6 +77,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	@SubscribeMessage('privateMessage')
 	async privateMessage(socket: Socket, user: UserI) {
 		const rooms: RoomI[] = await this.roomService.getAllRoomWithUsers();
+		user = await this.userService.getOne(user.id);
+		if (user.blockedUsers.some(toto => toto.id === socket.data.user.id))
+			return;
 		for (const room of rooms) {
 			if (room.privateMessage) {
 				if (room.users && room.users.find(toto => toto.id === user.id) && room.users.find(toto => toto.id === socket.data.user.id)) {
@@ -117,21 +120,32 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	async listAllChannels(socket: Socket) {
 		const rooms: any[] = await this.roomService.getAllRoom();
 		const users: any[] = await this.userService.findAll();
-		const checkedRooms = rooms;
 		for (const room of rooms) {
-			const banned = room.baned.find(toto => toto.id === socket.data.user.id)
-			if (banned) {
-				const index = checkedRooms.findIndex(toto => toto.id === room.id)
-				if (index !== -1) {
-					checkedRooms.splice(index, 1);
+			const baned = room.baned.find(toto => toto.id === socket.data.user.id)
+			if (baned){
+				if (baned.date != null && new Date(baned.date) < new Date()) {
+					await this.roomService.removeBanedToRoom(room, socket.data.user);
+				}
+				else {
+					const index = rooms.findIndex(toto => toto.id === room.id)
+					if (index !== -1) {
+						rooms.splice(index, 1);
+					}
 				}
 			}
 		}
 		const index = users.findIndex(obj => obj.id === socket.data.user.id);
 		if (index !== -1)
 			users.splice(index, 1);
-		for (const user of users) {
-			user.name = user.username;
+		for (let i = 0; i < users.length; i++) {
+			if (users[i].blockedUsers.some(toto => toto.id === socket.data.user.id))
+			{
+				users.splice(i, 1);
+			}
+			else
+			{
+				users[i].name = users[i].username;
+			}
 		}
 		for (let i = 0; i < rooms.length; i++) {
 			if (rooms[i].privateMessage === true) {
@@ -233,10 +247,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	@SubscribeMessage('addUserToRoom')
 	async addUserToRoom(socket: Socket, room: RoomI) {
 
-		const upRoom = await this.roomService.getRoom(room.id);
-
-		if (upRoom.baned.find(toto => toto.id === socket.data.user.id))
-			return socket.emit('Error', new UnauthorizedException());
+		let upRoom = await this.roomService.getRoom(room.id);
 
 		if (upRoom.users.find(user => user.id === socket.data.user.id)) {
 			this.onJoinRoom(socket, room.id);
@@ -369,9 +380,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	}
 
 	@SubscribeMessage('banFromRoom')
-	async onBanFromRoom(socket: Socket, object: { room: RoomI, user: UserI }) {
+	async onBanFromRoom(socket: Socket, object: { room: RoomI, user: UserI, baned: BlockedUser }) {
 		const updatedRoom = await this.onQuitRoom(socket, { room: object.room, user: object.user });
-		await this.roomService.addBannedUser(updatedRoom, object.user);
+		await this.roomService.addBannedUser(updatedRoom, object.baned);
 	}
 
 	@SubscribeMessage('deleteRoom')
@@ -454,9 +465,26 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('blockUser')
 	async blockUser(socket: Socket, object: { room: RoomI, user: UserI }) {
-		await this.userService.addBlockedUser(object.user, socket.data.user);
-		const upRoom: RoomI = await this.roomService.getRoom(object.room.id);
-		this.displayChange(upRoom);
+		const user = await this.userService.addBlockedUser(object.user, socket.data.user);
+		// const rooms: RoomI[] = await this.roomService.getAllRoomWithUsers();
+		// for (const room of rooms) {
+		// 	if (room.privateMessage) {
+		// 		for (const roomUser of room.users) {
+		// 			if (user.blockedUsers.some(toto => toto.id === roomUser.id)) {
+		// 				if (room.id === object.room)
+		// 					return await this.onDeleteRoom(socket, await this.roomService.getRoom(room.id));
+		// 				else {
+		// 					this.roomService.deleteRoom(room.id);
+		// 				}
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		// }
+		if (object.room) {
+			const upRoom: RoomI = await this.roomService.getRoom(object.room.id);
+			this.displayChange(upRoom);
+		}
 	}
 
 	@SubscribeMessage('unBlockUser')

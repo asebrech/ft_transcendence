@@ -12,7 +12,7 @@ export interface RoomI {
 	users?: UserI[];
 	admins?: UserI[];
 	muted?: BlockedUser[];
-	Baned?: UserI[];
+	Baned?: BlockedUser[];
 	created_at?: Date;
 	updated_at?: Date;
 }

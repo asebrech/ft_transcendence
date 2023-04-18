@@ -40,9 +40,8 @@ export class RoomEntity {
 	@Column({ type: 'jsonb', default: [] })
 	muted: BlockedUser[];
 
-	@ManyToMany(() => UserEntity)
-	@JoinTable()
-	baned: UserEntity[];
+	@Column({ type: 'jsonb', default: [] })
+	baned: BlockedUser[];
 
 	@OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
 	joinedUsers: JoinedRoomEntity[];

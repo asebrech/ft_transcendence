@@ -51,9 +51,9 @@ export class ChatService {
 		return this.socket.emit('quitRoom', {room, user});
 	}
 
-	banFromRoom(user: UserI) {
+	banFromRoom(object: {baned: BlockedUser, user: UserI}) {
 		const room: RoomI = this.selectedRoom;
-		return this.socket.emit('banFromRoom', {room, user});
+		return this.socket.emit('banFromRoom', {room, baned: {id: object.baned.id, date: object.baned.date}, user: object.user});
 	}
 
 	getAllChannels(): Observable<any[]> {
