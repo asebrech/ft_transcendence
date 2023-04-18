@@ -112,6 +112,9 @@
 
 .messages {
 	display: flex;
+	align-items: center;
+	flex-direction: row;
+	justify-content: flex-start;
 	margin-top: 25px;
 	width: 100%;
 }
@@ -120,16 +123,20 @@
 	margin-bottom: 30px;
 }
 
-.message div {
+.content {
 	margin-left: 20px;
-	width: calc(100% - 50px);
+	max-width: calc(100% - 50px);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 }
 
-.message div p {
+.text {
 	margin-top: 5px;
 	width: 100%;
 	//overflow-x: hidden;
 	word-wrap: break-word;
+	text-align: left;
 }
 
 .messagePicture {

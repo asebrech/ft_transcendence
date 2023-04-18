@@ -4,8 +4,8 @@
 		<div class="result">
 			<div *ngFor="let result of filteredResults" class="channels">
 				<div (click)="onClick(result)" class="channel">
-					<img src="../../../../../assets/images/add-user.png" *ngIf="result.username">
-					<img src="../../../../../assets/images/users.png" *ngIf="!result.username">
+					<img src="../../../../../assets/images/icons8-user-50.png" *ngIf="result.username">
+					<img src="../../../../../assets/images/icons8-team-50.png" *ngIf="!result.username">
 						<div *ngIf="result.username">User</div>
 						<div *ngIf="!result.username">Channel</div>
 					<div class="ischannel" [ngClass]="{'isuser': result.username}">{{result.name}}</div>

@@ -232,8 +232,8 @@ export class RoomService {
 	} 
 
 	async deleteRoom(roomId: number){
-		this.messagesService.deleteByRoomId(roomId);
-		this.joinedRoomService.deleteByroomId(roomId);
+		await this.messagesService.deleteByRoomId(roomId);
+		await this.joinedRoomService.deleteByroomId(roomId);
 		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins'] }));
 	}
 }
