@@ -38,6 +38,9 @@
 
 .username {
 	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+
 }
 
 .username h1 {
@@ -48,7 +51,7 @@
 
 .username div {
 	width: 55%;
-}
+}	
 
 .channelName {
 	background: transparent;
@@ -104,6 +107,7 @@
 	width: 100%;
 	height: calc(100% - 127px);
 	overflow-y: scroll;
+	scrollbar-color: transparent transparent;
 }
 
 .messages {
@@ -194,4 +198,37 @@
 	opacity: 0;
 	transition: opacity 0s ease-in-out;
 	position: absolute;
+}
+
+/* Hide scrollbar background */
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+::-moz-scrollbar {
+  background-color: transparent;
+}
+
+::-ms-scrollbar {
+  background-color: transparent;
+}
+
+::-o-scrollbar {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-moz-scrollbar-track {
+  background-color: transparent;
+}
+
+::-ms-scrollbar-track {
+  background-color: transparent;
+}
+
+::-o-scrollbar-track {
+  background-color: transparent;
 }

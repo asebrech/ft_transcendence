@@ -73,7 +73,7 @@ export class RoomService {
 
 	async getRoomWithPass(roomId: number): Promise<RoomI> {
 		return this.roomRepository.findOne({ where: { id: roomId },
-				relations: ['users', 'owner', 'admins', 'baned'],
+				relations: ['users', 'owner', 'admins'],
 				select: ['id', 'name', 'description','privateMessage', 'isPrivate', 'channelPassword', 'users', 'owner', 'admins', 'baned', 'muted', 'created_at', 'updated_at'] });
 	}
 

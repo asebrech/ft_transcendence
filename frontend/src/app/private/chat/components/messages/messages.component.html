@@ -4,12 +4,12 @@
 		<img src="../../../../../../assets/images/transmitter_1.png" (click)="members()" *ngIf="chatService.selectedRoom !== null">
 		<div class="header" [ngClass]="{'hidden': placeholderText === null}">
 			<div class="username" >
-				<div [ngClass]="{'hidden': !chatService.selectedRoomOwner && !chatService.selectedRoomAdmin}" >
-					<input class="channelName" type="text" #inputElement [placeholder]="placeholderText"
-					[(ngModel)]="inputText" (focus)="onFocus()" (blur)="validerPlaceholder(inputElement)"
-					(keydown.enter)="validerPlaceholderEnter(inputElement)" (input)="onInput(inputElement)">
-				</div>
-				<h1 *ngIf="!chatService.selectedRoomOwner && !chatService.selectedRoomAdmin" >{{placeholderText}}</h1>
+						<input 
+						[ngClass]="{'hidden': !chatService.selectedRoomOwner && !chatService.selectedRoomAdmin}"
+						class="channelName" type="text" #inputElement [placeholder]="placeholderText"
+						[(ngModel)]="inputText" (focus)="onFocus()" (blur)="validerPlaceholder(inputElement)"
+						(keydown.enter)="validerPlaceholderEnter(inputElement)" (input)="onInput(inputElement)">
+						<h1 *ngIf="!chatService.selectedRoomOwner && !chatService.selectedRoomAdmin" >{{placeholderText}}</h1>
 			</div>
 		</div>
 	</div>
@@ -22,7 +22,7 @@
 	<div #messageList class="message">
 		<div class="messages" *ngFor="let message of (messages$ | async)">
 			<img class="messagePicture" src="../../../../../../assets/images/astronaut.png">
-			<div>
+			<div class="test">
 				<strong class="usernameMessage" >{{message.user.username}}</strong>
 				<p class="text">{{message.text}}</p>
 			</div>

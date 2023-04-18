@@ -4,6 +4,7 @@
 	width: 100%;
 	height: calc(100% - 175px);
 	overflow-y: scroll;
+	scrollbar-color: transparent transparent;
 	// scrollbar-width: none; /* Firefox */
 	// -ms-overflow-style: none; /* IE 10+ */
 }
@@ -76,3 +77,37 @@
 	margin-left: -25px;
 	margin-top: 45px;
   }
+
+  /* Hide scrollbar background */
+::-webkit-scrollbar {
+	background-color: transparent;
+  }
+  
+  ::-moz-scrollbar {
+	background-color: transparent;
+  }
+  
+  ::-ms-scrollbar {
+	background-color: transparent;
+  }
+  
+  ::-o-scrollbar {
+	background-color: transparent;
+  }
+  
+  ::-webkit-scrollbar-track {
+	background-color: transparent;
+  }
+  
+  ::-moz-scrollbar-track {
+	background-color: transparent;
+  }
+  
+  ::-ms-scrollbar-track {
+	background-color: transparent;
+  }
+  
+  ::-o-scrollbar-track {
+	background-color: transparent;
+  }
+  
