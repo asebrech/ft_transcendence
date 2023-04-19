@@ -6,6 +6,7 @@
     <button (click)="changeUsername()">Change username</button>
     <button (click)="changeEmail()">Change email</button>
     <button (click)="changePwd()">reset password</button>
+	<button (click)="goTo2FA()">Managed 2FA</button>
     <div class="username-popup" *ngIf="usernamePopup">
       <h1>Please enter new username</h1>
       <input type="text" placeholder="USERNAME" [(ngModel)]="old">

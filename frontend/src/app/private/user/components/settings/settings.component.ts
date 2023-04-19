@@ -6,6 +6,7 @@ import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -37,7 +38,7 @@ export class SettingsComponent implements OnInit {
   colorPad : string;
   /////////////////////////////
 
-  constructor(private starsService: StarsService, private playerService: PlayerService, private authService: AuthService ) {}
+  constructor(private starsService: StarsService, private playerService: PlayerService, private authService: AuthService, private route: Router ) {}
 
   ngOnInit(): void {
     this.starsService.setActive(false);
@@ -45,6 +46,10 @@ export class SettingsComponent implements OnInit {
     this.user$.subscribe(user => {
       console.log(user.colorPad);
     })
+  }
+
+  async goTo2FA() {
+	await this.route.navigate(['/private/user/google-auth']);
   }
 
   changeUsername() {

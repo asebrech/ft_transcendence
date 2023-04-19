@@ -11,7 +11,7 @@ imports: [
 		imports: [ConfigModule],
 		inject: [ConfigService],
 		useFactory: async(configService: ConfigService) => ({
-			secret: configService.get('JWT_SECRET'),
+			secret: configService.get(process.env.CONFIGUE_SERVICE),
 			signOptions: {expiresIn: '10000s'}
 		})
 	})
