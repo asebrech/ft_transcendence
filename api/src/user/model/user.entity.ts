@@ -46,12 +46,6 @@ export class UserEntity {
 	@ManyToMany(() => RoomEntity, room => room.admins)
 	roomsAdmin: RoomEntity[];
 
-	@ManyToMany(() => RoomEntity, room => room.muted)
-	roomsMuted: RoomEntity[];
-
-	@ManyToMany(() => RoomEntity, room => room.baned)
-	roomsBaned: RoomEntity[];
-
 	@OneToMany(() => ConnectedUserEntity, connection => connection.user)
 	connections: ConnectedUserEntity[];
 	
