@@ -38,7 +38,9 @@
 
 <div *ngIf="showContextMenu" class="context-menu" [style.top.px]="contextMenuTop" [style.left.px]="contextMenuLeft">
   <button (click)="addFriend(this.user.id, selectedUser)">add friend</button>
-  <button >send message</button>
+  <button (click)="sendMessage(selectedUser)" *ngIf="!isBlocked" >send message</button>
+  <button *ngIf="!isBlocked" (click)="block(selectedUser)" >Block</button>
+  <button *ngIf="isBlocked" (click)="unblock(selectedUser)" >Unblock</button>
   <button (click)="removeFriend(this.user.id, selectedUser)">delete friend</button>
   <button (click)="goToProfileOf(selectedUser)">Go to profil</button>
 </div>

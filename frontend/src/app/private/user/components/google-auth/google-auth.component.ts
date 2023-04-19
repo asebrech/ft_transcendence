@@ -28,8 +28,8 @@ export class GoogleAuthComponent implements OnInit{
   }
 
   disable2FA() {
+	  this.qr = null;
 	this.http.get('api/users/disable-2fa').subscribe();
-	this.qr = null;
   }
 
 }

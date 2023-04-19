@@ -39,7 +39,8 @@ export class ChangePassComponent implements OnInit {
 
 
 	onSubmit() {
-		console.log(this.passForm.getRawValue());
-		this.dashService.create = false;
+		const pass = this.passForm.getRawValue();
+		this.chatService.changePass(pass.channelPassword);
+		this.dashService.changePass = false;
 	}
 }

@@ -5,6 +5,7 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	scrollbar-color: transparent transparent;
 }
 
 .search {
@@ -41,7 +42,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	overflow:scroll;
+	overflow-y:scroll;
 }
 
 .result p {
@@ -89,3 +90,37 @@ img {
 	width: 30px;
 	height: auto;
 }
+
+/* Hide scrollbar background */
+::-webkit-scrollbar {
+	background-color: transparent;
+  }
+  
+  ::-moz-scrollbar {
+	background-color: transparent;
+  }
+  
+  ::-ms-scrollbar {
+	background-color: transparent;
+  }
+  
+  ::-o-scrollbar {
+	background-color: transparent;
+  }
+  
+  ::-webkit-scrollbar-track {
+	background-color: transparent;
+  }
+  
+  ::-moz-scrollbar-track {
+	background-color: transparent;
+  }
+  
+  ::-ms-scrollbar-track {
+	background-color: transparent;
+  }
+  
+  ::-o-scrollbar-track {
+	background-color: transparent;
+  }
+  

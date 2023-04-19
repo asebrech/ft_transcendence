@@ -6,6 +6,8 @@ import { Observable, Subject, tap } from 'rxjs';
 import { MessageI, MessagePaginatedI } from 'src/app/model/message.interface';
 import { UserI } from 'src/app/model/user.interface';
 import { DashboardService } from '../dashboard-service/dashboard-service';
+import { BlockedUser } from 'src/app/model/blockedUser.interface';
+import { Router } from '@angular/router';
 
 @Injectable({
 	providedIn: 'root'
@@ -21,8 +23,9 @@ export class ChatService {
 	roomName$ = this.roomName.asObservable();
 	private messages = new Subject<MessageI[]>();
 	messages$ = this.messages.asObservable()
+	roomToCheck: RoomI = null;
 
-	constructor(private socket: CustomSocket, private snackbar: MatSnackBar, private dashService: DashboardService) { }
+	constructor(private socket: CustomSocket, private snackbar: MatSnackBar, private dashService: DashboardService, private route: Router) { }
 
 	getAddedMessage(): Observable<MessageI> {
 		return this.socket.fromEvent<MessageI>('messageAdded');
@@ -49,9 +52,9 @@ export class ChatService {
 		return this.socket.emit('quitRoom', {room, user});
 	}
 
-	banFromRoom(user: UserI) {
+	banFromRoom(object: {baned: BlockedUser, user: UserI}) {
 		const room: RoomI = this.selectedRoom;
-		return this.socket.emit('banFromRoom', {room, user});
+		return this.socket.emit('banFromRoom', {room, baned: {id: object.baned.id, date: object.baned.date}, user: object.user});
 	}
 
 	getAllChannels(): Observable<any[]> {
@@ -116,6 +119,12 @@ export class ChatService {
 		// });
 	}
 
+	async joinAndRpivateMessage(user: UserI) {
+		await this.route.navigate(['/private/chat/dashboard']);
+		localStorage.removeItem('room');
+		this.socket.emit('privateMessage', user);
+	}
+
 	privateMessage(user: UserI) {
 		this.socket.emit('privateMessage', user);
 	}
@@ -152,6 +161,10 @@ export class ChatService {
 		this.socket.emit('addUsers', { users: users, room: this.selectedRoom });
 	}
 
+	giveOwnership(user: UserI) {
+		this.socket.emit('giveOwnership', { user: user, room: this.selectedRoom });
+	}
+
 	addAdmin(user: UserI) {
 		this.socket.emit('addAdmin', { user: user, room: this.selectedRoom });
 	}
@@ -160,20 +173,20 @@ export class ChatService {
 		this.socket.emit('removeAdmin', { user: user, room: this.selectedRoom });
 	}
 
-	addMuted(user: UserI) {
-		this.socket.emit('addMuted', { user: user, room: this.selectedRoom });
+	addMuted(muted: BlockedUser) {
+		this.socket.emit('addMuted', { muted: muted, room: this.selectedRoom });
 	}
 
 	removeMuted(user: UserI) {
 		this.socket.emit('removeMuted', { user: user, room: this.selectedRoom });
 	}
 
-	blockUser(user: UserI) {
-		this.socket.emit('blockUser', { user: user, room: this.selectedRoom });
+	blockUser(user: UserI, room: RoomI) {
+		this.socket.emit('blockUser', { user: user, room: room });
 	}
 
-	unBlockUser(user: UserI) {
-		this.socket.emit('unBlockUser', { user: user, room: this.selectedRoom });
+	unBlockUser(user: UserI, room: RoomI) {
+		this.socket.emit('unBlockUser', { user: user, room: room});
 	}
 
 	checkIfBlocked(user: UserI) {
@@ -182,5 +195,32 @@ export class ChatService {
 
 	getIfBlocked(): Observable<boolean> {
 		return this.socket.fromEvent<boolean>('isBlocked');
+	}
+
+	checkPass(pass: string){
+		const room: RoomI = this.roomToCheck
+		this.socket.emit('checkPass', {pass, room});
+	}
+
+	getIfCheckPass(): Observable<RoomI> {
+		return this.socket.fromEvent<RoomI>('checkPass');
+	}
+
+	getConfirmPass(): Observable<boolean> {
+		return this.socket.fromEvent<boolean>('confirmPass');
+	}
+
+	changePass(pass: string){
+		const room: RoomI = this.selectedRoom
+		this.socket.emit('changePass', {pass, room});
+	}
+
+	removePass(){
+		const room: RoomI = this.selectedRoom
+		this.socket.emit('removePass', this.selectedRoom);
+	}
+
+	checkBlocked() {
+		this.socket.emit('checkBlocked', this.selectedRoom);
 	}
 }

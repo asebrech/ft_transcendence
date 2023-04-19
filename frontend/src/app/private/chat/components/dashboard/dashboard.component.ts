@@ -25,12 +25,12 @@ export class DashboardComponent implements OnInit{
 			this.dashService.find = false;
 		}
 		if (this.dashService.checkPass && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.checkPass').contains(event.target)) {
-			this.dashService.checkPass = false;
+				this.dashService.checkPass = false;
 		}
-		if (!this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && this.elementRef.nativeElement.querySelector('.add').contains(event.target)) {
+		if (!this.dashService.create && this.elementRef.nativeElement.querySelector('.create-container') && this.elementRef.nativeElement.querySelector('.create-container').contains(event.target)) {
 			this.dashService.create = true;
 		}
-		else if (this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && !this.elementRef.nativeElement.querySelector('.createChannel').contains(event.target)) {
+		else if (this.dashService.create && this.elementRef.nativeElement.querySelector('.create-container') && !this.elementRef.nativeElement.querySelector('.createChannel').contains(event.target)) {
 			this.dashService.create = false;
 		}
 	}
@@ -41,6 +41,8 @@ export class DashboardComponent implements OnInit{
 			const myData = JSON.parse(storedData);
 			this.dashService.members = myData;
 		}
+		this.chatService.getIfCheckPass().subscribe((value) =>{ this.dashService.checkPass = true; this.chatService.roomToCheck = value});
+		this.chatService.getConfirmPass().subscribe(() => this.dashService.checkPass = false);
 	}
 
 }

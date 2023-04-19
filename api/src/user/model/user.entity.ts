@@ -36,6 +36,9 @@ export class UserEntity {
 
 	@OneToMany(() => RoomEntity, room => room.owner)
 	roomsOwner: RoomEntity[];
+	
+	@ManyToMany(() => RoomEntity, room => room.users)
+	rooms: RoomEntity[];
 
 	@Column({default: ''})
 	profilePicture: string;
@@ -48,12 +51,6 @@ export class UserEntity {
 
 	@ManyToMany(() => RoomEntity, room => room.admins)
 	roomsAdmin: RoomEntity[];
-
-	@ManyToMany(() => RoomEntity, room => room.muted)
-	roomsMuted: RoomEntity[];
-
-	@ManyToMany(() => RoomEntity, room => room.baned)
-	roomsBaned: RoomEntity[];
 
 	@OneToMany(() => ConnectedUserEntity, connection => connection.user)
 	connections: ConnectedUserEntity[];
@@ -78,6 +75,13 @@ export class UserEntity {
 
 	@Column({default: 'default'})
 	colorPad: string;
+
+	@BeforeInsert()
+	@BeforeUpdate( )
+	emailToLowerCase() {
+		this.email = this.email.toLocaleLowerCase();
+		this.username = this.username.toLocaleLowerCase(); 
+	}
 
 	@Column({default: 'default'})
 	colorBall: string;

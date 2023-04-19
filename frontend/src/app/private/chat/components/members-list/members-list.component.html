@@ -26,8 +26,10 @@
 		'transition': selectedUser === user && !isClicked ?'ease-in 0.1s': '' }"
 		[ngClass]="{'selected': selectedUser === user}"
 		>
-		<img src="../../../../../../assets/images/astronaut.png">
-		<div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}"></div>
+		<img src="../../../../../../assets/images/astronaut.png" class="userProfile">
+		<!-- <img src="../../../../../assets/images/icons8-star-50.png" class="image" *ngIf="chatservice.selectedRoom.owner.id === user.id"> -->
+		<!-- <img src="../../../../../assets/images/icons8-star-half-50.png" class="image" > -->
+		<!-- <div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}"></div> -->
 		<div class="name">
 			{{ user.username }}
 		</div>

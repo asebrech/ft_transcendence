@@ -1,8 +1,15 @@
 <div class="main">
 	<img [src]="switchMenue ? imagePath1 : imagePath2" class="arrow">
 	<div class="switch" [ngClass]="{'hidden': !switchMenue}" >
-			<div class="pass" *ngIf="chatService.selectedRoomOwner">
+			<div class="pass" *ngIf="chatService.selectedRoomOwner && chatService.selectedRoom.isPrivate ">
+				<label (click)="switch()" (click)="removePass()" >Remove Password</label>
+			</div>
+			<div class="separator" *ngIf="chatService.selectedRoomOwner && chatService.selectedRoom.isPrivate"></div>
+			<div class="pass" *ngIf="chatService.selectedRoomOwner && chatService.selectedRoom.isPrivate ">
 				<label (click)="switch()" (click)="changePass()" >Change Password</label>
+			</div>
+			<div class="pass" *ngIf="chatService.selectedRoomOwner && !chatService.selectedRoom.isPrivate ">
+				<label (click)="switch()" (click)="changePass()" >Set Password</label>
 			</div>
 			<div class="separator" *ngIf="chatService.selectedRoomOwner"></div>
 			<div class="leave" *ngIf="!chatService.selectedRoomOwner && !chatService.selectedRoom.privateMessage">

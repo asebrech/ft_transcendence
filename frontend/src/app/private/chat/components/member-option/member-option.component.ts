@@ -19,6 +19,11 @@ export class MemberOptionComponent implements OnInit {
 	isOwner: boolean = true;
 	isAdmin: boolean = true;
 	isBlocked: boolean = null;
+	myDateTimeValue: string;
+	banOption: boolean = false;
+	muteOption: boolean = false;
+
+
 
 
 
@@ -28,11 +33,19 @@ export class MemberOptionComponent implements OnInit {
 	
 	ngOnInit(): void {
 		this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
+		this.chatService.checkBlocked();
 		if (!this.chatService.selectedRoomOwner)
 			this.isOwner = false;
 		if (!this.chatService.selectedRoomAdmin)
 			this.isAdmin = false;
 	}
+
+	isValidDateTime() {
+	  const now = new Date();
+	  const selectedDateTime = new Date(this.myDateTimeValue);
+	  return selectedDateTime > now;
+	}
+
 
 	ngAfterViewInit() {
 		this.divHeight.emit(this.maDiv.nativeElement.offsetHeight);
@@ -41,6 +54,14 @@ export class MemberOptionComponent implements OnInit {
 	onClick() {
 		this.valueChanged.emit(false);
 	}
+
+	banTime() {
+		this.chatService.banFromRoom({baned: {id: this.selectedUser.id, date: new Date(this.myDateTimeValue)}, user: this.selectedUser});
+	  }
+
+	  muteTime() {
+		this.chatService.addMuted({id: this.selectedUser.id, date: new Date(this.myDateTimeValue)});
+	  }
 
 	checkUser() {
 		return (this.chatService.selectedRoomOwner || this.chatService.selectedRoomAdmin)
@@ -72,6 +93,10 @@ export class MemberOptionComponent implements OnInit {
 		return !this.checkIfAdmin();
 	}
 
+	giveOwnership() {
+		this.chatService.giveOwnership(this.selectedUser);
+	}
+
 	promote() {
 		this.chatService.addAdmin(this.selectedUser);
 	}
@@ -81,7 +106,7 @@ export class MemberOptionComponent implements OnInit {
 	}
 
 	mute() {
-		this.chatService.addMuted(this.selectedUser);
+		this.chatService.addMuted({id: this.selectedUser.id, date: null});
 	}
 
 	unMute() {
@@ -93,17 +118,25 @@ export class MemberOptionComponent implements OnInit {
 	}
 
 	block() {
-		this.chatService.blockUser(this.selectedUser);
+		this.chatService.blockUser(this.selectedUser, this.chatService.selectedRoom);
 		// if (this.chatService.selectedRoom.privateMessage)
 		// 	this.chatService.deleteRoom();
 	}
 	
 	unBlock() {
-		this.chatService.unBlockUser(this.selectedUser);
+		this.chatService.unBlockUser(this.selectedUser, this.chatService.selectedRoom);
+	}
+
+	showban() {
+		this.banOption = true;
+	}
+
+	showmute() {
+		this.muteOption = true;
 	}
 
 	ban() {
-		this.chatService.banFromRoom(this.selectedUser);
+		this.chatService.banFromRoom({baned: {id: this.selectedUser.id, date: null}, user: this.selectedUser});
 
 	}
 

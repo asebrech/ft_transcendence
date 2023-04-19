@@ -1,15 +1,18 @@
 import { UserI } from "src/user/model/user.interface";
+import { BlockedUser } from "../blockedUser.interface";
 
 export interface RoomI {
 	id?: number;
 	name?: string;
 	description?: string;
 	privateMessage?: boolean;
+	isPrivate?: boolean;
+	channelPassword?: string;
 	owner?: UserI;
 	users?: UserI[];
 	admins?: UserI[];
-	muted?: UserI[];
-	baned?: UserI[];
+	muted?: BlockedUser[];
+	baned?: BlockedUser[];
 	created_at?: Date;
 	updated_at?: Date;
 }
