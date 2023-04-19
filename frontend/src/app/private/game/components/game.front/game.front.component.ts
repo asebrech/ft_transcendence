@@ -192,7 +192,6 @@ export class GameFrontComponent implements OnInit, DoCheck
     // room?.onMessage("emptyRoom")
     // {
     // }
-
     this.playerService.getUser().subscribe((user: UserI) => {
       skinPad = user.colorPad;
       skinBall = user.colorBall;
@@ -202,11 +201,6 @@ export class GameFrontComponent implements OnInit, DoCheck
     this.gameEnded = false;
 	  this.starsService.setActive(false);
     ///////////////////////
-    // let audio = new Audio()
-    // audio.src = "../../../../assets/background.wav";
-    // audio.load();
-    // audio.play();
-    //////////////////////
     inWidth = 1920;
     inHeight = 1080;
     client = new Client("ws://" + location.hostname + ":3000");
