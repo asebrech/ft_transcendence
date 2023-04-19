@@ -6,6 +6,7 @@ export interface MessageI {
 	text: string;
 	user: UserI;
 	room: RoomI;
+	gameRoom?: string;
 	created_at: Date;
 	updated_at: Date;
 }

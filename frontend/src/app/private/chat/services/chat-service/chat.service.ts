@@ -24,6 +24,7 @@ export class ChatService {
 	private messages = new Subject<MessageI[]>();
 	messages$ = this.messages.asObservable()
 	roomToCheck: RoomI = null;
+	gameRoom = new Subject<string>();
 
 	constructor(private socket: CustomSocket, private snackbar: MatSnackBar, private dashService: DashboardService, private route: Router) { }
 

@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { join } from 'path';
 import { InviteScene } from '../../services/invite.scene.service';
 import { ActivatedRoute } from '@angular/router';
+import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
 
 export let room : any;
 export let client : Client;
@@ -35,7 +36,7 @@ export class GameInviteComponent implements OnInit {
   username : string;
   in : boolean = true;
 
-  constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private route : ActivatedRoute) 
+  constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private route : ActivatedRoute, private chatService: ChatService) 
   {
     this.user = this.authService.getLoggedInUser();
     this.username = this.user.id;
@@ -148,6 +149,7 @@ export class GameInviteComponent implements OnInit {
     try 
     {
       room = await client?.create("my_room", { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
+	  this.chatService.gameRoom.next(room.id);
       console.log(room.id);
       console.log(client.auth);
       console.log(this.notJoined);
