@@ -1,6 +1,6 @@
 <app-nav-bar></app-nav-bar>
 
-<div class="game" #game id="game">
+<div *ngIf="gameEnded == false" class="game" #game id="game">
     <div *ngIf="notJoined" class="waitingAnimation">
       <div class="load-wrapp">
         <div class="load-5">
@@ -15,4 +15,5 @@
     </div>
     <input type="text" #myInput>
     <button (click)="onSubmit(myInput.value)">Submit</button>
-    </div>
+</div>
+<app-end-game-page *ngIf="gameEnded"> </app-end-game-page>

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { gameWon } from '../game.front/game.front.component';
+import { gameWonInvite } from '../game.invite/game.invite.component';
 
 @Component({
   selector: 'app-end-game-page',
@@ -48,7 +49,7 @@ export class EndGamePageComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    if (gameWon == true)
+    if (gameWon == true || gameWonInvite == true)
     {
       this.WonGame = true;
     }

@@ -1,17 +1,15 @@
 import { Component, NgModule, OnDestroy, OnInit, ViewChild, ElementRef, DoCheck} from '@angular/core';
-import { Location } from '@angular/common';
 import * as Phaser from 'phaser';
 import { Client } from 'colyseus.js';
 import { PlayScene } from '../../services/play.scene.service';
 import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
-import { BehaviorSubject, async } from 'rxjs';
-import { GameService } from '../../services/game.service';
+import { BehaviorSubject } from 'rxjs';
 import { PlayerService } from 'src/app/private/user/services/player.service';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserI, playerHistory } from 'src/app/model/user.interface';
-import { map } from 'jquery';
+import { Router } from '@angular/router';
 
 export let room : any;
 export let client : Client;
@@ -52,7 +50,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   history : History;
 
   
-  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService) 
+  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router) 
   {
     this.user = this.authService.getLoggedInUser();
     this.username = this.user.id;
@@ -191,6 +189,10 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnInit()
   {
+    // room?.onMessage("emptyRoom")
+    // {
+    // }
+
     this.playerService.getUser().subscribe((user: UserI) => {
       skinPad = user.colorPad;
       skinBall = user.colorBall;
@@ -296,7 +298,6 @@ export class GameFrontComponent implements OnInit, DoCheck
     }
     return 1;
   }
-  ////////////////////////////////////////////////
   async ready()
   {
     room?.send("ready");
@@ -326,13 +327,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   ///////////////////////////////////////////////
   test()
   {
-    this.addButtonStatus(0);
-    this.launch.launchGame();  
-    this.launch.gameFound();
-    setTimeout(() => {
-      this.waitingPlayScene = new Phaser.Game(this.waitingPlaySceneConfig);
-    }, 2000);
-
+    window.location.reload();
   }
 }
 

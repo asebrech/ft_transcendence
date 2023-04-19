@@ -164,7 +164,7 @@ export class MyRoom extends Room<Schema>
     }
     client.leave();
     player.delete(client.sessionId);
-    if (this.playing == 0)
+    if (this.playing == 1)
       this.broadcast("emptyRoom");
     console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length)
     //appeler service pour rentre les donner de la partie.

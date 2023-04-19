@@ -8,13 +8,14 @@ import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { join } from 'path';
 import { InviteScene } from '../../services/invite.scene.service';
+import { ActivatedRoute } from '@angular/router';
 
 export let room : any;
 export let client : Client;
 export let inWidth : number;
 export let inHeight : number;
 export let player_left : boolean;
-export let gameWon : boolean;
+export let gameWonInvite : boolean;
 export let skinPad : string;
 export let skinBall : string;
 export let opponentPad : string;
@@ -26,15 +27,15 @@ export let opponentPad : string;
 })
 export class GameInviteComponent implements OnInit {
 
-  playScene: Phaser.Game;
-  playSceneConfig: Phaser.Types.Core.GameConfig;
+  inviteScene: Phaser.Game;
+  inviteSceneConfig: Phaser.Types.Core.GameConfig;
   gameEnded : boolean;
   notJoined = true;
   user : any ;
   username : string;
-  in : boolean;
+  in : boolean = true;
 
-  constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService) 
+  constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private route : ActivatedRoute) 
   {
     this.user = this.authService.getLoggedInUser();
     this.username = this.user.id;
@@ -61,17 +62,20 @@ export class GameInviteComponent implements OnInit {
     {
       room?.onMessage("left_player_skin", (message) =>
       {
+        console.log("1");
+
         opponentPad = message;
       })
     }
     room?.onMessage("second_player_found", () =>
     {
+      this.notJoined = false;
       if (this.notJoined == false && this.in == true)
       {
         console.log("1");
         this.in = false
         setTimeout(() => {
-          this.playScene = new Phaser.Game(this.playSceneConfig);
+          this.inviteScene = new Phaser.Game(this.inviteSceneConfig);
         }, 2000);
       }
     })
@@ -80,27 +84,36 @@ export class GameInviteComponent implements OnInit {
       if (message.winner == true)
       {
         if (player_left == true)
-          gameWon = true;
+          gameWonInvite = true;
         else
-          gameWon = false;
+          gameWonInvite = false;
         this.gameEnded = true;
       }
       else if (message.winner == false)
       {
         if (player_left == true)
-          gameWon = false;
+          gameWonInvite = false;
         else
-          gameWon = true;
+          gameWonInvite = true;
         this.gameEnded = true;
       }
-      this.playScene.destroy(true);
+      this.inviteScene.destroy(true);
     });
   }
 
 
   ngOnInit(): void
   {
-    gameWon = false;
+    this.route.queryParams.subscribe(params => {
+      const functionName = params['functionName'];
+      // appeler la fonction en fonction du nom
+      if (functionName === 'maFonction') {
+        setTimeout(() => {
+          this.create();
+        }, 1000);
+      }
+    });
+    gameWonInvite = false;
     ///////////////////////
     this.gameEnded = false;
     this.playerService.getUser().subscribe((user: UserI) => {
@@ -110,7 +123,7 @@ export class GameInviteComponent implements OnInit {
     inWidth = 1920;
     inHeight = 1080;
     client = new Client("ws://" + location.hostname + ":3000");
-    this.playSceneConfig = {
+    this.inviteSceneConfig = {
       type: Phaser.AUTO,
       scene: [InviteScene],
       scale: {
@@ -134,10 +147,9 @@ export class GameInviteComponent implements OnInit {
   {
     try 
     {
-      room = await client?.create("my_room", { rank : 10, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
-      console.log(room);
+      room = await client?.create("my_room", { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
+      console.log(room.id);
       console.log(client.auth);
-      this.notJoined = false;
       console.log(this.notJoined);
     } catch (e) {
       console.error("join error", e);
@@ -147,7 +159,7 @@ export class GameInviteComponent implements OnInit {
   async connect(value : string)
   {
     try {
-      room = await client?.joinById(value, { rank : 10, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
+      room = await client?.joinById(value, { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
       console.log(room);
       console.log(client.auth);
       this.notJoined = false;
@@ -156,6 +168,7 @@ export class GameInviteComponent implements OnInit {
       console.error("join error", e);
     }  
   }
+  //////////////////////////////////
   onSubmit(value : string)
   {
     if (!value)

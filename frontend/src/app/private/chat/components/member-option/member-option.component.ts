@@ -107,13 +107,9 @@ export class MemberOptionComponent implements OnInit {
 
 	}
 
-	inviteToGame() {
-		const navigationExtras: NavigationExtras = {
-			state: {
-			loadData: true
-			}
-		};
-		this.router.navigate(['private/game/invite'], navigationExtras);
+	inviteToGame() 
+	{
+		this.router.navigate(['private/game/invite'], { queryParams: { functionName: 'maFonction' } });
 		console.log('Invite to Game', this.selectedUser);
 	}
 
