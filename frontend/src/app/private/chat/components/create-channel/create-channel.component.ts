@@ -17,7 +17,7 @@ export class CreateChannelComponent implements OnInit {
 
 	ngOnInit() {
 		this.channelForm = this.fb.group({
-			name: ['', Validators.required],
+			name: ['', [Validators.required, Validators.maxLength(20)]],
 			isPrivate: [false],
 			channelPassword: [''],
 			confirmPassword: ['']

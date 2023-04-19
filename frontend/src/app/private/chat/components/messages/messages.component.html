@@ -20,10 +20,10 @@
 		<app-channel-option class="channelOption" *ngIf="chatService.selectedRoom !== null"></app-channel-option>
 	</div>
 	<div #messageList class="message">
-		<div class="messages" *ngFor="let message of (messages$ | async)">
-			<img class="messagePicture" src="../../../../../../assets/images/astronaut.png">
-			<div class="content">
-						<strong class="usernameMessage" >{{message.user.username}}</strong>
+		<div class="messages" *ngFor="let message of (messages$ | async)" [ngClass]="{'myMessage': chatService.currentUser.id === message.user.id}">
+			<img class="messagePicture" src="../../../../../../assets/images/astronaut.png" *ngIf="chatService.currentUser.id !== message.user.id">
+			<div class="content" >
+						<strong class="usernameMessage" *ngIf="chatService.currentUser.id !== message.user.id" >{{message.user.username}}</strong>
 							<p class="text">{{message.text}}</p>
 			</div>
 		</div>
