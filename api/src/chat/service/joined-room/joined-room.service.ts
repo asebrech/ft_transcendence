@@ -19,7 +19,7 @@ export class JoinedRoomService {
 	}
 
 	async findByUser(user: UserI): Promise<JoinedRoomI[]> {
-		return this.joinedRoomRepository.find({ where: { user } })
+		return this.joinedRoomRepository.findBy(user);
 	}
 
 	async findByRoom(roomId: number): Promise<JoinedRoomI[]> {

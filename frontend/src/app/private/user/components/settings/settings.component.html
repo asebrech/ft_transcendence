@@ -2,7 +2,9 @@
 <div class="container">
   <div class="profil">
     <h1>Profil</h1>
-    <img src="../../../../../assets/images/astronaut.png" alt="profilePicture">
+    <img [src]="getImageUrl()" alt="profilePicture"
+    >
+    <app-avatar></app-avatar>
     <button (click)="changeUsername()">Change username</button>
     <button (click)="changeEmail()">Change email</button>
     <button (click)="changePwd()">reset password</button>
@@ -39,7 +41,7 @@
           <img (click)="retrieveBallSkin($event)" src="../../../../../assets/images/ball/earth.png">
         </div>
       </div>
-      <ngx-colors ngx-colors-trigger [(ngModel)]="colorBall" (ngModelChange)="onColorBallChange($event)" ></ngx-colors>  
+      <ngx-colors ngx-colors-trigger [(ngModel)]="colorBall" (ngModelChange)="onColorBallChange($event)" ></ngx-colors>
     </div>
 
     <div class="paddle">

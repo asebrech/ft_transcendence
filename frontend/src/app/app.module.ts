@@ -12,6 +12,7 @@ import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { StarsComponent } from './components/stars/stars.component';
 import { StarsInteractiveComponent } from './components/stars-interactive/stars-interactive.component';
 import { CookieService } from 'ngx-cookie-service';
+import { WINDOW_PROVIDERS } from './window-token';
 
 export function tokenGetter() {
 	return localStorage.getItem("access_token");
@@ -36,7 +37,7 @@ export function tokenGetter() {
       }
 	    }),
     ],
-  providers: [CookieService],
+  providers: [WINDOW_PROVIDERS],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

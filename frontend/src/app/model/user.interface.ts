@@ -12,13 +12,13 @@ export interface UserI {
 	level?:number;
 	friends?: Friend[];
 	colorPad?: string;
-
+  profilPic?: string;
 }
 
 export interface Friend {
 	id?: number;
 	username?: string;
-	photo?: string;
+	profilPic?: string;
 	win?: number;
 	losses?: number;
 }

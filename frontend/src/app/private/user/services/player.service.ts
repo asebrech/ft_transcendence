@@ -65,5 +65,13 @@ export class PlayerService {
   updateColorPad(userId: number, color: string) : Observable<UserI> {
     return this.httpClient.put<UserI>(`api/users/${userId}/update-color-pad`, {color});
   }
+
+  uploadProfilePic(formData: FormData, userId : number): Observable<any> {
+    return this.httpClient.post<FormData>(`/api/users/${userId}/upload-profil-pic`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    })
+  }
+
 }
 

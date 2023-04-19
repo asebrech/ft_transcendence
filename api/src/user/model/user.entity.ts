@@ -40,45 +40,46 @@ export class UserEntity {
 	@OneToMany(() => RoomEntity, room => room.owner)
 	roomsOwner: RoomEntity[];
 
-	@Column({default: ''})
-	profilePicture: string;
-
+	
 	@Column({default: 0})
 	wins : number;
-
+	
 	@Column({default: 0})
 	losses : number;
 
 	@ManyToMany(() => RoomEntity, room => room.admins)
 	roomsAdmin: RoomEntity[];
-
+	
 	@ManyToMany(() => RoomEntity, room => room.muted)
 	roomsMuted: RoomEntity[];
-
+	
 	@ManyToMany(() => RoomEntity, room => room.baned)
 	roomsBaned: RoomEntity[];
-
+	
 	@OneToMany(() => ConnectedUserEntity, connection => connection.user)
 	connections: ConnectedUserEntity[];
-
+	
 	@OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
 	joinedRooms: JoinedRoomEntity[];
-
+	
 	@OneToMany(() => MessageEntity, message => message.user)
 	messages: MessageEntity[] ;
-
+	
 	@Column('double precision', {default: 0})
 	ratio : number;
-
+	
 	@Column({default: 0})
 	total : number;
-
+	
 	@Column({default: 1})
 	level: number;
-
+	
 	@Column({ type: 'jsonb', default: '[]' })
 	friends: Friend[];
-
+	
 	@Column({default: 'default'})
 	colorPad: string;
+
+	@Column({ nullable: true })
+	profilPic: string;
 }

@@ -2,7 +2,7 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
-import { throwError } from 'rxjs';
+import { Observable, from, map, switchMap, throwError } from 'rxjs';
 import { AuthService } from 'src/auth/service/auth.service';
 import { RoomI } from 'src/chat/model/room/room.interface';
 import { UserEntity } from 'src/user/model/user.entity';
@@ -171,6 +171,16 @@ export class UserService {
 			return false;
 	}
 
+	updateOne(id: number, user: UserI): Observable<any> {
+        // delete user.email;
+        // delete user.password;
+        // delete user.role;
+
+        return from(this.userRepository.update(id, user)).pipe(
+            switchMap(() => this.findOne2(id))
+        );
+	}
+
 	async updateUsername(userId: number, newUsername: string): Promise<UserI> {
 		const user = await this.findOne(userId);
 		const usernameExists = await this.usernameExists(newUsername);
@@ -185,6 +195,15 @@ export class UserService {
 	private async findOne(id: number): Promise<UserI> {
 		return this.userRepository.findOneBy({ id });
 	}
+
+	findOne2(id: number): Observable<UserI> {
+        return from(this.userRepository.findOneBy({id})).pipe(
+            map((user: UserI) => {
+                const {password, ...result} = user;
+                return result;
+            } )
+        )
+    }
 
 	public async getOne(id: number): Promise<UserI> {
 		const user = await this.userRepository.findOne({ where: {id}, relations: ['blockedUsers'] });
@@ -273,5 +292,12 @@ export class UserService {
 		const user = await this.userRepository.findOneBy({id});
 		user.colorPad = color;
 		return this.userRepository.save(user);
+	}
+
+	async uploadProfilPic(id : number, profilPic: string) : Promise<UserI> {
+		console.log(profilPic, "saluuuuut");
+		this.userRepository.update(id, { profilPic : profilPic });
+		const updatedUser = await this.findOne(id);
+		return updatedUser;
 	}
 }

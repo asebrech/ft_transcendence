@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { AvatarComponent } from './components/avatar/avatar.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     ProfileComponent,
     FriendsComponent,
     SettingsComponent,
+    AvatarComponent,
   ],
   imports: [
     CommonModule,

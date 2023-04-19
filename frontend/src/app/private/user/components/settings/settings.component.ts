@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { CustomValidators } from 'src/app/public/_helpers/custom-validators';
 import { PlayerService } from '../../services/player.service';
@@ -6,6 +6,8 @@ import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
+import { WINDOW } from 'src/app/window-token';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-settings',
@@ -32,18 +34,27 @@ export class SettingsComponent implements OnInit {
   user$: Observable<UserI>;
   newO: string;
   old: string;
-  /////////////////////////////
+
   colorBall : string;
   colorPad : string;
-  /////////////////////////////
 
-  constructor(private starsService: StarsService, private playerService: PlayerService, private authService: AuthService ) {}
+  data: any;
+
+  origin = this.window.location.origin;
+
+
+  constructor(
+    private starsService: StarsService,
+    private playerService: PlayerService,
+    private authService: AuthService,
+    private http: HttpClient,
+    @Inject(WINDOW) private window: Window) {}
 
   ngOnInit(): void {
     this.starsService.setActive(false);
     this.user$ = this.playerService.getUser();
     this.user$.subscribe(user => {
-      console.log(user.colorPad);
+    this.data = user;
     })
   }
 
@@ -135,4 +146,11 @@ export class SettingsComponent implements OnInit {
 
   }
 
+  getImageUrl(): string {
+    const userToken = localStorage.getItem('token'); // récupère le token depuis le local storage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${userToken}` // ajoute le token dans l'en-tête de la requête
+    });
+    return `http://localhost:3000/api/users/profile-image/${this.data?.profilPic}`;;
+  }
 }
