@@ -17,7 +17,7 @@ export interface UserI {
 	friends?: Friend[];
 	colorPad?: string;
 	colorBall?: string;
-	history?: [];
+	history?: playerHistory[];
 }
 
 export interface Friend {
@@ -26,5 +26,11 @@ export interface Friend {
 	profilPic?: string;
 	win?: number;
 	losses?: number;
-	history?: [];
+	history?: playerHistory[];
+}
+
+export interface playerHistory {
+	userId?: number;
+	opponentId?: number;
+	won?: boolean;
 }

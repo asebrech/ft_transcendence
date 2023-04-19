@@ -1,16 +1,18 @@
 <app-nav-bar></app-nav-bar>
 
-<div class="game">
-    <div class="waitingAnimation">
-        <h1>Waiting for player to join..</h1>
-        <div class="load-wrapp">
-            <div class="load-5">
-              <div class="ring-2">
-                <div class="ball-holder">
-                  <div class="ball"></div>
-                </div>
-              </div>
+<div class="game" #game id="game">
+    <div *ngIf="notJoined" class="waitingAnimation">
+      <div class="load-wrapp">
+        <div class="load-5">
+          <div class="ring-2">
+            <div class="ball-holder">
+              <div class="ball"></div>
             </div>
+          </div>
         </div>
+      </div>
+      <!-- <h1>Waiting for player to join..</h1> -->
     </div>
-</div>
+    <input type="text" #myInput>
+    <button (click)="onSubmit(myInput.value)">Submit</button>
+    </div>

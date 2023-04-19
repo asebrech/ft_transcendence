@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, map } from 'rxjs';
-import { UserI } from 'src/app/model/user.interface';
+import { UserI, playerHistory } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserService } from 'src/app/public/services/user-service/user.service';
 
@@ -86,9 +86,18 @@ export class PlayerService {
       }));
     }
 
-  // setHistory(userId: number, opponentId: number, won: boolean) : Observable<UserI> {
-  //   return this.httpClient.post<UserI>(`api/users/${userId}/set-history`, { opponentId , won});
-  // }
+  setHistory(userId: number, history: playerHistory) : Observable<UserI> {
+    console.log("salut service");
+    return this.httpClient.post<UserI>(`api/users/${userId}/add-to-history`, {history});
+  }
+
+  incrLevel(id: number) {
+    return this.httpClient.post(`api/users/${id}/incr-level/`, null);
+  }
+
+  decrLevel(id: number) {
+    return this.httpClient.post(`api/users/${id}/decr-level/`, null);
+  }
 }
 
 

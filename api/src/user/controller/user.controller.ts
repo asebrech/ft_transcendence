@@ -3,7 +3,7 @@ import { Body, Controller, Get, Logger, Param, Post, Put, Query, Req, UseGuards 
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
-import { UserI } from '../model/user.interface';
+import { UserI, playerHistory } from '../model/user.interface';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { LoginUserDto } from '../model/dto/login-user.dto';
 import { LoginResponseI } from '../model/login-response.interface';
@@ -159,6 +159,17 @@ export class UserController {
 	  return this.userService.addWinOrLoss(userId, false);
 	}
 
+	@Post(':id/incr-level')
+	async incrLevel(@Param('id') userId: number) {
+	  return this.userService.incrOrDecrLevel(userId, true);
+	}
+  
+	@Post(':id/decr-level')
+	async decrLevel(@Param('id') userId: number) {
+	  return this.userService.incrOrDecrLevel(userId, false);
+	}
+
+
 	@Get('all')
 	async getAllUsers() {
 		return this.userService.getAllUsers();
@@ -170,15 +181,20 @@ export class UserController {
     const user = await this.userService.getUserInfo(id);
     // Retourner les informations de l'utilisateur
     return user;
-  }
+  	}
 
   	@Put(':id/update-color-pad')
   	async updateColorPad(@Param('id') id: number, @Body() { color } : ChangePadSkinDto) {
 		await this.userService.updateColorPad(id, color);
-  }
+  	}
 
 	@Put(':id/update-color-ball')
 	async updateColorBall(@Param('id') id: number, @Body() { color } : ChangeBallSkinDto) {
 		await this.userService.updateColorBall(id, color);
-}
+	}
+
+	@Post(':id/add-to-history')
+	async setHistory(@Param('id') id: number, @Body('history') history: playerHistory) {
+		await this.userService.setHistory(id, history);
+	}
 }
