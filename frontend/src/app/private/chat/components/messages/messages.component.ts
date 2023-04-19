@@ -157,4 +157,8 @@ export class MessagesComponent implements OnInit {
 		inputElement.style.width = `${textWidth + padding}px`;
 	}
 
+	joinGame(gameRoom: string) {
+		console.log('joinGame', gameRoom);
+	}
+
 }

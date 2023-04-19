@@ -19,6 +19,9 @@ export class MessageEntity {
 	@JoinColumn()
 	room: RoomEntity; 
 
+	@Column({nullable: true, default: null})
+	gameRoom: string;
+
 	@CreateDateColumn()
 	created_at: Date;
 

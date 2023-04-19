@@ -143,6 +143,9 @@ export class MemberOptionComponent implements OnInit {
 	inviteToGame() 
 	{
 		this.router.navigate(['private/game/invite'], { queryParams: { functionName: 'maFonction' } });
+		this.chatService.gameRoom.subscribe(room =>{
+		this.chatService.sendMessage({ text: "Game Invite", room: this.chatService.selectedRoom, gameRoom: room });
+		});
 		console.log('Invite to Game', this.selectedUser);
 	}
 
