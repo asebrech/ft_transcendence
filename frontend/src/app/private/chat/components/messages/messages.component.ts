@@ -110,7 +110,7 @@ export class MessagesComponent implements OnInit {
 	validerPlaceholder(inputElement: HTMLInputElement): void {
 		this.placeholderText = this.placeTmp;
 		const tmp: string = this.inputText.trim();
-		if (tmp !== '' && tmp != this.placeholderText) {
+		if (tmp !== '' && tmp != this.placeholderText && tmp.length < 20) {
 			this.placeholderText = this.inputText;
 			this.chatService.changeName(this.placeholderText, this.chatService.selectedRoom);
 		}
@@ -129,6 +129,8 @@ export class MessagesComponent implements OnInit {
 
 	ajusterLargeurInput(inputElement: HTMLInputElement, text: string): void {
 		// Créez un élément span temporaire pour mesurer la largeur du texte
+		if (text && text.length > 20)
+			return
 		const span = document.createElement('span');
 		span.style.position = 'absolute';
 		span.style.visibility = 'hidden';

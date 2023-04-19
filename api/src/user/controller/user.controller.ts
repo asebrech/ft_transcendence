@@ -5,7 +5,7 @@ import { Express } from 'express';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
-import { UserI } from '../model/user.interface';
+import { UserI, playerHistory } from '../model/user.interface';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { LoginUserDto } from '../model/dto/login-user.dto';
 import { LoginResponseI } from '../model/login-response.interface';
@@ -26,6 +26,8 @@ import { of } from 'rxjs/internal/observable/of';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { Observable, map, tap } from 'rxjs';
 import { AuthGuard } from '@nestjs/passport';
+import { ChangeBallSkinDto } from '../model/dto/change-ball-skin.dto';
+import { ChangePadSkinDto } from '../model/dto/change-pad-skin.dto';
 
 
 export const storage = {
@@ -181,6 +183,11 @@ export class UserController {
 	  return this.userService.addWinOrLoss(userId, false);
 	}
 
+	@Post(':id/incr-level')
+	async incrLevel(@Param('id') userId: number) {
+	  return this.userService.incrOrDecrLevel(userId, true);
+	}
+
 	@Get('all')
 	async getAllUsers() {
 		return this.userService.getAllUsers();
@@ -192,12 +199,12 @@ export class UserController {
     const user = await this.userService.getUserInfo(id);
     // Retourner les informations de l'utilisateur
     return user;
-  }
+  	}
 
   	@Put(':id/update-color-pad')
-  	async updateColorPad(@Param('id') id: number, @Body('colorPad') color: string) {
+  	async updateColorPad(@Param('id') id: number, @Body() { color } : ChangePadSkinDto) {
 		await this.userService.updateColorPad(id, color);
-  }
+  	}
 
 	@Post(':id/upload-profil-pic')
 	//@UseGuards(JwtAuthGuard)
@@ -215,6 +222,10 @@ export class UserController {
 	@Get('profile-image/:imagename')
 	findProfileImage(@Param('imagename') imagename, @Res() res): Observable<Object> {
 		return of(res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename)));
+	}
+	@Post(':id/add-to-history')
+	async setHistory(@Param('id') id: number, @Body('history') history: playerHistory) {
+		await this.userService.setHistory(id, history);
 	}
 }
  

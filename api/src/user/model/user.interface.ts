@@ -1,7 +1,3 @@
-import { RoomI } from "src/chat/model/room/room.interface";
-/* eslint-disable prettier/prettier */
-import { boolean } from "yargs";
-import { UserEntity } from "./user.entity";
 
 export interface UserI {
 	id?: number;
@@ -20,6 +16,8 @@ export interface UserI {
 	profilPic?: string;
 	friends?: Friend[];
 	colorPad?: string;
+	colorBall?: string;
+	history?: playerHistory[];
 }
 
 export interface Friend {
@@ -28,4 +26,11 @@ export interface Friend {
 	profilPic?: string;
 	win?: number;
 	losses?: number;
+	history?: playerHistory[];
+}
+
+export interface playerHistory {
+	userId?: number;
+	opponentId?: number;
+	won?: boolean;
 }

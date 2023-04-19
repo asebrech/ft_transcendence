@@ -8,6 +8,8 @@ import { Repository } from 'typeorm';
 import { JoinedRoomService } from '../joined-room/joined-room.service';
 import { MessageService } from '../message/message.service';
 import { MessageI } from 'src/chat/model/message/message.interface';
+import { AuthService } from 'src/auth/service/auth.service';
+import { BlockedUser } from 'src/chat/model/blockedUser.interface';
 
 @Injectable()
 export class RoomService {
@@ -16,13 +18,34 @@ export class RoomService {
 		@InjectRepository(RoomEntity)
 		private readonly roomRepository: Repository<RoomEntity>,
 		private joinedRoomService: JoinedRoomService,
-		private messagesService: MessageService
+		private messagesService: MessageService,
+		private authService: AuthService
+
 	) {}
 
 	async createRoom(room: RoomI, creator: UserI): Promise<RoomI> {
 		const newRoom = await this.addCreatorToRoom(room, creator);
 		newRoom.privateMessage = false;
+		if (room.isPrivate)
+		newRoom.channelPassword = await this.authService.hashPassword(newRoom.channelPassword);
 		return this.roomRepository.save(newRoom);
+	}
+
+	async checkPass(room: RoomI, pass: string): Promise<boolean> {
+		return this.authService.comparePassword(pass, room.channelPassword);
+	}
+
+	async changePass(room: RoomI, pass: string): Promise<RoomI> {
+		if (!room.isPrivate)
+			room.isPrivate = true;
+		room.channelPassword = await this.authService.hashPassword(pass);
+		return this.roomRepository.save(room);
+	}
+
+	async removePass(room: RoomI): Promise<RoomI> {
+		room.isPrivate = false;
+		room.channelPassword = null;
+		return this.roomRepository.save(room);
 	}
 
 	async createPrivateMessage(users: UserI[]): Promise<RoomI> {
@@ -37,7 +60,7 @@ export class RoomService {
 	}
 
 	async getAllRoom(): Promise<RoomI[]> {
-		return this.roomRepository.find({relations: ['baned']});
+		return this.roomRepository.find();
 	}
 
 	async getAllRoomWithUsers(): Promise<RoomI[]> {
@@ -45,7 +68,13 @@ export class RoomService {
 	}
 
 	async getRoom(roomId: number): Promise<RoomI> {
-		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned', 'muted'] });
+		return this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins'] });
+	}
+
+	async getRoomWithPass(roomId: number): Promise<RoomI> {
+		return this.roomRepository.findOne({ where: { id: roomId },
+				relations: ['users', 'owner', 'admins'],
+				select: ['id', 'name', 'description','privateMessage', 'isPrivate', 'channelPassword', 'users', 'owner', 'admins', 'baned', 'muted', 'created_at', 'updated_at'] });
 	}
 
 	async updateRoom(room: RoomI): Promise<RoomI> {
@@ -138,6 +167,11 @@ export class RoomService {
 		return this.roomRepository.save(room);
 	}
 	
+	async changeOwner(room: RoomI, user: UserI): Promise<RoomI> {		
+		room.owner = user
+		return this.roomRepository.save(room);
+	} 
+
 	async addAdminToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
 		if (!room.admins){
 			room.admins = [];
@@ -153,11 +187,17 @@ export class RoomService {
  			return this.roomRepository.save(room);
 	} 
 
-	async addMutedToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
+	async addMutedToRoom(room: RoomI, muted: BlockedUser): Promise<RoomI> {		
 		if (!room.muted){
 			room.muted = [];
 		}
-		room.muted.push(user);
+		const id = muted.id;
+		let date: Date;
+		if (muted.date)
+			date = muted.date
+		else
+			date = null;
+		room.muted.push({id, date});
 		return this.roomRepository.save(room);
 	} 
 
@@ -168,6 +208,13 @@ export class RoomService {
  			return this.roomRepository.save(room);
 	} 
 
+	async removeBanedToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
+		const index = room.baned.findIndex(obj => obj.id === user.id);
+			if (index !== -1)
+  				room.baned.splice(index, 1);
+ 			return this.roomRepository.save(room);
+	} 
+
 	async quitRoom(userToRemove: UserI, room: RoomI): Promise<RoomI> {
 			const index = room.users.findIndex(obj => obj.id === userToRemove.id);
 			if (index !== -1)
@@ -175,17 +222,23 @@ export class RoomService {
  			return this.roomRepository.save(room);
 	}
 
-	async addBannedUser(room: RoomI, user: UserI): Promise<RoomI> {		
+	async addBannedUser(room: RoomI, baned: BlockedUser): Promise<RoomI> {		
 		if (!room.baned){
 			room.baned = [];
 		}
-		room.baned.push(user);
+		const id = baned.id;
+		let date: Date;
+		if (baned.date)
+			date = baned.date
+		else
+			date = null;
+		room.baned.push({id, date});
 		return this.roomRepository.save(room);
 	} 
 
 	async deleteRoom(roomId: number){
-		this.messagesService.deleteByRoomId(roomId);
-		this.joinedRoomService.deleteByroomId(roomId);
-		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins', 'baned', 'muted'] }));
+		await this.messagesService.deleteByRoomId(roomId);
+		await this.joinedRoomService.deleteByroomId(roomId);
+		await this.roomRepository.remove(await this.roomRepository.findOne({ where: { id: roomId }, relations: ['users', 'owner', 'admins'] }));
 	}
 }

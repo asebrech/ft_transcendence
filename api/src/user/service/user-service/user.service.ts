@@ -2,11 +2,11 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
-import { Observable, from, map, switchMap, throwError } from 'rxjs';
+import { Observable, from, map, switchMap, of, throwError } from 'rxjs';
 import { AuthService } from 'src/auth/service/auth.service';
 import { RoomI } from 'src/chat/model/room/room.interface';
 import { UserEntity } from 'src/user/model/user.entity';
-import { Friend, UserI } from 'src/user/model/user.interface';
+import { Friend, UserI, playerHistory } from 'src/user/model/user.interface';
 import { Like, Repository } from 'typeorm';
 
 @Injectable()
@@ -266,8 +266,18 @@ export class UserService {
 		return this.userRepository.save(user);
 	  }
 
-	  async getUserInfo(id: number): Promise<UserEntity> {
-		// Récupérer l'utilisateur correspondant à l'ID fourni avec ses amis
+	  async incrOrDecrLevel(id: number, isWin: boolean): Promise<UserEntity> {
+		const user = await this.userRepository.findOneBy({id});
+		if (isWin)
+		  user.level += 1;
+		else {
+			if(user.level > 1)
+		  		user.level -= 1;
+		}
+		return this.userRepository.save(user);
+	  }
+
+	async getUserInfo(id: number): Promise<UserEntity> {
 		const user = await this.userRepository.findOneBy({id});
 		// Retourner l'utilisateur avec toutes ses informations
 		return user;
@@ -289,9 +299,9 @@ export class UserService {
 	} 
 
 	async updateColorPad(id : number, color: string) : Promise<UserI> {
-		const user = await this.userRepository.findOneBy({id});
-		user.colorPad = color;
-		return this.userRepository.save(user);
+		await this.userRepository.update(id, {colorPad : color});
+		const updateUser = await this.findOne(id);
+		return updateUser;
 	}
 
 	async uploadProfilPic(id : number, profilPic: string) : Promise<UserI> {
@@ -300,4 +310,24 @@ export class UserService {
 		const updatedUser = await this.findOne(id);
 		return updatedUser;
 	}
+
+	async updateColorBall(id : number, color: string) : Promise<UserI> {
+		await this.userRepository.update(id, {colorBall : color});
+		const updateUser = await this.findOne(id);
+		return updateUser;
+	}
+
+	async setHistory(id: number, addhistory: playerHistory) : Promise<UserI> {
+		const user = await this.userRepository.findOneBy({ id });
+		const history: playerHistory = {
+			userId: addhistory.userId,
+			opponentId: addhistory.opponentId,
+			won: addhistory.won
+		  };
+		if (!user.playerHistory)
+			user.playerHistory = [];
+		user.playerHistory.push(history);
+		await this.userRepository.save(user);
+		return user;
+	  }
 }

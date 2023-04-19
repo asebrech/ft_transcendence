@@ -4,6 +4,7 @@ import { PlayerService } from '../../services/player.service';
 import { Friend, UserI } from 'src/app/model/user.interface';
 import { Observable, catchError } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
+import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
 
 @Component({
   selector: 'app-friends',
@@ -24,10 +25,13 @@ export class FriendsComponent implements OnInit {
   selectedUser: UserI;
   user : UserI = this.authService.getLoggedInUser();
   friends: Friend[] = [];
+  isBlocked: boolean = null;
 
-  constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService) { }
+
+  constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit(): void {
+	this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
        this.friends = user.friends;
@@ -41,6 +45,14 @@ export class FriendsComponent implements OnInit {
     this.setMessage();
   }
 
+  sendMessage(user: UserI) {
+	this.chatService.joinAndRpivateMessage(user);
+  }
+
+  sendMessage(user: UserI) {
+	this.chatService.joinAndRpivateMessage(user);
+  }
+
   searchUsers() {
     if (this.searchTerm.trim() !== '') {
       this.filteredUsers = this.users.filter((user: UserI) => {
@@ -51,6 +63,7 @@ export class FriendsComponent implements OnInit {
   }
 
   onContextMenu(event: MouseEvent, user: UserI){
+	this.chatService.checkIfBlocked(user);
     event.preventDefault();
     this.showContextMenu = true;
     this.contextMenuTop = event.clientY;
@@ -118,6 +131,18 @@ export class FriendsComponent implements OnInit {
       this.message = "";
     }
   }
+
+  block(user: UserI) {
+	this.chatService.blockUser(user, null);
+	this.showContextMenu = false;
+  }
+  
+  unblock(user: UserI) {
+	this.chatService.unBlockUser(user, null);
+	this.showContextMenu = false;
+
+  }
+
 }
 
 

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { gameWon } from '../game.front/game.front.component';
+import { gameWonInvite } from '../game.invite/game.invite.component';
 
 @Component({
   selector: 'app-end-game-page',
@@ -9,7 +10,10 @@ import { gameWon } from '../game.front/game.front.component';
 })
 export class EndGamePageComponent implements OnInit {
 
-  constructor(private starsService: StarsService) { }
+  constructor(private starsService: StarsService) 
+  {
+    this.starsService.setActive(false);
+  }
 
   WonGame : boolean = false;
   LostGame : boolean = false;
@@ -31,20 +35,21 @@ export class EndGamePageComponent implements OnInit {
     {
       this.xpBar.nativeElement.addEventListener('animationend', () => {
           this.level++;
-      });    
-    };
-    if (this.LostGame == true)
-    {
-      this.degBar.nativeElement.addEventListener('animationend', () => {
+        });    
+      };
+      if (this.LostGame == true)
+      {
+        this.degBar.nativeElement.addEventListener('animationend', () => {
           if (this.level != 1)
             this.level--;
       });
     };
+    this.starsService.setActive(true);
   }
 
   ngOnInit(): void 
   {
-    if (gameWon == true)
+    if (gameWon == true || gameWonInvite == true)
     {
       this.WonGame = true;
     }

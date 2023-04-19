@@ -38,6 +38,9 @@
 
 .username {
 	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+
 }
 
 .username h1 {
@@ -48,7 +51,7 @@
 
 .username div {
 	width: 55%;
-}
+}	
 
 .channelName {
 	background: transparent;
@@ -104,10 +107,14 @@
 	width: 100%;
 	height: calc(100% - 127px);
 	overflow-y: scroll;
+	scrollbar-color: transparent transparent;
 }
 
 .messages {
 	display: flex;
+	align-items: center;
+	flex-direction: row;
+	justify-content: flex-start;
 	margin-top: 25px;
 	width: 100%;
 }
@@ -116,16 +123,44 @@
 	margin-bottom: 30px;
 }
 
-.message div {
+.content {
 	margin-left: 20px;
-	width: calc(100% - 50px);
+	margin-right: 20px;
+	max-width: calc(80% - 50px);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 }
 
-.message div p {
-	margin-top: 5px;
+.myContent {
+	margin-left: 20px;
+	margin-right: 20px;
+	max-width: calc(80% - 50px);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.myMessage {
+	
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	justify-content: flex-end;
+	margin-top: 25px;
 	width: 100%;
-	//overflow-x: hidden;
+}
+
+.text {
+	margin-top: 10px;
+	max-width: 100%;
 	word-wrap: break-word;
+	text-align: left;
+	border-radius: 9px;
+	padding: 10px;
+	background: rgba(31, 10, 62, 0.5);
+	box-shadow: 0px 23px 24px rgba(0, 0, 0, 0.25);
+	backdrop-filter: blur(15px);
 }
 
 .messagePicture {
@@ -194,4 +229,37 @@
 	opacity: 0;
 	transition: opacity 0s ease-in-out;
 	position: absolute;
+}
+
+/* Hide scrollbar background */
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+::-moz-scrollbar {
+  background-color: transparent;
+}
+
+::-ms-scrollbar {
+  background-color: transparent;
+}
+
+::-o-scrollbar {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-moz-scrollbar-track {
+  background-color: transparent;
+}
+
+::-ms-scrollbar-track {
+  background-color: transparent;
+}
+
+::-o-scrollbar-track {
+  background-color: transparent;
 }

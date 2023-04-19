@@ -1,7 +1,7 @@
-import { inWidth, inHeight, player_left } from "../components/game.front/game.front.component";
+import { inWidth, inHeight, player_left, skinPad, skinBall, opponentPad } from "../components/game.front/game.front.component";
 import * as Phaser from "phaser";
 import { room } from "../components/game.front/game.front.component";
-import { finished } from "stream";
+import { PlayerService } from "../../user/services/player.service";
 
 let start : boolean;
 let right_pad: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
@@ -38,6 +38,11 @@ export class PlayScene extends Phaser.Scene
     [3140, 2974], // 6 
     [6052, 4280] // 7
   ];
+  isColorPad : boolean;
+  isColorBall : boolean;
+  skin : string;
+  isOpponentColorPad : boolean;
+
 
   constructor() 
   {
@@ -52,6 +57,43 @@ export class PlayScene extends Phaser.Scene
     this.last_bg_x = this.positions[pos][0];
     this.last_bg_y = this.positions[pos][1];
     this.speed = 300;
+    /////////////////////////////////////////////////
+    if (opponentPad[0] == '#')
+    {
+      this.isOpponentColorPad = true;
+    }
+    else
+    {
+      this.isOpponentColorPad = false;
+    }
+    /////////////////////////////////////////////////
+    if (skinPad[0] == '#')
+    {
+      this.isColorPad = true;
+    }
+    else
+    {
+      this.isColorPad = false;
+    }
+    ///////// ////////// /////////
+    if (skinBall[0] == '#')
+    {
+      this.isColorBall = true;
+    }
+    else
+    {
+      this.isColorBall = false;
+    }
+    /////////////////////////
+    if (player_left == true)
+    {
+      this.skin = "pad2.png"
+    }
+    else
+    {
+      this.skin = "pad.png"
+    }
+    /////////////////////////////////
   }
   
   
@@ -62,16 +104,78 @@ export class PlayScene extends Phaser.Scene
     let result = (Math.floor(Math.random() * (max - min)) + min);
     return result
   }
+
+  convertColorCode(colorCode: string) {
+    // Remove "#" symbol from color code
+    const hexCode = colorCode.substring(1);
+  
+    // Convert hexadecimal digits to decimal format
+    const red = parseInt(hexCode.substring(0, 2), 16);
+    const green = parseInt(hexCode.substring(2, 4), 16);
+    const blue = parseInt(hexCode.substring(4, 6), 16);
+  
+    // Concatenate decimal values and add "0x" prefix
+    const hexValue = (red << 16) | (green << 8) | blue;
+    // const hexString = "0x" + hexValue.toString(16).padStart(6, "0");
+  
+    return hexValue;
+  }
   
   async preload() 
   {
-    this.load.image('right_pad', 'assets/images/pad.png');
-    this.load.image('left_pad', 'assets/images/pad2.png');
+    if (this.isColorPad == false)
+    {
+      if(player_left == true)
+      {
+        this.skin = skinPad.split('/').pop();
+        this.load.image('left_pad', 'assets/images/paddle/' + this.skin);
+        // this.load.image('right_pad', 'assets/images/paddle/pad.png');  
+      }
+      else
+      {
+        this.skin = skinPad.split('/').pop();
+        this.load.image('right_pad', 'assets/images/paddle/' + this.skin);  
+        // this.load.image('left_pad', 'assets/images/paddle/pad2.png');
+      }
+    }
+    if (this.isOpponentColorPad == false)
+    {
+      if (player_left == true)
+      {
+        this.load.image('right_pad', 'assets/images/paddle/' + opponentPad.split('/').pop());  
+      }
+      else
+      {
+        this.load.image('left_pad', 'assets/images/paddle/' + opponentPad.split('/').pop());
+      }
+    }
+    if (this.isColorPad == true)
+    {
+      this.load.image('right_pad', 'assets/images/paddle/pad.png');  
+      this.load.image('left_pad', 'assets/images/paddle/pad2.png');
+    }
+/////////////////////////////////////////////////////////////////
+    if (this.isColorBall == false)
+    {
+      if(player_left == true)
+      {
+        this.load.image('ball', 'assets/images/ball/' + skinBall.split('/').pop());
+      }
+      else
+      {
+        this.load.image('ball', 'assets/images/ball/' + skinBall.split('/').pop());  
+      }
+    }
+    if (this.isColorBall == false)
+    {
+      this.load.image('ball', 'assets/images/ball/ball.png');
+    }
+
+    
     this.load.atlas('space', 'assets/images/tests/space.png', 'assets/images/tests/space.json');
     this.load.image('background', 'assets/images/tests/nebula.jpg');
     this.load.image('stars', 'assets/images/tests/stars.png');
     this.load.image('wing', 'assets/images/tests/wing.png');
-    this.load.image('ball', 'assets/images/ball.png');
     this.load.image('fullscreen', 'assets/images/fullscreenOff.png');
     this.load.image('fullscreenOff', 'assets/images/fullscreen.png');
     this.load.image('readyButton', 'assets/images/readyButton.png');
@@ -111,11 +215,27 @@ export class PlayScene extends Phaser.Scene
     this.score = this.add.text(inWidth / 2 - 30, 10, this.left_score + ' | ' + this.right_score , { font: '48px Arial'}).setScrollFactor(0);
     this.wall_bottom = this.add.rectangle(inWidth / 2, -5, inWidth, 10 , 0xff0000).setScrollFactor(0);
     this.wall_top = this.add.rectangle(inWidth / 2, inHeight + 5, inWidth, 10 , 0xff0000).setScrollFactor(0);
-    
     right_pad = this.physics.add.image(inWidth - 30, inHeight / 2, 'right_pad').setCollideWorldBounds(true).setScrollFactor(0);
     left_pad = this.physics.add.image(30, inHeight / 2, 'left_pad').setCollideWorldBounds(true).setScrollFactor(0);
-    
+
+    if (this.isColorPad == true)
+    {
+      if(player_left == true)
+        left_pad.setTint(this.convertColorCode(skinPad));
+      else
+        right_pad.setTint(this.convertColorCode(skinPad));
+    }
+
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
+    
+    if (this.isColorBall == true)
+    {
+      if(player_left == true)
+        ball.setTint(this.convertColorCode(skinPad));
+      else
+        ball.setTint(this.convertColorCode(skinPad));
+    }
+
     //////////////////////////////////////////////////
     ball.scale = 0.1;
     ball.setBounce(1,1);
@@ -125,7 +245,6 @@ export class PlayScene extends Phaser.Scene
     left_pad.scale = 0.3;
     left_pad.setBounce(1,1);
     left_pad.setPushable(false);
-    console.log(right_pad.width, right_pad.height);
     //////////////////////////////////////////////////
     this.physics.add.existing(this.wall_top, true); // Ajoute la physique au rectangle cree avec phaser
     this.physics.add.existing(this.wall_bottom, true); // Ajoute la physique au rectangle cree avec phaser
@@ -282,9 +401,13 @@ export class PlayScene extends Phaser.Scene
       if ((this.right_score || this.left_score) > 9)
       {
         if (this.left_score > this.right_score)
-          room?.send("game_finished", ({score_left : this.left_score, score_right : this.right_score, winner : "won"}));
+        {
+          room?.send("game_finished", ({score_left : this.left_score, score_right : this.right_score, winner : true}));
+        }
         else
-          room?.send("game_finished", ({score_left : this.left_score, score_right : this.right_score, winner : "lost"}));
+        {
+          room?.send("game_finished", ({score_left : this.left_score, score_right : this.right_score, winner : false}));
+        }
       }
     }
     ///////////////////////////////////////////////////////////////

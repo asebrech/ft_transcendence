@@ -49,3 +49,50 @@
 	height: 25px;
 	margin-left: -30px;
 }
+
+.ban {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 5px;
+}
+
+.ban input {
+	background: rgba(217, 217, 217, 0.25);
+	border: none;
+	color: white;
+	border-radius: 3px;
+	padding: 5px;
+	margin: 5px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.ban input:focus {
+	outline: none;
+	color: white;
+}
+
+.ban button {
+	width: 100%;
+	background: #C32F76;
+	border: none;
+	border-radius: 3px;
+	color: white;
+	padding: 5px;
+	margin: 5px;
+	cursor: pointer;
+}
+
+.ban button:disabled {
+	color: #989aa2;
+	background: #AB3B71;
+	cursor: default;
+}
+
+.hidden {
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0s ease-in-out;
+	position: absolute;
+}
