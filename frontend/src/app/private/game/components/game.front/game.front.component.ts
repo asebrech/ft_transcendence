@@ -48,6 +48,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   gameEnded : boolean;
   rank: number;
   history : History;
+  hasShownAlert = false;
 
   
   constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router) 
@@ -59,6 +60,7 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngDoCheck()
   {
+
     if (this.launch.showButtonStats() == 1)
     {
       if (this.joined == false)
@@ -68,6 +70,7 @@ export class GameFrontComponent implements OnInit, DoCheck
         this.joinedVar.next(this.joined);
       }
     };
+
     room?.onMessage("left_player", ()=>
     {
       player_left = true;
@@ -185,13 +188,32 @@ export class GameFrontComponent implements OnInit, DoCheck
       }
       this.playScene.destroy(true);
     });
+    room?.onMessage("emptyRoom", ()=>
+    {
+      setTimeout(() => {
+        if (this.hasShownAlert == false)
+        {
+          window.alert('One of the player disconnected !');
+          this.hasShownAlert = true;
+        }
+      }, 2000);
+      setTimeout(() => {
+        window.location.reload();
+      }, 4000);
+    });
+  }
+
+  ngOnDestroy()
+  {
+    if(this.in == 1)
+    {
+      room?.leave();
+      window.location.reload();
+    }
   }
 
   ngOnInit()
   {
-    // room?.onMessage("emptyRoom")
-    // {
-    // }
     this.playerService.getUser().subscribe((user: UserI) => {
       skinPad = user.colorPad;
       skinBall = user.colorBall;
@@ -235,7 +257,6 @@ export class GameFrontComponent implements OnInit, DoCheck
       physics: {
         default: 'arcade',
         arcade: {
-          // debug: true,
           gravity: {y : 0, x: 0 }
         }
       }
@@ -299,7 +320,6 @@ export class GameFrontComponent implements OnInit, DoCheck
   async join()
   {
     try {
-      // TODO : USERNAME EST UNDEFINED /// RAJOUTER LE RANK PAR DEFAUT 10
       room = await client?.joinOrCreate("ranked",  { rank : this.rank, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
       console.log(room);
       console.log(client.auth);

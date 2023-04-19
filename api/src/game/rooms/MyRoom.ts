@@ -16,6 +16,7 @@ export class MyRoom extends Room<Schema>
   right_player_skin : string;
   left_player_skin : string;
 
+
   constructor() {
     super();
 
@@ -44,6 +45,7 @@ export class MyRoom extends Room<Schema>
         this.left_player = options.clientId;
         client.send("left_player");
         this.left_player_skin = options.padSkin;
+
         console.log(this.left_player);
       }
       catch
@@ -158,20 +160,29 @@ export class MyRoom extends Room<Schema>
   // When a client leaves the room
   onLeave (client: Client, consented: boolean) 
   {
-    if (player.get(client.sessionId) == "player_left" || player.get(client.sessionId) == "player_right")
+    if (player.get(client.sessionId) == "player_right" || player.get(client.sessionId) == "player_left")
     {
-      this.playing--;
-    }
-    client.leave();
-    player.delete(client.sessionId);
-    if (this.playing == 1)
       this.broadcast("emptyRoom");
+      for (const client of this.clients) {
+        this.disconnectClient(client);
+      }
+    }
+    else
+    {
+      client.leave();
+    }
     console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length)
-    //appeler service pour rentre les donner de la partie.
   }
   // Cleanup callback, called after there are no more clients in the room. (see `autoDispose`)
   onDispose () 
   {
-   
   }
+  
+  disconnectClient(client: Client) 
+  {
+    client.leave()
+    player.delete(client.sessionId);
+    console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length);
+  }
+
 }
