@@ -49,10 +49,6 @@ export class FriendsComponent implements OnInit {
 	this.chatService.joinAndRpivateMessage(user);
   }
 
-  sendMessage(user: UserI) {
-	this.chatService.joinAndRpivateMessage(user);
-  }
-
   searchUsers() {
     if (this.searchTerm.trim() !== '') {
       this.filteredUsers = this.users.filter((user: UserI) => {
