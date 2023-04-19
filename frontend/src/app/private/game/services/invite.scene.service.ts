@@ -1,6 +1,6 @@
-import { inWidth, inHeight, player_left, skinPad, skinBall, opponentPad } from "../components/game.front/game.front.component";
+import { inWidth, inHeight, player_left, skinPad, skinBall, opponentPad } from "../components/game.invite/game.invite.component";
 import * as Phaser from "phaser";
-import { room } from "../components/game.front/game.front.component";
+import { room } from "../components/game.invite/game.invite.component";
 import { PlayerService } from "../../user/services/player.service";
 
 let start : boolean;
@@ -10,7 +10,7 @@ let ball : Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
 let ball_velocity_x : number;
 let ball_velocity_y : number;
 
-export class PlayScene extends Phaser.Scene 
+export class InviteScene extends Phaser.Scene 
 {
   left_score : number;
   right_score : number;

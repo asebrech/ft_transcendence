@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { ChatService } from '../../services/chat-service/chat.service';
 import { UserI } from 'src/app/model/user.interface';
 import { Observable } from 'rxjs';
+import { Router, NavigationExtras } from '@angular/router';
 
 @Component({
 	selector: 'app-member-option',
@@ -22,8 +23,9 @@ export class MemberOptionComponent implements OnInit {
 
 
 
-	constructor(public chatService: ChatService) { }
-
+	constructor(public chatService: ChatService, private router : Router) { }
+	
+	
 	ngOnInit(): void {
 		this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
 		if (!this.chatService.selectedRoomOwner)
@@ -105,7 +107,9 @@ export class MemberOptionComponent implements OnInit {
 
 	}
 
-	inviteToGame() {
+	inviteToGame() 
+	{
+		this.router.navigate(['private/game/invite'], { queryParams: { functionName: 'maFonction' } });
 		console.log('Invite to Game', this.selectedUser);
 	}
 

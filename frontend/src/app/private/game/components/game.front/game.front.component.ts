@@ -1,5 +1,4 @@
 import { Component, NgModule, OnDestroy, OnInit, ViewChild, ElementRef, DoCheck} from '@angular/core';
-import { Location } from '@angular/common';
 import * as Phaser from 'phaser';
 import { Client } from 'colyseus.js';
 import { PlayScene } from '../../services/play.scene.service';
@@ -7,9 +6,10 @@ import { WaitingScene } from '../../services/waiting.play.service';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
 import { BehaviorSubject } from 'rxjs';
-import { GameService } from '../../services/game.service';
 import { PlayerService } from 'src/app/private/user/services/player.service';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
+import { UserI, playerHistory } from 'src/app/model/user.interface';
+import { Router } from '@angular/router';
 
 export let room : any;
 export let client : Client;
@@ -17,6 +17,10 @@ export let inWidth : number;
 export let inHeight : number;
 export let player_left : boolean;
 export let gameWon : boolean;
+export let skinPad : string;
+export let skinBall : string;
+export let opponentPad : string;
+
 
 @Component({
   selector: 'app-game.front',
@@ -35,21 +39,25 @@ export class GameFrontComponent implements OnInit, DoCheck
   ///////////////////////////////////
   joined = false;
   in = 0;
+  checked : boolean = false;
   connected = false;
   joinedVar = new BehaviorSubject<boolean> (this.joined);
   botGameLaunched = false;
   user : any ;
   username : string;
   gameEnded : boolean;
+  rank: number;
+  history : History;
 
   
-  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService) 
+  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router) 
   {
     this.user = this.authService.getLoggedInUser();
-    this.username = this.user.username;
+    this.username = this.user.id;
+    this.rank = this.user.level;
   }
 
-  ngDoCheck() 
+  ngDoCheck()
   {
     if (this.launch.showButtonStats() == 1)
     {
@@ -72,6 +80,20 @@ export class GameFrontComponent implements OnInit, DoCheck
     {
       this.joinGameSession(message.ticket);
     });
+    if (player_left == true)
+    {
+      room?.onMessage("right_player_skin", (message) =>
+      {
+        opponentPad = message;
+      })
+    }
+    if (player_left == false)
+    {
+      room?.onMessage("left_player_skin", (message) =>
+      {
+        opponentPad = message;
+      })
+    }
     room?.onMessage("second_player_found", () =>
     {
       this.joinedVar.subscribe((value) =>
@@ -95,20 +117,70 @@ export class GameFrontComponent implements OnInit, DoCheck
     })
     room?.onMessage("end", (message) =>
     {
-      if (message == "won")
+      if (message.winner == true && this.checked == false)
       {
+        this.checked = true;
         if (player_left == true)
+        {
           gameWon = true;
+          const history : playerHistory = {
+            userId: this.user.id,
+            opponentId: message.player_right,
+            won: true
+          }
+          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+            console.log("match added to history successfully", user.history);
+          });
+          this.playerService.incrLevel(this.user.id).subscribe(response => { console.log("level incred");});
+          this.playerService.addWin(this.user.id).subscribe();
+        }
         else
+        {
           gameWon = false;
+          const history : playerHistory = {
+            userId: this.user.id,
+            opponentId: message.player_left,
+            won: false
+          }
+          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+            console.log("match added to history successfully", user.history);
+          });
+          this.playerService.decrLevel(this.user.id).subscribe(response => { console.log("level decred");});
+          this.playerService.addLosses(this.user.id).subscribe();
+        }
         this.gameEnded = true;
       }
-      else if (message == "lost")
+      else if (message.winner == false && this.checked == false)
       {
+        this.checked = true;
         if (player_left == true)
+        {
           gameWon = false;
+          const history : playerHistory = {
+            userId: this.user.id,
+            opponentId: message.player_right,
+            won: false
+          }
+          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+            console.log("match added to history successfully", user.history);
+          });
+          this.playerService.decrLevel(this.user.id).subscribe(response => { console.log("level decred");});
+          this.playerService.addLosses(this.user.id).subscribe();
+        }
         else
+        {
           gameWon = true;
+          const history : playerHistory = {
+            userId: this.user.id,
+            opponentId: message.player_left,
+            won: true
+          }
+          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+            console.log("match added to history successfully", user.history);
+          });
+          this.playerService.incrLevel(this.user.id).subscribe(response => { console.log("level incred");});
+          this.playerService.addWin(this.user.id).subscribe();
+        }
         this.gameEnded = true;
       }
       this.playScene.destroy(true);
@@ -117,16 +189,18 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnInit()
   {
+    // room?.onMessage("emptyRoom")
+    // {
+    // }
+    this.playerService.getUser().subscribe((user: UserI) => {
+      skinPad = user.colorPad;
+      skinBall = user.colorBall;
+    });
     gameWon = false;
     ///////////////////////
     this.gameEnded = false;
 	  this.starsService.setActive(false);
     ///////////////////////
-    let audio = new Audio()
-    audio.src = "../../../../assets/background.wav";
-    audio.load();
-    audio.play();
-    //////////////////////
     inWidth = 1920;
     inHeight = 1080;
     client = new Client("ws://" + location.hostname + ":3000");
@@ -209,6 +283,7 @@ export class GameFrontComponent implements OnInit, DoCheck
       }, 1000);
     }
   }
+
   switchToBotPlay()
   {
     if (this.launch.launchGameRet() == 1)
@@ -217,7 +292,6 @@ export class GameFrontComponent implements OnInit, DoCheck
     }
     return 1;
   }
-  ////////////////////////////////////////////////
   async ready()
   {
     room?.send("ready");
@@ -225,8 +299,8 @@ export class GameFrontComponent implements OnInit, DoCheck
   async join()
   {
     try {
-      // TODO : USERNAME EST UNDEFINED 
-      room = await client?.joinOrCreate("ranked",  { rank : 10, numClientsToMatch : 2 , clientId : this.username });
+      // TODO : USERNAME EST UNDEFINED /// RAJOUTER LE RANK PAR DEFAUT 10
+      room = await client?.joinOrCreate("ranked",  { rank : this.rank, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
       console.log(room);
       console.log(client.auth);
     } catch (e) {
@@ -245,8 +319,9 @@ export class GameFrontComponent implements OnInit, DoCheck
     }  
   }
   ///////////////////////////////////////////////
-  ngOnDestroy(): void {
-	this.starsService.setActive(true);
+  test()
+  {
+    window.location.reload();
   }
 }
 

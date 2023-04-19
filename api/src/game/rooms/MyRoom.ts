@@ -13,6 +13,8 @@ export class MyRoom extends Room<Schema>
   left_score : number = 0;
   rdyPlayer = 2;
   playing : number = 2;
+  right_player_skin : string;
+  left_player_skin : string;
 
   constructor() {
     super();
@@ -23,7 +25,7 @@ export class MyRoom extends Room<Schema>
   // When room is initialized
   onCreate (options: any) 
   {
-    console.log("room " + this.roomId + " created successfully");
+    console.log("room " + this.roomId + " created successfully , playerId : ", options.clientId);
   }
 
   // onAuth(client: Client, options: any, request?: IncomingMessage) 
@@ -41,6 +43,8 @@ export class MyRoom extends Room<Schema>
       {
         this.left_player = options.clientId;
         client.send("left_player");
+        this.left_player_skin = options.padSkin;
+        console.log(this.left_player);
       }
       catch
       {
@@ -54,12 +58,16 @@ export class MyRoom extends Room<Schema>
       {
         this.right_player = options.clientId;
         client.send("right_player");
+        this.right_player_skin = options.padSkin;
+        console.log(this.right_player);
       }
       catch
       {
         console.error("error could not send [request_right_player_screen]")
       }
       player.set(client.sessionId, "player_right");
+      this.broadcast("right_player_skin", this.right_player_skin);
+      this.broadcast("left_player_skin", this.left_player_skin);
       this.broadcast("second_player_found");
     }
     else
@@ -135,7 +143,7 @@ export class MyRoom extends Room<Schema>
     });
     this.onMessage("game_finished", (client, message)=>
     {
-      this.broadcast("end", (message.winner));
+      this.broadcast("end", ({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}, winner : message.winner}));
     });
     this.onMessage("score_update", (client , message) =>
     {
@@ -156,7 +164,7 @@ export class MyRoom extends Room<Schema>
     }
     client.leave();
     player.delete(client.sessionId);
-    if (this.playing == 0)
+    if (this.playing == 1)
       this.broadcast("emptyRoom");
     console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length)
     //appeler service pour rentre les donner de la partie.

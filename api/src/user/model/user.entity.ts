@@ -1,9 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { userInfo } from "os";
-import { RoomI } from "src/chat/model/room/room.interface";
 import { BeforeInsert, BeforeUpdate, Column, Double, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany,OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Friend, UserI } from "./user.interface";
-import { ParseFloatPipe } from "@nestjs/common";
+import { Friend, UserI, playerHistory } from "./user.interface";
 import { RoomEntity } from "src/chat/model/room/room.entity";
 import { ConnectedUserEntity } from "src/chat/model/connected-user/connected-user.entity";
 import { JoinedRoomEntity } from "src/chat/model/joined-room/joined-room.entity";
@@ -81,4 +78,10 @@ export class UserEntity {
 
 	@Column({default: 'default'})
 	colorPad: string;
+
+	@Column({default: 'default'})
+	colorBall: string;
+
+	@Column({ type: 'jsonb', default: '[]' })
+	playerHistory: playerHistory[];
 }
