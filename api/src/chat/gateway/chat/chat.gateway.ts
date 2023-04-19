@@ -490,8 +490,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	@SubscribeMessage('unBlockUser')
 	async UnBlockUser(socket: Socket, object: { room: RoomI, user: UserI }) {
 		await this.userService.removeBlockedUser(object.user, socket.data.user);
-		const upRoom: RoomI = await this.roomService.getRoom(object.room.id);
-		this.displayChange(upRoom);
+		if (object.room) {
+			const upRoom: RoomI = await this.roomService.getRoom(object.room.id);
+			this.displayChange(upRoom);
+		}
 	}
 
 	@SubscribeMessage('checkIfBlocked')

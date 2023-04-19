@@ -112,13 +112,13 @@ export class MemberOptionComponent implements OnInit {
 	}
 
 	block() {
-		this.chatService.blockUser(this.selectedUser);
+		this.chatService.blockUser(this.selectedUser, this.chatService.selectedRoom);
 		// if (this.chatService.selectedRoom.privateMessage)
 		// 	this.chatService.deleteRoom();
 	}
 	
 	unBlock() {
-		this.chatService.unBlockUser(this.selectedUser);
+		this.chatService.unBlockUser(this.selectedUser, this.chatService.selectedRoom);
 	}
 
 	showban() {

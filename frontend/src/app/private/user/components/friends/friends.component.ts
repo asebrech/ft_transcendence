@@ -25,10 +25,13 @@ export class FriendsComponent implements OnInit {
   selectedUser: UserI;
   user : UserI = this.authService.getLoggedInUser();
   friends: Friend[];
+  isBlocked: boolean = null;
+
 
   constructor(private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit(): void {
+	this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
       if (!user.friends)
@@ -57,6 +60,7 @@ export class FriendsComponent implements OnInit {
   }
 
   onContextMenu(event: MouseEvent, user: UserI){
+	this.chatService.checkIfBlocked(user);
     event.preventDefault();
     this.showContextMenu = true;
     this.contextMenuTop = event.clientY;
@@ -113,4 +117,16 @@ export class FriendsComponent implements OnInit {
   goToProfileOf(user: UserI) {
     this.playerService.goToProfileOf(user);
   }
+
+  block(user: UserI) {
+	this.chatService.blockUser(user, null);
+	this.showContextMenu = false;
+  }
+  
+  unblock(user: UserI) {
+	this.chatService.unBlockUser(user, null);
+	this.showContextMenu = false;
+
+  }
+
 }

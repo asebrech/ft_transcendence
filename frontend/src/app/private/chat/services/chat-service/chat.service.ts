@@ -177,12 +177,12 @@ export class ChatService {
 		this.socket.emit('removeMuted', { user: user, room: this.selectedRoom });
 	}
 
-	blockUser(user: UserI) {
-		this.socket.emit('blockUser', { user: user, room: this.selectedRoom });
+	blockUser(user: UserI, room: RoomI) {
+		this.socket.emit('blockUser', { user: user, room: room });
 	}
 
-	unBlockUser(user: UserI) {
-		this.socket.emit('unBlockUser', { user: user, room: this.selectedRoom });
+	unBlockUser(user: UserI, room: RoomI) {
+		this.socket.emit('unBlockUser', { user: user, room: room});
 	}
 
 	checkIfBlocked(user: UserI) {
