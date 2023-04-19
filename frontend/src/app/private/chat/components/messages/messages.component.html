@@ -22,10 +22,11 @@
 	<div #messageList class="message">
 		<div class="messages" *ngFor="let message of (messages$ | async)" [ngClass]="{'myMessage': chatService.currentUser.id === message.user.id}">
 			<img class="messagePicture" src="../../../../../../assets/images/astronaut.png" *ngIf="chatService.currentUser.id !== message.user.id">
-			<div class="content" >
-						<strong class="usernameMessage" *ngIf="chatService.currentUser.id !== message.user.id" >{{message.user.username}}</strong>
+			<div class="content" [ngClass]="{'myContent': chatService.currentUser.id === message.user.id}">
+						<strong class="usernameMessage"  >{{message.user.username}}</strong>
 							<p class="text">{{message.text}}</p>
 			</div>
+			<img class="messagePicture" src="../../../../../../assets/images/astronaut.png" *ngIf="chatService.currentUser.id === message.user.id">
 		</div>
 	</div>
 	<form class="input" (submit)="onSubmit()" *ngIf="chatService.selectedRoom !== null">

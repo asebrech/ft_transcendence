@@ -27,10 +27,10 @@ export class DashboardComponent implements OnInit{
 		if (this.dashService.checkPass && this.elementRef.nativeElement.querySelector('.search-container') && !this.elementRef.nativeElement.querySelector('.checkPass').contains(event.target)) {
 				this.dashService.checkPass = false;
 		}
-		if (!this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && this.elementRef.nativeElement.querySelector('.add').contains(event.target)) {
+		if (!this.dashService.create && this.elementRef.nativeElement.querySelector('.create-container') && this.elementRef.nativeElement.querySelector('.create-container').contains(event.target)) {
 			this.dashService.create = true;
 		}
-		else if (this.dashService.create && this.elementRef.nativeElement.querySelector('.add') && !this.elementRef.nativeElement.querySelector('.createChannel').contains(event.target)) {
+		else if (this.dashService.create && this.elementRef.nativeElement.querySelector('.create-container') && !this.elementRef.nativeElement.querySelector('.createChannel').contains(event.target)) {
 			this.dashService.create = false;
 		}
 	}

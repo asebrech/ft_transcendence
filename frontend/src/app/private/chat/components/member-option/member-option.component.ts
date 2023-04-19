@@ -91,6 +91,10 @@ export class MemberOptionComponent implements OnInit {
 		return !this.checkIfAdmin();
 	}
 
+	giveOwnership() {
+		this.chatService.giveOwnership(this.selectedUser);
+	}
+
 	promote() {
 		this.chatService.addAdmin(this.selectedUser);
 	}

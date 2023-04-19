@@ -209,6 +209,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		}
 	}
 
+	@SubscribeMessage('giveOwnership')
+	async giveOwnership(socket: Socket, object: { user: UserI, room: RoomI }) {
+		object.room = await this.roomService.getRoom(object.room.id);
+		const addAdminRoom: RoomI = await this.roomService.changeOwner(object.room, object.user);
+		this.displayChange(addAdminRoom);
+	}
+
 	@SubscribeMessage('addAdmin')
 	async addAdmin(socket: Socket, object: { user: UserI, room: RoomI }) {
 		object.room = await this.roomService.getRoom(object.room.id);
@@ -239,6 +246,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('paginateRooms')
 	async onPaginatieRoom(socket: Socket) {
+		if (!socket || !socket.data || !socket.data.user || !socket.data.user.id)
+			return;
 		let rooms: RoomI[] = await this.roomService.getRoomsForUser(socket.data.user.id);
 		rooms = this.roomService.formatPrivateRooms(socket.data.user, rooms);
 		return this.server.to(socket.id).emit('rooms', rooms);

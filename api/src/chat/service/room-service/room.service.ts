@@ -167,6 +167,11 @@ export class RoomService {
 		return this.roomRepository.save(room);
 	}
 	
+	async changeOwner(room: RoomI, user: UserI): Promise<RoomI> {		
+		room.owner = user
+		return this.roomRepository.save(room);
+	} 
+
 	async addAdminToRoom(room: RoomI, user: UserI): Promise<RoomI> {		
 		if (!room.admins){
 			room.admins = [];

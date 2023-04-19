@@ -161,6 +161,10 @@ export class ChatService {
 		this.socket.emit('addUsers', { users: users, room: this.selectedRoom });
 	}
 
+	giveOwnership(user: UserI) {
+		this.socket.emit('giveOwnership', { user: user, room: this.selectedRoom });
+	}
+
 	addAdmin(user: UserI) {
 		this.socket.emit('addAdmin', { user: user, room: this.selectedRoom });
 	}

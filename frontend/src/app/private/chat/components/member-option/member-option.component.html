@@ -12,18 +12,25 @@
 			<img src="../../../../../assets/images/utilisateur-astronaute_1.png">
 		</div>
 	</div>
+	<div class="separator" *ngIf="checkUserOwnerOnly() "></div>
+	<div class="labelContainer" *ngIf="checkUserOwnerOnly()" (click)="onClick(); giveOwnership();">
+		<label >Give Ownership</label>
+		<div class="image">
+			<img src="../../../../../assets/images/icons8-star-50.png">
+		</div>
+	</div>
 	<div class="separator" *ngIf="checkUserOwnerOnly() && !checkIfAdmin()"></div>
 	<div class="labelContainer" *ngIf="checkUserOwnerOnly() && !checkIfAdmin()" (click)="onClick(); promote();">
 		<label  >Promote</label>
 		<div class="image">
-			<img src="../../../../../assets/images/promote-user.png">
+			<img src="../../../../../assets/images/icons8-star-half-50.png">
 		</div>
 	</div>
 	<div class="separator" *ngIf="checkUserOwnerOnly() && checkIfAdmin()"></div>
 	<div class="labelContainer" *ngIf="checkUserOwnerOnly() && checkIfAdmin()" (click)="onClick(); demote();">
 		<label  >Demote</label>
 		<div class="image">
-			<img src="../../../../../assets/images/promote-user.png">
+			<img src="../../../../../assets/images/icons8-star-half-50.png">
 		</div>
 	</div>
 	<div class="separator" *ngIf="chatService.currentUser.id !== selectedUser.id && isBlocked !== null && !isBlocked"></div>

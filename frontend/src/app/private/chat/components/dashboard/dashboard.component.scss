@@ -96,6 +96,8 @@
 	margin-top: 15px;
 	color: #989aa2;
 	user-select: none;
+	cursor: pointer;
+	//padding: 5px;
 }
 
 .create-container:hover {
@@ -106,6 +108,9 @@
 .create-container div {
 	font-size: 25px;
 	margin-top: -2.5px;
+	cursor: pointer;
+}
+.create-container label {
 	cursor: pointer;
 }
 
