@@ -181,10 +181,10 @@ export class MessagesComponent implements OnInit {
 	async joinGame(gameRoom: string) 
 	{
 		const roomExists = await this.checkRoomExists(gameRoom);
-		if (roomExists) 
+		if (roomExists)
 			this.router.navigate(['private/game/invite'], { queryParams: { functionName: 'Join', room : gameRoom } });
-		else 
-		  console.log("The room does not exist");
+		else
+			window.alert('This link expired !');
 	}
 
 }
