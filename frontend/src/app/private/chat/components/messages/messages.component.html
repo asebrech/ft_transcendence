@@ -25,7 +25,8 @@
 			<div class="content" [ngClass]="{'myContent': chatService.currentUser.id === message.user.id}">
 						<strong class="usernameMessage"  >{{message.user.username}}</strong>
 							<p class="text" *ngIf="!message.gameRoom">{{message.text}}</p>
-							<button *ngIf="message.gameRoom" (click)="joinGame(message.gameRoom)" >Accept invite to Game</button>
+							<button *ngIf="message.gameRoom && chatService.currentUser.id !== message.user.id" (click)="joinGame(message.gameRoom)" >Accept invite to Game</button>
+							<p class="confirm" *ngIf="message.gameRoom && chatService.currentUser.id === message.user.id">Invitation Sent</p>
 			</div>
 			<img class="messagePicture" src="../../../../../../assets/images/astronaut.png" *ngIf="chatService.currentUser.id === message.user.id">
 		</div>
