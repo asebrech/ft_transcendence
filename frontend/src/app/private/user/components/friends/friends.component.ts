@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PlayerService } from '../../services/player.service';
 import { Friend, UserI } from 'src/app/model/user.interface';
 import { Observable, catchError } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-friends',
@@ -24,11 +25,12 @@ export class FriendsComponent implements OnInit {
   isMyFriend: boolean = true;
   selectedUser: UserI;
   user : UserI = this.authService.getLoggedInUser();
-  friends: Friend[];
+  friends: Friend[] = [];
   isBlocked: boolean = null;
+  data: any;
 
 
-  constructor(private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
+  constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit(): void {
 	this.chatService.getConnected().subscribe(val => {
@@ -60,8 +62,6 @@ export class FriendsComponent implements OnInit {
 	this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
-      if (!user.friends)
-       this.message = "Liste d'amis vide !";
        this.friends = user.friends;
     });
     this.playerService.getUserList().subscribe(users => {
@@ -71,6 +71,8 @@ export class FriendsComponent implements OnInit {
       this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
 	  this.chatService.connected();
     });
+    this.setMessage();
+   // this.playerService.getUserBy
   }
 
   sendMessage(user: UserI) {
@@ -109,53 +111,72 @@ export class FriendsComponent implements OnInit {
         console.log('An error occurred:', error);
         throw('Something went wrong; please try again later.');
       })
-    )
-    .subscribe(response => {
-      console.log('Friend removed successfully:', response);
-      this.user$.subscribe((user: UserI) => {
-        this.friends = user.friends;
+      )
+      .subscribe(response => {
+        console.log('Friend removed successfully');
+        this.user$.subscribe((user: UserI) => {
+          const friendIndex = this.friends.findIndex(f => f.id === friend.id);
+          this.friends.splice(friendIndex, 1);
+          this.setMessage()
+        });
 		this.chatService.connected();
       });
-    });
-    this.showContextMenu = false;
-  }
+      this.showContextMenu = false;
+      if (this.friends.length === 0)
+        this.message = "Liste d'amis vide !";
+    }
 
-  addFriend(userId: number, selectedUser: UserI){
-    console.log(selectedUser);
-    this.playerService.addFriend(userId, selectedUser).pipe(
-      catchError(error => {
-        console.log('An error occurred:', error);
-        throw('Something went wrong; please try again later.');
-      })
-    )
-    .subscribe(response => {
-      console.log('Friend added successfully:', response);
-      this.user$.subscribe((user: UserI) => {
-        this.friends = user.friends;
-		this.chatService.connected();
+    addFriend(userId: number, selectedUser: UserI){
+      this.playerService.addFriend(userId, selectedUser).pipe(
+        catchError(error => {
+          console.log('An error occurred:', error);
+          throw('Something went wrong; please try again later.');
+        })
+        )
+        .subscribe((response : UserI) => {
+          console.log('Friend added successfully');
+          this.user$.subscribe((user: UserI) => {
+            this.friends = user.friends;
+            this.setMessage()
+    		this.chatService.connected();
       });
-    });
-    this.showContextMenu = false;
-  }
+        });
+        this.showContextMenu = false;
+      }
 
-  selectUser(user: UserI) {
-    console.table(user);
-    this.selectedUser = user;
+    selectUser(user: UserI) {
+      this.selectedUser = user;
   }
 
   goToProfileOf(user: UserI) {
     this.playerService.goToProfileOf(user);
   }
 
+  private setMessage() {
+    if (this.friends.length === 0) {
+      this.message = "Liste d'amis vide !";
+    } else {
+      this.message = "";
+    }
+  }
+
   block(user: UserI) {
 	this.chatService.blockUser(user, null);
 	this.showContextMenu = false;
   }
-  
+
   unblock(user: UserI) {
 	this.chatService.unBlockUser(user, null);
 	this.showContextMenu = false;
 
+  }
+
+  getImageUrl(user: UserI): string {
+    const userToken = localStorage.getItem('token'); // récupère le token depuis le local storage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${userToken}` // ajoute le token dans l'en-tête de la requête
+    });
+    return `http://localhost:3000/api/users/profile-image/${user.profilPic}`;
   }
 
 }

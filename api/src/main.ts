@@ -16,7 +16,7 @@ async function bootstrap()
   gameServer.define('ranked', matchMaking);
   gameServer.listen(3001)
 
-  
+
 // attach Colyseus into the existing http server from NestJS
 //  gameServer.attach({ server: app.getHttpServer() });
   app.setGlobalPrefix('api');

@@ -13,15 +13,17 @@ export interface UserI {
 	level?:number;
 	friends?: Friend[];
 	colorPad?: string;
+	profilPic?: string;
 	history?: playerHistory[];
 	colorBall?: string;
+  connected?: boolean;
 }
 
 export interface Friend {
 	id?: number;
 	username?: string;
 	isConnected?: boolean,
-	photo?: string;
+	profilPic?: string;
 	win?: number;
 	losses?: number;
 	history?: playerHistory[];

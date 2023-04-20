@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards, Put } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards, Put, UseInterceptors, UploadedFile, Request, Res  } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
@@ -14,12 +16,36 @@ import { UserEntity } from '../model/user.entity';
 import { ChangePasswordDto } from '../model/dto/change-password.dto';
 import { ChangeEmailDto } from '../model/dto/change-email.dto';
 import { ChangeUsernameDto } from '../model/dto/change-username.dto';
+import { promises } from 'dns';
+import { ChangePictureDto } from '../model/dto/change-picture.dto';
+import multer, { Multer, diskStorage } from 'multer';
+import path = require('path');
+import { join } from 'path';
+import { v4 as uuidv4} from 'uuid';
+import { of } from 'rxjs/internal/observable/of';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
+import { Observable, map, tap } from 'rxjs';
+import { AuthGuard } from '@nestjs/passport';
 import { ChangeBallSkinDto } from '../model/dto/change-ball-skin.dto';
 import { ChangePadSkinDto } from '../model/dto/change-pad-skin.dto';
 
 
+export const storage = {
+    storage: diskStorage({
+        destination: './uploads/profileimages',
+        filename: (req, file, cb) => {
+            const filename: string = path.parse(file.originalname).name.replace(/\s/g, '') + uuidv4();
+            const extension: string = path.parse(file.originalname).ext;
+
+            cb(null, `${filename}${extension}`)
+        }
+    })
+
+}
+
 @Controller('users')
 export class UserController {
+	defaultProfilePic: '../../../image/astronaut.png';
 
 	constructor(
 		private userService: UserService,
@@ -29,6 +55,7 @@ export class UserController {
 	@Post()
 	async create(@Body() createUserDto: CreateUserDto): Promise<UserI> {
 		const userEntity: UserI = this.userHelperService.createUserDtoEntity(createUserDto);
+		userEntity.profilPic = this.defaultProfilePic;
 		return this.userService.create(userEntity);
 	}
 
@@ -95,6 +122,7 @@ export class UserController {
 	@Get('qr-code')
 	async getQrCode(@Req() req: RequestModel): Promise<{qr: string}> {
 	  let user: UserI = req.user;
+	  console.log(user);
 	  if (user.google_auth) {
 		const qr: string = await this.userService.getQrCode(user);
 		return {qr};
@@ -103,7 +131,7 @@ export class UserController {
 		return {qr: null};
 	  }
 	}
-  
+
 	@Post('verify')
 	async verifyToken(@Body() body: { token: string; session: string;}) {
 		const user: UserI = await this.userService.handleVerifyToken(body.token, body.session);
@@ -181,8 +209,28 @@ export class UserController {
 		await this.userService.updateColorPad(id, color);
   	}
 
+	@Post(':id/upload-profil-pic')
+	//@UseGuards(JwtAuthGuard)
+	@UseInterceptors(FileInterceptor('file', storage))
+	async uploadFile(@UploadedFile() file, @Param('id') id: number) {
+		console.log(file);
+		const user: UserI  =  await this.userService.getOne(id);
+
+		return this.userService.updateOne(user.id, {profilPic: file.filename}).pipe(
+			tap((user: UserI) => console.log(user)),
+			map((user:UserI) => ({profileImage: user.profilPic}))
+		)
+	}
+
+	@Get('profile-image/:imagename')
+	findProfileImage(@Param('imagename') imagename, @Res() res): Observable<Object> {
+		return of(res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename)));
+	}
+
+
 	@Post(':id/add-to-history')
 	async setHistory(@Param('id') id: number, @Body('history') history: playerHistory) {
 		await this.userService.setHistory(id, history);
 	}
 }
+ 

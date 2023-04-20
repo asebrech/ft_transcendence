@@ -32,6 +32,7 @@
     "jquery": "^3.6.3",
     "ng-circle-progress": "^1.6.0",
     "ngx-colors": "^3.5.2",
+    "ngx-cookie-service": "^15.0.0",
     "ngx-socket-io": "^4.4.0",
     "phaser": "^3.55.2",
     "qrcode": "^1.5.1",

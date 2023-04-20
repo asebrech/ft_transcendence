@@ -36,16 +36,10 @@ export class UserEntity {
 
 	@OneToMany(() => RoomEntity, room => room.owner)
 	roomsOwner: RoomEntity[];
-	
-	@ManyToMany(() => RoomEntity, room => room.users)
-	rooms: RoomEntity[];
-
-	@Column({default: ''})
-	profilePicture: string;
 
 	@Column({default: 0})
 	wins : number;
-
+	
 	@Column({default: 0})
 	losses : number;
 
@@ -54,38 +48,41 @@ export class UserEntity {
 
 	@OneToMany(() => ConnectedUserEntity, connection => connection.user)
 	connections: ConnectedUserEntity[];
-
+	
 	@OneToMany(() => JoinedRoomEntity, joinedRoom => joinedRoom.room)
 	joinedRooms: JoinedRoomEntity[];
-
+	
 	@OneToMany(() => MessageEntity, message => message.user)
 	messages: MessageEntity[] ;
-
+	
 	@Column('double precision', {default: 0})
 	ratio : number;
-
+	
 	@Column({default: 0})
 	total : number;
-
+	
 	@Column({default: 1})
 	level: number;
-
+	
 	@Column({ type: 'jsonb', default: '[]' })
 	friends: Friend[];
-
+	
 	@Column({default: 'default'})
 	colorPad: string;
-	
+
 	@Column({default: 'default'})
 	colorBall: string;
 
-	@BeforeInsert()
-	@BeforeUpdate( )
-	emailToLowerCase() {
-		this.email = this.email.toLocaleLowerCase();
-		this.username = this.username.toLocaleLowerCase(); 
-	}
-
 	@Column({ type: 'jsonb', default: '[]' })
-	playerHistory: playerHistory[];
+	history: playerHistory[];
+
+	@Column({ nullable: true })
+	profilPic: string;
+
+	// @BeforeInsert()
+	// @BeforeUpdate( )
+	// emailToLowerCase() {
+	// 	this.email = this.email.toLocaleLowerCase();
+	// 	this.username = this.username.toLocaleLowerCase(); 
+	// }
 }

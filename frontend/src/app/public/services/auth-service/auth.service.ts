@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Observable, Subject, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AccessTokenI } from 'src/app/model/access-token.interface';
 import { LoginResponseI } from 'src/app/model/login-response';
 import { UserI } from 'src/app/model/user.interface';

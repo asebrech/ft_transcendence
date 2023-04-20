@@ -17,7 +17,9 @@ export class PlayerService {
   colorBall : string;
   colorPad : string;
 
-  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient, private route: Router) {}
+  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient, private route: Router) {
+
+  }
 
   getUser(): Observable<UserI> {
     const userId = this.authService.getLoggedInUser().id;
@@ -63,10 +65,18 @@ export class PlayerService {
   goToProfileOf(user: UserI) {
     this.route.navigate(['/private/user/profile', user.id]);
   }
-  
+
   updateColorPad(userId: number, color: string) : Observable<UserI> {
     return this.httpClient.put<UserI>(`api/users/${userId}/update-color-pad`, {color});
   }
+
+  uploadProfilePic(formData: FormData, userId : number): Observable<any> {
+    return this.httpClient.post<FormData>(`/api/users/${userId}/upload-profil-pic`, formData, {
+      reportProgress: true,
+      observe: 'events'
+    })
+  }
+
 
   updateColorBall(userId: number, color: string) : Observable<UserI> {
     return this.httpClient.put<UserI>(`api/users/${userId}/update-color-ball`, {color});
@@ -78,7 +88,7 @@ export class PlayerService {
         return this.colorPad;
       }));
     }
-    
+
     getColorBall() : Observable<string> {
       return this.getUser().pipe(map((user: UserI) => {
         this.colorBall = user.colorBall;
@@ -98,5 +108,4 @@ export class PlayerService {
     return this.httpClient.post(`api/users/${id}/decr-level/`, null);
   }
 }
-
 

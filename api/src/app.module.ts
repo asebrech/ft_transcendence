@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -25,7 +26,6 @@ import { ChatModule } from './chat/chat.module';
 	providers: [AppService],
 })
 
-
 export class AppModule {
 	configure(consumer: MiddlewareConsumer) {
 		consumer
@@ -39,7 +39,7 @@ export class AppModule {
 				{ path: '/api/users/check-email', method: RequestMethod.GET },
 				{ path: '/api/colyseus', method: RequestMethod.GET },
 			)
-			.forRoutes('')
+			.forRoutes({path: '/api/users/profile-image/:imagename', method: RequestMethod.GET})
 			.apply((req, res, next) => {
 				res.setHeader('Access-Control-Allow-Origin', '*');
 				res.setHeader(

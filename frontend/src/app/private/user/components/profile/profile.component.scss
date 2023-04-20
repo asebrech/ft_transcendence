@@ -1,6 +1,8 @@
 .general {
 margin-top: 70px;
 padding-left: 120px;
+display: flex;
+justify-content: center;
 }
 
 .container {
@@ -113,6 +115,15 @@ tr {
   margin-top: 5em;
   font-family: 'nasalization';
 }
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
 
 .connected {
 	z-index: 999999;

@@ -1,0 +1,4 @@
+<form (ngSubmit)="uploadFile()">
+  <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept="image/*" (change)="onFileSelected()">
+  <button type="submit">Télécharger</button>
+</form>

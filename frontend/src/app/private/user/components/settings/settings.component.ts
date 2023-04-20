@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { CustomValidators } from 'src/app/public/_helpers/custom-validators';
 import { PlayerService } from '../../services/player.service';
@@ -6,6 +6,8 @@ import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
+import { WINDOW } from 'src/app/window-token';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
@@ -33,18 +35,28 @@ export class SettingsComponent implements OnInit {
   user$: Observable<UserI>;
   newO: string;
   old: string;
-  /////////////////////////////
+
   colorBall : string;
   colorPad : string;
-  /////////////////////////////
 
-  constructor(private starsService: StarsService, private playerService: PlayerService, private authService: AuthService, private route: Router ) {}
+  data: any;
+
+  origin = this.window.location.origin;
+
+
+  constructor(
+    private starsService: StarsService,
+    private playerService: PlayerService,
+    private authService: AuthService, private route: Router,
+    private http: HttpClient,
+    @Inject(WINDOW) private window: Window) {}
 
   ngOnInit(): void {
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
       this.colorPad = user.colorPad;
       this.colorBall = user.colorBall;
+	  this.data = user;
     });
   }
 
@@ -103,7 +115,7 @@ export class SettingsComponent implements OnInit {
     //this.simpleNotification();
   }
   ////////////////////////////////////////////////////////////////////
-  retrieveBallSkin(event: Event) {
+  retrieveBallSkin(event: Event){
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
     this.playerService.updateColorBall(this.user.id,clickedImageSrc).subscribe( (user: UserI) => { 
         console.log("ball changed successfully");
@@ -122,10 +134,10 @@ export class SettingsComponent implements OnInit {
     });
   }
   
-  retrievePaddleSkin(event: Event) 
+  retrievePaddleSkin(event: Event)
   {
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
-    this.playerService.updateColorPad(this.user.id,clickedImageSrc).subscribe( (user: UserI) => { 
+    this.playerService.updateColorPad(this.user.id,clickedImageSrc).subscribe( (user: UserI) => {
         console.log("pad changed successfully");
         this.user$.subscribe( (user: UserI) => {
         this.colorPad = user.colorPad;
@@ -151,5 +163,13 @@ export class SettingsComponent implements OnInit {
     console.log(this.colorBall);
     console.log(this.colorPad);
 
+  }
+
+  getImageUrl(): string {
+    const userToken = localStorage.getItem('token'); // récupère le token depuis le local storage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${userToken}` // ajoute le token dans l'en-tête de la requête
+    });
+    return `http://localhost:3000/api/users/profile-image/${this.data?.profilPic}`;;
   }
 }

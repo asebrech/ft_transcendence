@@ -2,7 +2,7 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
-import { of, throwError } from 'rxjs';
+import { Observable, from, map, switchMap, of, throwError } from 'rxjs';
 import { AuthService } from 'src/auth/service/auth.service';
 import { RoomI } from 'src/chat/model/room/room.interface';
 import { UserEntity } from 'src/user/model/user.entity';
@@ -79,6 +79,12 @@ export class UserService {
 
 	async getQrCode(user: UserI): Promise<string> {
 		const foundUser: UserI =  await this.findByEmail(user.email);
+		if (!foundUser) {
+			throw new NotFoundException('User not found');
+		  }
+		  if (!foundUser.google_auth) {
+			throw new BadRequestException('Google Authenticator is not enabled for this user');
+		  }
 		const secret: string = this.authService.decrypteSecret(foundUser.google_auth_secret);
 		return this.authService.getQrCodeKeyuri(foundUser, secret);
 	}
@@ -171,6 +177,16 @@ export class UserService {
 			return false;
 	}
 
+	updateOne(id: number, user: UserI): Observable<any> {
+        // delete user.email;
+        // delete user.password;
+        // delete user.role;
+
+        return from(this.userRepository.update(id, user)).pipe(
+            switchMap(() => this.findOne2(id))
+        );
+	}
+
 	async updateUsername(userId: number, newUsername: string): Promise<UserI> {
 		const user = await this.findOne(userId);
 		const usernameExists = await this.usernameExists(newUsername);
@@ -185,6 +201,15 @@ export class UserService {
 	private async findOne(id: number): Promise<UserI> {
 		return this.userRepository.findOneBy({ id });
 	}
+
+	findOne2(id: number): Observable<UserI> {
+        return from(this.userRepository.findOneBy({id})).pipe(
+            map((user: UserI) => {
+                const {password, ...result} = user;
+                return result;
+            } )
+        )
+    }
 
 	public async getOne(id: number): Promise<UserI> {
 		const user = await this.userRepository.findOne({ where: {id}, relations: ['blockedUsers'] });
@@ -285,6 +310,13 @@ export class UserService {
 		return updateUser;
 	}
 
+	async uploadProfilPic(id : number, profilPic: string) : Promise<UserI> {
+		console.log(profilPic, "saluuuuut");
+		this.userRepository.update(id, { profilPic : profilPic });
+		const updatedUser = await this.findOne(id);
+		return updatedUser;
+	}
+
 	async updateColorBall(id : number, color: string) : Promise<UserI> {
 		await this.userRepository.update(id, {colorBall : color});
 		const updateUser = await this.findOne(id);
@@ -298,9 +330,9 @@ export class UserService {
 			opponentId: addhistory.opponentId,
 			won: addhistory.won
 		  };
-		if (!user.playerHistory)
-			user.playerHistory = [];
-		user.playerHistory.push(history);
+		if (!user.history)
+			user.history = [];
+		user.history.push(history);
 		await this.userRepository.save(user);
 		return user;
 	  }
