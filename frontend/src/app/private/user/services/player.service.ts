@@ -17,7 +17,9 @@ export class PlayerService {
   colorBall : string;
   colorPad : string;
 
-  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient, private route: Router) {}
+  constructor(private userService: UserService, private authService: AuthService, private httpClient : HttpClient, private route: Router) {
+
+  }
 
   getUser(): Observable<UserI> {
     const userId = this.authService.getLoggedInUser().id;
@@ -86,7 +88,7 @@ export class PlayerService {
         return this.colorPad;
       }));
     }
-    
+
     getColorBall() : Observable<string> {
       return this.getUser().pipe(map((user: UserI) => {
         this.colorBall = user.colorBall;

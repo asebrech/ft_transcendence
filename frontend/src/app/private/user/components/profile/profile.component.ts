@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgModule, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserI } from 'src/app/model/user.interface';
-import { AuthService } from 'src/app/public/services/auth-service/auth.service';
+import { UserI, playerHistory } from 'src/app/model/user.interface';
 import { PlayerService } from '../../services/player.service';
-import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
+import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,35 +11,35 @@ import { BehaviorSubject, Observable, of, tap } from 'rxjs';
   styleUrls: ['./profile.component.scss'],
 })
 
+
 export class ProfileComponent {
   user$: Observable<UserI>;
-  win: number;
-  dataSubject = new BehaviorSubject(null);
-
-  constructor(private authService : AuthService, private playerService: PlayerService, private route: ActivatedRoute) {
+  opponents$ : Observable<UserI[]>;
+  user: UserI;
+  opponentName: string;
+  constructor(private playerService: PlayerService, private route: ActivatedRoute, private authService : AuthService) {
   }
 
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.playerService.getUserById(id).subscribe(user => {
-        if (user.wins == 0 && user.losses == 0)
-          this.win = 0;
-        else 
-          this.win = (user.wins / (user.wins + user.losses)) * 100;
-        this.dataSubject.next(user);
-      });
-      this.user$ = this.dataSubject.asObservable();
+      this.user$ = this.playerService.getUserById(id);
+    } else {
+      this.user$ = this.playerService.getUser();
     }
-    else {
-      this.playerService.getUser().subscribe(user => {
-        if (user.wins == 0 && user.losses == 0)
-          this.win = 0;
-        else 
-          this.win = (user.wins / (user.wins + user.losses)) * 100;
-        this.dataSubject.next(user);
-      });
-      this.user$ = this.dataSubject.asObservable();
-    }
+
+    this.user$.subscribe();
+    this.user = this.authService.getLoggedInUser();
+
+    this.user$.subscribe((user) => {
+      this.user = user;
+      this.opponents$ = this.getOpponents(this.user.history);
+    });
+  }
+
+  getOpponents(history: playerHistory[]): Observable<UserI[]> {
+    const opponentIds = history.map((h) => h.opponentId);
+    return forkJoin(opponentIds.map((id) => this.playerService.getUserById(id)));
   }
 }
+

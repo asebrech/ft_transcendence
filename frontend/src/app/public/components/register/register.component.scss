@@ -37,7 +37,6 @@
 }
 
 .general {
-	background-color: #110720;
 	display: flex;
   position: absolute;
   height: 100%;
@@ -72,8 +71,8 @@ p {
 
 .img {
 	display: flex;
-	height: 50%;
-	width: 50%;
+	// height: 50%;
+	// width: 50%;
 	justify-content: left;
 	margin-right: 20%;
   align-self: end;
@@ -130,6 +129,14 @@ mat-card {
 	}
 }
 
+.upload{
+  margin-top: 1em;
+}
+
+label {
+  font-family: 'nasalization';
+  margin-bottom: 1em;
+}
 ::placeholder {
   font-size: 0.8em;
 }

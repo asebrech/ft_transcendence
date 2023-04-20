@@ -5,6 +5,7 @@ import { Friend, UserI } from 'src/app/model/user.interface';
 import { Observable, catchError } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-friends',
@@ -26,6 +27,7 @@ export class FriendsComponent implements OnInit {
   user : UserI = this.authService.getLoggedInUser();
   friends: Friend[] = [];
   isBlocked: boolean = null;
+  data: any;
 
 
   constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
@@ -43,6 +45,7 @@ export class FriendsComponent implements OnInit {
       this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
     });
     this.setMessage();
+   // this.playerService.getUserBy
   }
 
   sendMessage(user: UserI) {
@@ -132,14 +135,19 @@ export class FriendsComponent implements OnInit {
 	this.chatService.blockUser(user, null);
 	this.showContextMenu = false;
   }
-  
+
   unblock(user: UserI) {
 	this.chatService.unBlockUser(user, null);
 	this.showContextMenu = false;
 
   }
 
+  getImageUrl(user: UserI): string {
+    const userToken = localStorage.getItem('token'); // récupère le token depuis le local storage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${userToken}` // ajoute le token dans l'en-tête de la requête
+    });
+    return `http://localhost:3000/api/users/profile-image/${user.profilPic}`;
+  }
+
 }
-
-
-//tagueul

@@ -12,9 +12,10 @@ export interface UserI {
 	level?:number;
 	friends?: Friend[];
 	colorPad?: string;
-	profilPic?: string;	
+	profilPic?: string;
 	history?: playerHistory[];
 	colorBall?: string;
+  connected?: boolean;
 }
 
 export interface Friend {

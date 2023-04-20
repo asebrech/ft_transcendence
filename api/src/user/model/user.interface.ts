@@ -18,6 +18,7 @@ export interface UserI {
 	colorPad?: string;
 	colorBall?: string;
 	history?: playerHistory[];
+	connected?: boolean;
 }
 
 export interface Friend {

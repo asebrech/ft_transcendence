@@ -11,7 +11,8 @@
       <div class="suggestions" *ngIf="filteredUsers.length > 0">
         <ul>
           <li *ngFor="let user of filteredUsers" (contextmenu)="onContextMenu($event, user)">
-            <img src="../../../../../../assets/images/astronaut.png" alt="Photo de profil de {{user.username}}" >
+            <img *ngIf="user.profilPic" src="http://localhost:3000/api/users/profile-image/{{user.profilPic}}" alt="profilePicture">
+            <img class="profile" *ngIf="!user.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut">
             {{user.username}}
           </li>
         </ul>
@@ -28,7 +29,8 @@
     <div class="main">
       <ul>
         <li *ngFor="let friend of friends" (contextmenu)="onContextMenu($event, friend)" >
-          <img src="../../../../../../assets/images/astronaut.png">
+          <img *ngIf="friend.profilPic" src="http://localhost:3000/api/users/profile-image/{{friend.profilPic}}" alt="profilePicture">
+          <img class="profile" *ngIf="!friend.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut">
           {{ friend.username }}
         </li>
         </ul>

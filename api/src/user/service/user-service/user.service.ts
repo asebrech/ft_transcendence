@@ -79,6 +79,12 @@ export class UserService {
 
 	async getQrCode(user: UserI): Promise<string> {
 		const foundUser: UserI =  await this.findByEmail(user.email);
+		if (!foundUser) {
+			throw new NotFoundException('User not found');
+		  }
+		  if (!foundUser.google_auth) {
+			throw new BadRequestException('Google Authenticator is not enabled for this user');
+		  }
 		const secret: string = this.authService.decrypteSecret(foundUser.google_auth_secret);
 		return this.authService.getQrCodeKeyuri(foundUser, secret);
 	}
@@ -324,9 +330,9 @@ export class UserService {
 			opponentId: addhistory.opponentId,
 			won: addhistory.won
 		  };
-		if (!user.playerHistory)
-			user.playerHistory = [];
-		user.playerHistory.push(history);
+		if (!user.history)
+			user.history = [];
+		user.history.push(history);
 		await this.userRepository.save(user);
 		return user;
 	  }

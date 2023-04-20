@@ -74,8 +74,15 @@ export class UserEntity {
 	colorBall: string;
 
 	@Column({ type: 'jsonb', default: '[]' })
-	playerHistory: playerHistory[];
+	history: playerHistory[];
 
 	@Column({ nullable: true })
 	profilPic: string;
+
+	@BeforeInsert()
+	@BeforeUpdate( )
+	emailToLowerCase() {
+		this.email = this.email.toLocaleLowerCase();
+		this.username = this.username.toLocaleLowerCase(); 
+	}
 }

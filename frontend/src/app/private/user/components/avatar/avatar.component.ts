@@ -56,10 +56,9 @@ export class AvatarComponent implements OnInit {
         inProgress: false,
         progress: 0
       };
-      console.log(this.file);
+
       //this.uploadFile();
     }
-
 
   uploadFile() {
     const formData = new FormData();

@@ -45,6 +45,7 @@ export const storage = {
 
 @Controller('users')
 export class UserController {
+	defaultProfilePic: '../../../image/astronaut.png';
 
 	constructor(
 		private userService: UserService,
@@ -54,6 +55,7 @@ export class UserController {
 	@Post()
 	async create(@Body() createUserDto: CreateUserDto): Promise<UserI> {
 		const userEntity: UserI = this.userHelperService.createUserDtoEntity(createUserDto);
+		userEntity.profilPic = this.defaultProfilePic;
 		return this.userService.create(userEntity);
 	}
 
@@ -120,6 +122,7 @@ export class UserController {
 	@Get('qr-code')
 	async getQrCode(@Req() req: RequestModel): Promise<{qr: string}> {
 	  let user: UserI = req.user;
+	  console.log(user);
 	  if (user.google_auth) {
 		const qr: string = await this.userService.getQrCode(user);
 		return {qr};
@@ -128,7 +131,7 @@ export class UserController {
 		return {qr: null};
 	  }
 	}
-  
+
 	@Post('verify')
 	async verifyToken(@Body() body: { token: string; session: string;}) {
 		const user: UserI = await this.userService.handleVerifyToken(body.token, body.session);
@@ -223,6 +226,8 @@ export class UserController {
 	findProfileImage(@Param('imagename') imagename, @Res() res): Observable<Object> {
 		return of(res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename)));
 	}
+
+
 	@Post(':id/add-to-history')
 	async setHistory(@Param('id') id: number, @Body('history') history: playerHistory) {
 		await this.userService.setHistory(id, history);
