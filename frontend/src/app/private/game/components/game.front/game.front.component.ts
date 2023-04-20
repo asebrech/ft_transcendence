@@ -203,6 +203,7 @@ export class GameFrontComponent implements OnInit, DoCheck
       room?.leave();
       window.location.reload();
     }
+	this.starsService.setActive(true);
   }
 
   ngOnInit()
@@ -224,7 +225,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     gameWon = false;
     ///////////////////////
     this.gameEnded = false;
-	  this.starsService.setActive(true);
+	  this.starsService.setActive(false);
     ///////////////////////
     inWidth = 1920;
     inHeight = 1080;
