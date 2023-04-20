@@ -22,6 +22,9 @@ export class ConversationListComponent implements OnInit {
 
   ngOnInit() {
 	  this.chatService.getConnected().subscribe(users => {
+		for (let i = 0; i < this.rooms.length; i++) {
+			this.rooms[i].isConnected = false;
+		}
 		for (const room of this.rooms) {
 			if (room.privateMessage) {
 				for (const user of users) {
@@ -36,9 +39,7 @@ export class ConversationListComponent implements OnInit {
 	})
 	this.chatService.emitPaginateRooms();
 	this.rooms$.subscribe(val =>{ this.rooms = val;
-		for (let i = 0; i < this.rooms.length; i++) {
-			this.rooms[i].isConnected = false;
-		}
+
 		this.chatService.connected();
 	});
 	const storedData = localStorage.getItem('room');

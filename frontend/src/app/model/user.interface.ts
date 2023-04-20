@@ -20,6 +20,7 @@ export interface UserI {
 export interface Friend {
 	id?: number;
 	username?: string;
+	isConnected?: boolean,
 	photo?: string;
 	win?: number;
 	losses?: number;
