@@ -330,21 +330,5 @@ export class GameFrontComponent implements OnInit, DoCheck
       console.error("join error", e);
     }  
   }
-  async connect(value : string)
-  {
-    try {
-      room = await client?.joinById(value, { });
-      this.playScene = new Phaser.Game(this.playSceneConfig);
-      console.log(room);
-      console.log(client.auth);
-    } catch (e) {
-      console.error("join error", e);
-    }  
-  }
-  ///////////////////////////////////////////////
-  test()
-  {
-    window.location.reload();
-  }
 }
 

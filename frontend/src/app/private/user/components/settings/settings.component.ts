@@ -112,7 +112,6 @@ export class SettingsComponent implements OnInit {
       })
     });
   }
-
   onColorBallChange(newColor: string)
   {
     this.playerService.updateColorBall(this.user.id,newColor).subscribe( (user: UserI) => { 
@@ -153,5 +152,4 @@ export class SettingsComponent implements OnInit {
     console.log(this.colorPad);
 
   }
-
 }
