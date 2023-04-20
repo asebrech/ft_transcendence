@@ -10,6 +10,7 @@ import { PlayerService } from 'src/app/private/user/services/player.service';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserI, playerHistory } from 'src/app/model/user.interface';
 import { Router } from '@angular/router';
+import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
 
 export let room : any;
 export let client : Client;
@@ -51,7 +52,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   hasShownAlert = false;
 
   
-  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router) 
+  constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router, private chatService: ChatService) 
   {
     this.user = this.authService.getLoggedInUser();
     this.username = this.user.id;

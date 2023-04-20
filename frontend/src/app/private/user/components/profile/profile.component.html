@@ -2,39 +2,41 @@
 <div class="general">
   <div class="container">
     <div class="block" *ngIf="(user$ | async) as user">
-      <h1>{{ user.username}}</h1>
-      <img class="profile" src="../../../../../assets/images/astronaut.png" alt="astronaut">
+		<h1>{{ user.username}}</h1>
+		<img class="profile" src="../../../../../assets/images/astronaut.png" alt="astronaut">
+		<div class="connected" *ngIf="toto && toto.isConnected === true"></div>
+		  <div class="notConnected" *ngIf="toto && toto.isConnected === false"></div>
       <label>Level {{ user.level}}</label>
       <progress max="100" value="50">
-        50%</progress>
-        <div><img src="../../../../../assets/images/master-chief.png" alt="badge" class="badge"></div>
-      </div>
-      <div class="block" *ngIf="user$ | async as user">
-        <h1>STATISTIC</h1>
-        <div class="row">
-          <div class="col">
-            <h2>VICTORY</h2>
-            <p>{{user.wins}}</p>
-          </div>
-          <div class="col">
-            <h2>LOSS</h2>
-            <p>{{user.losses}}</p>
-          </div>
-          <div class="col">
-            <h2>PLAYTIME</h2>
-            <p>{{user.total }}</p>
-          </div>
-        </div>
-        <div class="circle">
-          <circle-progress
-          [radius]="80"
-          [outerStrokeColor]="'#39A78E'"
-          [innerStrokeColor]="'#FE7C73'"
-          [animation]="true"
-          [animationDuration]="300"
-          [percent]="win"
-          ></circle-progress>
-        </div>
+		  50%</progress>
+		  <div><img src="../../../../../assets/images/master-chief.png" alt="badge" class="badge"></div>
+		</div>
+		<div class="block" *ngIf="user$ | async as user">
+			<h1>STATISTIC</h1>
+			<div class="row">
+				<div class="col">
+					<h2>VICTORY</h2>
+					<p>{{user.wins}}</p>
+				</div>
+				<div class="col">
+					<h2>LOSS</h2>
+					<p>{{user.losses}}</p>
+				</div>
+				<div class="col">
+					<h2>PLAYTIME</h2>
+					<p>{{user.total }}</p>
+				</div>
+			</div>
+			<div class="circle">
+				<circle-progress
+				[radius]="80"
+				[outerStrokeColor]="'#39A78E'"
+				[innerStrokeColor]="'#FE7C73'"
+				[animation]="true"
+				[animationDuration]="300"
+				[percent]="win"
+				></circle-progress>
+			</div>
     </div>
     <div class="block">
       <h1>HISTORY</h1>
