@@ -54,7 +54,6 @@ export class LiveComponent implements OnInit, DoCheck {
   
   async ngOnInit()
   {
-    this.starsService.setActive(false);
 
     this.screen = false;
     this.watchingLive = true;
@@ -88,7 +87,6 @@ export class LiveComponent implements OnInit, DoCheck {
     if(rooms.length > 0)
     {
       this.myArray = [];
-      console.log("test");
       for (let i : number = 0 ; i < rooms.length; i++)
       {
         const metadata = rooms[i].metadata;

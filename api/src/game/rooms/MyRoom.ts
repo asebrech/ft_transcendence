@@ -45,8 +45,6 @@ export class MyRoom extends Room<Schema>
         this.left_player = options.clientId;
         client.send("left_player");
         this.left_player_skin = options.padSkin;
-
-        console.log(this.left_player);
       }
       catch
       {
@@ -61,7 +59,6 @@ export class MyRoom extends Room<Schema>
         this.right_player = options.clientId;
         client.send("right_player");
         this.right_player_skin = options.padSkin;
-        console.log(this.right_player);
       }
       catch
       {
@@ -184,5 +181,4 @@ export class MyRoom extends Room<Schema>
     player.delete(client.sessionId);
     console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length);
   }
-
 }

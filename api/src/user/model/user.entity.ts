@@ -75,6 +75,9 @@ export class UserEntity {
 
 	@Column({default: 'default'})
 	colorPad: string;
+	
+	@Column({default: 'default'})
+	colorBall: string;
 
 	@BeforeInsert()
 	@BeforeUpdate( )
@@ -82,9 +85,6 @@ export class UserEntity {
 		this.email = this.email.toLocaleLowerCase();
 		this.username = this.username.toLocaleLowerCase(); 
 	}
-
-	@Column({default: 'default'})
-	colorBall: string;
 
 	@Column({ type: 'jsonb', default: '[]' })
 	playerHistory: playerHistory[];

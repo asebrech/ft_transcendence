@@ -88,6 +88,7 @@ export class GameFrontComponent implements OnInit, DoCheck
       room?.onMessage("right_player_skin", (message) =>
       {
         opponentPad = message;
+
       })
     }
     if (player_left == false)
@@ -132,7 +133,6 @@ export class GameFrontComponent implements OnInit, DoCheck
             won: true
           }
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
-            console.log("match added to history successfully", user.history);
           });
           this.playerService.incrLevel(this.user.id).subscribe(response => { console.log("level incred");});
           this.playerService.addWin(this.user.id).subscribe();
@@ -146,7 +146,6 @@ export class GameFrontComponent implements OnInit, DoCheck
             won: false
           }
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
-            console.log("match added to history successfully", user.history);
           });
           this.playerService.decrLevel(this.user.id).subscribe(response => { console.log("level decred");});
           this.playerService.addLosses(this.user.id).subscribe();
@@ -165,9 +164,8 @@ export class GameFrontComponent implements OnInit, DoCheck
             won: false
           }
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
-            console.log("match added to history successfully", user.history);
           });
-          this.playerService.decrLevel(this.user.id).subscribe(response => { console.log("level decred");});
+          this.playerService.decrLevel(this.user.id).subscribe(response => {});
           this.playerService.addLosses(this.user.id).subscribe();
         }
         else
@@ -179,9 +177,8 @@ export class GameFrontComponent implements OnInit, DoCheck
             won: true
           }
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
-            console.log("match added to history successfully", user.history);
           });
-          this.playerService.incrLevel(this.user.id).subscribe(response => { console.log("level incred");});
+          this.playerService.incrLevel(this.user.id).subscribe(response => { });
           this.playerService.addWin(this.user.id).subscribe();
         }
         this.gameEnded = true;
@@ -190,16 +187,12 @@ export class GameFrontComponent implements OnInit, DoCheck
     });
     room?.onMessage("emptyRoom", ()=>
     {
-      setTimeout(() => {
-        if (this.hasShownAlert == false)
-        {
-          window.alert('One of the player disconnected !');
-          this.hasShownAlert = true;
-        }
-      }, 2000);
-      setTimeout(() => {
+      if (this.hasShownAlert == false)
+      {
+        window.alert('One of the player disconnected !');
         window.location.reload();
-      }, 4000);
+        this.hasShownAlert = true;
+      }
     });
   }
 
@@ -214,9 +207,19 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnInit()
   {
-    this.playerService.getUser().subscribe((user: UserI) => {
+    this.playerService.getUser().subscribe((user: UserI) => 
+    {
       skinPad = user.colorPad;
       skinBall = user.colorBall;
+      if (user.colorPad == 'default' && user.colorBall == 'default')
+      {
+        skinBall = skinBall + '.png';
+        skinPad = skinPad + '.png';
+      }
+      else if (user.colorPad == 'default')
+        skinPad = skinPad + '.png';
+      else if (user.colorBall == 'default')
+        skinBall = skinBall + '.png';
     });
     gameWon = false;
     ///////////////////////

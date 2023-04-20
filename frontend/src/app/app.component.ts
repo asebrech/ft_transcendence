@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StarsService } from './services/stars-service/stars.service';
 import * as $ from 'jquery';
@@ -10,8 +10,18 @@ import * as $ from 'jquery';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent{
+  
+  isActiveValue: boolean;
 
   constructor(public service: StarsService) {}
+  
+  ngOnInit()
+  {
+    this.isActiveValue = this.service.isActive();
+  }
 
+  isActive() {
+    return this.isActiveValue;
+  }
 
 }

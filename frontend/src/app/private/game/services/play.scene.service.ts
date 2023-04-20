@@ -60,6 +60,7 @@ export class PlayScene extends Phaser.Scene
     /////////////////////////////////////////////////
     if (opponentPad[0] == '#')
     {
+      console.log(1);
       this.isOpponentColorPad = true;
     }
     else
@@ -140,6 +141,7 @@ export class PlayScene extends Phaser.Scene
     }
     if (this.isOpponentColorPad == false)
     {
+      console.log("isOpponentColorPad");
       if (player_left == true)
       {
         this.load.image('right_pad', 'assets/images/paddle/' + opponentPad.split('/').pop());  
@@ -151,8 +153,8 @@ export class PlayScene extends Phaser.Scene
     }
     if (this.isColorPad == true)
     {
-      this.load.image('right_pad', 'assets/images/paddle/pad.png');  
-      this.load.image('left_pad', 'assets/images/paddle/pad2.png');
+      this.load.image('right_pad', 'assets/images/paddle/default.png');  
+      this.load.image('left_pad', 'assets/images/paddle/default.png');
     }
 /////////////////////////////////////////////////////////////////
     if (this.isColorBall == false)
@@ -220,10 +222,20 @@ export class PlayScene extends Phaser.Scene
 
     if (this.isColorPad == true)
     {
+      console.log(this.convertColorCode(skinPad), "colorPad");
       if(player_left == true)
         left_pad.setTint(this.convertColorCode(skinPad));
       else
         right_pad.setTint(this.convertColorCode(skinPad));
+    }
+
+    if (this.isOpponentColorPad == true)
+    {
+      console.log(this.convertColorCode(opponentPad), "OpponentPad");
+      if(player_left == true)
+        right_pad.setTint(this.convertColorCode(opponentPad));
+      else
+        left_pad.setTint(this.convertColorCode(opponentPad));
     }
 
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
@@ -231,9 +243,9 @@ export class PlayScene extends Phaser.Scene
     if (this.isColorBall == true)
     {
       if(player_left == true)
-        ball.setTint(this.convertColorCode(skinPad));
+        ball.setTint(this.convertColorCode(skinBall));
       else
-        ball.setTint(this.convertColorCode(skinPad));
+        ball.setTint(this.convertColorCode(skinBall));
     }
 
     //////////////////////////////////////////////////

@@ -8,8 +8,9 @@ import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { join } from 'path';
 import { InviteScene } from '../../services/invite.scene.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
+import { BlobOptions } from 'buffer';
 
 export let room : any;
 export let client : Client;
@@ -35,8 +36,9 @@ export class GameInviteComponent implements OnInit {
   user : any ;
   username : string;
   in : boolean = true;
+  hasShownAlert : boolean = false;
 
-  constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private route : ActivatedRoute, private chatService: ChatService) 
+  constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private route : ActivatedRoute, private chatService: ChatService, private router : Router) 
   {
     this.user = this.authService.getLoggedInUser();
     this.username = this.user.id;
@@ -63,8 +65,6 @@ export class GameInviteComponent implements OnInit {
     {
       room?.onMessage("left_player_skin", (message) =>
       {
-        console.log("1");
-
         opponentPad = message;
       })
     }
@@ -73,7 +73,6 @@ export class GameInviteComponent implements OnInit {
       this.notJoined = false;
       if (this.notJoined == false && this.in == true)
       {
-        console.log("1");
         this.in = false
         setTimeout(() => {
           this.inviteScene = new Phaser.Game(this.inviteSceneConfig);
@@ -100,7 +99,26 @@ export class GameInviteComponent implements OnInit {
       }
       this.inviteScene.destroy(true);
     });
+    room?.onMessage("emptyRoom", ()=>
+    {
+      if (this.hasShownAlert == false)
+      {
+        window.alert('One of the player disconnected !');
+        this.router.navigate(['private/chat']);
+        this.hasShownAlert = true;
+      }
+    });
   }
+
+  ngOnDestroy()
+  {
+    if(this.in == true)
+    {
+      room?.leave();
+      window.location.reload();
+    }
+  }
+
 
 
   ngOnInit(): void
@@ -108,18 +126,43 @@ export class GameInviteComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const functionName = params['functionName'];
       // appeler la fonction en fonction du nom
-      if (functionName === 'maFonction') {
+      if (functionName === 'Create') {
         setTimeout(() => {
           this.create();
         }, 1000);
       }
     });
+    this.route.queryParams.subscribe(params => {
+      const functionName = params['functionName'];
+      const roomId = params['room'];
+
+      // appeler la fonction en fonction du nom
+      if (functionName === 'Join') {
+        setTimeout(() => {
+          this.connect(roomId);
+        }, 1000);
+      }
+    });
+
     gameWonInvite = false;
     ///////////////////////
     this.gameEnded = false;
     this.playerService.getUser().subscribe((user: UserI) => {
-      skinPad = user.colorPad;
-      skinBall = user.colorBall;
+      if (user.colorPad == 'default')
+      {
+        skinPad = user.colorPad;
+        skinPad = skinPad + '.png';
+      }
+      if (user.colorBall == 'default')
+      {
+        skinBall = user.colorBall;
+        skinBall = skinBall + '.png';
+      }
+      else
+      {
+        skinPad = user.colorPad;
+        skinBall = user.colorBall;
+      }
     });
     inWidth = 1920;
     inHeight = 1080;
@@ -152,7 +195,6 @@ export class GameInviteComponent implements OnInit {
 	  this.chatService.gameRoom.next(room.id);
       console.log(room.id);
       console.log(client.auth);
-      console.log(this.notJoined);
     } catch (e) {
       console.error("join error", e);
     }  
@@ -165,7 +207,6 @@ export class GameInviteComponent implements OnInit {
       console.log(room);
       console.log(client.auth);
       this.notJoined = false;
-      console.log(this.notJoined);
     } catch (e) {
       console.error("join error", e);
     }  

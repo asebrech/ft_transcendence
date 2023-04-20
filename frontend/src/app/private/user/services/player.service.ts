@@ -87,7 +87,6 @@ export class PlayerService {
     }
 
   setHistory(userId: number, history: playerHistory) : Observable<UserI> {
-    console.log("salut service");
     return this.httpClient.post<UserI>(`api/users/${userId}/add-to-history`, {history});
   }
 

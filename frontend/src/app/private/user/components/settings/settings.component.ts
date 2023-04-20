@@ -41,7 +41,6 @@ export class SettingsComponent implements OnInit {
   constructor(private starsService: StarsService, private playerService: PlayerService, private authService: AuthService, private route: Router ) {}
 
   ngOnInit(): void {
-    this.starsService.setActive(false);
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
       this.colorPad = user.colorPad;

@@ -6,6 +6,7 @@ import { ChatService } from '../../services/chat-service/chat.service';
 import { Observable, delay, tap } from 'rxjs';
 import { room } from 'src/app/private/game/components/game.front/game.front.component';
 import { RoomI } from 'src/app/model/room.interface';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-messages',
@@ -29,7 +30,7 @@ export class MessagesComponent implements OnInit {
 
 
 	constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef,
-		private elementRef: ElementRef, public chatService: ChatService) {
+		private elementRef: ElementRef, public chatService: ChatService, private router : Router) {
 
 		this.ChannelName$.subscribe(name =>{if(name){ this.placeholderText = name.name} else {this.placeholderText = null}});
 	}
@@ -158,7 +159,7 @@ export class MessagesComponent implements OnInit {
 	}
 
 	joinGame(gameRoom: string) {
-		console.log('joinGame', gameRoom);
+		this.router.navigate(['private/game/invite'], { queryParams: { functionName: 'Join', room : gameRoom } });
 	}
 
 }
