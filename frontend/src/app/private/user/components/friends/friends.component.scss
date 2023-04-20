@@ -164,3 +164,24 @@ input {
     align-items: center;
   }
 }
+
+.connected {
+	content: "";
+	width: 12px;
+	height: 12px;
+	background-color: #00ff00;
+	border-radius: 50%;
+	margin-left: -25px;
+	margin-top: 45px;
+  }
+
+  .notConnected {
+	content: "";
+	//display: inline-block;
+	width: 12px;
+	height: 12px;
+	background-color: grey;
+	border-radius: 50%;
+	margin-left: -25px;
+	margin-top: 45px;
+  }

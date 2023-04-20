@@ -11,8 +11,10 @@
       <div class="suggestions" *ngIf="filteredUsers.length > 0">
         <ul>
           <li *ngFor="let user of filteredUsers" (contextmenu)="onContextMenu($event, user)">
-            <img src="../../../../../../assets/images/astronaut.png" alt="Photo de profil de {{user.username}}" >
-            {{user.username}}
+			  <img src="../../../../../../assets/images/astronaut.png" alt="Photo de profil de {{user.username}}" >
+			  <div class="connected" *ngIf="user.isConnected === true"></div>
+				<div class="notConnected" *ngIf="user.isConnected === false"></div>
+								{{user.username}}
           </li>
         </ul>
       </div>
@@ -29,6 +31,8 @@
       <ul>
         <li *ngFor="let friend of friends" (contextmenu)="onContextMenu($event, friend)" >
           <img src="../../../../../../assets/images/astronaut.png">
+		  <div class="connected" *ngIf="friend.isConnected === true"></div>
+		  <div class="notConnected" *ngIf="friend.isConnected === false"></div>
           {{ friend.username }}
         </li>
         </ul>

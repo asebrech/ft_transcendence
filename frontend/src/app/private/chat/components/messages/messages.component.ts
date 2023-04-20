@@ -162,7 +162,7 @@ export class MessagesComponent implements OnInit {
 
 	async checkRoomExists(roomId: string) 
 	{
-		let client = new Client("ws://" + location.hostname + ":3000");
+		let client = new Client("ws://" + location.hostname + ":3001");
 		let rooms = await client.getAvailableRooms("my_room");
 		if (rooms.length > 0)
 		{

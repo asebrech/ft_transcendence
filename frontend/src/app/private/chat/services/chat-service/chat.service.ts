@@ -28,6 +28,14 @@ export class ChatService {
 
 	constructor(private socket: CustomSocket, private snackbar: MatSnackBar, private dashService: DashboardService, private route: Router) { }
 
+	connected() {
+		return this.socket.emit('connected');
+	}
+
+	getConnected(): Observable<UserI[]> {
+		return this.socket.fromEvent<UserI[]>('connected');
+	}
+
 	getAddedMessage(): Observable<MessageI> {
 		return this.socket.fromEvent<MessageI>('messageAdded');
 	}

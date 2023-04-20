@@ -59,7 +59,7 @@ export class LiveComponent implements OnInit, DoCheck {
     this.watchingLive = true;
     this.showLive = 1;
     this.showGame = 0;
-    this.client = new Client("ws://" + location.hostname + ":3000");
+    this.client = new Client("ws://" + location.hostname + ":3001");
     this.liveSceneConfig = {
       type: Phaser.AUTO,
       scene: [LiveScene],

@@ -31,6 +31,32 @@ export class FriendsComponent implements OnInit {
   constructor(private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit(): void {
+	this.chatService.getConnected().subscribe(val => {
+		if (this.filteredUsers) {
+		for (let i = 0; i < this.filteredUsers.length; i++) {
+			this.filteredUsers[i].isConnected = false;
+		}
+		for (const user of this.filteredUsers) {
+				for (const valUser of val) {
+						if (valUser.id === user.id) {
+							user.isConnected = true;
+					}
+				}
+		}
+		}
+		if (this.friends) {
+			for (let i = 0; i < this.friends.length; i++) {
+				this.friends[i].isConnected = false;
+			}
+			for (const user of this.friends) {
+					for (const valUser of val) {
+							if (valUser.id === user.id) {
+								user.isConnected = true;
+						}
+					}
+			}
+			}
+	})
 	this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
@@ -43,6 +69,7 @@ export class FriendsComponent implements OnInit {
       this.users = users; // tout les users.
       this.users = this.users.filter(users => users.id !== this.user.id);
       this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
+	  this.chatService.connected();
     });
   }
 
@@ -87,6 +114,7 @@ export class FriendsComponent implements OnInit {
       console.log('Friend removed successfully:', response);
       this.user$.subscribe((user: UserI) => {
         this.friends = user.friends;
+		this.chatService.connected();
       });
     });
     this.showContextMenu = false;
@@ -104,6 +132,7 @@ export class FriendsComponent implements OnInit {
       console.log('Friend added successfully:', response);
       this.user$.subscribe((user: UserI) => {
         this.friends = user.friends;
+		this.chatService.connected();
       });
     });
     this.showContextMenu = false;

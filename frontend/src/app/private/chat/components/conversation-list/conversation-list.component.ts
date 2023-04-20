@@ -4,6 +4,7 @@ import { RoomI } from 'src/app/model/room.interface';
 import { ChatService } from '../../services/chat-service/chat.service';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
+import { UserI } from 'src/app/model/user.interface';
 
 @Component({
   selector: 'app-conversation-list',
@@ -12,15 +13,35 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 })
 export class ConversationListComponent implements OnInit {
 	isClicked = false;
-	connected: boolean = true;
 
 	rooms$: Observable<RoomI[]>= this.chatService.getMyRooms();
-	rooms: RoomI[];
+	rooms: RoomI[] = [];
+	currentUser: UserI = this.authService.getLoggedInUser();
 
   constructor(public dashService: DashboardService, public chatService: ChatService, private authService: AuthService){ }
 
   ngOnInit() {
-	  this.chatService.emitPaginateRooms();
+	  this.chatService.getConnected().subscribe(users => {
+		for (let i = 0; i < this.rooms.length; i++) {
+			this.rooms[i].isConnected = false;
+		}
+		for (const room of this.rooms) {
+			if (room.privateMessage) {
+				for (const user of users) {
+					for (const roomUser of room.users) {
+						if (roomUser.id !== this.currentUser.id && roomUser.id === user.id) {
+							room.isConnected = true;
+						}
+					}
+				}
+			}
+		}
+	})
+	this.chatService.emitPaginateRooms();
+	this.rooms$.subscribe(val =>{ this.rooms = val;
+
+		this.chatService.connected();
+	});
 	const storedData = localStorage.getItem('room');
 		  if (storedData) {
 			  const myData = JSON.parse(storedData);

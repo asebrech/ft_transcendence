@@ -203,6 +203,7 @@ export class GameFrontComponent implements OnInit, DoCheck
       room?.leave();
       window.location.reload();
     }
+	this.starsService.setActive(true);
   }
 
   ngOnInit()
@@ -228,7 +229,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     ///////////////////////
     inWidth = 1920;
     inHeight = 1080;
-    client = new Client("ws://" + location.hostname + ":3000");
+    client = new Client("ws://" + location.hostname + ":3001");
     this.playSceneConfig = {
       type: Phaser.AUTO,
       scene: [PlayScene],

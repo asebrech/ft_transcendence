@@ -232,7 +232,6 @@
 }
 
 button {
-	width: 100%;
 	background: #C32F76;
 	border: none;
 	border-radius: 3px;
@@ -240,6 +239,17 @@ button {
 	padding: 5px;
 	margin: 5px;
 	cursor: pointer;
+}
+
+
+.confirm {
+	max-width: 100%;
+	background: #C32F76;
+	border: none;
+	border-radius: 3px;
+	color: white;
+	padding: 5px;
+	margin: 5px;
 }
 
 /* Hide scrollbar background */
