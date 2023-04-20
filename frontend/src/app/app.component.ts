@@ -9,19 +9,9 @@ import * as $ from 'jquery';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
+export class AppComponent
+{
   
-  isActiveValue: boolean;
-
   constructor(public service: StarsService) {}
   
-  ngOnInit()
-  {
-    this.isActiveValue = this.service.isActive();
-  }
-
-  isActive() {
-    return this.isActiveValue;
-  }
-
 }

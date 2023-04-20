@@ -129,13 +129,11 @@ export class InviteScene extends Phaser.Scene
       {
         this.skin = skinPad.split('/').pop();
         this.load.image('left_pad', 'assets/images/paddle/' + this.skin);
-        // this.load.image('right_pad', 'assets/images/paddle/pad.png');  
       }
       else
       {
         this.skin = skinPad.split('/').pop();
         this.load.image('right_pad', 'assets/images/paddle/' + this.skin);  
-        // this.load.image('left_pad', 'assets/images/paddle/pad2.png');
       }
     }
     if (this.isOpponentColorPad == false)
@@ -151,8 +149,8 @@ export class InviteScene extends Phaser.Scene
     }
     if (this.isColorPad == true)
     {
-      this.load.image('right_pad', 'assets/images/paddle/pad.png');  
-      this.load.image('left_pad', 'assets/images/paddle/pad2.png');
+      this.load.image('right_pad', 'assets/images/paddle/default.png');  
+      this.load.image('left_pad', 'assets/images/paddle/default.png');
     }
 /////////////////////////////////////////////////////////////////
     if (this.isColorBall == false)

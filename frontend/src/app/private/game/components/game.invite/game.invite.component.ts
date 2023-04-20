@@ -58,6 +58,7 @@ export class GameInviteComponent implements OnInit {
     {
       room?.onMessage("right_player_skin", (message) =>
       {
+        console.log(message);
         opponentPad = message;
       })
     }
@@ -65,6 +66,7 @@ export class GameInviteComponent implements OnInit {
     {
       room?.onMessage("left_player_skin", (message) =>
       {
+        console.log(message);
         opponentPad = message;
       })
     }
@@ -140,30 +142,26 @@ export class GameInviteComponent implements OnInit {
       if (functionName === 'Join') {
         setTimeout(() => {
           this.connect(roomId);
-        }, 1000);
+        }, 2000);
       }
     });
-
-    gameWonInvite = false;
-    ///////////////////////
-    this.gameEnded = false;
-    this.playerService.getUser().subscribe((user: UserI) => {
-      if (user.colorPad == 'default')
+    this.playerService.getUser().subscribe((user: UserI) => 
+    {
+      skinPad = user.colorPad;
+      skinBall = user.colorBall;
+      if (user.colorPad == 'default' && user.colorBall == 'default')
       {
-        skinPad = user.colorPad;
+        skinBall = skinBall + '.png';
         skinPad = skinPad + '.png';
       }
-      if (user.colorBall == 'default')
-      {
-        skinBall = user.colorBall;
+      else if (user.colorPad == 'default')
+        skinPad = skinPad + '.png';
+      else if (user.colorBall == 'default')
         skinBall = skinBall + '.png';
-      }
-      else
-      {
-        skinPad = user.colorPad;
-        skinBall = user.colorBall;
-      }
     });
+    ///////////////////////
+    gameWonInvite = false;
+    this.gameEnded = false;
     inWidth = 1920;
     inHeight = 1080;
     client = new Client("ws://" + location.hostname + ":3000");
@@ -192,7 +190,7 @@ export class GameInviteComponent implements OnInit {
     try 
     {
       room = await client?.create("my_room", { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
-	  this.chatService.gameRoom.next(room.id);
+	    this.chatService.gameRoom.next(room.id);
       console.log(room.id);
       console.log(client.auth);
     } catch (e) {

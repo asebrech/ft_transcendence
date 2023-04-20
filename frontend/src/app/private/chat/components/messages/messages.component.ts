@@ -4,9 +4,11 @@ import { DashboardService } from '../../services/dashboard-service/dashboard-ser
 import { MessageI } from 'src/app/model/message.interface';
 import { ChatService } from '../../services/chat-service/chat.service';
 import { Observable, delay, tap } from 'rxjs';
-import { room } from 'src/app/private/game/components/game.front/game.front.component';
 import { RoomI } from 'src/app/model/room.interface';
 import { Router } from '@angular/router';
+import { Client } from 'colyseus.js';
+import { room } from 'src/app/private/game/components/game.front/game.front.component';
+
 
 @Component({
 	selector: 'app-messages',
@@ -158,8 +160,31 @@ export class MessagesComponent implements OnInit {
 		inputElement.style.width = `${textWidth + padding}px`;
 	}
 
-	joinGame(gameRoom: string) {
-		this.router.navigate(['private/game/invite'], { queryParams: { functionName: 'Join', room : gameRoom } });
+	async checkRoomExists(roomId: string) 
+	{
+		let client = new Client("ws://" + location.hostname + ":3000");
+		let rooms = await client.getAvailableRooms("my_room");
+		if (rooms.length > 0)
+		{
+			for (let i : number = 0 ; i < rooms.length; i++)
+			{
+				if (rooms[i].roomId == roomId)
+				{
+					return true
+				}
+			}
+			return false;
+		}
+		return false;
+	}
+
+	async joinGame(gameRoom: string) 
+	{
+		const roomExists = await this.checkRoomExists(gameRoom);
+		if (roomExists) 
+			this.router.navigate(['private/game/invite'], { queryParams: { functionName: 'Join', room : gameRoom } });
+		else 
+		  console.log("The room does not exist");
 	}
 
 }

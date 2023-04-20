@@ -1,8 +1,9 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ɵbypassSanitizationTrustResourceUrl } from '@angular/core';
 import { ChatService } from '../../services/chat-service/chat.service';
 import { UserI } from 'src/app/model/user.interface';
 import { Observable } from 'rxjs';
 import { Router, NavigationExtras } from '@angular/router';
+
 
 @Component({
 	selector: 'app-member-option',
@@ -143,8 +144,9 @@ export class MemberOptionComponent implements OnInit {
 	inviteToGame() 
 	{
 		this.router.navigate(['private/game/invite'], { queryParams: { functionName: 'Create' } });
-		this.chatService.gameRoom.subscribe(room =>{
-		this.chatService.sendMessage({ text: "Game Invite", room: this.chatService.selectedRoom, gameRoom: room });
+		this.chatService.gameRoom.subscribe(room =>
+		{
+			this.chatService.sendMessage({ text: "Game Invite", room: this.chatService.selectedRoom, gameRoom: room });
 		});
 	}
 

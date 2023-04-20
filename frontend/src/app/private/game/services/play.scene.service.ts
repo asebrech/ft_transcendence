@@ -60,7 +60,6 @@ export class PlayScene extends Phaser.Scene
     /////////////////////////////////////////////////
     if (opponentPad[0] == '#')
     {
-      console.log(1);
       this.isOpponentColorPad = true;
     }
     else
@@ -130,18 +129,15 @@ export class PlayScene extends Phaser.Scene
       {
         this.skin = skinPad.split('/').pop();
         this.load.image('left_pad', 'assets/images/paddle/' + this.skin);
-        // this.load.image('right_pad', 'assets/images/paddle/pad.png');  
       }
       else
       {
         this.skin = skinPad.split('/').pop();
         this.load.image('right_pad', 'assets/images/paddle/' + this.skin);  
-        // this.load.image('left_pad', 'assets/images/paddle/pad2.png');
       }
     }
     if (this.isOpponentColorPad == false)
     {
-      console.log("isOpponentColorPad");
       if (player_left == true)
       {
         this.load.image('right_pad', 'assets/images/paddle/' + opponentPad.split('/').pop());  
