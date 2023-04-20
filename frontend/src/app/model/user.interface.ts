@@ -4,6 +4,7 @@ export interface UserI {
 	id?: number;
 	email?: string,
 	username?: string,
+	isConnected?: boolean,
 	password?: string;
 	wins?: number;
 	losses?: number;

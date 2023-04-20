@@ -23,7 +23,8 @@ export class MembersListComponent implements OnInit {
 	overlayPosition = { left: 0, top: 0 };
 	selectedIndex: number | null = null;
 
-	users: Observable<UserI[]> = this.chatservice.getMember();
+	users$: Observable<UserI[]> = this.chatservice.getMember();
+	users: UserI[] = [];
 
 	@Input() selectedUserInput: UserI;
 	  @ViewChild('option') option: ElementRef;
@@ -32,7 +33,26 @@ export class MembersListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+	this.chatservice.getConnected().subscribe(val => {
+		if (this.users) {
+		for (const user of this.users) {
+				for (const valUser of val) {
+						if (valUser.id === user.id) {
+							user.isConnected = true;
+					}
+				}
+		}
+		}
+	})
 	this.chatservice.listMember();
+	this.users$.subscribe(val =>{ this.users = val;
+		if (this.users) {
+			for (let i = 0; i < this.users.length; i++) {
+				this.users[i].isConnected = false;
+			}
+			this.chatservice.connected();
+		}
+	});
   }
 
   ngOnDestroy() {

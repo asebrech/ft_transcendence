@@ -52,11 +52,41 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	async handleDisconnect(socket: Socket) {
 		await this.connectedUserService.deleteBySocketId(socket.id);
 		socket.disconnect();
+		const connections: ConnectedUserI[] = await this.connectedUserService.findAll();
+		const users: UserI[] = [];
+		for(const connection of connections) {
+			if (!users.some(toto => toto.id === connection.user.id))
+				users.push(connection.user);
+		}
+		for(const connection of connections) {
+			await this.server.to(connection.socketId).emit('connected', users);
+		}
 	}
 
-	private disconnect(socket: Socket) {
+	private async disconnect(socket: Socket) {
 		socket.emit('Error', new UnauthorizedException());
+		await this.connectedUserService.deleteBySocketId(socket.id);
 		socket.disconnect();
+		const connections: ConnectedUserI[] = await this.connectedUserService.findAll();
+		const users: UserI[] = [];
+		for(const connection of connections) {
+			if (!users.some(toto => toto.id === connection.user.id))
+				users.push(connection.user);
+		}
+		for(const connection of connections) {
+			await this.server.to(connection.socketId).emit('connected', users);
+		}
+	}
+
+	@SubscribeMessage('connected')
+	async isConnected(socket: Socket, user:UserI) {
+		const connections: ConnectedUserI[] = await this.connectedUserService.findAll();
+		const users: UserI[] = [];
+		for(const connection of connections) {
+			if (!users.some(toto => toto.id === connection.user.id))
+				users.push(connection.user);
+		}
+		await this.server.to(socket.id).emit('connected', users);
 	}
 
 	@SubscribeMessage('createRoom')

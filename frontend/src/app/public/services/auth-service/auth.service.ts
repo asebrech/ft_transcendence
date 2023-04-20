@@ -51,7 +51,7 @@ export class AuthService {
 	return this.http.post<AccessTokenI>('https://api.intra.42.fr/oauth/token', body);
 }
 
-  getLoggedInUser() {
+  getLoggedInUser(): UserI {
 	const decodedToken = this.jwtService.decodeToken();
 	return decodedToken.user;
   }

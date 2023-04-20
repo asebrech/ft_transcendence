@@ -16,7 +16,7 @@
 </div>
 <div class="main"  >
 	<ul >
-		<li *ngFor="let user of (users | async); let i = index" class="list" (click)="getElementPosition(i, $event)"
+		<li *ngFor="let user of users; let i = index" class="list" (click)="getElementPosition(i, $event)"
 		(click)="select()"
 		(mousedown)="isClicked = true"
 		(mousedown)="selectedUser = user"
@@ -30,6 +30,8 @@
 		<!-- <img src="../../../../../assets/images/icons8-star-50.png" class="image" *ngIf="chatservice.selectedRoom.owner.id === user.id"> -->
 		<!-- <img src="../../../../../assets/images/icons8-star-half-50.png" class="image" > -->
 		<!-- <div class="connected" [ngStyle]="{'background-color': !connected ? 'grey' : ''}"></div> -->
+		<div class="connected" *ngIf="user.isConnected === true"></div>
+		<div class="notConnected" *ngIf="user.isConnected === false"></div>
 		<div class="name">
 			{{ user.username }}
 		</div>

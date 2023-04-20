@@ -6,6 +6,7 @@ export interface RoomI {
 	name?: string;
 	description?: string;
 	privateMessage?: boolean;
+	isConnected?: boolean;
 	isPrivate?: boolean;
 	channelPassword?: string;
 	owner?: UserI;
