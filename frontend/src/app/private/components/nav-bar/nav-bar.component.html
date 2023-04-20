@@ -1,5 +1,4 @@
-
-<nav *ngIf="hideMenu">
+<nav>
 	<ul>
 	  <li>
 		  <a [routerLink]="['/private/game/spacepong']" title="Game" [ngClass]="{'activeGame': currentUrl === '/private/game/spacepong'}">
@@ -34,11 +33,6 @@
 </ul>
 </nav>
 
-<div class="menu__mobile">
-	<div #menu__mobile_button class="menu__mobile_button">
-		<span></span>
-	</div>
-</div>
 
 <header>
 	<a>

@@ -214,5 +214,4 @@ export class StarsBlowComponent implements OnInit {
       init();
     }  
   }
-
 }

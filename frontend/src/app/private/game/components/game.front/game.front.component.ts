@@ -224,7 +224,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     gameWon = false;
     ///////////////////////
     this.gameEnded = false;
-	  this.starsService.setActive(false);
+	  this.starsService.setActive(true);
     ///////////////////////
     inWidth = 1920;
     inHeight = 1080;
