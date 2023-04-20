@@ -26,12 +26,10 @@ export class matchMaking extends Room {
    * spots with "bots" on this case.
    */
   allowUnmatchedGroups: boolean = false
-
   /**
    * Evaluate groups for each client at interval
    */
   evaluateGroupsInterval = 2000;
-
   /**
    * Groups of players per iteration
    */
@@ -69,6 +67,7 @@ export class matchMaking extends Room {
   stats: ClientStat[] = [];
 
   onCreate(options: any) {
+    this.setSeatReservationTime(100000);
 
     this.onMessage("confirm", (client: Client, message: any) => 
     {
@@ -89,6 +88,8 @@ export class matchMaking extends Room {
   }
 
   onJoin(client: Client, options: any) {
+    // console.log("test[][][][][][][][][")
+    // console.log(this.seatReservationTime);
     this.stats.push({
       client: client,
       rank: options.rank,
@@ -205,13 +206,6 @@ export class matchMaking extends Room {
             //   });
             // }, this.cancelConfirmationAfter);
 
-          } else {
-            /**
-             * Notify all clients within the group on how many players are in the queue
-             */
-            group.clients.forEach(client => {
-              client.client.send("clients", group.clients.length);
-            });
           }
         })
     );

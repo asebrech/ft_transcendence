@@ -26,7 +26,9 @@ export class MyRoom extends Room<Schema>
   // When room is initialized
   onCreate (options: any) 
   {
+    this.setSeatReservationTime(100000);
     console.log("room " + this.roomId + " created successfully , playerId : ", options.clientId);
+  
   }
 
   // onAuth(client: Client, options: any, request?: IncomingMessage) 
