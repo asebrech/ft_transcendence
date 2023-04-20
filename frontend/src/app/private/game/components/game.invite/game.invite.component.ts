@@ -164,7 +164,7 @@ export class GameInviteComponent implements OnInit {
     this.gameEnded = false;
     inWidth = 1920;
     inHeight = 1080;
-    client = new Client("ws://" + location.hostname + ":3000");
+    client = new Client("ws://" + location.hostname + ":3001");
     this.inviteSceneConfig = {
       type: Phaser.AUTO,
       scene: [InviteScene],

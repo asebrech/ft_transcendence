@@ -31,7 +31,7 @@ WORKDIR /ft_transcendence/src/app
 
 COPY --from=development /ft_transcendence/src/app .
 
-EXPOSE 3000
+EXPOSE 3000 3001
 
 #run app
 CMD ["node", "dist/main"]
