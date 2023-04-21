@@ -47,6 +47,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   botGameLaunched = false;
   user : any ;
   username : string;
+  realName : string;
   gameEnded : boolean;
   rank: number;
   history : History;
@@ -59,6 +60,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     this.user = this.authService.getLoggedInUser();
     this.username = this.user.id;
     this.rank = this.user.level;
+    this.realName = this.user.username;
   }
 
   ngDoCheck()
@@ -277,7 +279,6 @@ export class GameFrontComponent implements OnInit, DoCheck
       room = await client?.consumeSeatReservation(ticket);
     } catch (error) 
     {
-      console.log('Failed to join game session:', error);
     }
   }
   
@@ -327,7 +328,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   async join()
   {
     try {
-      room = await client?.joinOrCreate("ranked",  { rank : this.rank, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
+      room = await client?.joinOrCreate("ranked",  { rank : this.rank, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
       console.log(room);
       console.log(client.auth);
       this.hasJoinedSession = true;

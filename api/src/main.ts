@@ -6,6 +6,7 @@ import { Room, Server } from "colyseus";
 import { MyRoom } from "./game/rooms/MyRoom";
 import { monitor } from "@colyseus/monitor";
 import { matchMaking } from './game/rooms/matchMaking';
+import { TestRoom } from './game/rooms/test';
 
 async function bootstrap() 
 {
@@ -13,7 +14,7 @@ async function bootstrap()
   const gameServer = new Server();
 
   gameServer.define("my_room", MyRoom);
-  gameServer.define('ranked', matchMaking);
+  gameServer.define('ranked', TestRoom);
   gameServer.listen(3001)
 
   

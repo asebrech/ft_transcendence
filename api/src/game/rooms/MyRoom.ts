@@ -15,6 +15,8 @@ export class MyRoom extends Room<Schema>
   playing : number = 2;
   right_player_skin : string;
   left_player_skin : string;
+  right_player_username : string;
+  left_player_username : string;
 
 
   constructor() {
@@ -45,6 +47,7 @@ export class MyRoom extends Room<Schema>
       try
       {
         this.left_player = options.clientId;
+        this.left_player_username = options.player_name;
         client.send("left_player");
         this.left_player_skin = options.padSkin;
       }
@@ -59,6 +62,7 @@ export class MyRoom extends Room<Schema>
       try
       {
         this.right_player = options.clientId;
+        this.right_player_username = options.player_name;
         client.send("right_player");
         this.right_player_skin = options.padSkin;
       }
@@ -153,7 +157,7 @@ export class MyRoom extends Room<Schema>
       this.broadcast("updated_score", ({s_l : this.left_score, s_r : this.right_score}));
       this.setMetadata({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}})
     });
-    this.setMetadata({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}})
+    this.setMetadata({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}, left_username : this.left_player_username, right_username : this.right_player_username})
   }
 
   // When a client leaves the room
