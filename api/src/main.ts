@@ -14,7 +14,7 @@ async function bootstrap()
   const gameServer = new Server();
 
   gameServer.define("my_room", MyRoom);
-  gameServer.define('ranked', TestRoom);
+  gameServer.define('ranked', matchMaking);
   gameServer.listen(3001)
 
 
