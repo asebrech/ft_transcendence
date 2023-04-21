@@ -14,8 +14,8 @@ import { UserI } from 'src/app/model/user.interface';
 export class ConversationListComponent implements OnInit {
 	isClicked = false;
 
-	rooms$: Observable<RoomI[]>= this.chatService.getMyRooms();
-	rooms: RoomI[] = [];
+	rooms$: Observable<any[]>= this.chatService.getMyRooms();
+	rooms: any[] = [];
 	currentUser: UserI = this.authService.getLoggedInUser();
 
   constructor(public dashService: DashboardService, public chatService: ChatService, private authService: AuthService){ }
