@@ -35,6 +35,7 @@ export class GameInviteComponent implements OnInit {
   notJoined = true;
   user : any ;
   username : string;
+  realName : string;
   in : boolean = true;
   hasShownAlert : boolean = false;
 
@@ -42,6 +43,7 @@ export class GameInviteComponent implements OnInit {
   {
     this.user = this.authService.getLoggedInUser();
     this.username = this.user.id;
+    this.realName = this.user.username;
   }
 
   ngDoCheck()
@@ -114,10 +116,9 @@ export class GameInviteComponent implements OnInit {
 
   ngOnDestroy()
   {
-    if(this.in == true)
+    if(this.in == false)
     {
       room?.leave();
-      window.location.reload();
     }
   }
 
@@ -189,7 +190,7 @@ export class GameInviteComponent implements OnInit {
   {
     try 
     {
-      room = await client?.create("my_room", { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
+      room = await client?.create("my_room", { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
 	    this.chatService.gameRoom.next(room.id);
       console.log(room.id);
       console.log(client.auth);
@@ -201,7 +202,7 @@ export class GameInviteComponent implements OnInit {
   async connect(value : string)
   {
     try {
-      room = await client?.joinById(value, { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
+      room = await client?.joinById(value, { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
       console.log(room);
       console.log(client.auth);
       this.notJoined = false;

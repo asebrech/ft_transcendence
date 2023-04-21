@@ -22,7 +22,7 @@ export class EndGamePageComponent implements OnInit {
   resultWin : string = "YOU WIN !";
   you : string = "TATA";
   opponent : string = "TOTO";
-  level : number = 4;
+  level : number = 0;
   your_score : number = 4;
   opponent_score : number = 10;
 

@@ -92,8 +92,8 @@ export class LiveComponent implements OnInit, DoCheck {
         const metadata = rooms[i].metadata;
         this.myArray.push({
           roomId: rooms[i].roomId,
-          player_left: metadata.player_left,
-          player_right: metadata.player_right,
+          player_left: metadata.left_username,
+          player_right: metadata.right_username,
           score_left: metadata.score.left,
           score_right: metadata.score.right
         });

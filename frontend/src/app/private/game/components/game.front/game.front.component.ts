@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserI, playerHistory } from 'src/app/model/user.interface';
 import { Router } from '@angular/router';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
+import { thresholdFreedmanDiaconis } from 'd3';
 
 export let room : any;
 export let client : Client;
@@ -46,10 +47,12 @@ export class GameFrontComponent implements OnInit, DoCheck
   botGameLaunched = false;
   user : any ;
   username : string;
+  realName : string;
   gameEnded : boolean;
   rank: number;
   history : History;
   hasShownAlert = false;
+  hasJoinedSession = false;
 
   
   constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router, private chatService: ChatService) 
@@ -57,6 +60,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     this.user = this.authService.getLoggedInUser();
     this.username = this.user.id;
     this.rank = this.user.level;
+    this.realName = this.user.username;
   }
 
   ngDoCheck()
@@ -199,12 +203,12 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnDestroy()
   {
-    if(this.in == 1)
+    if(this.hasJoinedSession == true)
     {
-      room?.leave();
       window.location.reload();
+      // room.leave();
     }
-	this.starsService.setActive(true);
+	  this.starsService.setActive(true);
   }
 
   ngOnInit()
@@ -275,7 +279,6 @@ export class GameFrontComponent implements OnInit, DoCheck
       room = await client?.consumeSeatReservation(ticket);
     } catch (error) 
     {
-      console.log('Failed to join game session:', error);
     }
   }
   
@@ -325,9 +328,10 @@ export class GameFrontComponent implements OnInit, DoCheck
   async join()
   {
     try {
-      room = await client?.joinOrCreate("ranked",  { rank : this.rank, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
+      room = await client?.joinOrCreate("ranked",  { rank : this.rank, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
       console.log(room);
       console.log(client.auth);
+      this.hasJoinedSession = true;
     } catch (e) {
       console.error("join error", e);
     }  
