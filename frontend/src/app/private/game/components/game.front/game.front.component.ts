@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { UserI, playerHistory } from 'src/app/model/user.interface';
 import { Router } from '@angular/router';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
+import { thresholdFreedmanDiaconis } from 'd3';
 
 export let room : any;
 export let client : Client;
@@ -50,6 +51,7 @@ export class GameFrontComponent implements OnInit, DoCheck
   rank: number;
   history : History;
   hasShownAlert = false;
+  hasJoinedSession = false;
 
   
   constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router, private chatService: ChatService) 
@@ -199,12 +201,12 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnDestroy()
   {
-    if(this.in == 1)
+    if(this.hasJoinedSession == true)
     {
-      room?.leave();
       window.location.reload();
+      // room.leave();
     }
-	this.starsService.setActive(true);
+	  this.starsService.setActive(true);
   }
 
   ngOnInit()
@@ -328,6 +330,7 @@ export class GameFrontComponent implements OnInit, DoCheck
       room = await client?.joinOrCreate("ranked",  { rank : this.rank, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad});
       console.log(room);
       console.log(client.auth);
+      this.hasJoinedSession = true;
     } catch (e) {
       console.error("join error", e);
     }  

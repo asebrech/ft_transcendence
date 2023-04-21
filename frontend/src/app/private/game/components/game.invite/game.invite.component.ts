@@ -114,10 +114,9 @@ export class GameInviteComponent implements OnInit {
 
   ngOnDestroy()
   {
-    if(this.in == true)
+    if(this.in == false)
     {
       room?.leave();
-      window.location.reload();
     }
   }
 
