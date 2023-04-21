@@ -122,7 +122,6 @@ export class UserController {
 	@Get('qr-code')
 	async getQrCode(@Req() req: RequestModel): Promise<{qr: string}> {
 	  let user: UserI = req.user;
-	  console.log(user);
 	  if (user.google_auth) {
 		const qr: string = await this.userService.getQrCode(user);
 		return {qr};
@@ -135,6 +134,8 @@ export class UserController {
 	@Post('verify')
 	async verifyToken(@Body() body: { token: string; session: string;}) {
 		const user: UserI = await this.userService.handleVerifyToken(body.token, body.session);
+		if (!user)
+			return {};
 		const jwt: string = await this.userService.returnJwt(user);
 		return {
 			access_token: jwt,

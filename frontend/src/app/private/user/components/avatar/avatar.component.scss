@@ -1,0 +1,34 @@
+button {
+	width: 100px;
+	background: #C32F76;
+	border: none;
+	border-radius: 3px;
+	color: white;
+	padding: 5px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+
+.submit button:disabled {
+	color: #989aa2;
+	background: #AB3B71;
+	cursor: default;
+}
+
+.submit button:enabled {
+	cursor: pointer;
+}
+
+input {
+	background: rgba(217, 217, 217, 0.25);
+	border: none;
+	color: #989aa2;
+	border-radius: 3px;
+	padding: 3px;
+}
+
+input:focus {
+	outline: none;
+	color: white;
+}

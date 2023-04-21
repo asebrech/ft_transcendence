@@ -75,7 +75,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 	}
 
 	private async disconnect(socket: Socket) {
-		Logger.log('offline2');
 		socket.emit('Error', new UnauthorizedException());
 		await this.connectedUserService.deleteBySocketId(socket.id);
 		socket.disconnect();

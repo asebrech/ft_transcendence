@@ -34,24 +34,11 @@ export class AppModule {
 				{ path: '/api/users', method: RequestMethod.POST },
 				{ path: '/api/users/login', method: RequestMethod.POST },
 				{ path: '/api/users/api-login', method: RequestMethod.POST },
-				{ path: '/api/users/qr-code', method: RequestMethod.GET },
 				{ path: '/api/users/verify', method: RequestMethod.POST },
 				{ path: '/api/users/check-email', method: RequestMethod.GET },
 				{ path: '/api/colyseus', method: RequestMethod.GET },
+				{ path: '/api/users/profile-image/:imagename', method: RequestMethod.GET },
 			)
-			.forRoutes({path: '/api/users/profile-image/:imagename', method: RequestMethod.GET})
-			.apply((req, res, next) => {
-				res.setHeader('Access-Control-Allow-Origin', '*');
-				res.setHeader(
-					'Access-Control-Allow-Methods',
-					'GET, POST, PUT, DELETE, OPTIONS',
-				);
-				res.setHeader(
-					'Access-Control-Allow-Headers',
-					'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-				);
-				next();
-			})
 			.forRoutes('*');
 	}
 }
