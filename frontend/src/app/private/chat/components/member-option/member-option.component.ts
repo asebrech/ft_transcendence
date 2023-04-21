@@ -3,6 +3,7 @@ import { ChatService } from '../../services/chat-service/chat.service';
 import { UserI } from 'src/app/model/user.interface';
 import { Observable } from 'rxjs';
 import { Router, NavigationExtras } from '@angular/router';
+import { PlayerService } from 'src/app/private/user/services/player.service';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class MemberOptionComponent implements OnInit {
 
 
 
-	constructor(public chatService: ChatService, private router : Router) { }
+	constructor(public chatService: ChatService, private router : Router, private playerService: PlayerService) { }
 	
 	
 	ngOnInit(): void {
@@ -151,7 +152,7 @@ export class MemberOptionComponent implements OnInit {
 	}
 
 	userProfile() {
-		console.log('User Profile', this.selectedUser);
+		this.playerService.goToProfileOf(this.selectedUser);
 	}
 
 	addFriend() {
