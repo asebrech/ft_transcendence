@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, tap } from 'rxjs';
 import { AuthService } from '../../services/auth-service/auth.service';
-import { ActivatedRoute, Route } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { LoginResponseI } from 'src/app/model/login-response';
 
 @Component({
@@ -15,7 +15,7 @@ export class GoogleAuthComponent implements OnInit, OnDestroy{;
 	session: any;
 	token: string;
 
-  constructor(private http: HttpClient, private authService: AuthService, private route: ActivatedRoute) { }
+  constructor(private http: HttpClient, private authService: AuthService, private route: ActivatedRoute, private router : Router) { }
 
   ngOnInit() {
 	this.session = this.route.snapshot.queryParams;

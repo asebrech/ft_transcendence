@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { HttpException, HttpStatus, Injectable, NestMiddleware } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, Logger, NestMiddleware } from "@nestjs/common";
 import { NextFunction } from "express";
 import { AuthService } from "src/auth/service/auth.service";
 import { UserI } from "src/user/model/user.interface";

@@ -92,20 +92,23 @@ export class UserService {
 	async handleVerifyToken(token: string, sessionId: string): Promise<UserI> {
 		const session = this.authService.getSession(sessionId);
 		if (!session) {
-			throw new HttpException('Login was not successful, invalid session', HttpStatus.UNAUTHORIZED);
+			return null
+			//throw new HttpException('Login was not successful, invalid session', HttpStatus.UNAUTHORIZED);
 		}
 		const foundUser: UserI =  await this.findByEmail(session.email);
 		if (!token)
 		{
 			this.authService.deleteSession(sessionId);
-			throw new HttpException('Session leaved', HttpStatus.NO_CONTENT);
+			//throw new HttpException('Session leaved', HttpStatus.NO_CONTENT);
+			return null;
 		}
 		const check: boolean = this.authService.checkToken(foundUser, token);
 		if (check) {
 			this.authService.deleteSession(sessionId);
 			return foundUser;
 		} else {
-			throw new HttpException('Login was not successful, invalid token', HttpStatus.UNAUTHORIZED);
+			return null
+			//throw new HttpException('Login was not successful, invalid token', HttpStatus.UNAUTHORIZED);
 		}
 	}
 
