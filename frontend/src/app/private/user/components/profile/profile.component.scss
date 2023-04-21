@@ -51,7 +51,8 @@ progress {
 }
 
 .profile {
-width: 70%;
+  width: 70%;
+  border-radius: 50%;
 }
 
 .col {
@@ -133,7 +134,9 @@ tr {
 	background-color: #00ff00;
 	border-radius: 50%;
 	border-radius: 50%;
-	margin-left: 50%;
+  margin-left: 60%;
+  margin-top: -10%;
+  backface-visibility: hidden;
   }
 
   .notConnected {
@@ -143,5 +146,8 @@ tr {
 	height: 40px;
 	background-color: grey;
 	border-radius: 50%;
-	margin-left: 50%;
+  margin-left: 60%;
+  margin-top: -10%;
+  backface-visibility: hidden;
   }
+

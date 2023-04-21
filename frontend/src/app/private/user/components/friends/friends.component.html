@@ -11,7 +11,7 @@
       <div class="suggestions" *ngIf="filteredUsers.length > 0">
         <ul>
           <li *ngFor="let user of filteredUsers" (contextmenu)="onContextMenu($event, user)">
-			  <img *ngIf="user.profilPic" src="http://localhost:3000/api/users/profile-image/{{user.profilPic}}" alt="profilePicture">
+			  <img class="profilPic" *ngIf="user.profilPic" src="http://localhost:3000/api/users/profile-image/{{user.profilPic}}" alt="profilePicture">
             <img class="profile" *ngIf="!user.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut">
 			  <div class="connected" *ngIf="user.isConnected === true"></div>
 				<div class="notConnected" *ngIf="user.isConnected === false"></div>

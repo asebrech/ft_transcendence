@@ -3,7 +3,7 @@
   <div class="profil" *ngIf="(user$ | async) as user">
     <h1>Profil</h1>
     <img *ngIf="user.profilPic" src="http://localhost:3000/api/users/profile-image/{{user.profilPic}}" alt="profilePicture">
-    <img class="profile" *ngIf="!user.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut">
+    <img class="profilPic" *ngIf="!user.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut">
     <app-avatar></app-avatar>
     <button (click)="changeUsername()">Change username</button>
     <button (click)="changeEmail()">Change email</button>
@@ -23,7 +23,7 @@
     </div>
     <div class="username-popup" *ngIf="emailPopup">
       <h1>Please enter new email</h1>
-      <input type="email" placeholder="OLD EMAIL" [(ngModel)]="old">
+      <input type="email" placeholder="OLD EMAIL" [(ngModel)]="old" >
       <input type="email" placeholder="NEW EMAIL"  [(ngModel)]="newO">
       <button class="changes" (click)="closePopup(0, old, newO)">SAVE CHANGES</button>
     </div>
@@ -42,11 +42,11 @@
           <img (click)="retrieveBallSkin($event)" src="../../../../../assets/images/ball/earth.png">
         </div>
       </div>
-      <ngx-colors ngx-colors-trigger [(ngModel)]="colorBall" (ngModelChange)="onColorBallChange($event)" ></ngx-colors>
+      <ngx-colors ngx-colors-trigger [(ngModel)]="colorBall" (ngModelChange)="onColorBallChange($event)" ngDefaultControl></ngx-colors>
     </div>
 
     <div class="paddle">
-      <div ngx-colors-trigger [(ngModel)]="colorPad" [style.background-color]="colorPad" (ngModelChange)="onPaddleColorChange($event)" class="paddle_color_container"></div>
+      <div ngx-colors-trigger [(ngModel)]="colorPad" [style.background-color]="colorPad" (ngModelChange)="onPaddleColorChange($event)" class="paddle_color_container" ngDefaultControl></div>
       <div class="paddle_skin_container">
         <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/black_star.png">
         <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/halo.png">

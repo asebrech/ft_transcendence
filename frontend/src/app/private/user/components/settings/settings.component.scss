@@ -8,16 +8,21 @@
 
 .profil {
   display: flex;
+  padding-top: 2vh;
   flex-direction: column;
   padding-bottom: 150px;
+  -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
+  background: rgba(22, 7, 45, 0.3);
   align-items: center;
+  flex: 1;
   padding-left: -120px;
+  box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
   img {
     width: 40%;
     margin: 20px;
+    border-radius: 50%;
   }
-
 }
 
 button {
@@ -36,6 +41,7 @@ button {
   display: flex;
   flex-direction: column;
   padding-bottom: 150px;
+  flex: 1;
   backdrop-filter: blur(3px);
 }
 
@@ -48,7 +54,7 @@ h1 {
 // CSS "flex-grow: 1" sur chaque div pour que chacune
 //prenne autant de place que possible dans le conteneur parent.
 
-input 
+input
 {
   align-self: center;
   background-color: #110720;
@@ -64,7 +70,7 @@ input
   margin-bottom: 2%;
 }
 
-.username-popup 
+.username-popup
 {
   position: fixed;
   top: 0;
@@ -88,7 +94,7 @@ input
   }
 }
 
-button.changes 
+button.changes
 {
   padding: 8px;
   margin: 5px;
@@ -109,7 +115,7 @@ button.changes
   align-items: center;
   padding-top: 2vh;
   width: 23vw;
-  height: 39vh;
+ // height: 39vh;
   background: rgba(22, 7, 45, 0.3);
   box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(3px);

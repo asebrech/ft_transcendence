@@ -88,7 +88,6 @@ export class SettingsComponent implements OnInit {
       this.emailPopup = false;
     }
     else if (num == 1){
-      console.log(this.user.password);
       this.playerService.updatePassword(this.user.id, old, newO).pipe(
         catchError(error => {
           console.log('An error occurred:', error);
@@ -117,25 +116,24 @@ export class SettingsComponent implements OnInit {
   ////////////////////////////////////////////////////////////////////
   retrieveBallSkin(event: Event){
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
-    this.playerService.updateColorBall(this.user.id,clickedImageSrc).subscribe( (user: UserI) => { 
+    this.playerService.updateColorBall(this.user.id,clickedImageSrc).subscribe( (user: UserI) => {
         console.log("ball changed successfully");
       this.user$.subscribe( (user: UserI) => {
         this.colorBall = user.colorBall;
       })
     });
   }
-  onColorBallChange(newColor: string)
-  {
-    this.playerService.updateColorBall(this.user.id,newColor).subscribe( (user: UserI) => { 
+
+  onColorBallChange(newColor: string){
+    this.playerService.updateColorBall(this.user.id,newColor).subscribe( (user: UserI) => {
       console.log("ball color changed successfully");
       this.user$.subscribe( (user: UserI) => {
       this.colorBall = user.colorBall;
       })
     });
   }
-  
-  retrievePaddleSkin(event: Event)
-  {
+
+  retrievePaddleSkin(event: Event){
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
     this.playerService.updateColorPad(this.user.id,clickedImageSrc).subscribe( (user: UserI) => {
         console.log("pad changed successfully");
@@ -145,24 +143,13 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  onPaddleColorChange(newColor : string)
-  {
-    this.playerService.updateColorPad(this.user.id, newColor).subscribe( (user: UserI) => { 
+  onPaddleColorChange(newColor : string){
+    this.playerService.updateColorPad(this.user.id, newColor).subscribe( (user: UserI) => {
         console.log("pad color changed successfully");
       this.user$.subscribe( (user: UserI) => {
         this.colorPad = user.colorPad;
       })
     });
-  }
-
-
-
-  /////////////////////////////
-  test()
-  {
-    console.log(this.colorBall);
-    console.log(this.colorPad);
-
   }
 
   getImageUrl(): string {
