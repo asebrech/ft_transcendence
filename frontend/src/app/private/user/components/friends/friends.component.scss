@@ -124,45 +124,41 @@ input {
 
 /* CSS pour les éléments du menu */
 
-.mainMenu {
+.context-menu {
   position: absolute;
-	width: 250px;
-	border-radius: 9px;
-	background: rgba(22, 7, 45, 0.5);
-	box-shadow: 23px 0px 24px rgba(0, 0, 0, 0.25);
-	backdrop-filter: blur(15px);
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+  top: 0;
+  left: 0;
+  background-color: #2f3136;
+  //color:#2b2d31;
+  border: 1px solid #4f545c;
+  border-radius: 3px;
+  padding: 5px;
+  z-index: 1;
 }
 
-.labelContainer {
-	margin: 10px;
-	display: flex;
-	align-items: start;
-	width: 70%;
-	justify-content: space-between;
-	transition: ease-in-out 0.05s;
-	cursor: pointer;
+/* CSS pour les éléments du menu */
+.context-menu button {
+  display: flex;
+  align-items:flex-start;
+  border: 1px solid #4f545c;
+  border-radius: 3px;
+  color: white;
+  background-color: #2b2d31;
+  font-family: 'nasalization';
+  padding: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
 }
 
-.labelContainer:hover {
-	scale: (1.03);
-	transition: ease-in-out 0.05s;
-
+.context-menu button:hover {
+  background-color: #40444b;
 }
 
-.mainMenu label {
-	cursor: pointer;
-	font-size: 18px;
-}
-
-.separator {
-	content: '';
-	width: 70%;
-	height: 1px;
-	background: white;
-	//margin: 10px;
+.context-menu button:not(:first-child) {
+  border-top: 1px solid #4f545c;
+  margin-top: 4px;
+  padding-top: 4px;
 }
 
 @media screen and (max-width: 768px) {

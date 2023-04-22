@@ -19,6 +19,7 @@ export class ProfileComponent {
   opponents$ : Observable<UserI[]>;
   user: UserI;
   opponentName: string;
+  ratio : number;
   constructor(private playerService: PlayerService, private route: ActivatedRoute, private authService : AuthService, private chatService: ChatService) {
   }
 
@@ -50,6 +51,7 @@ export class ProfileComponent {
     this.user$.subscribe((user) => {
       this.user = user;
       this.opponents$ = this.getOpponents(this.user.history);
+      this.ratio = (user.wins / (user.wins + user.losses)) * 100;
     });
   }
 

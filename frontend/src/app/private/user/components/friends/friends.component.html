@@ -42,31 +42,11 @@
   </div>
 </div>
 
-<div *ngIf="showContextMenu"
-  [style.left.px]="overlayPosition.left"
-[style.top.px]="overlayPosition.top"
-  class="mainMenu">
-  <div class="labelContainer" (click)="goToProfileOf(selectedUser)">
-    <label>Go to Profile</label>
-  </div>
-  <div class="separator" *ngIf="!isMyFriend || !isBlocked"></div>
-  <div class="labelContainer" (click)="sendMessage(selectedUser)" *ngIf="!isBlocked" >
-    <label>Send Message</label>
-  </div>
-  <div class="separator" *ngIf="!isBlocked"></div>
-  <div class="labelContainer" *ngIf="!isBlocked" (click)="block(selectedUser)" >
-    <label>Block</label>
-  </div>
-  <div class="separator" *ngIf="isBlocked"></div>
-  <div class="labelContainer" *ngIf="isBlocked" (click)="unblock(selectedUser)" >
-    <label>Unblock</label>
-  </div>
-  <div class="separator" *ngIf="isMyFriend"></div>
-  <div class="labelContainer" *ngIf="isMyFriend" (click)="removeFriend(this.user.id, selectedUser)">
-    <label>Delete Friend</label>
-  </div>
-  <div class="separator" *ngIf="!isMyFriend"></div>
-  <div class="labelContainer" *ngIf="!isMyFriend" (click)="addFriend(this.user.id, selectedUser)">
-    <label>Add Friend</label>
-  </div>
+<div *ngIf="showContextMenu" class="context-menu" [style.top.px]="contextMenuTop" [style.left.px]="contextMenuLeft">
+  <button *ngIf="!isMyFriend" (click)="addFriend(this.user.id, selectedUser)">add friend</button>
+  <button (click)="sendMessage(selectedUser)" *ngIf="!isBlocked" >send message</button>
+  <button *ngIf="!isBlocked" (click)="block(selectedUser)" >Block</button>
+  <button *ngIf="isBlocked" (click)="unblock(selectedUser)" >Unblock</button>
+  <button  *ngIf="isMyFriend" (click)="removeFriend(this.user.id, selectedUser)">delete friend</button>
+  <button (click)="goToProfileOf(selectedUser)">Go to profil</button>
 </div>

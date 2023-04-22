@@ -20,14 +20,14 @@ export class FriendsComponent implements OnInit {
   searchTerm: string = '';
   message: string;
   showContextMenu: boolean;
-  overlayPosition = { left: 0, top: 0 };
+  contextMenuTop: number;
+  contextMenuLeft: number;
   isMyFriend: boolean = true;
   selectedUser: UserI;
   user : UserI = this.authService.getLoggedInUser();
   friends: Friend[] = [];
   isBlocked: boolean = null;
   data: any;
-
 
   constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
@@ -93,7 +93,8 @@ export class FriendsComponent implements OnInit {
 	  this.chatService.checkIfBlocked(user);
     event.preventDefault();
     this.showContextMenu = true;
-    this.overlayPosition = {left :event.clientY, top: event.clientX}
+    this.contextMenuTop = event.clientY;
+    this.contextMenuLeft = event.clientX;
     this.selectedUser = user; // le profil sur lequel on a fait clic droit.
   }
 
