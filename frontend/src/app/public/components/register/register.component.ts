@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injectable, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Injectable, Input, ViewChild, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { CustomValidators } from '../../_helpers/custom-validators';
 import { UserService } from '../../services/user-service/user.service';
@@ -53,6 +53,7 @@ export class RegisterComponent {
       inProgress: false,
       progress: 0
     };
+    console.log(this.fileUpload.nativeElement.files[0]);
   }
 
   uploadFile(id: number) {
@@ -82,10 +83,21 @@ export class RegisterComponent {
 
   register() {
 		if (this.form.valid) {
+      if (!this.file.data && this.form.get('profilPic').value === null) {
+        const defaultImageURL = '../../../assets/images/astronaut.png';
+      fetch(defaultImageURL)
+        .then(response => response.arrayBuffer())
+        .then(buffer => {
+          this.file = {
+          data : new File([buffer], 'astronaut.png', { type: 'image/png' }),
+          inProgress: false,
+          progress: 0,
+        }});
+      }
 			this.userService.create({
 				email: this.email.value,
 				password: this.password.value,
-				username: this.username.value
+				username: this.username.value,
 			}).pipe(
 				tap(() => this.authService.login({
 					email: this.email.value,
@@ -97,7 +109,6 @@ export class RegisterComponent {
           }
         });
 			}
-
 	}
 
 	get	email(): FormControl {

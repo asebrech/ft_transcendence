@@ -29,7 +29,7 @@ export class MembersListComponent implements OnInit {
 	@Input() selectedUserInput: UserI;
 	  @ViewChild('option') option: ElementRef;
 
-  constructor(private elementRef: ElementRef, public dashService: DashboardService, public chatservice: ChatService) { 
+  constructor(private elementRef: ElementRef, public dashService: DashboardService, public chatservice: ChatService) {
   }
 
   ngOnInit(): void {
@@ -98,7 +98,7 @@ export class MembersListComponent implements OnInit {
   }
 
   getElementPosition(index: number, event: MouseEvent) {
-	  
+
 // 	if (this.selectedUser.id === this.chatservice.currentUser.id){
 // 		this.hide();
 // 		this.showOverlay = false;
@@ -111,25 +111,25 @@ export class MembersListComponent implements OnInit {
 		}
 		// Récupérer l'élément DOM à partir de l'événement de clic
 		const domElement = event.target as HTMLElement;
-		
+
 		// Récupérer la position de l'élément en utilisant getBoundingClientRect()
 		const rect = domElement.getBoundingClientRect();
-		
+
 		this.selectedIndex = index;
-		
+
 		this.overlayPosition.left = -260;
-		
+
 		const windowHeight = window.innerHeight;
 		const overlayHeight = this.heightOverlay + 100;//domElement.offsetHeight;
-		
+
 		if (rect.top + this.heightOverlay > windowHeight) {
 			this.overlayPosition.top = windowHeight - overlayHeight;
 		} else {
 			this.overlayPosition.top = rect.top -95;
 		}
-		
+
 		// Afficher la div de 100x100
-		
+
 		this.showOverlay = true;
 	this.checkResize();
   }
@@ -139,7 +139,7 @@ export class MembersListComponent implements OnInit {
     if (this.showOverlay && this.selectedIndex !== null) {
       // Calculez la hauteur de défilement
 	  const selectedElement = document.querySelector('.selected') as HTMLAnchorElement;
-	  
+
 	  const rect = selectedElement.getBoundingClientRect();
       const scrollTop = window.pageYOffset;
 

@@ -20,8 +20,7 @@ export class FriendsComponent implements OnInit {
   searchTerm: string = '';
   message: string;
   showContextMenu: boolean;
-  contextMenuTop: number;
-  contextMenuLeft: number;
+  overlayPosition = { left: 0, top: 0 };
   isMyFriend: boolean = true;
   selectedUser: UserI;
   user : UserI = this.authService.getLoggedInUser();
@@ -63,6 +62,7 @@ export class FriendsComponent implements OnInit {
     this.user$ = this.playerService.getUser();
     this.user$.subscribe((user: UserI) => {
        this.friends = user.friends;
+       this.setMessage();
     });
     this.playerService.getUserList().subscribe(users => {
       this.filteredUsers = users; // affichera les utilisateurs selon l'input
@@ -89,20 +89,16 @@ export class FriendsComponent implements OnInit {
   }
 
   onContextMenu(event: MouseEvent, user: UserI){
-	this.chatService.checkIfBlocked(user);
+    this.checkIfFriend(user);
+	  this.chatService.checkIfBlocked(user);
     event.preventDefault();
     this.showContextMenu = true;
-    this.contextMenuTop = event.clientY;
-    this.contextMenuLeft = event.clientX;
+    this.overlayPosition = {left :event.clientY, top: event.clientX}
     this.selectedUser = user; // le profil sur lequel on a fait clic droit.
   }
 
   closeContextMenu(){
     this.showContextMenu = false;
-  }
-
-  removevFriend() {
-    console.log("supprimer ami");
   }
 
   removeFriend(id: number, friend: UserI) {
@@ -168,7 +164,6 @@ export class FriendsComponent implements OnInit {
   unblock(user: UserI) {
 	this.chatService.unBlockUser(user, null);
 	this.showContextMenu = false;
-
   }
 
   getImageUrl(user: UserI): string {
@@ -179,4 +174,13 @@ export class FriendsComponent implements OnInit {
     return `http://localhost:3000/api/users/profile-image/${user.profilPic}`;
   }
 
+  checkIfFriend(user: UserI) {
+    this.isMyFriend = false; // remise à false à chaque fois qu'on appelle la fonction
+    for (const friend of this.friends) {
+      if (friend.id === user.id) { // si l'ami a le même id que l'utilisateur
+        this.isMyFriend = true; // utilisateur trouvé dans le tableau
+        break;
+      }
+    }
+  }
 }

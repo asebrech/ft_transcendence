@@ -38,6 +38,7 @@ export class AppModule {
 				{ path: '/api/users/check-email', method: RequestMethod.GET },
 				{ path: '/api/colyseus', method: RequestMethod.GET },
 				{ path: '/api/users/profile-image/:imagename', method: RequestMethod.GET },
+				{ path: '/api/users/:id/upload-profil-pic', method: RequestMethod.POST },
 			)
 			.forRoutes('*');
 	}

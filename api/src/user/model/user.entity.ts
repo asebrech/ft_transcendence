@@ -84,5 +84,5 @@ export class UserEntity {
 	// emailToLowerCase() {
 	// 	this.email = this.email.toLocaleLowerCase();
 	// 	this.username = this.username.toLocaleLowerCase(); 
-	// }
+	// } 
 }
