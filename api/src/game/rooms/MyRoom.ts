@@ -185,6 +185,7 @@ export class MyRoom extends Room<Schema>
   {
     client.leave()
     player.delete(client.sessionId);
-    console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length);
+    console.log("LE JOUEUR ID " + this.left_player + " A QUITTER LA PARTIE");
+    console.log("LE JOUEUR ID " + this.right_player + " A QUITTER LA PARTIE");
   }
 }
