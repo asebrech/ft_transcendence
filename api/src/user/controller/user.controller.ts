@@ -191,6 +191,11 @@ export class UserController {
 	  return this.userService.incrOrDecrLevel(userId, true);
 	}
 
+	@Post(':id/decr-level')
+	async decrLevel(@Param('id') userId: number) {
+	  return this.userService.incrOrDecrLevel(userId, false);
+	}
+
 	@Get('all')
 	async getAllUsers() {
 		return this.userService.getAllUsers();

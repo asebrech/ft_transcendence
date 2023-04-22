@@ -5,6 +5,7 @@ import { gameWonInvite, inviteOpponentName , inviteOpponentEndScore, inviteUserE
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { Client } from 'colyseus.js';
 import { PlayerService } from 'src/app/private/user/services/player.service';
+import { UserI } from 'src/app/model/user.interface';
 @Component({
   selector: 'app-end-game-page',
   templateUrl: './end-game-page.component.html',
@@ -17,7 +18,7 @@ export class EndGamePageComponent implements OnInit {
   you : string;
   opponent : string;
   ////////////////////
-  level : number = 0;
+  level : number;
   ////////////////////
   your_score : number = 0;
   opponent_score : number = 0;
@@ -27,9 +28,7 @@ export class EndGamePageComponent implements OnInit {
     this.starsService.setActive(false);
     this.userAuth = this.authService.getLoggedInUser();
     this.you = this.userAuth.username;
-    this.level = this.userAuth.level;
   }
-
 
   WonGame : boolean = false;
   LostGame : boolean = false;
@@ -60,22 +59,23 @@ export class EndGamePageComponent implements OnInit {
     }
     if (this.WonGame == true && this.xpBar)
     {
-      this.playerService.incrLevel(this.userAuth.id).subscribe(response => { console.log("level incred");});
+      this.playerService.incrLevel(this.userAuth.id).subscribe((user: UserI) => {
+         this.level = user.level;
+        });
       this.playerService.addWin(this.userAuth.id).subscribe();
       this.xpBar.nativeElement.addEventListener('animationend', () => 
       {
-        this.level++;
-      });    
+      });
     };
 
     if (this.LostGame == true)
     {
-      this.playerService.decrLevel(this.userAuth.id).subscribe(response => { console.log("level decred");});
+      this.playerService.decrLevel(this.userAuth.id).subscribe((user: UserI) => {
+      this.level = user.level;
+      });
       this.playerService.addLosses(this.userAuth.id).subscribe();
       this.degBar.nativeElement.addEventListener('animationend', () => 
       {
-        if (this.level > 1)
-          this.level--;
       });
     };
 
@@ -92,26 +92,33 @@ export class EndGamePageComponent implements OnInit {
     {
       this.LostGame = true;
     }
+
+    this.playerService.getUser().subscribe((user:UserI) => { this.level = user.level;})
   }
   
-  // async opponnentInfo()
-  // {
-  //   let myClient = new Client("ws://" + location.hostname + ":3001");
-  //   const rooms = await myClient.getAvailableRooms("my_room");
-  //   if(rooms.length > 0)
-  //   {
-  //     for (let i : number = 0 ; i < rooms.length; i++)
-  //     {
-  //       const metadata = rooms[i].metadata;
-  //       console.log(rooms[i].roomId);
-  //       console.log("left_username : ",metadata.left_username);
-  //       console.log("right_username : ",metadata.right_username);
-  //       console.log("right_user_id : ", metadata.player_left);
-  //       console.log("left_user_id : ", metadata.player_right);
-  //       console.log(metadata.score.left);
-  //       console.log(metadata.score.right);
-  //     };
-  //   }
-  // }
+  goBack()
+  {
+    window.location.reload();
+  }
+
+  async opponnentInfo()
+  {
+    let myClient = new Client("ws://" + location.hostname + ":3001");
+    const rooms = await myClient.getAvailableRooms("my_room");
+    if(rooms.length > 0)
+    {
+      for (let i : number = 0 ; i < rooms.length; i++)
+      {
+        const metadata = rooms[i].metadata;
+        console.log(rooms[i].roomId);
+        console.log("left_username : ",metadata.left_username);
+        console.log("right_username : ",metadata.right_username);
+        console.log("right_user_id : ", metadata.player_left);
+        console.log("left_user_id : ", metadata.player_right);
+        console.log(metadata.score.left);
+        console.log(metadata.score.right);
+      };
+    }
+  }
 
 }

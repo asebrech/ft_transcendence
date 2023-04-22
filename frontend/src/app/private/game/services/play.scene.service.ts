@@ -205,7 +205,7 @@ export class PlayScene extends Phaser.Scene
         ease: 'Linear',
         loop: -1
     });
-    this.stars = this.add.tileSprite(0, 0, inWidth, inHeight, 'stars').setScrollFactor(0);
+    this.stars = this.add.tileSprite(0, 0, 8000, 6000, 'stars').setScrollFactor(0);
     this.camera1 = this.cameras.add(0,0, inWidth, inHeight);
     this.camera1.startFollow(this.bg);
     this.camera1.centerOn(inWidth,inHeight);
