@@ -28,9 +28,8 @@ export class MyRoom extends Room<Schema>
   // When room is initialized
   onCreate (options: any) 
   {
-    this.setSeatReservationTime(100000);
+    this.setSeatReservationTime(10000);
     console.log("room " + this.roomId + " created successfully , playerId : ", options.clientId);
-  
   }
 
   // onAuth(client: Client, options: any, request?: IncomingMessage) 
@@ -74,6 +73,7 @@ export class MyRoom extends Room<Schema>
       this.broadcast("right_player_skin", this.right_player_skin);
       this.broadcast("left_player_skin", this.left_player_skin);
       this.broadcast("second_player_found");
+      console.log("LES DEUX JOUEURS DANS LA ROOM PLAYER_LEFT : " + this.left_player + " ET LE PLAYER_RIGHT " + this.right_player);
     }
     else
       player.set(client.sessionId, "spectator");
