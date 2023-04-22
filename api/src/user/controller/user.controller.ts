@@ -18,10 +18,10 @@ import path = require('path');
 import { join } from 'path';
 import { v4 as uuidv4} from 'uuid';
 import { of } from 'rxjs/internal/observable/of';
-
 import { Observable, map, tap } from 'rxjs';
-
 import { ChangePadSkinDto } from '../model/dto/change-pad-skin.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
+import { AuthGuard } from '@nestjs/passport';
 
 
 export const storage = {
@@ -140,20 +140,18 @@ export class UserController {
 		return this.userService.checkEmail(mail);
 	}
 
-	@Put(':id/change-password')
-	//@UseGuards(JwtAuthGuard)
-	async changePassword(@Param('id') userId : number, @Body() { oldPassword, newPassword }: ChangePasswordDto) {
-		await this.userService.updatePassword(userId, oldPassword, newPassword);
-	}
+	// @UseGuards(JwtAuthGuard)
+	// @Put(':id/change-password')
+	// async changePassword(@Param('id') userId : number, @Body() { oldPassword, newPassword }: ChangePasswordDto) {
+	// 	await this.userService.updatePassword(userId, oldPassword, newPassword);
+	// }
 
 	@Put(':id/change-username')
-	//@UseGuards(JwtAuthGuard)
 	async changeUsername(@Param('id') userId : number, @Body() { newUsername }: ChangeUsernameDto) {
 		await this.userService.updateUsername(userId, newUsername);
 	}
 
 	@Put(':id/change-email')
-	//@UseGuards(JwtAuthGuard)
 	async changeEmail(@Param('id') userId : number, @Body() { newEmail }: ChangeEmailDto) {
 		await this.userService.updateEmail(userId, newEmail);
 	}

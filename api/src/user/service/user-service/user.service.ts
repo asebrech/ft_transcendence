@@ -154,15 +154,19 @@ export class UserService {
 		return this.authService.comparePassword(password, storedPasswordHash);
 	}
 
-	async updatePassword(userId: number, oldPassword: string, newPassword: string): Promise<UserI> {
-		const user = await this.findOne(userId);
-		if(await this.authService.comparePassword(oldPassword, user.password))
-			throw new HttpException('Old password is incorrect', HttpStatus.UNAUTHORIZED);
-		const newPasswordHash = await this.authService.hashPassword(newPassword);
-		await this.userRepository.update(userId, { password: newPasswordHash });
-		const updatedUser = await this.findOne(userId);
-		return updatedUser;
-	}
+	// async updatePassword(userId: number, oldPassword: string, newPassword: string): Promise<UserI> {
+	// 	const user = await this.userRepository.createQueryBuilder('user')
+	// 	.addSelect('user.password')
+	// 	.where('user.id = :userId', { userId })
+	// 	.getOne();
+	// 	console.log(user.password);
+	// 	if(await this.authService.comparePassword(oldPassword, user.password))
+	// 		throw new HttpException('Old password is incorrect', HttpStatus.UNAUTHORIZED);
+	// 	const newPasswordHash = await this.authService.hashPassword(newPassword);
+	// 	await this.userRepository.update(userId, { password: newPasswordHash });
+	// 	const updatedUser = await this.findOne(userId);
+	// 	return updatedUser;
+	// }
 
 	async updateEmail(userId: number, newEmail: string): Promise<UserI> {
 		if (await this.checkEmail(newEmail))
@@ -194,7 +198,7 @@ export class UserService {
 		const user = await this.findOne(userId);
 		const usernameExists = await this.usernameExists(newUsername);
 		if (usernameExists){
-			throw new HttpException('This username is already taken', HttpStatus.UNAUTHORIZED);
+			throw new HttpException('This username is already taken', HttpStatus.NOT_ACCEPTABLE);
 		}
 		await this.userRepository.update(userId, { username: newUsername });
 		const updatedUser = await this.findOne(userId);

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, map } from 'rxjs';
@@ -46,12 +46,12 @@ export class PlayerService {
     return this.httpClient.post<UserI>(`api/users/${userId}/remove-friend`,{friend});
   }
 
-  updatePassword(userId: number, oldPassword: string, newPassword: string): Observable<UserI> {
-    return this.httpClient.put<UserI>(`api/users/${userId}/change-password`,{oldPassword, newPassword});
-  }
+  // updatePassword(userId: number, oldPassword: string, newPassword: string): Observable<UserI> {
+  //   return this.httpClient.put<UserI>(`api/users/${userId}/change-password`,{oldPassword, newPassword});
+  // }
 
-  updateEmail(userId: number, oldEmail: string, newEmail: string): Observable<UserI> {
-    return this.httpClient.put<UserI>(`api/users/${userId}/change-email`,{oldEmail, newEmail});
+  updateEmail(userId: number, newEmail: string): Observable<UserI> {
+    return this.httpClient.put<UserI>(`api/users/${userId}/change-email`,{newEmail});
   }
 
   updateUsername(userId: number, newUsername: string): Observable<UserI> {
