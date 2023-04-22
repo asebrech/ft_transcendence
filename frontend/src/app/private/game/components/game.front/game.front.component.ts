@@ -195,15 +195,15 @@ export class GameFrontComponent implements OnInit, DoCheck
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
         }
-        frontPlay = true;
         this.gameEnded = true;
       }
+      frontPlay = true;
       this.playScene.destroy(true);
     });
 
     room?.onMessage("emptyRoom", ()=>
     {
-      if (this.hasShownAlert == false)
+      if (this.hasShownAlert == false && frontPlay == false)
       {
         window.alert('One of the player disconnected !');
         window.location.reload();

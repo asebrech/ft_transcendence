@@ -55,8 +55,8 @@ export class WaitingScene extends Phaser.Scene
     this.load.image('wing', 'assets/images/tests/wing.png');
     ///////////////TEXTURE//////////////////////////
     this.load.image('ball', 'assets/images/ball/default.png');
-    this.load.image('right_pad', 'assets/images/pad.png');
-    this.load.image('leftPad', 'assets/images/pad.png');
+    this.load.image('right_pad', 'assets/images/paddle/default.png');
+    this.load.image('leftPad', 'assets/images/paddle/default.png');
     ///////////////////////////////////////////////
     this.load.image('fullscreen', 'assets/images/fullscreenOff.png')
     this.load.image('fullscreenOff', 'assets/images/fullscreen.png')
@@ -85,7 +85,7 @@ export class WaitingScene extends Phaser.Scene
         ease: 'Linear',
         loop: -1
     });
-    this.stars = this.add.tileSprite(0, 0, inWidth, inHeight, 'stars').setScrollFactor(0);
+    this.stars = this.add.tileSprite(0, 0, 800, 800, 'stars').setScrollFactor(0);
     //////////////////////////////////////////////////
     this.camera1 = this.cameras.add(0,0, inWidth, inHeight);
     this.camera1.startFollow(this.bg)

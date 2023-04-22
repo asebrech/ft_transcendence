@@ -53,8 +53,6 @@ export class ProfileComponent {
         this.user = user;
         this.opponents$ = this.getOpponents(this.user.history);
       });
-
-      this.printAllRoomWithPlayer();
   }
 
   getOpponents(history: playerHistory[]): Observable<UserI[]> {

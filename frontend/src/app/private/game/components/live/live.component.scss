@@ -95,6 +95,7 @@
     height: 8vh;
     margin-left: 22.5vw;    
     position: absolute;
+    display: flex;
     background: rgba(148, 148, 148, 0.3);
     box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(4.5px);
@@ -122,13 +123,13 @@
 {
     margin-left: 0.8vw;
     margin-top: 2vh;
-    font-size: 4vh;
+    font-size: 3vh;
 }
 .s_r
 {
     margin-left: 3.2vw;
     margin-top: 2vh;
-    font-size: 4vh;
+    font-size: 3vh;
 }
 
 .refresh

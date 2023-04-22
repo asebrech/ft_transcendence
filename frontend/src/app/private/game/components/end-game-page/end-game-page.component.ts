@@ -43,16 +43,20 @@ export class EndGamePageComponent implements OnInit {
   ngAfterViewInit() 
   {
     if (invitePlay == true)
-    {
+    {          
+      setTimeout(() => {
       this.opponent = inviteOpponentName;
       this.opponent_score = inviteOpponentEndScore;
       this.your_score = inviteUserEndScore;
+      }, 0);
     }
     if (frontPlay == true)
     {
+      setTimeout(() => {
       this.opponent = opponentName;
       this.opponent_score = opponentEndScore;
       this.your_score = userEndScore;
+      }, 0);
     }
     if (this.WonGame == true && this.xpBar)
     {

@@ -153,15 +153,15 @@ export class GameInviteComponent implements OnInit {
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
         }
-        invitePlay = true;
         this.gameEnded = true;
       }
+      invitePlay = true;
       this.inviteScene.destroy(true);
     });
 
     room?.onMessage("emptyRoom", ()=>
     {
-      if (this.hasShownAlert == false)
+      if (this.hasShownAlert == false && invitePlay == false)
       {
         window.alert('One of the player disconnected !');
         this.router.navigate(['private/chat']);
