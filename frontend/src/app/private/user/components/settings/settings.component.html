@@ -42,11 +42,11 @@
           <img (click)="retrieveBallSkin($event)" src="../../../../../assets/images/ball/earth.png">
         </div>
       </div>
-      <ngx-colors ngx-colors-trigger [(ngModel)]="colorBall" (ngModelChange)="onColorBallChange($event)" ngDefaultControl></ngx-colors>
+      <ngx-colors ngx-colors-trigger [(ngModel)]="colorBall" (ngModelChange)="onColorBallChange($event)"></ngx-colors>
     </div>
 
     <div class="paddle">
-      <div ngx-colors-trigger [(ngModel)]="colorPad" [style.background-color]="colorPad" (ngModelChange)="onPaddleColorChange($event)" class="paddle_color_container" ngDefaultControl></div>
+      <div ngx-colors-trigger [(ngModel)]="colorPad" [style.background-color]="colorPad" (ngModelChange)="onPaddleColorChange($event)" class="paddle_color_container"></div>
       <div class="paddle_skin_container">
         <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/black_star.png">
         <img (click)="retrievePaddleSkin($event)" src="../../../../../assets/images/paddle/halo.png">

@@ -192,6 +192,11 @@ export class UserController {
 	  return this.userService.incrOrDecrLevel(userId, true);
 	}
 
+	@Post(':id/decr-level')
+	async decrLevel(@Param('id') userId: number) {
+	  return this.userService.incrOrDecrLevel(userId, false);
+	}
+
 	@Get('all')
 	async getAllUsers() {
 		return this.userService.getAllUsers();
@@ -208,6 +213,11 @@ export class UserController {
   	@Put(':id/update-color-pad')
   	async updateColorPad(@Param('id') id: number, @Body() { color } : ChangePadSkinDto) {
 		await this.userService.updateColorPad(id, color);
+  	}
+
+	@Put(':id/update-color-ball')
+	async updateColorBall(@Param('id') id: number, @Body() { color } : ChangeBallSkinDto) {
+		await this.userService.updateColorBall(id, color);
   	}
 
 	@Post(':id/upload-profil-pic')

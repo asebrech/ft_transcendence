@@ -314,7 +314,6 @@ export class UserService {
 	}
 
 	async uploadProfilPic(id : number, profilPic: string) : Promise<UserI> {
-		console.log(profilPic, "saluuuuut");
 		this.userRepository.update(id, { profilPic : profilPic });
 		const updatedUser = await this.findOne(id);
 		return updatedUser;
