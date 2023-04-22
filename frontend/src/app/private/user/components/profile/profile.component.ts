@@ -80,7 +80,6 @@ export class ProfileComponent {
         console.log(metadata.score.right);
       };
     }
-
   }
 }
 

@@ -56,13 +56,13 @@ export class LiveScene extends Phaser.Scene
 
   async preload() 
   {
-    this.load.image('right_pad', 'assets/images/pad.png');
-    this.load.image('left_pad', 'assets/images/pad2.png');
+    this.load.image('right_pad', 'assets/images/paddle/default.png');
+    this.load.image('left_pad', 'assets/images/paddle/default.png');
     this.load.atlas('space', 'assets/images/tests/space.png', 'assets/images/tests/space.json');
     this.load.image('background', 'assets/images/tests/nebula.jpg');
     this.load.image('stars', 'assets/images/tests/stars.png');
     this.load.image('wing', 'assets/images/tests/wing.png');
-    this.load.image('ball', 'assets/images/ball.png');
+    this.load.image('ball', 'assets/images/ball/default.png');
     this.load.image('fullscreen', 'assets/images/fullscreenOff.png');
     this.load.image('fullscreenOff', 'assets/images/fullscreen.png');
     this.load.image('readyButton', 'assets/images/readyButton.png');

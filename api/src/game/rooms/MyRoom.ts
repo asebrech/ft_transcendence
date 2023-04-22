@@ -148,7 +148,7 @@ export class MyRoom extends Room<Schema>
     });
     this.onMessage("game_finished", (client, message)=>
     {
-      this.broadcast("end", ({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}, winner : message.winner}));
+      this.broadcast("end", ({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}, winner : message.winner, left_username : this.left_player_username, right_username : this.right_player_username}));
     });
     this.onMessage("score_update", (client , message) =>
     {

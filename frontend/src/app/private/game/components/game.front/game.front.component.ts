@@ -22,6 +22,10 @@ export let gameWon : boolean;
 export let skinPad : string;
 export let skinBall : string;
 export let opponentPad : string;
+export let opponentName : string;
+export let opponentEndScore : number;
+export let userEndScore : number;
+export let frontPlay : boolean = false;
 
 
 @Component({
@@ -131,6 +135,10 @@ export class GameFrontComponent implements OnInit, DoCheck
         this.checked = true;
         if (player_left == true)
         {
+          opponentEndScore = message.score.right;
+          opponentName = message.right_username;
+          userEndScore = message.score.left;
+          console.log(opponentEndScore, opponentName, userEndScore);
           gameWon = true;
           const history : playerHistory = {
             userId: this.user.id,
@@ -139,11 +147,12 @@ export class GameFrontComponent implements OnInit, DoCheck
           }
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
-          this.playerService.incrLevel(this.user.id).subscribe(response => { console.log("level incred");});
-          this.playerService.addWin(this.user.id).subscribe();
         }
         else
         {
+          opponentEndScore = message.score.left;
+          opponentName = message.left_username;
+          userEndScore = message.score.right;
           gameWon = false;
           const history : playerHistory = {
             userId: this.user.id,
@@ -152,8 +161,6 @@ export class GameFrontComponent implements OnInit, DoCheck
           }
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
-          this.playerService.decrLevel(this.user.id).subscribe(response => { console.log("level decred");});
-          this.playerService.addLosses(this.user.id).subscribe();
         }
         this.gameEnded = true;
       }
@@ -162,6 +169,9 @@ export class GameFrontComponent implements OnInit, DoCheck
         this.checked = true;
         if (player_left == true)
         {
+          opponentEndScore = message.score.right;
+          opponentName = message.right_username;
+          userEndScore = message.score.left;
           gameWon = false;
           const history : playerHistory = {
             userId: this.user.id,
@@ -170,11 +180,12 @@ export class GameFrontComponent implements OnInit, DoCheck
           }
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
-          this.playerService.decrLevel(this.user.id).subscribe(response => {});
-          this.playerService.addLosses(this.user.id).subscribe();
         }
         else
         {
+          opponentEndScore = message.score.left;
+          opponentName = message.left_username;
+          userEndScore = message.score.right;
           gameWon = true;
           const history : playerHistory = {
             userId: this.user.id,
@@ -183,13 +194,13 @@ export class GameFrontComponent implements OnInit, DoCheck
           }
           this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
-          this.playerService.incrLevel(this.user.id).subscribe(response => { });
-          this.playerService.addWin(this.user.id).subscribe();
         }
+        frontPlay = true;
         this.gameEnded = true;
       }
       this.playScene.destroy(true);
     });
+
     room?.onMessage("emptyRoom", ()=>
     {
       if (this.hasShownAlert == false)

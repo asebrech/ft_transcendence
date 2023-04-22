@@ -54,7 +54,7 @@ export class WaitingScene extends Phaser.Scene
     this.load.image('stars', 'assets/images/tests/stars.png');
     this.load.image('wing', 'assets/images/tests/wing.png');
     ///////////////TEXTURE//////////////////////////
-    this.load.image('ball', 'assets/images/ball.png');
+    this.load.image('ball', 'assets/images/ball/default.png');
     this.load.image('right_pad', 'assets/images/pad.png');
     this.load.image('leftPad', 'assets/images/pad.png');
     ///////////////////////////////////////////////

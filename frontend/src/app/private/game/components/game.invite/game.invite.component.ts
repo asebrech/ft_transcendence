@@ -3,14 +3,11 @@ import { StarsService } from 'src/app/services/stars-service/stars.service';
 import * as Phaser from 'phaser';
 import { Client } from 'colyseus.js';
 import { PlayerService } from 'src/app/private/user/services/player.service';
-import { UserI } from 'src/app/model/user.interface';
-import { BehaviorSubject } from 'rxjs';
+import { UserI, playerHistory } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
-import { join } from 'path';
 import { InviteScene } from '../../services/invite.scene.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
-import { BlobOptions } from 'buffer';
 
 export let room : any;
 export let client : Client;
@@ -21,6 +18,10 @@ export let gameWonInvite : boolean;
 export let skinPad : string;
 export let skinBall : string;
 export let opponentPad : string;
+export let inviteOpponentName : string;
+export let inviteUserEndScore : number;
+export let inviteOpponentEndScore : number;
+export let invitePlay : boolean = false;
 
 @Component({
   selector: 'app-game.invite',
@@ -33,6 +34,7 @@ export class GameInviteComponent implements OnInit {
   inviteSceneConfig: Phaser.Types.Core.GameConfig;
   gameEnded : boolean;
   notJoined = true;
+  checked : boolean = false;
   user : any ;
   username : string;
   realName : string;
@@ -85,24 +87,78 @@ export class GameInviteComponent implements OnInit {
     })
     room?.onMessage("end", (message) =>
     {
-      if (message.winner == true)
+      if (message.winner == true && this.checked == false)
       {
+        this.checked = true;
         if (player_left == true)
+        {
+          inviteOpponentEndScore = message.score.right;
+          inviteOpponentName = message.right_username;
+          inviteUserEndScore = message.score.left;
+
           gameWonInvite = true;
+          const history : playerHistory = {
+            userId: this.user.id,
+            opponentId: message.player_right,
+            won: true
+          }
+          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+          });
+        }
         else
+        {
+          inviteOpponentEndScore = message.score.left;
+          inviteOpponentName = message.left_username;
+          inviteUserEndScore = message.score.right;
+
           gameWonInvite = false;
+          const history : playerHistory = {
+            userId: this.user.id,
+            opponentId: message.player_left,
+            won: false
+          }
+          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+          });
+        }
         this.gameEnded = true;
       }
-      else if (message.winner == false)
+      else if (message.winner == false && this.checked == false)
       {
+        this.checked = true;
         if (player_left == true)
+        {
+          inviteOpponentEndScore = message.score.right;
+          inviteOpponentName = message.right_username;
+          inviteUserEndScore = message.score.left;
           gameWonInvite = false;
+          const history : playerHistory = {
+            userId: this.user.id,
+            opponentId: message.player_right,
+            won: false
+          }
+          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+          });
+        }
         else
+        {
+          inviteOpponentEndScore = message.score.left;
+          inviteOpponentName = message.left_username;
+          inviteUserEndScore = message.score.right;
           gameWonInvite = true;
+          const history : playerHistory = {
+            userId: this.user.id,
+            opponentId: message.player_left,
+            won: true
+          }
+          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+          });
+        }
+        invitePlay = true;
         this.gameEnded = true;
       }
       this.inviteScene.destroy(true);
     });
+
     room?.onMessage("emptyRoom", ()=>
     {
       if (this.hasShownAlert == false)
