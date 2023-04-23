@@ -1,33 +1,28 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards, Put, UseInterceptors, UploadedFile, Request, Res  } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
 import { UserService } from '../service/user-service/user.service';
 import { CreateUserDto } from '../model/dto/create-user.dto';
 import { UserHelperService } from '../service/user-helper/user-helper.service';
 import { UserI, playerHistory } from '../model/user.interface';
-import { Pagination } from 'nestjs-typeorm-paginate';
 import { LoginUserDto } from '../model/dto/login-user.dto';
 import { LoginResponseI } from '../model/login-response.interface';
 import { AccessTokenI } from '../model/access-token.interface';
 import { AccessTokenDto } from '../model/dto/access-token.dto';
 import { RequestModel } from 'src/middleware/auth.middleware';
-import { UserEntity } from '../model/user.entity';
 import { ChangePasswordDto } from '../model/dto/change-password.dto';
 import { ChangeEmailDto } from '../model/dto/change-email.dto';
 import { ChangeUsernameDto } from '../model/dto/change-username.dto';
-import { promises } from 'dns';
-import { ChangePictureDto } from '../model/dto/change-picture.dto';
-import multer, { Multer, diskStorage } from 'multer';
+import { diskStorage } from 'multer';
 import path = require('path');
 import { join } from 'path';
 import { v4 as uuidv4} from 'uuid';
 import { of } from 'rxjs/internal/observable/of';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { Observable, map, tap } from 'rxjs';
+import { ChangePadSkinDto } from '../model/dto/change-pad-skin.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { AuthGuard } from '@nestjs/passport';
 import { ChangeBallSkinDto } from '../model/dto/change-ball-skin.dto';
-import { ChangePadSkinDto } from '../model/dto/change-pad-skin.dto';
 
 
 export const storage = {
@@ -40,12 +35,10 @@ export const storage = {
             cb(null, `${filename}${extension}`)
         }
     })
-
 }
 
 @Controller('users')
 export class UserController {
-	defaultProfilePic: '../../../image/astronaut.png';
 
 	constructor(
 		private userService: UserService,
@@ -55,7 +48,6 @@ export class UserController {
 	@Post()
 	async create(@Body() createUserDto: CreateUserDto): Promise<UserI> {
 		const userEntity: UserI = this.userHelperService.createUserDtoEntity(createUserDto);
-		userEntity.profilPic = this.defaultProfilePic;
 		return this.userService.create(userEntity);
 	}
 
@@ -149,20 +141,18 @@ export class UserController {
 		return this.userService.checkEmail(mail);
 	}
 
-	@Put(':id/change-password')
-	//@UseGuards(JwtAuthGuard)
-	async changePassword(@Param('id') userId : number, @Body() { oldPassword, newPassword }: ChangePasswordDto) {
-		await this.userService.updatePassword(userId, oldPassword, newPassword);
-	}
+	// @UseGuards(JwtAuthGuard)
+	// @Put(':id/change-password')
+	// async changePassword(@Param('id') userId : number, @Body() { oldPassword, newPassword }: ChangePasswordDto) {
+	// 	await this.userService.updatePassword(userId, oldPassword, newPassword);
+	// }
 
 	@Put(':id/change-username')
-	//@UseGuards(JwtAuthGuard)
 	async changeUsername(@Param('id') userId : number, @Body() { newUsername }: ChangeUsernameDto) {
 		await this.userService.updateUsername(userId, newUsername);
 	}
 
 	@Put(':id/change-email')
-	//@UseGuards(JwtAuthGuard)
 	async changeEmail(@Param('id') userId : number, @Body() { newEmail }: ChangeEmailDto) {
 		await this.userService.updateEmail(userId, newEmail);
 	}
@@ -238,10 +228,8 @@ export class UserController {
 		return of(res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename)));
 	}
 
-
 	@Post(':id/add-to-history')
 	async setHistory(@Param('id') id: number, @Body('history') history: playerHistory) {
 		await this.userService.setHistory(id, history);
 	}
 }
- 

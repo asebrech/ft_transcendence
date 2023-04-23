@@ -31,19 +31,13 @@
           [innerStrokeColor]="'#FE7C73'"
           [animation]="true"
           [animationDuration]="300"
+          [percent]="ratio"
           ></circle-progress>
         </div>
     </div>
     <div class="block" *ngIf="user$ | async as user">
       <h1>HISTORY</h1>
       <table *ngIf="user.history?.length > 0; else message">
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Result</th>
-            <th>Opponent</th>
-          </tr>
-        </thead>
         <tbody>
           <ng-container *ngIf="opponents$ | async as opponents">
           <tr *ngFor="let match of user.history.slice(0, 10); let i = index" >

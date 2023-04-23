@@ -20,10 +20,11 @@ export class ProfileComponent {
   opponents$ : Observable<UserI[]>;
   user: UserI;
   opponentName: string;
+  ratio : number;
   constructor(private playerService: PlayerService, private route: ActivatedRoute, private authService : AuthService, private chatService: ChatService) {
   }
 
-  ngOnInit() 
+  ngOnInit()
   {
     this.chatService.getConnected().subscribe(val => {
       this.user$.subscribe(user =>{ this.toto = user
@@ -49,10 +50,11 @@ export class ProfileComponent {
       this.user$.subscribe();
       this.user = this.authService.getLoggedInUser();
 
-      this.user$.subscribe((user) => {
-        this.user = user;
-        this.opponents$ = this.getOpponents(this.user.history);
-      });
+    this.user$.subscribe((user) => {
+      this.user = user;
+      this.opponents$ = this.getOpponents(this.user.history);
+      this.ratio = (user.wins / (user.wins + user.losses)) * 100;
+    });
   }
 
   getOpponents(history: playerHistory[]): Observable<UserI[]> {

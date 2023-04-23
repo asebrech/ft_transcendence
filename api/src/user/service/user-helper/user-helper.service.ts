@@ -14,7 +14,7 @@ export class UserHelperService {
 		return {
 			email: createUserDto.email,
 			username: createUserDto.username,
-			password: createUserDto.password
+			password: createUserDto.password,
 		}
 	}
 

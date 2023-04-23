@@ -34,7 +34,7 @@ export class SettingsComponent implements OnInit {
   user$: Observable<UserI>;
   newO: string;
   old: string;
-
+  username: string;
   colorBall : string = '';
   colorPad : string = '';
 
@@ -51,6 +51,8 @@ export class SettingsComponent implements OnInit {
     this.user$.subscribe((user: UserI) => {
       this.colorPad = user.colorPad;
       this.colorBall = user.colorBall;
+      this.username = user.username;
+      this.email = user.email;
 	  this.data = user;
     });
   }
@@ -70,41 +72,26 @@ export class SettingsComponent implements OnInit {
   }
 
   closePopup(num : number, old: string ,newO: string): void{
+    console.log(this.username, this.email);
     if (num == 0) {
-      this.playerService.updateEmail(this.user.id, old, newO).pipe(
-        catchError(error => {
-          console.log('An error occurred:', error);
-          throw('Something went wrong; please try again later.');
-        })
-      )
-      .subscribe(response => {})
-      this.emailPopup = false;
+      if(newO != this.email){
+      this.playerService.updateEmail(this.user.id, newO).subscribe(response => {
+        console.log('Email updated successfully:', response);
+      });
     }
-    else if (num == 1){
-      this.playerService.updatePassword(this.user.id, old, newO).pipe(
-        catchError(error => {
-          console.log('An error occurred:', error);
-          throw('Something went wrong; please try again later.');
-        })
-      )
-      .subscribe();
-      this.pwdPopup = false;
+    this.emailPopup = false;
     }
     else {
-      this.playerService.updateUsername(this.user.id, newO).pipe(
-        catchError(error => {
-          console.log('An error occurred:', error);
-          throw('Something went wrong; please try again later.');
-        })
-      )
-      .subscribe(response => {
+      if (newO != this.username){
+      this.playerService.updateUsername(this.user.id, newO).subscribe(response => {
         console.log('Username updated successfully:', response);
       });
-      this.usernamePopup = false;
+    }
+    this.usernamePopup = false;
     }
     //this.simpleNotification();
   }
-  ////////////////////////////////////////////////////////////////////
+
   retrieveBallSkin(event: Event){
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
     this.playerService.updateColorBall(this.user.id,clickedImageSrc).subscribe( (user: UserI) => {
@@ -149,5 +136,11 @@ export class SettingsComponent implements OnInit {
       Authorization: `Bearer ${userToken}` // ajoute le token dans l'en-tête de la requête
     });
     return `http://localhost:3000/api/users/profile-image/${this.data?.profilPic}`;;
+  }
+
+  close() {
+    this.usernamePopup = false;
+    this.pwdPopup = false;
+    this.emailPopup = false;
   }
 }
