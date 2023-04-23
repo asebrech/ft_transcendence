@@ -5,6 +5,7 @@ export interface UserI {
 	email?: string,
 	username?: string,
 	isConnected?: boolean,
+	inGame?: boolean,
 	password?: string;
 	wins?: number;
 	losses?: number;
@@ -23,6 +24,7 @@ export interface Friend {
 	id?: number;
 	username?: string;
 	isConnected?: boolean,
+	inGame?: boolean,
 	profilPic?: string;
 	win?: number;
 	losses?: number;

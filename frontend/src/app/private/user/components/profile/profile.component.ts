@@ -25,6 +25,15 @@ export class ProfileComponent {
 
   ngOnInit() 
   {
+
+	this.chatService.getInGame().subscribe (players => {
+		this.printAllRoomWithPlayer()
+	})
+
+	this.chatService.getEndGame().subscribe (players => {
+		this.printAllRoomWithPlayer()
+	})
+
     this.chatService.getConnected().subscribe(val => {
       this.user$.subscribe(user =>{ this.toto = user
       if (this.toto) {
@@ -35,10 +44,13 @@ export class ProfileComponent {
               this.toto.isConnected = true;
           }
       }
-      }
+	  this.printAllRoomWithPlayer()
+	}
     })
     })
+
     this.chatService.connected();
+
       const id = +this.route.snapshot.paramMap.get('id');
       if (id) {
         this.user$ = this.playerService.getUserById(id);
@@ -62,22 +74,22 @@ export class ProfileComponent {
 
   async printAllRoomWithPlayer()
   {
-    let myClient = new Client("ws://" + location.hostname + ":3001");
-    const rooms = await myClient.getAvailableRooms("my_room");
-    if(rooms.length > 0)
-    {
-      for (let i : number = 0 ; i < rooms.length; i++)
-      {
-        const metadata = rooms[i].metadata;
-        console.log(rooms[i].roomId);
-        console.log("left_username : ",metadata.left_username);
-        console.log("right_username : ",metadata.right_username);
-        console.log("right_user_id : ", metadata.player_left);
-        console.log("left_user_id : ", metadata.player_right);
-        console.log(metadata.score.left);
-        console.log(metadata.score.right);
-      };
-    }
+	  
+	  let myClient = new Client("ws://" + location.hostname + ":3001");
+	  const rooms = await myClient.getAvailableRooms("my_room");
+	  if(rooms.length > 0)
+	  {
+		  for (let i : number = 0 ; i < rooms.length; i++)
+		  {
+			  const metadata = rooms[i].metadata;
+			  if (this.toto) {
+				if (this.toto.id === metadata.player_left || this.toto.id == metadata.player_right) {
+					this.toto.inGame = true;
+				}
+			}
+		}
+	}
   }
+
 }
 

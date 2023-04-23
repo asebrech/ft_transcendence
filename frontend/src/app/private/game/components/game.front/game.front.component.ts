@@ -116,7 +116,7 @@ export class GameFrontComponent implements OnInit, DoCheck
 		{
 			if (value == true && this.in == 0)
 			{
-			console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left_id + " PLAYER_RIGHT " + message.player_right_id);
+			this.chatService.inGame([message.player_left_id, message.player_right_id])
 			  this.player1 = message.player_left_id;
 			  this.player2 = message.player_right_id;
           if (this.botGameLaunched == false)
@@ -138,7 +138,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     {
 		if (message.winner == true && this.checked == false)
 		{
-		  console.log("LES JOUEUR QUI ont quitte : PLAYER_LEFT " + message.player_left + " PLAYER_RIGHT " + message.player_right);
+		  this.chatService.endGame([this.player1, this.player2])
         this.checked = true;
         if (player_left == true)
         {
@@ -221,7 +221,7 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnDestroy()
   {
-	console.log(this.player1, this.player2)
+	this.chatService.endGame([this.player1, this.player2])
     if(this.hasJoinedSession == true)
     {
       window.location.reload();
