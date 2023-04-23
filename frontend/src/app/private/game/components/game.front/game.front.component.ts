@@ -57,6 +57,9 @@ export class GameFrontComponent implements OnInit, DoCheck
   history : History;
   hasShownAlert = false;
   hasJoinedSession = false;
+  player1: number;
+  player2: number;
+
 
   
   constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router, private chatService: ChatService) 
@@ -107,12 +110,15 @@ export class GameFrontComponent implements OnInit, DoCheck
         opponentPad = message;
       })
     }
-    room?.onMessage("second_player_found", () =>
+    room?.onMessage("second_player_found", (message) =>
     {
-      this.joinedVar.subscribe((value) =>
-      {
-        if (value == true && this.in == 0)
-        {
+		this.joinedVar.subscribe((value) =>
+		{
+			if (value == true && this.in == 0)
+			{
+			this.chatService.inGame([message.player_left_id, message.player_right_id])
+			  this.player1 = message.player_left_id;
+			  this.player2 = message.player_right_id;
           if (this.botGameLaunched == false)
           {
             this.addButtonStatus(0);
@@ -130,8 +136,9 @@ export class GameFrontComponent implements OnInit, DoCheck
     })
     room?.onMessage("end", (message) =>
     {
-      if (message.winner == true && this.checked == false)
-      {
+		if (message.winner == true && this.checked == false)
+		{
+		  this.chatService.endGame([this.player1, this.player2])
         this.checked = true;
         if (player_left == true)
         {
@@ -214,6 +221,7 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnDestroy()
   {
+	this.chatService.endGame([this.player1, this.player2])
     if(this.hasJoinedSession == true)
     {
       window.location.reload();

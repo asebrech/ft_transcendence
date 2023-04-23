@@ -72,7 +72,7 @@ export class MyRoom extends Room<Schema>
       player.set(client.sessionId, "player_right");
       this.broadcast("right_player_skin", this.right_player_skin);
       this.broadcast("left_player_skin", this.left_player_skin);
-      this.broadcast("second_player_found");
+	  this.broadcast("second_player_found", ({player_left_id : this.left_player, player_right_id : this.right_player}));
       console.log("LES DEUX JOUEURS DANS LA ROOM PLAYER_LEFT : " + this.left_player + " ET LE PLAYER_RIGHT " + this.right_player);
     }
     else

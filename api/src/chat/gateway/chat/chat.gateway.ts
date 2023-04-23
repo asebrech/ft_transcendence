@@ -91,6 +91,22 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		await this.server.to(socket.id).emit('connected', users);
 	}
 
+	@SubscribeMessage('inGame')
+	async inGame(socket: Socket, player:number[]) {
+		const connections: ConnectedUserI[] = await this.connectedUserService.findAll();
+		for(const connection of connections) {
+			await this.server.to(connection.socketId).emit('inGame', player);
+		}
+	}
+	
+	@SubscribeMessage('endGame')
+	async endGame(socket: Socket, player:number[]) {
+		const connections: ConnectedUserI[] = await this.connectedUserService.findAll();
+		for(const connection of connections) {
+			await this.server.to(connection.socketId).emit('endGame', player);
+		}
+	}
+
 	@SubscribeMessage('createRoom')
 	async onCreateRoom(socket: Socket, room: RoomI) {
 		const createdRoom: RoomI = await this.roomService.createRoom(room, socket.data.user);

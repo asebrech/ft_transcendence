@@ -6,6 +6,7 @@ import { Observable, catchError } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
 import { HttpHeaders } from '@angular/common/http';
+import { Client } from 'colyseus.js';
 
 @Component({
   selector: 'app-friends',
@@ -32,54 +33,85 @@ export class FriendsComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit(): void {
-	this.chatService.getConnected().subscribe(val => {
+
+	this.chatService.getInGame().subscribe (players => {
 		if (this.filteredUsers) {
-		for (let i = 0; i < this.filteredUsers.length; i++) {
-			this.filteredUsers[i].isConnected = false;
-		}
-		for (const user of this.filteredUsers) {
-				for (const valUser of val) {
-						if (valUser.id === user.id) {
-							user.isConnected = true;
-					}
+			for (const user of this.filteredUsers) {
+				if (user.id === players[0] || user.id == players[1]) {
+					user.inGame = true;
 				}
-		}
-		}
-		if (this.friends) {
-			for (let i = 0; i < this.friends.length; i++) {
-				this.friends[i].isConnected = false;
 			}
 			for (const user of this.friends) {
+				if (user.id === players[0] || user.id == players[1]) {
+					user.inGame = true;
+				}
+			}
+		}
+	})
+
+	this.chatService.getEndGame().subscribe (players => {
+		if (this.filteredUsers) {
+			for (const user of this.filteredUsers) {
+				if (user.id === players[0] || user.id == players[1]) {
+					user.inGame = false;
+				}
+			}
+			for (const user of this.friends) {
+				if (user.id === players[0] || user.id == players[1]) {
+					user.inGame = false;
+				}
+			}
+		}
+	})
+
+	  this.chatService.getConnected().subscribe(val => {
+		  if (this.filteredUsers) {
+			  for (let i = 0; i < this.filteredUsers.length; i++) {
+				  this.filteredUsers[i].isConnected = false;
+				}
+				for (const user of this.filteredUsers) {
 					for (const valUser of val) {
-							if (valUser.id === user.id) {
-								user.isConnected = true;
+						if (valUser.id === user.id) {
+							user.isConnected = true;
 						}
 					}
+				}
 			}
+			if (this.friends) {
+				for (let i = 0; i < this.friends.length; i++) {
+					this.friends[i].isConnected = false;
+				}
+				for (const user of this.friends) {
+					for (const valUser of val) {
+						if (valUser.id === user.id) {
+							user.isConnected = true;
+						}
+					}
+				}
 			}
-	})
-	this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
-    this.user$ = this.playerService.getUser();
-    this.user$.subscribe((user: UserI) => {
-       this.friends = user.friends;
-       this.setMessage();
-    });
-    this.playerService.getUserList().subscribe(users => {
-      this.filteredUsers = users; // affichera les utilisateurs selon l'input
-      this.users = users; // tout les users.
-      this.users = this.users.filter(users => users.id !== this.user.id);
-      this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
-	  this.chatService.connected();
-    });
-    this.setMessage();
-   // this.playerService.getUserBy
-  }
+		})
+		this.chatService.getIfBlocked().subscribe(toto => this.isBlocked = toto);
+		this.user$ = this.playerService.getUser();
+		this.user$.subscribe((user: UserI) => {
+			this.friends = user.friends;
+		});
+		this.playerService.getUserList().subscribe(users => {
+			this.filteredUsers = users; // affichera les utilisateurs selon l'input
+			this.users = users; // tout les users.
+			this.users = this.users.filter(users => users.id !== this.user.id);
+			this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
+			this.chatService.connected();
+			this.printAllRoomWithPlayer();
+		});
+		this.setMessage();
+		// this.playerService.getUserBy
+	}
 
-  sendMessage(user: UserI) {
-	this.chatService.joinAndRpivateMessage(user);
-  }
+	sendMessage(user: UserI) {
+		this.chatService.joinAndRpivateMessage(user);
+	}
 
-  searchUsers() {
+	searchUsers() {
     if (this.searchTerm.trim() !== '') {
       this.filteredUsers = this.users.filter((user: UserI) => {
         return user.username.toLowerCase().startsWith(this.searchTerm.toLowerCase());
@@ -89,7 +121,7 @@ export class FriendsComponent implements OnInit {
   }
 
   onContextMenu(event: MouseEvent, user: UserI){
-    this.checkIfFriend(user);
+ //   this.checkIfFriend(user);
 	  this.chatService.checkIfBlocked(user);
     event.preventDefault();
     this.showContextMenu = true;
@@ -175,13 +207,32 @@ export class FriendsComponent implements OnInit {
     return `http://localhost:3000/api/users/profile-image/${user.profilPic}`;
   }
 
-  checkIfFriend(user: UserI) {
-    this.isMyFriend = false; // remise à false à chaque fois qu'on appelle la fonction
-    for (const friend of this.friends) {
-      if (friend.id === user.id) { // si l'ami a le même id que l'utilisateur
-        this.isMyFriend = true; // utilisateur trouvé dans le tableau
-        break;
-      }
-    }
+  async printAllRoomWithPlayer()
+  {
+
+	  let myClient = new Client("ws://" + location.hostname + ":3001");
+	  const rooms = await myClient.getAvailableRooms("my_room");
+	  if(rooms.length > 0)
+	  {
+		  for (let i : number = 0 ; i < rooms.length; i++)
+		  {
+			  const metadata = rooms[i].metadata;
+				for (let i = 0; i < this.filteredUsers.length; i++) {
+				if (this.filteredUsers[i].id === metadata.player_left || this.filteredUsers[i].id == metadata.player_right) {
+					this.filteredUsers[i].inGame = true;
+				}
+				else
+					this.filteredUsers[i].inGame = false;
+			}
+			for (let i = 0; i < this.friends.length; i++) {
+				if (this.friends[i].id === metadata.player_left || this.friends[i].id == metadata.player_right) {
+					this.friends[i].inGame = true;
+				}
+				else
+					this.friends[i].inGame = false;
+			}
+		}
+	}
   }
+
 }

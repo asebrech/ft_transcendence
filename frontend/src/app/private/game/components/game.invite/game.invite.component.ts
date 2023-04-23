@@ -74,8 +74,9 @@ export class GameInviteComponent implements OnInit {
         opponentPad = message;
       })
     }
-    room?.onMessage("second_player_found", () =>
+    room?.onMessage("second_player_found", (message) =>
     {
+      console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left_id + " PLAYER_RIGHT " + message.player_right_id);
       this.notJoined = false;
       if (this.notJoined == false && this.in == true)
       {
@@ -87,6 +88,7 @@ export class GameInviteComponent implements OnInit {
     })
     room?.onMessage("end", (message) =>
     {
+      console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left + " PLAYER_RIGHT " + message.player_right);
       if (message.winner == true && this.checked == false)
       {
         this.checked = true;
