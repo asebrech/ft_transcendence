@@ -107,8 +107,10 @@ export class GameFrontComponent implements OnInit, DoCheck
         opponentPad = message;
       })
     }
-    room?.onMessage("second_player_found", () =>
+    room?.onMessage("second_player_found", (message) =>
     {
+      console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left_id + " PLAYER_RIGHT " + message.player_right_id);
+
       this.joinedVar.subscribe((value) =>
       {
         if (value == true && this.in == 0)
@@ -130,6 +132,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     })
     room?.onMessage("end", (message) =>
     {
+      console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left + " PLAYER_RIGHT " + message.player_right);
       if (message.winner == true && this.checked == false)
       {
         this.checked = true;
