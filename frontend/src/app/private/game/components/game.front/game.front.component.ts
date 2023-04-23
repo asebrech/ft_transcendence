@@ -57,6 +57,9 @@ export class GameFrontComponent implements OnInit, DoCheck
   history : History;
   hasShownAlert = false;
   hasJoinedSession = false;
+  player1: number;
+  player2: number;
+
 
   
   constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router, private chatService: ChatService) 
@@ -109,12 +112,13 @@ export class GameFrontComponent implements OnInit, DoCheck
     }
     room?.onMessage("second_player_found", (message) =>
     {
-      console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left_id + " PLAYER_RIGHT " + message.player_right_id);
-
-      this.joinedVar.subscribe((value) =>
-      {
-        if (value == true && this.in == 0)
-        {
+		this.joinedVar.subscribe((value) =>
+		{
+			if (value == true && this.in == 0)
+			{
+			console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left_id + " PLAYER_RIGHT " + message.player_right_id);
+			  this.player1 = message.player_left_id;
+			  this.player2 = message.player_right_id;
           if (this.botGameLaunched == false)
           {
             this.addButtonStatus(0);
@@ -132,9 +136,9 @@ export class GameFrontComponent implements OnInit, DoCheck
     })
     room?.onMessage("end", (message) =>
     {
-      console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left + " PLAYER_RIGHT " + message.player_right);
-      if (message.winner == true && this.checked == false)
-      {
+		if (message.winner == true && this.checked == false)
+		{
+		  console.log("LES JOUEUR QUI ont quitte : PLAYER_LEFT " + message.player_left + " PLAYER_RIGHT " + message.player_right);
         this.checked = true;
         if (player_left == true)
         {
@@ -217,6 +221,7 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnDestroy()
   {
+	console.log(this.player1, this.player2)
     if(this.hasJoinedSession == true)
     {
       window.location.reload();
