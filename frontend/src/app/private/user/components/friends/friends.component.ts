@@ -35,36 +35,36 @@ export class FriendsComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit(): void {
+    setTimeout(()=> {
+    this.chatService.getInGame().subscribe (players => {
+      if (this.filteredUsers) {
+        for (const user of this.filteredUsers) {
+          if (user.id === players[0] || user.id == players[1]) {
+            user.inGame = true;
+          }
+        }
+        for (const user of this.friends) {
+          if (user.id === players[0] || user.id == players[1]) {
+            user.inGame = true;
+          }
+        }
+      }
+    })
 
-	this.chatService.getInGame().subscribe (players => {
-		if (this.filteredUsers) {
-			for (const user of this.filteredUsers) {
-				if (user.id === players[0] || user.id == players[1]) {
-					user.inGame = true;
-				}
-			}
-			for (const user of this.friends) {
-				if (user.id === players[0] || user.id == players[1]) {
-					user.inGame = true;
-				}
-			}
-		}
-	})
-
-	this.chatService.getEndGame().subscribe (players => {
-		if (this.filteredUsers) {
-			for (const user of this.filteredUsers) {
-				if (user.id === players[0] || user.id == players[1]) {
-					user.inGame = false;
-				}
-			}
-			for (const user of this.friends) {
-				if (user.id === players[0] || user.id == players[1]) {
-					user.inGame = false;
-				}
-			}
-		}
-	})
+    this.chatService.getEndGame().subscribe (players => {
+      if (this.filteredUsers) {
+        for (const user of this.filteredUsers) {
+          if (user.id === players[0] || user.id == players[1]) {
+            user.inGame = false;
+          }
+        }
+        for (const user of this.friends) {
+          if (user.id === players[0] || user.id == players[1]) {
+            user.inGame = false;
+          }
+        }
+      }
+    })
 
 	  this.chatService.getConnected().subscribe(val => {
 		  if (this.filteredUsers) {
@@ -106,7 +106,7 @@ export class FriendsComponent implements OnInit {
 			this.printAllRoomWithPlayer();
       this.setMessage();
 		});
-		// this.playerService.getUserBy
+    },100);
 	}
 
 	sendMessage(user: UserI) {

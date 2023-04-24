@@ -30,48 +30,50 @@ export class ProfileComponent {
       private chatService : ChatService) {
   }
 
-  ngOnInit()
-  {
-	this.chatService.getInGame().subscribe (players => {
-		this.printAllRoomWithPlayer()
-	})
+  ngOnInit(){
 
-	this.chatService.getEndGame().subscribe (players => {
-		this.printAllRoomWithPlayer()
-	})
+    setTimeout(() => {
+    this.chatService.getInGame().subscribe (players => {
+      this.printAllRoomWithPlayer()
+    })
+
+    this.chatService.getEndGame().subscribe (players => {
+      this.printAllRoomWithPlayer()
+    })
 
     this.chatService.getConnected().subscribe(val => {
       this.user$.subscribe(user =>{ this.toto = user
       if (this.toto) {
-      this.toto.isConnected = false;
+       this.toto.isConnected = false;
 
-      for (const valUser of val) {
-          if (valUser.id === this.toto.id) {
-              this.toto.isConnected = true;
+        for (const valUser of val) {
+            if (valUser.id === this.toto.id) {
+                this.toto.isConnected = true;
+            }
           }
-      }
-	  this.printAllRoomWithPlayer()
-	}
-    })
+        this.printAllRoomWithPlayer()
+        }
+      })
     })
 
     this.chatService.connected();
 
-      const id = +this.route.snapshot.paramMap.get('id');
-      if (id) {
-        this.user$ = this.playerService.getUserById(id);
-      } else {
-        this.user$ = this.playerService.getUser();
-      }
+    const id = +this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.user$ = this.playerService.getUserById(id);
+    } else {
+      this.user$ = this.playerService.getUser();
+    }
 
-      this.user$.subscribe();
-      this.user = this.authService.getLoggedInUser();
+    this.user$.subscribe();
+    this.user = this.authService.getLoggedInUser();
 
     this.user$.subscribe((user) => {
       this.user = user;
       this.opponents$ = this.getOpponents(this.user.history);
       this.ratio = (user.wins / (user.wins + user.losses)) * 100;
-    });
+      });
+    },100);
   }
 
   getOpponents(history: playerHistory[]): Observable<UserI[]> {

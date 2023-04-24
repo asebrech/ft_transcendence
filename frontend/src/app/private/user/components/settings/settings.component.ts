@@ -48,15 +48,17 @@ export class SettingsComponent implements OnInit {
     private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.user$ = this.playerService.getUser();
-    this.user$.subscribe((user: UserI) => {
-      this.colorPad = user.colorPad;
-      this.colorBall = user.colorBall;
-      this.username = user.username;
-      this.email = user.email;
+    setTimeout(() => {
+      this.user$ = this.playerService.getUser();
+      this.user$.subscribe((user: UserI) => {
+        this.colorPad = user.colorPad;
+        this.colorBall = user.colorBall;
+        this.username = user.username;
+        this.email = user.email;
 
-	  this.data = user;
-    });
+      this.data = user;
+      });
+    },100)
   }
 
   async goTo2FA() {
