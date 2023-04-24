@@ -222,7 +222,7 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnDestroy()
   {
-	this.chatService.endGame([this.player1, this.player2])
+	//this.chatService.endGame([this.player1, this.player2])
     if(this.hasJoinedSession == true)
     {
       window.location.reload();
