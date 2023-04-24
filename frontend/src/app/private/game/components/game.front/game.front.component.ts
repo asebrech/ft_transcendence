@@ -148,7 +148,6 @@ export class GameFrontComponent implements OnInit, DoCheck
           opponentEndScore = message.score.right;
           opponentName = message.right_username;
           userEndScore = message.score.left;
-          console.log(opponentEndScore, opponentName, userEndScore);
           gameWon = true;
           const history : playerHistory = {
             userId: this.user.id,
@@ -352,8 +351,6 @@ export class GameFrontComponent implements OnInit, DoCheck
   {
     try {
       room = await client?.joinOrCreate("ranked",  { rank : this.rank, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
-      console.log(room);
-      console.log(client.auth);
       this.hasJoinedSession = true;
     } catch (e) {
       console.error("join error", e);

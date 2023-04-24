@@ -117,7 +117,6 @@ export class LiveComponent implements OnInit, DoCheck {
         setTimeout(() => {
           this.liveScene = new Phaser.Game(this.liveSceneConfig);
         }, 2000);
-        console.log(room);
       } catch (e) {
         window.alert("You can't join this room because game is finished");
       }  

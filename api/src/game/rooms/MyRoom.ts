@@ -29,7 +29,6 @@ export class MyRoom extends Room<Schema>
   onCreate (options: any) 
   {
     this.setSeatReservationTime(10000);
-    console.log("room " + this.roomId + " created successfully , playerId : ", options.clientId);
   }
 
   // onAuth(client: Client, options: any, request?: IncomingMessage) 
@@ -73,12 +72,10 @@ export class MyRoom extends Room<Schema>
       this.broadcast("right_player_skin", this.right_player_skin);
       this.broadcast("left_player_skin", this.left_player_skin);
 	    this.broadcast("second_player_found", ({player_left_id : this.left_player, player_right_id : this.right_player}));
-      console.log("LES DEUX JOUEURS DANS LA ROOM PLAYER_LEFT : " + this.left_player + " ET LE PLAYER_RIGHT " + this.right_player);
     }
     else
       player.set(client.sessionId, "spectator");
     ///////////////////////////////////////////
-    console.log(client.sessionId + " is connected to " + this.roomId + " , now this room has " + player.get(client.sessionId))
     
     ///////////////////////////////////////////
     this.onMessage("move_left_pad", (client, message) =>
@@ -174,7 +171,6 @@ export class MyRoom extends Room<Schema>
     {
       client.leave();
     }
-    console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length)
   }
   // Cleanup callback, called after there are no more clients in the room. (see `autoDispose`)
   onDispose () 
@@ -185,7 +181,5 @@ export class MyRoom extends Room<Schema>
   {
     client.leave()
     player.delete(client.sessionId);
-    console.log("LE JOUEUR ID " + this.left_player + " A QUITTER LA PARTIE");
-    console.log("LE JOUEUR ID " + this.right_player + " A QUITTER LA PARTIE");
   }
 }

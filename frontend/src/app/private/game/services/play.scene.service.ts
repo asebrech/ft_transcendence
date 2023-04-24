@@ -218,7 +218,6 @@ export class PlayScene extends Phaser.Scene
 
     if (this.isColorPad == true)
     {
-      console.log(this.convertColorCode(skinPad), "colorPad");
       if(player_left == true)
         left_pad.setTint(this.convertColorCode(skinPad));
       else
@@ -227,7 +226,6 @@ export class PlayScene extends Phaser.Scene
 
     if (this.isOpponentColorPad == true)
     {
-      console.log(this.convertColorCode(opponentPad), "OpponentPad");
       if(player_left == true)
         right_pad.setTint(this.convertColorCode(opponentPad));
       else

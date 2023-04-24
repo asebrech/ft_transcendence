@@ -110,13 +110,6 @@ export class EndGamePageComponent implements OnInit {
       for (let i : number = 0 ; i < rooms.length; i++)
       {
         const metadata = rooms[i].metadata;
-        console.log(rooms[i].roomId);
-        console.log("left_username : ",metadata.left_username);
-        console.log("right_username : ",metadata.right_username);
-        console.log("right_user_id : ", metadata.player_left);
-        console.log("left_user_id : ", metadata.player_right);
-        console.log(metadata.score.left);
-        console.log(metadata.score.right);
       };
     }
   }

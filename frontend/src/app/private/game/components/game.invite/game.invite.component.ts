@@ -62,7 +62,6 @@ export class GameInviteComponent implements OnInit {
     {
       room?.onMessage("right_player_skin", (message) =>
       {
-        console.log(message);
         opponentPad = message;
       })
     }
@@ -70,13 +69,11 @@ export class GameInviteComponent implements OnInit {
     {
       room?.onMessage("left_player_skin", (message) =>
       {
-        console.log(message);
         opponentPad = message;
       })
     }
     room?.onMessage("second_player_found", (message) =>
     {
-      console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left_id + " PLAYER_RIGHT " + message.player_right_id);
       this.notJoined = false;
       if (this.notJoined == false && this.in == true)
       {
@@ -88,7 +85,6 @@ export class GameInviteComponent implements OnInit {
     })
     room?.onMessage("end", (message) =>
     {
-      console.log("LES JOUEUR QUI JOUE : PLAYER_LEFT " + message.player_left + " PLAYER_RIGHT " + message.player_right);
       if (message.winner == true && this.checked == false)
       {
         this.checked = true;
@@ -250,8 +246,6 @@ export class GameInviteComponent implements OnInit {
     {
       room = await client?.create("my_room", { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
 	    this.chatService.gameRoom.next(room.id);
-      console.log(room.id);
-      console.log(client.auth);
     } catch (e) {
       console.error("join error", e);
     }  
@@ -261,8 +255,6 @@ export class GameInviteComponent implements OnInit {
   {
     try {
       room = await client?.joinById(value, { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
-      console.log(room);
-      console.log(client.auth);
       this.notJoined = false;
     } catch (e) {
       console.error("join error", e);

@@ -88,8 +88,6 @@ export class matchMaking extends Room {
   }
 
   onJoin(client: Client, options: any) {
-    // console.log("test[][][][][][][][][")
-    // console.log(this.seatReservationTime);
     this.stats.push({
       client: client,
       rank: options.rank,
