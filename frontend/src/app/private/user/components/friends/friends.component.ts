@@ -30,6 +30,8 @@ export class FriendsComponent implements OnInit {
   isBlocked: boolean = null;
   data: any;
 
+  hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
+
   constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit(): void {

@@ -38,6 +38,7 @@ export class SettingsComponent implements OnInit {
   colorBall : string = '';
   colorPad : string = '';
 
+  hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
   data: any;
 
   constructor(

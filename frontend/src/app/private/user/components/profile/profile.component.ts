@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgModule, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserI, playerHistory } from 'src/app/model/user.interface';
 import { PlayerService } from '../../services/player.service';
@@ -6,6 +6,7 @@ import { Observable, forkJoin, map } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
 import { Client } from 'colyseus.js';
+import { WINDOW } from 'src/app/window-token';
 
 @Component({
   selector: 'app-profile',
@@ -20,12 +21,17 @@ export class ProfileComponent {
   user: UserI;
   opponentName: string;
   ratio : number;
-  constructor(private playerService: PlayerService, private route: ActivatedRoute, private authService : AuthService, private chatService: ChatService) {
+  hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
+
+  constructor(
+      private playerService: PlayerService,
+      private route: ActivatedRoute,
+      private authService : AuthService,
+      private chatService : ChatService) {
   }
 
   ngOnInit()
   {
-
 	this.chatService.getInGame().subscribe (players => {
 		this.printAllRoomWithPlayer()
 	})
@@ -92,5 +98,9 @@ export class ProfileComponent {
 	}
   }
 
+}
+
+function Inject(WINDOW: any): (target: typeof ProfileComponent, propertyKey: undefined, parameterIndex: 0) => void {
+  throw new Error('Function not implemented.');
 }
 

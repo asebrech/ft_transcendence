@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, Inject } from '@angular/core';
 import { PlayerService } from '../../services/player.service';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
@@ -6,7 +6,6 @@ import { map, catchError, of } from 'rxjs';
 import { Event } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WINDOW } from 'src/app/window-token'
-import { Inject } from '@angular/core';
 
 export interface File {
   data: any;
