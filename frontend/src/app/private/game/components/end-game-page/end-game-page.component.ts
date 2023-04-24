@@ -8,43 +8,42 @@ import { PlayerService } from 'src/app/private/user/services/player.service';
 import { UserI } from 'src/app/model/user.interface';
 import {  Router } from '@angular/router';
 
+
 @Component({
-  selector: 'app-end-game-page',
-  templateUrl: './end-game-page.component.html',
-  styleUrls: ['./end-game-page.component.scss']
+	selector: 'app-end-game-page',
+	templateUrl: './end-game-page.component.html',
+	styleUrls: ['./end-game-page.component.scss']
 })
 export class EndGamePageComponent implements OnInit {
-
-  userAuth : any ;
-  ////////////////////
-  you : string;
-  opponent : string;
-  ////////////////////
-  level : number;
-  ////////////////////
-  your_score : number = 0;
-  opponent_score : number = 0;
-
-  constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private router : Router) 
-  {
-    this.starsService.setActive(false);
-    this.userAuth = this.authService.getLoggedInUser();
-    this.you = this.userAuth.username;
-  }
-
-  WonGame : boolean = false;
-  LostGame : boolean = false;
-
-  resultLose : string = "YOU LOSE !";
-  resultWin : string = "YOU WIN !";
-
-  @ViewChild('progressBar', { static: false }) xpBar!: ElementRef;
-  @ViewChild('degressBar', { static: false }) degBar!: ElementRef;
-
-  ngAfterViewInit() 
-  {
-    if (invitePlay == true)
-    {          
+	
+	userAuth : any ;
+	////////////////////
+	you : string;
+	opponent : string;
+	level : number;
+	your_score : number = 0;
+	opponent_score : number = 0;
+	
+	constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private router : Router) 
+	{
+		this.starsService.setActive(false);
+		this.userAuth = this.authService.getLoggedInUser();
+		this.you = this.userAuth.username;
+	}
+	
+	WonGame : boolean = false;
+	LostGame : boolean = false;
+	
+	resultLose : string = "YOU LOSE !";
+	resultWin : string = "YOU WIN !";
+	
+	@ViewChild('progressBar', { static: false }) xpBar!: ElementRef;
+	@ViewChild('degressBar', { static: false }) degBar!: ElementRef;
+	
+	ngAfterViewInit() 
+	{
+		if (invitePlay == true)
+		{          
       setTimeout(() => {
       this.opponent = inviteOpponentName;
       this.opponent_score = inviteOpponentEndScore;
