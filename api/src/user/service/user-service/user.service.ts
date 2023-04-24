@@ -28,12 +28,11 @@ export class UserService {
 				const user = await this.userRepository.save(this.userRepository.create(newUser));
 				return this.findOne(user.id);
 			} else {
-				console.log("Email already in use. Try again");
+				throw new HttpException('Email is already in use', HttpStatus.CONFLICT);
 			}
 		} catch {
 			await new Promise(resolve => setTimeout(resolve, 1000));
-			console.log("Email already in use. Try again");
-		}
+			throw new HttpException('Email is already in use', HttpStatus.CONFLICT);		}
 	}
 
 	async login(user: UserI): Promise<UserI> {
@@ -44,14 +43,11 @@ export class UserService {
 				if (matches) {
 					return fondUser;
 				} else {
-					console.log("User not found, or bad infos. Try again");
-				}
+					throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);				}
 			} else {
-				console.log("User not found, or bad infos. Try again");
-			}
+				throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);			}
 		} catch {
-			console.log("User not found, or bad infos. Try again");
-		}
+			throw new HttpException('User not found', HttpStatus.NOT_FOUND);		}
 	}
 
 	async apiLoginHandle(apiUser: UserI): Promise<UserI> {
@@ -171,8 +167,7 @@ export class UserService {
 
 	async updateEmail(userId: number, newEmail: string): Promise<UserI> {
 		if (await this.checkEmail(newEmail))
-			return ;
-		await this.userRepository.update(userId, { email: newEmail });
+			throw new HttpException('This email address is already used', HttpStatus.UNAUTHORIZED);		await this.userRepository.update(userId, { email: newEmail });
 		const updatedUser = await this.findOne(userId);
 		return updatedUser;
 	}
@@ -251,8 +246,7 @@ export class UserService {
 			user.friends = [];
 		const existingFriend = user.friends.find(friend => friend.id === newFriend.id);
   		if (existingFriend) {
-			console.log("User on your friendlist.");
-			return;
+			throw new Error(`Friend of id : ${newFriend.id} is already on friend list.`);			return;
 		}
 		user.friends.push(friend);
 		await this.userRepository.save(user);
@@ -266,7 +260,7 @@ export class UserService {
 		  user.friends.splice(friendIndex, 1);
 		  return this.userRepository.save(user);
 		} else {
-			console.log("Friend not found. Try again");
+			throw new Error('Friend not found');
 		}
 	  }
 

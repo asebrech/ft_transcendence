@@ -108,7 +108,7 @@ export class RegisterComponent {
           if (this.file.data) {
             this.uploadFile(createdUser.id);
           }
-        }, 1000);
+        }, 2000);
         });
 			}
 	}
