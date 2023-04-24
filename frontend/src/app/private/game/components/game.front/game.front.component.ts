@@ -113,7 +113,7 @@ export class GameFrontComponent implements OnInit, DoCheck
         opponentPad = message;
       })
     }
-    room?.onMessage("second_player_found", () =>
+    room?.onMessage("second_player_found", (message) =>
     {
 		this.joinedVar.subscribe((value) =>
 		{
