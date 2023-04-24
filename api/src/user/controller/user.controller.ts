@@ -84,6 +84,7 @@ export class UserController {
 	async apiLogin(@Body() accessTokenDto: AccessTokenDto): Promise<LoginResponseI>{
 		const accessToken: AccessTokenI = this.userHelperService.accessTokenDtoToEntity(accessTokenDto);
 		const userApi: UserI = await this.userHelperService.getDataFromApi(accessToken.access_token);
+		console.table(userApi)
 		const user : UserI = await this.userService.apiLoginHandle(userApi);
 		if (!user.google_auth) {
 			const jwt: string = await this.userService.returnJwt(user);
@@ -214,11 +215,9 @@ export class UserController {
 	//@UseGuards(JwtAuthGuard)
 	@UseInterceptors(FileInterceptor('file', storage))
 	async uploadFile(@UploadedFile() file, @Param('id') id: number) {
-		console.log(file);
 		const user: UserI  =  await this.userService.getOne(id);
 
 		return this.userService.updateOne(user.id, {profilPic: file.filename}).pipe(
-			tap((user: UserI) => console.log(user)),
 			map((user:UserI) => ({profileImage: user.profilPic}))
 		)
 	}

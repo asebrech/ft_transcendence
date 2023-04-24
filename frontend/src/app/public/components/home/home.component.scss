@@ -88,10 +88,8 @@ body {
 
 div.profile_pic {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   .astro {
     width: 15%;
   }
 }
-
-

@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { profile } from 'console';
 import { AccessTokenI } from 'src/user/model/access-token.interface';
 import { AccessTokenDto } from 'src/user/model/dto/access-token.dto';
 import { ApiLoginDto } from 'src/user/model/dto/api-login.dto';
@@ -43,6 +44,7 @@ export class UserHelperService {
 					Authorization: `Bearer ${token}`,
 				},
 			});
+			console.table(response.data);
 			return this.apiLoginDtoToEntity(response.data);
 		} catch {
 			throw new HttpException('wrong token', HttpStatus.UNAUTHORIZED);
@@ -52,7 +54,8 @@ export class UserHelperService {
 	private apiLoginDtoToEntity(loginUserDto: ApiLoginDto): UserI {
 		return {
 			username: loginUserDto.login,
-			email: loginUserDto.email
+			email: loginUserDto.email,
+			profilPic: loginUserDto.image
 		}
 	}
 }

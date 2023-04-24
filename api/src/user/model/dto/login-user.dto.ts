@@ -8,4 +8,5 @@ export class LoginUserDto {
 	@IsNotEmpty()
 	password: string;
 
+	image: string;
 }

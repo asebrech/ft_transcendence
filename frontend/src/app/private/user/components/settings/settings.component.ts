@@ -53,6 +53,7 @@ export class SettingsComponent implements OnInit {
       this.colorBall = user.colorBall;
       this.username = user.username;
       this.email = user.email;
+
 	  this.data = user;
     });
   }
@@ -138,9 +139,15 @@ export class SettingsComponent implements OnInit {
     return `http://localhost:3000/api/users/profile-image/${this.data?.profilPic}`;;
   }
 
+  updateAvatar() {
+    this.user$ = this.playerService.getUser(); // met à jour la variable user$
+  }
+
   close() {
     this.usernamePopup = false;
     this.pwdPopup = false;
     this.emailPopup = false;
   }
+
+
 }

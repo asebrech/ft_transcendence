@@ -4,7 +4,7 @@
     <h1>Profil</h1>
     <img *ngIf="user.profilPic" src="http://localhost:3000/api/users/profile-image/{{user.profilPic}}" alt="profilePicture">
     <img class="profilPic" *ngIf="!user.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut">
-    <app-avatar></app-avatar>
+    <app-avatar (avatarUpdated)="updateAvatar()"></app-avatar>
     <button (click)="changeUsername()">Change username</button>
     <button (click)="changeEmail()">Change email</button>
 	<button (click)="goTo2FA()">Manage 2FA</button>
@@ -14,13 +14,6 @@
       <input type="text" placeholder="NEW USERNAME" [(ngModel)]="newO" >
       <button class="changes"[disabled]="!newO"  (click)="closePopup(2, old, newO)">SAVE CHANGES</button>
     </div>
-    <!-- <div class="username-popup" *ngIf="pwdPopup">
-      <button class="close-btn" (click)="close()">X</button>
-      <h1>Please enter new password</h1>
-      <input type="password" placeholder="OLD PASSWORD" [(ngModel)]="old" >
-      <input type="password"placeholder="NEW PASSWORD"  [(ngModel)]="newO" >
-      <button class="changes" [disabled]="!old || !newO" (click)="closePopup(1, old, newO)">SAVE CHANGES</button>
-    </div> -->
     <div class="username-popup" *ngIf="emailPopup">
       <button class="close-btn" (click)="close()">X</button>
       <h1>Please enter new email</h1>

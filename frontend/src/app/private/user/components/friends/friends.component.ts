@@ -121,7 +121,7 @@ export class FriendsComponent implements OnInit {
   }
 
   onContextMenu(event: MouseEvent, user: UserI){
- //   this.checkIfFriend(user);
+    this.checkIfFriend(user);
 	  this.chatService.checkIfBlocked(user);
     event.preventDefault();
     this.showContextMenu = true;
@@ -171,7 +171,7 @@ export class FriendsComponent implements OnInit {
       });
         });
         this.showContextMenu = false;
-      }
+    }
 
     selectUser(user: UserI) {
       this.selectedUser = user;
@@ -205,6 +205,16 @@ export class FriendsComponent implements OnInit {
       Authorization: `Bearer ${userToken}` // ajoute le token dans l'en-tête de la requête
     });
     return `http://localhost:3000/api/users/profile-image/${user.profilPic}`;
+  }
+
+  checkIfFriend(user: UserI) {
+    this.isMyFriend = false; // remise à false à chaque fois qu'on appelle la fonction
+    for (const friend of this.friends) {
+      if (friend.id === user.id) { // si l'ami a le même id que l'utilisateur
+        this.isMyFriend = true; // utilisateur trouvé dans le tableau
+        break;
+      }
+    }
   }
 
   async printAllRoomWithPlayer()

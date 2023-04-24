@@ -104,9 +104,11 @@ export class RegisterComponent {
 					password: this.password.value
 				}))
         ).subscribe((createdUser : UserI) => {
+          setTimeout(() => {
           if (this.file.data) {
             this.uploadFile(createdUser.id);
           }
+        }, 2000);
         });
 			}
 	}

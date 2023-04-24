@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { PlayerService } from '../../services/player.service';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
@@ -24,7 +24,7 @@ export interface File {
 export class AvatarComponent implements OnInit {
 
   @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;
-
+  @Output() avatarUpdate = new EventEmitter<boolean>();
   file: File = {
     data: null,
     inProgress: false,
@@ -81,6 +81,7 @@ export class AvatarComponent implements OnInit {
       })).subscribe((event: any) => {
         if(typeof (event) === 'object') {
           this.form.patchValue({profileImage: event.body.profileImage});
+          this.avatarUpdate.emit(true);
         }
       })
   }

@@ -13,6 +13,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "qrcode",
+              "colyseus.js",
+              "phaser",
+              "jquery"
+           ],
             "outputPath": "dist/frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
