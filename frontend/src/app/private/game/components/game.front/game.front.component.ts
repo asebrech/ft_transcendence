@@ -212,6 +212,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     {
       if (this.hasShownAlert == false && frontPlay == false)
       {
+		  this.chatService.endGame([this.player1, this.player2])
         window.alert('One of the player disconnected !');
         window.location.reload();
         this.hasShownAlert = true;
