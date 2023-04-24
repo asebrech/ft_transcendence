@@ -57,10 +57,9 @@ export class GameFrontComponent implements OnInit, DoCheck
   history : History;
   hasShownAlert = false;
   hasJoinedSession = false;
+  ticketConsummed : boolean = false;
   player1: number;
   player2: number;
-
-
   
   constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router, private chatService: ChatService) 
   {
@@ -93,7 +92,11 @@ export class GameFrontComponent implements OnInit, DoCheck
     });
     room?.onMessage("seat", (message) => 
     {
-      this.joinGameSession(message.ticket);
+      if(this.ticketConsummed == false)
+      {
+        this.joinGameSession(message.ticket);
+        this.ticketConsummed = true;
+      }
     });
     if (player_left == true)
     {
@@ -110,7 +113,7 @@ export class GameFrontComponent implements OnInit, DoCheck
         opponentPad = message;
       })
     }
-    room?.onMessage("second_player_found", (message) =>
+    room?.onMessage("second_player_found", () =>
     {
 		this.joinedVar.subscribe((value) =>
 		{
