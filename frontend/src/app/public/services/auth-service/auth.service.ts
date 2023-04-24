@@ -17,8 +17,12 @@ export class AuthService {
   constructor(private http: HttpClient, private snackbar: MatSnackBar, private jwtService: JwtHelperService, private router: Router) { }
 
   login(user: UserI) {
+	try {
 	const response = this.http.post<LoginResponseI>('api/users/login', user);
 	this.loginHandler(response);
+	}
+	catch {
+	}
   }
 
   apiLogin (token: AccessTokenI) {

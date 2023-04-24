@@ -63,6 +63,7 @@ export class UserController {
 
 	@Post('login')
 	async login(@Body() loginUserDto: LoginUserDto): Promise<LoginResponseI> {
+		try {
 		const userEntity: UserI = this.userHelperService.loginUserDtoToEntity(loginUserDto);
 		const user: UserI = await this.userService.login(userEntity);
 		const jwt: string = await this.userService.returnJwt(user);
@@ -78,6 +79,10 @@ export class UserController {
 			const sessionToken: string = this.userService.returnSession(user);
 			return {session: sessionToken}
 		}
+	}
+	catch{
+		return {} ;
+	}
 	}
 
 	@Post('api-login')
@@ -150,17 +155,31 @@ export class UserController {
 
 	@Put(':id/change-username')
 	async changeUsername(@Param('id') userId : number, @Body() { newUsername }: ChangeUsernameDto) {
+		try {
 		await this.userService.updateUsername(userId, newUsername);
+		}
+		catch {
+			return ;
+		}
 	}
 
 	@Put(':id/change-email')
 	async changeEmail(@Param('id') userId : number, @Body() { newEmail }: ChangeEmailDto) {
+		try {
 		await this.userService.updateEmail(userId, newEmail);
+		}
+		catch{
+			return;
+		}
 	}
 
-	@Post(':id/addfriend')	
+	@Post(':id/addfriend')
 	async addFriend(@Param('id') userId : number, @Body('newFriend') newFriend : UserI) {
+	try{
 		await this.userService.addFriend(userId, newFriend);
+	} catch {
+		return ;
+	}
 	} 
 
 	@Post(':id/remove-friend')
@@ -195,10 +214,15 @@ export class UserController {
 
 	@Get(':id')
   	async getUserInfo(@Param('id') id: number): Promise<UserI> {
+		try{
     // Récupérer les informations de l'utilisateur avec l'ID fourni
-    const user = await this.userService.getUserInfo(id);
+   		const user = await this.userService.getUserInfo(id);
     // Retourner les informations de l'utilisateur
     return user;
+		}
+		catch {
+			return ;
+		}
   	}
 
   	@Put(':id/update-color-pad')

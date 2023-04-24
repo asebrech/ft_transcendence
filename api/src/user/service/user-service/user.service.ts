@@ -32,7 +32,8 @@ export class UserService {
 			}
 		} catch {
 			await new Promise(resolve => setTimeout(resolve, 1000));
-			throw new HttpException('Email is already in use', HttpStatus.CONFLICT);		}
+			throw new HttpException('Email is already in use', HttpStatus.CONFLICT);	
+		}
 	}
 
 	async login(user: UserI): Promise<UserI> {
