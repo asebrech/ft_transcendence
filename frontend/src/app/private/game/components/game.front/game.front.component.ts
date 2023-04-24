@@ -27,6 +27,7 @@ export let opponentEndScore : number;
 export let userEndScore : number;
 export let frontPlay : boolean = false;
 
+console.warn = () => {};
 
 @Component({
   selector: 'app-game.front',

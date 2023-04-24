@@ -23,6 +23,8 @@ export let inviteUserEndScore : number;
 export let inviteOpponentEndScore : number;
 export let invitePlay : boolean = false;
 
+console.warn = () => {};
+
 @Component({
   selector: 'app-game.invite',
   templateUrl: './game.invite.component.html',

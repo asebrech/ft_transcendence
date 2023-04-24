@@ -23,7 +23,6 @@ export class MyRoom extends Room<Schema>
     super();
 
     // Set autoDispose to true
-    this.autoDispose = true;
   }
   // When room is initialized
   onCreate (options: any) 
@@ -166,6 +165,7 @@ export class MyRoom extends Room<Schema>
       for (const client of this.clients) {
         this.disconnectClient(client);
       }
+	  this.autoDispose = true;
     }
     else
     {
