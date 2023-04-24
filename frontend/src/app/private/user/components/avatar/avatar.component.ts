@@ -60,28 +60,12 @@ export class AvatarComponent implements OnInit {
     }
 
   uploadFile() {
+    // if (!this.file.data)
+    //   return ;
     const formData = new FormData();
     formData.append('file', this.file.data);
     this.file.inProgress = true;
 
-    this.playerService.uploadProfilePic(formData, this.authService.getLoggedInUser().id).pipe(
-      map((event) => {
-        switch (event.type) {
-          case HttpEventType.UploadProgress:
-            this.file.progress = Math.round(event.loaded * 100 / event.total);
-            break;
-          case HttpEventType.Response:
-            return event;
-        }
-      }),
-      catchError((error: HttpErrorResponse) => {
-        this.file.inProgress = false;
-        return of('Upload failed');
-      })).subscribe((event: any) => {
-        if(typeof (event) === 'object') {
-          this.form.patchValue({profileImage: event.body.profileImage});
-          this.avatarUpdate.emit(true);
-        }
-      })
+    this.playerService.uploadProfilePic(formData, this.authService.getLoggedInUser().id).subscribe();
   }
 }

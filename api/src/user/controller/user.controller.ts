@@ -47,8 +47,12 @@ export class UserController {
 
 	@Post()
 	async create(@Body() createUserDto: CreateUserDto): Promise<UserI> {
+		try {
 		const userEntity: UserI = this.userHelperService.createUserDtoEntity(createUserDto);
 		return this.userService.create(userEntity);
+		} catch {
+			return {};
+		}
 	}
 
 	@Get()
@@ -243,20 +247,33 @@ export class UserController {
 	//@UseGuards(JwtAuthGuard)
 	@UseInterceptors(FileInterceptor('file', storage))
 	async uploadFile(@UploadedFile() file, @Param('id') id: number) {
+		try {
 		const user: UserI  =  await this.userService.getOne(id);
 
 		return this.userService.updateOne(user.id, {profilPic: file.filename}).pipe(
 			map((user:UserI) => ({profileImage: user.profilPic}))
 		)
+		}
+		catch {
+			return ;
+		}
 	}
 
 	@Get('profile-image/:imagename')
 	findProfileImage(@Param('imagename') imagename, @Res() res): Observable<Object> {
+		try {
 		return of(res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename)));
+		} catch {
+			return ;
+		}
 	}
 
 	@Post(':id/add-to-history')
 	async setHistory(@Param('id') id: number, @Body('history') history: playerHistory) {
-		await this.userService.setHistory(id, history);
+		try {
+			await this.userService.setHistory(id, history);
+		} catch {
+			return ;
+		}
 	}
 }

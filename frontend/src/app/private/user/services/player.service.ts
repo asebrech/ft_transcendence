@@ -108,4 +108,3 @@ export class PlayerService {
     return this.httpClient.post(`api/users/${id}/decr-level/`, null);
   }
 }
-
