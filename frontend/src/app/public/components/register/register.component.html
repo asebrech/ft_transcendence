@@ -21,7 +21,7 @@
 					<mat-error *ngIf="username.touched && username.hasError('required')">Username is required</mat-error>
 					<input type="password" matInput placeholder="Password" formControlName="password" >
 					<mat-error *ngIf="password.touched && password.hasError('required')">Password is required</mat-error>
-					<input type="password" matInput placeholder="Password Confirm" formControlName="passwordConfirm"  (keyup.enter)="register()">
+					<input type="password" matInput placeholder="Password Confirm" formControlName="passwordConfirm">
 
 					<mat-error *ngIf="passwordConfirm.touched && form.hasError('passwordsNotMatching')">
 						Password are not matching

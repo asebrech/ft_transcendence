@@ -13,7 +13,6 @@ import { Client } from 'colyseus.js';
   styleUrls: ['./profile.component.scss'],
 })
 
-
 export class ProfileComponent {
   user$: Observable<UserI>;
   toto: UserI = null;

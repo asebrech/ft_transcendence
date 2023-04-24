@@ -144,7 +144,11 @@ export class UserController {
 
 	@Get('check-email')
 	async checkEmail(@Query('mail') mail :string ) : Promise<boolean> {
-		return this.userService.checkEmail(mail);
+		try{
+			return this.userService.checkEmail(mail);
+		} catch {
+			return ;
+		}
 	}
 
 	// @UseGuards(JwtAuthGuard)
@@ -175,12 +179,12 @@ export class UserController {
 
 	@Post(':id/addfriend')
 	async addFriend(@Param('id') userId : number, @Body('newFriend') newFriend : UserI) {
-	try{
-		await this.userService.addFriend(userId, newFriend);
-	} catch {
-		return ;
+		try{
+			await this.userService.addFriend(userId, newFriend);
+		} catch {
+			return ;
+		}
 	}
-	} 
 
 	@Post(':id/remove-friend')
 	async removeFriend(@Param('id') userId : number, @Body('friend') friend : UserI) {

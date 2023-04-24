@@ -16,7 +16,7 @@
 				<p *ngIf="email.touched && email.hasError('required')">Email is required</p>
 				<p *ngIf="email.touched && email.hasError('email')">Email must be valid</p>
 				<button type="submit" (click)="checkEmail()" *ngIf="!showPasswordField">login or signin</button>
-			<input [hidden]="!showPasswordField" [@testAnimation]="showPasswordField" type="password" placeholder="PASSWORD" formControlName="password" (keyup.enter)="login()">
+			<input [hidden]="!showPasswordField" [@testAnimation]="showPasswordField" type="password" placeholder="PASSWORD" formControlName="password">
 			<p *ngIf="password.touched && password.hasError('required') ">Password is required</p>
 			<button *ngIf="showPasswordField" type="submit"  (click)="login()">LOGIN</button>
 		</div>

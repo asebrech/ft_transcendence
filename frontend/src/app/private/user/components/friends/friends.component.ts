@@ -102,8 +102,8 @@ export class FriendsComponent implements OnInit {
 			this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
 			this.chatService.connected();
 			this.printAllRoomWithPlayer();
+      this.setMessage();
 		});
-		this.setMessage();
 		// this.playerService.getUserBy
 	}
 
