@@ -6,6 +6,8 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { Client } from 'colyseus.js';
 import { PlayerService } from 'src/app/private/user/services/player.service';
 import { UserI } from 'src/app/model/user.interface';
+import {  Router } from '@angular/router';
+
 @Component({
   selector: 'app-end-game-page',
   templateUrl: './end-game-page.component.html',
@@ -23,7 +25,7 @@ export class EndGamePageComponent implements OnInit {
   your_score : number = 0;
   opponent_score : number = 0;
 
-  constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService) 
+  constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private router : Router) 
   {
     this.starsService.setActive(false);
     this.userAuth = this.authService.getLoggedInUser();
@@ -98,8 +100,12 @@ export class EndGamePageComponent implements OnInit {
   
   goBack()
   {
-    window.location.reload();
+    if (invitePlay == true)
+      this.router.navigate(['private/chat']);
+    else
+      window.location.reload();
   }
+  
 
   async opponnentInfo()
   {
