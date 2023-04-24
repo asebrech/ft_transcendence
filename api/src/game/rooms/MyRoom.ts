@@ -28,9 +28,8 @@ export class MyRoom extends Room<Schema>
   // When room is initialized
   onCreate (options: any) 
   {
-    this.setSeatReservationTime(100000);
+    this.setSeatReservationTime(10000);
     console.log("room " + this.roomId + " created successfully , playerId : ", options.clientId);
-  
   }
 
   // onAuth(client: Client, options: any, request?: IncomingMessage) 
@@ -73,7 +72,8 @@ export class MyRoom extends Room<Schema>
       player.set(client.sessionId, "player_right");
       this.broadcast("right_player_skin", this.right_player_skin);
       this.broadcast("left_player_skin", this.left_player_skin);
-      this.broadcast("second_player_found");
+	  this.broadcast("second_player_found", ({player_left_id : this.left_player, player_right_id : this.right_player}));
+      console.log("LES DEUX JOUEURS DANS LA ROOM PLAYER_LEFT : " + this.left_player + " ET LE PLAYER_RIGHT " + this.right_player);
     }
     else
       player.set(client.sessionId, "spectator");
@@ -148,7 +148,7 @@ export class MyRoom extends Room<Schema>
     });
     this.onMessage("game_finished", (client, message)=>
     {
-      this.broadcast("end", ({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}, winner : message.winner}));
+      this.broadcast("end", ({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}, winner : message.winner, left_username : this.left_player_username, right_username : this.right_player_username}));
     });
     this.onMessage("score_update", (client , message) =>
     {
@@ -185,6 +185,7 @@ export class MyRoom extends Room<Schema>
   {
     client.leave()
     player.delete(client.sessionId);
-    console.log(client.sessionId + " left " + this.roomId + " , now this room has " + this.clients.length);
+    console.log("LE JOUEUR ID " + this.left_player + " A QUITTER LA PARTIE");
+    console.log("LE JOUEUR ID " + this.right_player + " A QUITTER LA PARTIE");
   }
 }

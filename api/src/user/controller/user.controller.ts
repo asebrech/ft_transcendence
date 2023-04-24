@@ -22,6 +22,7 @@ import { Observable, map, tap } from 'rxjs';
 import { ChangePadSkinDto } from '../model/dto/change-pad-skin.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guards';
 import { AuthGuard } from '@nestjs/passport';
+import { ChangeBallSkinDto } from '../model/dto/change-ball-skin.dto';
 
 
 export const storage = {
@@ -83,6 +84,7 @@ export class UserController {
 	async apiLogin(@Body() accessTokenDto: AccessTokenDto): Promise<LoginResponseI>{
 		const accessToken: AccessTokenI = this.userHelperService.accessTokenDtoToEntity(accessTokenDto);
 		const userApi: UserI = await this.userHelperService.getDataFromApi(accessToken.access_token);
+		console.table(userApi)
 		const user : UserI = await this.userService.apiLoginHandle(userApi);
 		if (!user.google_auth) {
 			const jwt: string = await this.userService.returnJwt(user);
@@ -181,6 +183,11 @@ export class UserController {
 	  return this.userService.incrOrDecrLevel(userId, true);
 	}
 
+	@Post(':id/decr-level')
+	async decrLevel(@Param('id') userId: number) {
+	  return this.userService.incrOrDecrLevel(userId, false);
+	}
+
 	@Get('all')
 	async getAllUsers() {
 		return this.userService.getAllUsers();
@@ -199,15 +206,18 @@ export class UserController {
 		await this.userService.updateColorPad(id, color);
   	}
 
+	@Put(':id/update-color-ball')
+	async updateColorBall(@Param('id') id: number, @Body() { color } : ChangeBallSkinDto) {
+		await this.userService.updateColorBall(id, color);
+  	}
+
 	@Post(':id/upload-profil-pic')
 	//@UseGuards(JwtAuthGuard)
 	@UseInterceptors(FileInterceptor('file', storage))
 	async uploadFile(@UploadedFile() file, @Param('id') id: number) {
-		console.log(file);
 		const user: UserI  =  await this.userService.getOne(id);
 
 		return this.userService.updateOne(user.id, {profilPic: file.filename}).pipe(
-			tap((user: UserI) => console.log(user)),
 			map((user:UserI) => ({profileImage: user.profilPic}))
 		)
 	}

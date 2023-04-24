@@ -6,7 +6,6 @@ import { UserI } from 'src/app/model/user.interface';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 import { StarsService } from 'src/app/services/stars-service/stars.service';
-import { WINDOW } from 'src/app/window-token';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -36,20 +35,16 @@ export class SettingsComponent implements OnInit {
   newO: string;
   old: string;
   username: string;
-  colorBall : string;
-  colorPad : string;
+  colorBall : string = '';
+  colorPad : string = '';
 
   data: any;
-
-  origin = this.window.location.origin;
-
 
   constructor(
     private starsService: StarsService,
     private playerService: PlayerService,
     private authService: AuthService, private route: Router,
-    private http: HttpClient,
-    @Inject(WINDOW) private window: Window) {}
+    private http: HttpClient) {}
 
   ngOnInit(): void {
     this.user$ = this.playerService.getUser();
@@ -58,6 +53,7 @@ export class SettingsComponent implements OnInit {
       this.colorBall = user.colorBall;
       this.username = user.username;
       this.email = user.email;
+
 	  this.data = user;
     });
   }
@@ -100,7 +96,6 @@ export class SettingsComponent implements OnInit {
   retrieveBallSkin(event: Event){
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
     this.playerService.updateColorBall(this.user.id,clickedImageSrc).subscribe( (user: UserI) => {
-        console.log("ball changed successfully");
       this.user$.subscribe( (user: UserI) => {
         this.colorBall = user.colorBall;
       })
@@ -108,18 +103,18 @@ export class SettingsComponent implements OnInit {
   }
 
   onColorBallChange(newColor: string){
-    this.playerService.updateColorBall(this.user.id,newColor).subscribe( (user: UserI) => {
-      console.log("ball color changed successfully");
-      this.user$.subscribe( (user: UserI) => {
-      this.colorBall = user.colorBall;
-      })
-    });
+    if(newColor) {
+      this.playerService.updateColorBall(this.user.id,newColor).subscribe( (user: UserI) => {
+        this.user$.subscribe( (user: UserI) => {
+        this.colorBall = user.colorBall;
+        })
+      });
+    }
   }
 
   retrievePaddleSkin(event: Event){
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
     this.playerService.updateColorPad(this.user.id,clickedImageSrc).subscribe( (user: UserI) => {
-        console.log("pad changed successfully");
         this.user$.subscribe( (user: UserI) => {
         this.colorPad = user.colorPad;
       })
@@ -127,12 +122,13 @@ export class SettingsComponent implements OnInit {
   }
 
   onPaddleColorChange(newColor : string){
-    this.playerService.updateColorPad(this.user.id, newColor).subscribe( (user: UserI) => {
-        console.log("pad color changed successfully");
-      this.user$.subscribe( (user: UserI) => {
-        this.colorPad = user.colorPad;
-      })
-    });
+    if (newColor) {
+      this.playerService.updateColorPad(this.user.id, newColor).subscribe( (user: UserI) => {
+        this.user$.subscribe( (user: UserI) => {
+          this.colorPad = user.colorPad;
+        })
+      });
+    }
   }
 
   getImageUrl(): string {
@@ -143,9 +139,15 @@ export class SettingsComponent implements OnInit {
     return `http://localhost:3000/api/users/profile-image/${this.data?.profilPic}`;;
   }
 
+  updateAvatar() {
+    this.user$ = this.playerService.getUser(); // met à jour la variable user$
+  }
+
   close() {
     this.usernamePopup = false;
     this.pwdPopup = false;
     this.emailPopup = false;
   }
+
+
 }

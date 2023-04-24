@@ -87,11 +87,11 @@ export class PlayScene extends Phaser.Scene
     /////////////////////////
     if (player_left == true)
     {
-      this.skin = "pad2.png"
+      this.skin = "default.png"
     }
     else
     {
-      this.skin = "pad.png"
+      this.skin = "defaut.png"
     }
     /////////////////////////////////
   }
@@ -164,9 +164,9 @@ export class PlayScene extends Phaser.Scene
         this.load.image('ball', 'assets/images/ball/' + skinBall.split('/').pop());  
       }
     }
-    if (this.isColorBall == false)
+    if (this.isColorBall == true)
     {
-      this.load.image('ball', 'assets/images/ball/ball.png');
+      this.load.image('ball', 'assets/images/ball/default.png');
     }
 
     
@@ -205,7 +205,7 @@ export class PlayScene extends Phaser.Scene
         ease: 'Linear',
         loop: -1
     });
-    this.stars = this.add.tileSprite(0, 0, inWidth, inHeight, 'stars').setScrollFactor(0);
+    this.stars = this.add.tileSprite(0, 0, 8000, 6000, 'stars').setScrollFactor(0);
     this.camera1 = this.cameras.add(0,0, inWidth, inHeight);
     this.camera1.startFollow(this.bg);
     this.camera1.centerOn(inWidth,inHeight);

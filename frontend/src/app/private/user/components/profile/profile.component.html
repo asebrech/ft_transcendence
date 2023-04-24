@@ -6,6 +6,7 @@
       <img class="profile" *ngIf="user.profilPic" src="http://localhost:3000/api/users/profile-image/{{user.profilPic}}" alt="astronaut">
 		<img class="profile" *ngIf="!user.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut">
 		<div class="connected" *ngIf="toto && toto.isConnected === true"></div>
+		<div class="inGame" *ngIf="toto && toto.inGame === true">In Game</div>
 		  <div class="notConnected" *ngIf="toto && toto.isConnected === false"></div>
       <label>Level {{ user.level}}</label>
       <progress max="100" value="50">

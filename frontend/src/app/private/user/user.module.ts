@@ -1,3 +1,4 @@
+import { NgxColorsModule } from 'ngx-colors';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './user-routing.module';
@@ -35,6 +36,7 @@ import { AvatarComponent } from './components/avatar/avatar.component';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    NgxColorsModule,
     NgCircleProgressModule.forRoot({
       "radius": 60,
       "space": -10,

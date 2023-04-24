@@ -40,6 +40,22 @@ export class ChatService {
 		return this.socket.fromEvent<MessageI>('messageAdded');
 	}
 
+	inGame(player: number[]) {
+		return this.socket.emit('inGame', player);
+	}
+
+	endGame(player: number[]) {
+		return this.socket.emit('endGame', player);
+	}
+
+	getInGame(): Observable<number[]> {
+		return this.socket.fromEvent<number[]>('inGame');
+	}
+
+	getEndGame(): Observable<number[]> {
+		return this.socket.fromEvent<number[]>('endGame');
+	}
+
 	sendMessage(message: MessageI) {
 		return this.socket.emit('addMessage', message);
 	}

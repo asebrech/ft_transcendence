@@ -28,10 +28,11 @@ export class UserService {
 				const user = await this.userRepository.save(this.userRepository.create(newUser));
 				return this.findOne(user.id);
 			} else {
-				throw new HttpException('Email is already in use', HttpStatus.CONFLICT);
+				console.log("Email already in use. Try again");
 			}
 		} catch {
-			throw new HttpException('Email is already in use', HttpStatus.CONFLICT);
+			await new Promise(resolve => setTimeout(resolve, 1000));
+			console.log("Email already in use. Try again");
 		}
 	}
 
@@ -43,13 +44,13 @@ export class UserService {
 				if (matches) {
 					return fondUser;
 				} else {
-					throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
+					console.log("User not found, or bad infos. Try again");
 				}
 			} else {
-				throw new HttpException('Login was not successful, wrong credentials', HttpStatus.UNAUTHORIZED);
+				console.log("User not found, or bad infos. Try again");
 			}
 		} catch {
-			throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+			console.log("User not found, or bad infos. Try again");
 		}
 	}
 
@@ -170,7 +171,7 @@ export class UserService {
 
 	async updateEmail(userId: number, newEmail: string): Promise<UserI> {
 		if (await this.checkEmail(newEmail))
-			throw new HttpException('This email address is already used', HttpStatus.UNAUTHORIZED);
+			return ;
 		await this.userRepository.update(userId, { email: newEmail });
 		const updatedUser = await this.findOne(userId);
 		return updatedUser;
@@ -198,7 +199,8 @@ export class UserService {
 		const user = await this.findOne(userId);
 		const usernameExists = await this.usernameExists(newUsername);
 		if (usernameExists){
-			throw new HttpException('This username is already taken', HttpStatus.NOT_ACCEPTABLE);
+			console.log("Email already in use. Try again");
+			return ;
 		}
 		await this.userRepository.update(userId, { username: newUsername });
 		const updatedUser = await this.findOne(userId);
@@ -249,7 +251,8 @@ export class UserService {
 			user.friends = [];
 		const existingFriend = user.friends.find(friend => friend.id === newFriend.id);
   		if (existingFriend) {
-		  throw new Error(`Friend of id : ${newFriend.id} is already on friend list.`);
+			console.log("User on your friendlist.");
+			return;
 		}
 		user.friends.push(friend);
 		await this.userRepository.save(user);
@@ -259,12 +262,11 @@ export class UserService {
 	async removeFriend(id: number, friend: UserI): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({ id });
 		const friendIndex = user.friends.findIndex(f => f.id === friend.id);
-		console.table(friend);
 		if (friendIndex !== -1) {
 		  user.friends.splice(friendIndex, 1);
 		  return this.userRepository.save(user);
 		} else {
-		  throw new Error('Friend not found');
+			console.log("Friend not found. Try again");
 		}
 	  }
 
@@ -302,7 +304,7 @@ export class UserService {
 		}
 		user.blockedUsers.push(userToBlock);
 		return this.userRepository.save(user);
-	} 
+	}
 
 	async removeBlockedUser(userToBlock: UserI, user: UserI): Promise<UserI> {		
 		const index = user.blockedUsers.findIndex(obj => obj.id === userToBlock.id);
@@ -318,7 +320,6 @@ export class UserService {
 	}
 
 	async uploadProfilPic(id : number, profilPic: string) : Promise<UserI> {
-		console.log(profilPic, "saluuuuut");
 		this.userRepository.update(id, { profilPic : profilPic });
 		const updatedUser = await this.findOne(id);
 		return updatedUser;

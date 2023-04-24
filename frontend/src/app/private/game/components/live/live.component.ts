@@ -42,7 +42,6 @@ export class LiveComponent implements OnInit, DoCheck {
       this.liveScene.destroy(true);
       this.screen = false;
       this.watchingLive = true;
-
     });
     room?.onMessage("emptyRoom", () =>
     {
@@ -103,17 +102,17 @@ export class LiveComponent implements OnInit, DoCheck {
 
   async joinLive(roomId : any)
   {
-    try {
-      room = await this.client?.joinById(roomId, { });
-      this.screen = true;
-      this.watchingLive = false;
-      setTimeout(() => {
-        this.liveScene = new Phaser.Game(this.liveSceneConfig);
-      }, 2000);
-      console.log(room);
-    } catch (e) {
-      console.error("join error", e);
-    }  
+      try {
+        room = await this.client?.joinById(roomId, { });
+        this.screen = true;
+        this.watchingLive = false;
+        setTimeout(() => {
+          this.liveScene = new Phaser.Game(this.liveSceneConfig);
+        }, 2000);
+        console.log(room);
+      } catch (e) {
+        window.alert("You can't join this room because game is finished");
+      }  
   }
   refresh()
   {

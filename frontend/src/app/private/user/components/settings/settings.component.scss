@@ -115,7 +115,6 @@ button.changes
   align-items: center;
   padding-top: 2vh;
   width: 23vw;
- // height: 39vh;
   background: rgba(22, 7, 45, 0.3);
   box-shadow: 23px 0px 31px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(3px);
@@ -134,7 +133,6 @@ button.changes
   height: 10vh;
   width: 18vw;
   border: white solid 1px;
-  border-radius: 32px;
   margin-left: 1vw;
   overflow-x: auto; /* Enable horizontal scrolling */
   white-space: nowrap; /* Prevent images from wrapping to the next line */
@@ -143,25 +141,7 @@ button.changes
 .ball_skin_container
 {
   display: inline-flex;
-  scrollbar-width: none;
   padding: 0.5vh;
-}
-.ball_skin_container::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  background-color: transparent; /* Set the background color of the scrollbar track */
-}
-
-.ball_skin_container::-webkit-scrollbar-thumb {
-  width: 0;
-  height: 0;
-  background-color: transparent; /* Set the color of the scrollbar thumb */
-}
-
-.ball_skin_container::-webkit-scrollbar-thumb:hover {
-  width: 0; /* Set the width of the scrollbar */
-  height: 0;
-  background-color: transparent; /* Set the color of the scrollbar thumb on hover */
 }
 
 .scrolable-content
@@ -177,12 +157,6 @@ img {
   border-radius: 10px;
 }
 
-.ball_color
-{
-  height: 5vh;
-  width: 2vw;
-  border-radius: 50px;
-}
 //////////////////////////////////////
 //////////////////PADDLE//////////////
 .paddle
@@ -200,29 +174,12 @@ img {
   height: 30vh;
   width: 18vw;
   border: white solid 1px;
-  border-radius: 32px;
   margin-left: 1vw;
   overflow-x: auto; /* Enable horizontal scrolling */
   white-space: nowrap; /* Prevent images from wrapping to the next line */
-  scrollbar-width: none;
   padding-left: 2vh;
-  // padding-right: 1vh;
 }
-.paddle_skin_container::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  background-color: transparent; /* Set the background color of the scrollbar track */
-}
-.paddle_skin_container::-webkit-scrollbar-thumb {
-  width: 0;
-  height: 0;
-  background-color: transparent; /* Set the color of the scrollbar thumb */
-}
-.paddle_skin_container::-webkit-scrollbar-thumb:hover {
-  width: 0; /* Set the width of the scrollbar */
-  height: 0;
-  background-color: transparent; /* Set the color of the scrollbar thumb on hover */
-}
+
 .paddle_skin_container
 img {
   width: 2vw;
@@ -257,3 +214,4 @@ img {
   font-weight: bold;
   color: #333;
 }
+
