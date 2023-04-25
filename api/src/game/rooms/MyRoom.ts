@@ -27,7 +27,6 @@ export class MyRoom extends Room<Schema>
   // When room is initialized
   onCreate (options: any) 
   {
-    this.setSeatReservationTime(10000);
   }
 
   // onAuth(client: Client, options: any, request?: IncomingMessage) 
@@ -138,13 +137,12 @@ export class MyRoom extends Room<Schema>
       }
     });
     ///////////////////////////////////////////
-    this.onMessage("collision", (client, message) =>
-    {
-      this.broadcast("collisionSound");
-    });
     this.onMessage("game_finished", (client, message)=>
     {
       this.broadcast("end", ({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}, winner : message.winner, left_username : this.left_player_username, right_username : this.right_player_username}));
+      for (const client of this.clients) {
+        this.disconnectClient(client);
+      }
     });
     this.onMessage("score_update", (client , message) =>
     {
@@ -165,7 +163,7 @@ export class MyRoom extends Room<Schema>
       for (const client of this.clients) {
         this.disconnectClient(client);
       }
-	  this.autoDispose = true;
+	  // this.autoDispose = true;
     }
     else
     {
