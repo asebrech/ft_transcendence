@@ -18,6 +18,8 @@ export class ConversationListComponent implements OnInit {
 	rooms: any[] = [];
 	currentUser: UserI = this.authService.getLoggedInUser();
 
+	hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
+
   constructor(public dashService: DashboardService, public chatService: ChatService, private authService: AuthService){ }
 
   ngOnInit() {

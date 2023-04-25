@@ -178,12 +178,10 @@ export class PlayScene extends Phaser.Scene
     this.load.image('fullscreenOff', 'assets/images/fullscreen.png');
     this.load.image('readyButton', 'assets/images/readyButton.png');
     this.load.image('blue', 'assets/images/blue.png');
-    this.load.audio('collide', 'assets/collisionSound.wav');
   }
   
   async create() 
   {
-    let collisionSound = this.sound.add('collide');
     //  World size is 8000 x 6000
     this.bg = this.add.tileSprite(this.last_bg_x, this.last_bg_y, inWidth, inHeight, 'background');
     //  Add our planets, etc
@@ -218,7 +216,6 @@ export class PlayScene extends Phaser.Scene
 
     if (this.isColorPad == true)
     {
-      console.log(this.convertColorCode(skinPad), "colorPad");
       if(player_left == true)
         left_pad.setTint(this.convertColorCode(skinPad));
       else
@@ -227,7 +224,6 @@ export class PlayScene extends Phaser.Scene
 
     if (this.isOpponentColorPad == true)
     {
-      console.log(this.convertColorCode(opponentPad), "OpponentPad");
       if(player_left == true)
         right_pad.setTint(this.convertColorCode(opponentPad));
       else
@@ -265,28 +261,22 @@ export class PlayScene extends Phaser.Scene
 
     this.physics.add.collider(left_pad, ball, () =>
     {
-      if (this.speed < 600)
+      if (this.speed < 500)
       {
         this.speed += 100;
         ball.body.velocity.normalize().scale(this.speed);
       }
-      collisionSound.play();
-      room?.send("collision");
     });
 
     this.physics.add.collider(right_pad, ball, () =>
     {
-      this.speed += 100;
-      collisionSound.play();
-      room?.send("collision");
-      ball.body.velocity.normalize().scale(this.speed);
+      if (this.speed < 500)
+      {
+        this.speed += 100;
+        ball.body.velocity.normalize().scale(this.speed);
+      }    
     });
 
-    room?.onMessage("collisionSound", (message)=>
-    {
-      if( player_left == false)
-        collisionSound.play();
-    })
 
     this.particle = this.add.particles('space').setInteractive();
     this.emitter = this.particle.createEmitter({
@@ -400,13 +390,13 @@ export class PlayScene extends Phaser.Scene
       }
     });
 
-    if ((this.right_score || this.left_score) > 5)
+    if ((this.right_score || this.left_score) > 2)
     {
       this.emitter.startFollow(ball).setScrollFactor(0);
     }
     if (player_left == true)
     {
-      if ((this.right_score || this.left_score) > 9)
+      if ((this.right_score || this.left_score) > 4)
       {
         if (this.left_score > this.right_score)
         {
@@ -419,12 +409,12 @@ export class PlayScene extends Phaser.Scene
       }
     }
     ///////////////////////////////////////////////////////////////
-    this.bg.x += 1;
-    this.bg.y += 1;
-    this.last_bg_x++;
-    this.last_bg_y++;
-    this.stars.tilePositionX += 1;
-    this.stars.tilePositionY += 1;
+    // this.bg.x += 1;
+    // this.bg.y += 1;
+    // this.last_bg_x++;
+    // this.last_bg_y++;
+    // this.stars.tilePositionX += 1;
+    // this.stars.tilePositionY += 1;
     /////////////////////////////////////////////////////////////
   }
 }

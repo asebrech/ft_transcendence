@@ -63,6 +63,7 @@ export class UserController {
 
 	@Post('login')
 	async login(@Body() loginUserDto: LoginUserDto): Promise<LoginResponseI> {
+		try {
 		const userEntity: UserI = this.userHelperService.loginUserDtoToEntity(loginUserDto);
 		const user: UserI = await this.userService.login(userEntity);
 		const jwt: string = await this.userService.returnJwt(user);
@@ -78,6 +79,10 @@ export class UserController {
 			const sessionToken: string = this.userService.returnSession(user);
 			return {session: sessionToken}
 		}
+	}
+	catch{
+		return {} ;
+	}
 	}
 
 	@Post('api-login')
@@ -139,7 +144,11 @@ export class UserController {
 
 	@Get('check-email')
 	async checkEmail(@Query('mail') mail :string ) : Promise<boolean> {
-		return this.userService.checkEmail(mail);
+		try{
+			return this.userService.checkEmail(mail);
+		} catch {
+			return ;
+		}
 	}
 
 	// @UseGuards(JwtAuthGuard)
@@ -150,18 +159,32 @@ export class UserController {
 
 	@Put(':id/change-username')
 	async changeUsername(@Param('id') userId : number, @Body() { newUsername }: ChangeUsernameDto) {
+		try {
 		await this.userService.updateUsername(userId, newUsername);
+		}
+		catch {
+			return ;
+		}
 	}
 
 	@Put(':id/change-email')
 	async changeEmail(@Param('id') userId : number, @Body() { newEmail }: ChangeEmailDto) {
+		try {
 		await this.userService.updateEmail(userId, newEmail);
+		}
+		catch{
+			return;
+		}
 	}
 
-	@Post(':id/addfriend')	
+	@Post(':id/addfriend')
 	async addFriend(@Param('id') userId : number, @Body('newFriend') newFriend : UserI) {
-		await this.userService.addFriend(userId, newFriend);
-	} 
+		try{
+			await this.userService.addFriend(userId, newFriend);
+		} catch {
+			return ;
+		}
+	}
 
 	@Post(':id/remove-friend')
 	async removeFriend(@Param('id') userId : number, @Body('friend') friend : UserI) {
@@ -195,10 +218,15 @@ export class UserController {
 
 	@Get(':id')
   	async getUserInfo(@Param('id') id: number): Promise<UserI> {
+		try{
     // Récupérer les informations de l'utilisateur avec l'ID fourni
-    const user = await this.userService.getUserInfo(id);
+   		const user = await this.userService.getUserInfo(id);
     // Retourner les informations de l'utilisateur
     return user;
+		}
+		catch {
+			return ;
+		}
   	}
 
   	@Put(':id/update-color-pad')
@@ -215,20 +243,33 @@ export class UserController {
 	//@UseGuards(JwtAuthGuard)
 	@UseInterceptors(FileInterceptor('file', storage))
 	async uploadFile(@UploadedFile() file, @Param('id') id: number) {
+		try {
 		const user: UserI  =  await this.userService.getOne(id);
 
 		return this.userService.updateOne(user.id, {profilPic: file.filename}).pipe(
 			map((user:UserI) => ({profileImage: user.profilPic}))
 		)
+		}
+		catch {
+			return ;
+		}
 	}
 
 	@Get('profile-image/:imagename')
 	findProfileImage(@Param('imagename') imagename, @Res() res): Observable<Object> {
+		try {
 		return of(res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename)));
+		} catch {
+			return ;
+		}
 	}
 
 	@Post(':id/add-to-history')
 	async setHistory(@Param('id') id: number, @Body('history') history: playerHistory) {
-		await this.userService.setHistory(id, history);
+		try {
+			await this.userService.setHistory(id, history);
+		} catch {
+			return ;
+		}
 	}
 }

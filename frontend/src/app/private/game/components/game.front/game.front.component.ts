@@ -27,6 +27,7 @@ export let opponentEndScore : number;
 export let userEndScore : number;
 export let frontPlay : boolean = false;
 
+console.warn = () => {};
 
 @Component({
   selector: 'app-game.front',
@@ -57,10 +58,9 @@ export class GameFrontComponent implements OnInit, DoCheck
   history : History;
   hasShownAlert = false;
   hasJoinedSession = false;
+  ticketConsummed : boolean = false;
   player1: number;
   player2: number;
-
-
   
   constructor(private authService : AuthService, private starsService: StarsService, private launch : LaunchGameService, private playerService : PlayerService,private router: Router, private chatService: ChatService) 
   {
@@ -93,7 +93,11 @@ export class GameFrontComponent implements OnInit, DoCheck
     });
     room?.onMessage("seat", (message) => 
     {
-      this.joinGameSession(message.ticket);
+      if(this.ticketConsummed == false)
+      {
+        this.joinGameSession(message.ticket);
+        this.ticketConsummed = true;
+      }
     });
     if (player_left == true)
     {
@@ -136,74 +140,74 @@ export class GameFrontComponent implements OnInit, DoCheck
     })
     room?.onMessage("end", (message) =>
     {
-		if (message.winner == true && this.checked == false)
-		{
-		  this.chatService.endGame([this.player1, this.player2])
-        this.checked = true;
-        if (player_left == true)
-        {
-          opponentEndScore = message.score.right;
-          opponentName = message.right_username;
-          userEndScore = message.score.left;
-          console.log(opponentEndScore, opponentName, userEndScore);
-          gameWon = true;
-          const history : playerHistory = {
-            userId: this.user.id,
-            opponentId: message.player_right,
-            won: true
-          }
-          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
-          });
-        }
-        else
-        {
-          opponentEndScore = message.score.left;
-          opponentName = message.left_username;
-          userEndScore = message.score.right;
-          gameWon = false;
-          const history : playerHistory = {
-            userId: this.user.id,
-            opponentId: message.player_left,
-            won: false
-          }
-          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
-          });
-        }
-        this.gameEnded = true;
-      }
-      else if (message.winner == false && this.checked == false)
+      if (message.winner == true && this.checked == false)
       {
-        this.checked = true;
-        if (player_left == true)
-        {
-          opponentEndScore = message.score.right;
-          opponentName = message.right_username;
-          userEndScore = message.score.left;
-          gameWon = false;
-          const history : playerHistory = {
-            userId: this.user.id,
-            opponentId: message.player_right,
-            won: false
+          this.chatService.endGame([this.player1, this.player2])
+          this.checked = true;
+          if (player_left == true)
+          {
+            opponentEndScore = message.score.right;
+            opponentName = message.right_username;
+            userEndScore = message.score.left;
+            gameWon = true;
+            const history : playerHistory = {
+              userId: this.user.id,
+              opponentId: message.player_right,
+              won: true
+            }
+            this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+            });
           }
-          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
-          });
-        }
-        else
-        {
-          opponentEndScore = message.score.left;
-          opponentName = message.left_username;
-          userEndScore = message.score.right;
-          gameWon = true;
-          const history : playerHistory = {
-            userId: this.user.id,
-            opponentId: message.player_left,
-            won: true
+          else
+          {
+            opponentEndScore = message.score.left;
+            opponentName = message.left_username;
+            userEndScore = message.score.right;
+            gameWon = false;
+            const history : playerHistory = {
+              userId: this.user.id,
+              opponentId: message.player_left,
+              won: false
+            }
+            this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+            });
           }
-          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
-          });
+          this.gameEnded = true;
         }
-        this.gameEnded = true;
-      }
+        else if (message.winner == false && this.checked == false)
+        {
+          this.chatService.endGame([this.player1, this.player2])
+          this.checked = true;
+          if (player_left == true)
+          {
+            opponentEndScore = message.score.right;
+            opponentName = message.right_username;
+            userEndScore = message.score.left;
+            gameWon = false;
+            const history : playerHistory = {
+              userId: this.user.id,
+              opponentId: message.player_right,
+              won: false
+            }
+            this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+            });
+          }
+          else
+          {
+            opponentEndScore = message.score.left;
+            opponentName = message.left_username;
+            userEndScore = message.score.right;
+            gameWon = true;
+            const history : playerHistory = {
+              userId: this.user.id,
+              opponentId: message.player_left,
+              won: true
+            }
+            this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+            });
+          }
+          this.gameEnded = true;
+        }
       frontPlay = true;
       this.playScene.destroy(true);
     });
@@ -212,6 +216,7 @@ export class GameFrontComponent implements OnInit, DoCheck
     {
       if (this.hasShownAlert == false && frontPlay == false)
       {
+		  this.chatService.endGame([this.player1, this.player2])
         window.alert('One of the player disconnected !');
         window.location.reload();
         this.hasShownAlert = true;
@@ -221,7 +226,7 @@ export class GameFrontComponent implements OnInit, DoCheck
 
   ngOnDestroy()
   {
-	this.chatService.endGame([this.player1, this.player2])
+	//this.chatService.endGame([this.player1, this.player2])
     if(this.hasJoinedSession == true)
     {
       window.location.reload();
@@ -348,8 +353,6 @@ export class GameFrontComponent implements OnInit, DoCheck
   {
     try {
       room = await client?.joinOrCreate("ranked",  { rank : this.rank, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
-      console.log(room);
-      console.log(client.auth);
       this.hasJoinedSession = true;
     } catch (e) {
       console.error("join error", e);

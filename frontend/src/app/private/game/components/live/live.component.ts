@@ -3,8 +3,11 @@ import { StarsService } from 'src/app/services/stars-service/stars.service';
 import { LaunchGameService } from '../../services/launch.game.service';
 import { Client } from 'colyseus.js';
 import { LiveScene } from '../../services/live.scene.service';
+import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
 
 export let room : any;
+
+console.warn = () => {};
 
 @Component({
   selector: 'app-live',
@@ -14,7 +17,7 @@ export let room : any;
 
 export class LiveComponent implements OnInit, DoCheck {
 
-  constructor(private starsService: StarsService, private launch : LaunchGameService) { }
+  constructor(private starsService: StarsService, private launch : LaunchGameService, private chatService: ChatService) { }
   // rooms : any;
   client : Client;
   roomIds: string[] = [];
@@ -78,14 +81,21 @@ export class LiveComponent implements OnInit, DoCheck {
     };
 
     this.getAvailableRooms();
+	this.chatService.getInGame().subscribe (() => {
+		this.getAvailableRooms()
+	})
+
+	this.chatService.getEndGame().subscribe (() => {
+		this.getAvailableRooms()
+	})
   }
   
   async getAvailableRooms()
   {
     const rooms = await this.client.getAvailableRooms("my_room");
+	this.myArray = [];
     if(rooms.length > 0)
     {
-      this.myArray = [];
       for (let i : number = 0 ; i < rooms.length; i++)
       {
         const metadata = rooms[i].metadata;
@@ -109,7 +119,6 @@ export class LiveComponent implements OnInit, DoCheck {
         setTimeout(() => {
           this.liveScene = new Phaser.Game(this.liveSceneConfig);
         }, 2000);
-        console.log(room);
       } catch (e) {
         window.alert("You can't join this room because game is finished");
       }  

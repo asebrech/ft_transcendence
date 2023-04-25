@@ -30,39 +30,41 @@ export class FriendsComponent implements OnInit {
   isBlocked: boolean = null;
   data: any;
 
+  hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
+
   constructor(private cdr: ChangeDetectorRef, private route : Router, private playerService: PlayerService, private authService: AuthService, private chatService: ChatService) { }
 
   ngOnInit(): void {
+    setTimeout(()=> {
+    this.chatService.getInGame().subscribe (players => {
+      if (this.filteredUsers) {
+        for (const user of this.filteredUsers) {
+          if (user.id === players[0] || user.id == players[1]) {
+            user.inGame = true;
+          }
+        }
+        for (const user of this.friends) {
+          if (user.id === players[0] || user.id == players[1]) {
+            user.inGame = true;
+          }
+        }
+      }
+    })
 
-	this.chatService.getInGame().subscribe (players => {
-		if (this.filteredUsers) {
-			for (const user of this.filteredUsers) {
-				if (user.id === players[0] || user.id == players[1]) {
-					user.inGame = true;
-				}
-			}
-			for (const user of this.friends) {
-				if (user.id === players[0] || user.id == players[1]) {
-					user.inGame = true;
-				}
-			}
-		}
-	})
-
-	this.chatService.getEndGame().subscribe (players => {
-		if (this.filteredUsers) {
-			for (const user of this.filteredUsers) {
-				if (user.id === players[0] || user.id == players[1]) {
-					user.inGame = false;
-				}
-			}
-			for (const user of this.friends) {
-				if (user.id === players[0] || user.id == players[1]) {
-					user.inGame = false;
-				}
-			}
-		}
-	})
+    this.chatService.getEndGame().subscribe (players => {
+      if (this.filteredUsers) {
+        for (const user of this.filteredUsers) {
+          if (user.id === players[0] || user.id == players[1]) {
+            user.inGame = false;
+          }
+        }
+        for (const user of this.friends) {
+          if (user.id === players[0] || user.id == players[1]) {
+            user.inGame = false;
+          }
+        }
+      }
+    })
 
 	  this.chatService.getConnected().subscribe(val => {
 		  if (this.filteredUsers) {
@@ -102,9 +104,9 @@ export class FriendsComponent implements OnInit {
 			this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
 			this.chatService.connected();
 			this.printAllRoomWithPlayer();
+      this.setMessage();
 		});
-		this.setMessage();
-		// this.playerService.getUserBy
+    },100);
 	}
 
 	sendMessage(user: UserI) {

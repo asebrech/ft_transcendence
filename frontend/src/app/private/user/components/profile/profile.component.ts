@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgModule, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserI, playerHistory } from 'src/app/model/user.interface';
 import { PlayerService } from '../../services/player.service';
@@ -6,13 +6,13 @@ import { Observable, forkJoin, map } from 'rxjs';
 import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
 import { Client } from 'colyseus.js';
+import { WINDOW } from 'src/app/window-token';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
-
 
 export class ProfileComponent {
   user$: Observable<UserI>;
@@ -21,52 +21,59 @@ export class ProfileComponent {
   user: UserI;
   opponentName: string;
   ratio : number;
-  constructor(private playerService: PlayerService, private route: ActivatedRoute, private authService : AuthService, private chatService: ChatService) {
+  hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
+
+  constructor(
+      private playerService: PlayerService,
+      private route: ActivatedRoute,
+      private authService : AuthService,
+      private chatService : ChatService) {
   }
 
-  ngOnInit()
-  {
+  ngOnInit(){
 
-	this.chatService.getInGame().subscribe (players => {
-		this.printAllRoomWithPlayer()
-	})
+    setTimeout(() => {
+    this.chatService.getInGame().subscribe (players => {
+      this.printAllRoomWithPlayer()
+    })
 
-	this.chatService.getEndGame().subscribe (players => {
-		this.printAllRoomWithPlayer()
-	})
+    this.chatService.getEndGame().subscribe (players => {
+      this.printAllRoomWithPlayer()
+    })
 
     this.chatService.getConnected().subscribe(val => {
       this.user$.subscribe(user =>{ this.toto = user
       if (this.toto) {
-      this.toto.isConnected = false;
+       this.toto.isConnected = false;
 
-      for (const valUser of val) {
-          if (valUser.id === this.toto.id) {
-              this.toto.isConnected = true;
+        for (const valUser of val) {
+            if (valUser.id === this.toto.id) {
+                this.toto.isConnected = true;
+            }
           }
-      }
-	  this.printAllRoomWithPlayer()
-	}
-    })
+        this.printAllRoomWithPlayer()
+        }
+      })
     })
 
     this.chatService.connected();
 
-      const id = +this.route.snapshot.paramMap.get('id');
-      if (id) {
-        this.user$ = this.playerService.getUserById(id);
-      } else {
-        this.user$ = this.playerService.getUser();
-      }
+    const id = +this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.user$ = this.playerService.getUserById(id);
+    } else {
+      this.user$ = this.playerService.getUser();
+    }
 
-      this.user$.subscribe();
-      this.user = this.authService.getLoggedInUser();
+    this.user$.subscribe();
+    this.user = this.authService.getLoggedInUser();
 
     this.user$.subscribe((user) => {
       this.user = user;
       this.opponents$ = this.getOpponents(this.user.history);
       this.ratio = (user.wins / (user.wins + user.losses)) * 100;
-    });
+      });
+    },100);
   }
 
   getOpponents(history: playerHistory[]): Observable<UserI[]> {
@@ -93,5 +100,9 @@ export class ProfileComponent {
 	}
   }
 
+}
+
+function Inject(WINDOW: any): (target: typeof ProfileComponent, propertyKey: undefined, parameterIndex: 0) => void {
+  throw new Error('Function not implemented.');
 }
 

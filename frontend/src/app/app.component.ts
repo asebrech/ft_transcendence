@@ -12,6 +12,6 @@ import * as $ from 'jquery';
 export class AppComponent
 {
   
-  constructor(public service: StarsService) {}
+  constructor() {}
   
 }

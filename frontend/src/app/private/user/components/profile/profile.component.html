@@ -3,7 +3,7 @@
   <div class="container">
     <div class="block" *ngIf="(user$ | async) as user">
 		<h1>{{ user.username}}</h1>
-      <img class="profile" *ngIf="user.profilPic" src="http://localhost:3000/api/users/profile-image/{{user.profilPic}}" alt="astronaut">
+      <img class="profile" *ngIf="user.profilPic" [src]="hostname + user.profilPic" alt="astronaut">
 		<img class="profile" *ngIf="!user.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut">
 		<div class="connected" *ngIf="toto && toto.isConnected === true"></div>
 		<div class="inGame" *ngIf="toto && toto.inGame === true">In Game</div>

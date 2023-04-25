@@ -67,7 +67,6 @@ export class matchMaking extends Room {
   stats: ClientStat[] = [];
 
   onCreate(options: any) {
-    this.setSeatReservationTime(100000);
 
     this.onMessage("confirm", (client: Client, message: any) => 
     {
@@ -88,8 +87,6 @@ export class matchMaking extends Room {
   }
 
   onJoin(client: Client, options: any) {
-    // console.log("test[][][][][][][][][")
-    // console.log(this.seatReservationTime);
     this.stats.push({
       client: client,
       rank: options.rank,

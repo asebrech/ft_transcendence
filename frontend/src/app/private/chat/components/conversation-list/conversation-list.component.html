@@ -10,8 +10,8 @@
 			'transition': chatService.selectedRoomId === room.id && !isClicked ?'ease-in 0.1s': '' }"
 			[ngClass]="{'selected': chatService.selectedRoomId === room.id}"
 			>
-			<img class="imgP" src="http://localhost:3000/api/users/profile-image/{{room.users[0].profilPic}}" *ngIf="room.privateMessage && currentUser.id !== room.users[0].id">
-			<img class="imgP" src="http://localhost:3000/api/users/profile-image/{{room.users[1].profilPic}}" *ngIf="room.privateMessage && currentUser.id !== room.users[1].id">
+			<img class="imgP" [src]="hostname + room.users[0].profilPic" *ngIf="room.privateMessage && currentUser.id !== room.users[0].id">
+			<img class="imgP" [src]="hostname + room.users[1].profilPic"*ngIf="room.privateMessage && currentUser.id !== room.users[1].id">
 			<img class="imgG" src="../../../../../../assets/images/src.png" *ngIf="!room.privateMessage">
 			<div class="connected" *ngIf="room.privateMessage && room.isConnected === true"></div>
 			<div class="notConnected" *ngIf="room.privateMessage && room.isConnected === false"></div>

@@ -26,6 +26,8 @@ export class MembersListComponent implements OnInit {
 	users$: Observable<UserI[]> = this.chatservice.getMember();
 	users: UserI[] = [];
 
+	hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
+
 	@Input() selectedUserInput: UserI;
 	  @ViewChild('option') option: ElementRef;
 

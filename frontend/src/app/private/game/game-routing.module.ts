@@ -7,11 +7,7 @@ import { GameInviteComponent } from './components/game.invite/game.invite.compon
 import { EndGamePageComponent } from './components/end-game-page/end-game-page.component';
 
 const routes: Routes = [
-	{ ////////////////////////////A SUPPRIMER APRES////////////////////////
-		path: 'test',
-		component: EndGamePageComponent
-	},
-	{ ////////////////////////////A SUPPRIMER APRES////////////////////////
+	{
 		path: 'invite',
 		component: GameInviteComponent
 	},

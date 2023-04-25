@@ -15,7 +15,7 @@
 	<div class="separator"></div>
 </div>
 <div class="main"  >
-	<ul >
+	<ul>
 		<li *ngFor="let user of users; let i = index" class="list" (click)="getElementPosition(i, $event)"
 		(click)="select()"
 		(mousedown)="isClicked = true"
@@ -25,7 +25,7 @@
 		[ngStyle]="{ 'background-color': selectedUser === user && isClicked ? 'rgba(217, 217, 217, 0.25)' : '',
 		'transition': selectedUser === user && !isClicked ?'ease-in 0.1s': '' }"
 		[ngClass]="{'selected': selectedUser === user}">
-		<img class="userProfile" *ngIf="user.profilPic" src="http://localhost:3000/api/users/profile-image/{{user.profilPic}}" alt="profilePicture">
+		<img class="userProfile" *ngIf="user.profilPic" [src]="hostname + user.profilPic" alt="astronaut" alt="profilePicture">
     <img class="userProfile" *ngIf="!user.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut">
 		<!-- <img src="../../../../../assets/images/icons8-star-50.png" class="image" *ngIf="chatservice.selectedRoom.owner.id === user.id"> -->
 		<!-- <img src="../../../../../assets/images/icons8-star-half-50.png" class="image" > -->

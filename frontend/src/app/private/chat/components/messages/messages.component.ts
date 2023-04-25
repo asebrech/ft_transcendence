@@ -30,6 +30,8 @@ export class MessagesComponent implements OnInit {
 	@ViewChild('messageList') messageList: ElementRef;
 	@ViewChild('inputElement') inputElementRef: ElementRef;
 
+	hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
+
 
 	constructor(private formBuilder: FormBuilder, public dashService: DashboardService, private changeDetector: ChangeDetectorRef,
 		private elementRef: ElementRef, public chatService: ChatService, private router : Router) {
