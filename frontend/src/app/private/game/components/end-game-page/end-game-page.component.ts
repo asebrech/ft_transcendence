@@ -8,6 +8,7 @@ import { PlayerService } from 'src/app/private/user/services/player.service';
 import { UserI } from 'src/app/model/user.interface';
 import {  Router } from '@angular/router';
 
+console.warn = () => {};
 
 @Component({
 	selector: 'app-end-game-page',

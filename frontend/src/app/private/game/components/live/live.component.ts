@@ -7,6 +7,8 @@ import { ChatService } from 'src/app/private/chat/services/chat-service/chat.ser
 
 export let room : any;
 
+console.warn = () => {};
+
 @Component({
   selector: 'app-live',
   templateUrl: './live.component.html',
