@@ -36,7 +36,7 @@ import { UserService } from '../../services/user-service/user.service';
 	  showPasswordField : boolean = false;
   
 	  constructor(private authService: AuthService, private router: Router, private http: HttpClient, private user: UserService) {}
-  
+
 	  ngOnInit() {
 		  // add event listener to reset password field and hide it when email changes
 		  this.form.get('email').valueChanges.subscribe(() => {
@@ -44,7 +44,7 @@ import { UserService } from '../../services/user-service/user.service';
 			  this.showPasswordField = false;
 		  });
 	  }
-  
+
 	  login() {
 		  if (this.form.valid)
 		  this.authService.login({
