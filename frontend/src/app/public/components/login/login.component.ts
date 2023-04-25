@@ -1,3 +1,12 @@
+import { Component, Injectable, Input } from '@angular/core';
+import { EmailValidator, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth-service/auth.service';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { UserService } from '../../services/user-service/user.service';
+
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
