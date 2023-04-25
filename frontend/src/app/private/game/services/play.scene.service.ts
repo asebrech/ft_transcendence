@@ -178,7 +178,7 @@ export class PlayScene extends Phaser.Scene
     this.load.image('fullscreenOff', 'assets/images/fullscreen.png');
     this.load.image('readyButton', 'assets/images/readyButton.png');
     this.load.image('blue', 'assets/images/blue.png');
-    }
+  }
   
   async create() 
   {
