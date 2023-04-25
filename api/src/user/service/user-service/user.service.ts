@@ -20,20 +20,16 @@ export class UserService {
 	) { }
 
 	async create(newUser: UserI): Promise<UserI> {
-		try {
 			const exists: boolean = await this.mailExists(newUser.email);
-			if (!exists) {
+			const userExist: boolean = await this.usernameExists(newUser.username)
+			if (!exists && !userExist) {
 				const passwordHash: string = await this.hashPassword(newUser.password);
 				newUser.password = passwordHash;
 				const user = await this.userRepository.save(this.userRepository.create(newUser));
 				return this.findOne(user.id);
 			} else {
-				throw new HttpException('Email is already in use', HttpStatus.CONFLICT);
+				return null;
 			}
-		} catch {
-			await new Promise(resolve => setTimeout(resolve, 1000));
-			throw new HttpException('Email is already in use', HttpStatus.CONFLICT);	
-		}
 	}
 
 	async login(user: UserI): Promise<UserI> {

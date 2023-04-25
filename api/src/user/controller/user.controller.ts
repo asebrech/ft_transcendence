@@ -47,12 +47,8 @@ export class UserController {
 
 	@Post()
 	async create(@Body() createUserDto: CreateUserDto): Promise<UserI> {
-		try {
 		const userEntity: UserI = this.userHelperService.createUserDtoEntity(createUserDto);
 		return this.userService.create(userEntity);
-		} catch {
-			return {};
-		}
 	}
 
 	@Get()

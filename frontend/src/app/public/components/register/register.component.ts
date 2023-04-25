@@ -98,15 +98,16 @@ export class RegisterComponent {
 				email: this.email.value,
 				password: this.password.value,
 				username: this.username.value,
-			}).pipe(
-				tap(() => this.authService.login({
+			}).subscribe((createdUser : UserI) => {
+			if (createdUser !== null) {
+				this.authService.login({
 					email: this.email.value,
 					password: this.password.value
-				}))
-        ).subscribe((createdUser : UserI) => {
-          if (this.file.data) {
-            this.uploadFile(createdUser.id);
-          }
+				})
+			  if (this.file.data) {
+				this.uploadFile(createdUser.id);
+			  }
+			}
         });
 			}
 	}
