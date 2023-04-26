@@ -25,8 +25,8 @@ export class AuthService {
 	}
   }
 
-  apiLogin (token: AccessTokenI) {
-	const response = this.http.post<LoginResponseI>('api/users/api-login', token);
+  apiLogin (body: any) {
+	const response = this.http.post<LoginResponseI>('api/users/api-login', body);
 	this.loginHandler(response);
   }
 

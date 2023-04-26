@@ -44,7 +44,6 @@ export class UserHelperService {
 					Authorization: `Bearer ${token}`,
 				},
 			});
-			console.table(response.data);
 			return this.apiLoginDtoToEntity(response.data);
 		} catch {
 			throw new HttpException('wrong token', HttpStatus.UNAUTHORIZED);

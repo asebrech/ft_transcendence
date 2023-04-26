@@ -10,7 +10,7 @@ import { TestRoom } from './game/rooms/test';
 
 async function bootstrap() 
 {
-  const app = await NestFactory.create(AppModule, {logger: false});
+  const app = await NestFactory.create(AppModule);
   const gameServer = new Server();
 
   gameServer.define("my_room", MyRoom);

@@ -26,7 +26,15 @@ export class ApiLoginComponent implements OnInit {
 		this.route.queryParams.subscribe(params => {
 		  this.code = params['code'];});
 		  if (this.code) {
-			this.authService.exchangeCodeForToken(this.code).subscribe(token => this.authService.apiLogin(token));
+			const body = {
+				code: this.code,
+				client_id: environment.CLIENT_ID,
+				client_secret: environment.CLIENT_SECRET,
+				grant_type: environment.GRANT_TYPE,
+				redirect_uri: environment.REDIRECT_URI
+			  };
+
+			this.authService.apiLogin(body);
 		  }
 	  }
 
