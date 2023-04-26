@@ -15,10 +15,10 @@
 			</label>
 		</div>
 		<div *ngIf="channelForm.get('isPrivate').value">
-			<input type="password" id="channelPassword" formControlName="channelPassword" placeholder="Password" class="inputCustom">
+			<input type="text" id="channelPassword" formControlName="channelPassword" placeholder="Password" class="inputCustom">
 		</div>
 		<div *ngIf="channelForm.get('isPrivate').value">
-			<input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="ConfirmPassword" class="inputCustom">
+			<input type="text" id="confirmPassword" formControlName="confirmPassword" placeholder="ConfirmPassword" class="inputCustom">
 		</div>
 		<div
 			*ngIf="channelForm.hasError('passwordMismatch') && (channelForm.get('channelPassword').dirty || channelForm.get('confirmPassword').dirty)" class="error">

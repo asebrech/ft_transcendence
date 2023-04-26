@@ -3,10 +3,10 @@
 	<div class="separator"></div>
 	<form [formGroup]="passForm" (ngSubmit)="onSubmit()" class="form">
 		<div >
-			<input type="password" id="channelPassword" formControlName="channelPassword" placeholder="Password" class="inputCustom">
+			<input type="text" id="channelPassword" formControlName="channelPassword" placeholder="Password" class="inputCustom">
 		</div>
 		<div >
-			<input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="ConfirmPassword" class="inputCustom">
+			<input type="text" id="confirmPassword" formControlName="confirmPassword" placeholder="ConfirmPassword" class="inputCustom">
 		</div>
 		<div
 			*ngIf="passForm.hasError('passwordMismatch') && (passForm.get('channelPassword').dirty || passForm.get('confirmPassword').dirty)" class="error">
