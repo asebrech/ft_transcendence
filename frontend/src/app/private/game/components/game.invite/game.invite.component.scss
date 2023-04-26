@@ -4,10 +4,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-left: 8vw;
-    height: 87vh;
-    width: 91vw;
-    // background-color: red;
+    height: 90vh;
+    width: calc(100% - 100px);
+    margin-left: 100px;
+    backdrop-filter: blur(4.5px);
+    z-index: -1;
 }
 
 .ring-2 

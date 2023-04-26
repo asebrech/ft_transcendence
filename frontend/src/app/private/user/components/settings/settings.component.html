@@ -4,6 +4,7 @@
     <h1>Profil</h1>
     <!-- <img *ngIf="user.profilPic" [src]="hostname + user.profilPic" alt="profilePicture">
     <img class="profilPic" *ngIf="!user.profilPic" src="../../../../../assets/images/astronaut.png" alt="astronaut"> -->
+    <p>Set new profile image</p>
     <app-avatar (avatarUpdated)="updateAvatar()"></app-avatar>
     <button (click)="changeUsername()">Change username</button>
     <button (click)="changeEmail()">Change email</button>

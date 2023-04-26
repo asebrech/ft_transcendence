@@ -22,13 +22,12 @@
 					<input type="text" matInput placeholder="Password" formControlName="password" >
 					<mat-error *ngIf="password.touched && password.hasError('required')">Password is required</mat-error>
 					<input type="text" matInput placeholder="Password Confirm" formControlName="passwordConfirm">
-
 					<mat-error *ngIf="passwordConfirm.touched && form.hasError('passwordsNotMatching')">
 						Password are not matching
 					</mat-error>
 					<mat-hint *ngIf="!form.valid"><small>Please fill all needed information</small></mat-hint>
 				<div class="button">
-					<button mat-button type="submit" [disabled]="!form.valid" >SIGN IN</button>
+					<button mat-button type="submit" [disabled]="!form.valid || username.value.length > 8" >SIGN IN</button>
 				</div>
 
 			</form>

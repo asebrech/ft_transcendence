@@ -53,9 +53,8 @@ export class RegisterComponent {
       inProgress: false,
       progress: 0
     };
-    console.log(this.fileUpload.nativeElement.files[0]);
   }
-
+  
   uploadFile(id: number) {
     const formData = new FormData();
     formData.append('file', this.file.data);
