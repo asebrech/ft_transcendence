@@ -9,5 +9,4 @@ export class ApiLoginDto {
 	@IsEmail()
 	email: string;
 
-	image: string;
 }

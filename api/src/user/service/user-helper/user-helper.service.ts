@@ -54,7 +54,6 @@ export class UserHelperService {
 		return {
 			username: loginUserDto.login,
 			email: loginUserDto.email,
-			profilPic: loginUserDto.image
 		}
 	}
 }
