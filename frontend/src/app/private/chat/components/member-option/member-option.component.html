@@ -65,7 +65,7 @@
 		<form #myForm="ngForm" (ngSubmit)="muteTime(); onClick();" class="ban">
 			<input type="datetime-local" id="myDateTime" name="myDateTime" [(ngModel)]="myDateTimeValue" required>
 			<button type="submit" [disabled]="!myForm.valid || !isValidDateTime()">Mute for a limited time</button>
-			<button type="submit" (click)="onClick(); mute();">Mute</button>
+			<button type="button" (click)="onClick(); mute();">Mute</button>
 		</form>
 	</div>
 	<div class="separator" *ngIf="checkUser() && checkIfMuted() && checklvl()"></div>
@@ -93,7 +93,7 @@
 		<form #myForm="ngForm" (ngSubmit)="banTime(); onClick();" class="ban">
 			<input type="datetime-local" id="myDateTime" name="myDateTime" [(ngModel)]="myDateTimeValue" required>
 			<button type="submit" [disabled]="!myForm.valid || !isValidDateTime()">Ban for a limited time</button>
-			<button type="submit" (click)="onClick(); ban();">Ban</button>
+			<button type="button" (click)="onClick(); ban();">Ban</button>
 		</form>
 	</div>
 </div>
