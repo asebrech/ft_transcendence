@@ -148,23 +148,11 @@ export class UserService {
 		return this.authService.comparePassword(password, storedPasswordHash);
 	}
 
-	// async updatePassword(userId: number, oldPassword: string, newPassword: string): Promise<UserI> {
-	// 	const user = await this.userRepository.createQueryBuilder('user')
-	// 	.addSelect('user.password')
-	// 	.where('user.id = :userId', { userId })
-	// 	.getOne();
-	// 	console.log(user.password);
-	// 	if(await this.authService.comparePassword(oldPassword, user.password))
-	// 		throw new HttpException('Old password is incorrect', HttpStatus.UNAUTHORIZED);
-	// 	const newPasswordHash = await this.authService.hashPassword(newPassword);
-	// 	await this.userRepository.update(userId, { password: newPasswordHash });
-	// 	const updatedUser = await this.findOne(userId);
-	// 	return updatedUser;
-	// }
-
 	async updateEmail(userId: number, newEmail: string): Promise<UserI> {
-		if (await this.checkEmail(newEmail))
-			throw new HttpException('This email address is already used', HttpStatus.UNAUTHORIZED);		await this.userRepository.update(userId, { email: newEmail });
+		const emailExists = await this.checkEmail(newEmail)
+		if (emailExists)
+			return;	
+		await this.userRepository.update(userId, { email: newEmail });
 		const updatedUser = await this.findOne(userId);
 		return updatedUser;
 	}
@@ -178,10 +166,6 @@ export class UserService {
 	}
 
 	updateOne(id: number, user: UserI): Observable<any> {
-        // delete user.email;
-        // delete user.password;
-        // delete user.role;
-
         return from(this.userRepository.update(id, user)).pipe(
             switchMap(() => this.findOne2(id))
         );
@@ -191,7 +175,6 @@ export class UserService {
 		const user = await this.findOne(userId);
 		const usernameExists = await this.usernameExists(newUsername);
 		if (usernameExists){
-			console.log("Email already in use. Try again");
 			return ;
 		}
 		await this.userRepository.update(userId, { username: newUsername });

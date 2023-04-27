@@ -28,7 +28,6 @@
       <img src="../../../../../assets/images/src.png" alt="amis-logo">
     </div>
     <hr>
-    <p *ngIf="message">{{message}}</p>
     <div class="main">
       <ul>
         <li *ngFor="let friend of friends" (contextmenu)="onContextMenu($event, friend)" >

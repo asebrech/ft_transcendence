@@ -76,20 +76,15 @@ export class SettingsComponent implements OnInit {
   }
 
   closePopup(num : number, old: string ,newO: string): void{
-    console.log(this.username, this.email);
     if (num == 0) {
       if(newO != this.email){
-      this.playerService.updateEmail(this.user.id, newO).subscribe(response => {
-        console.log('Email updated successfully:', response);
-      });
+      this.playerService.updateEmail(this.user.id, newO).subscribe()
     }
     this.emailPopup = false;
     }
     else {
       if (newO != this.username){
-      this.playerService.updateUsername(this.user.id, newO).subscribe(response => {
-        console.log('Username updated successfully:', response);
-      });
+      this.playerService.updateUsername(this.user.id, newO).subscribe();
     }
     this.usernamePopup = false;
     }

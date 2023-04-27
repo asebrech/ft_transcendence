@@ -19,7 +19,7 @@
       <button class="close-btn" (click)="close()">X</button>
       <h1>Please enter new email</h1>
       <input type="email" placeholder="NEW EMAIL"  [(ngModel)]="newO" >
-      <button class="changes" [disabled]="!old || !newO" (click)="closePopup(0, old, newO)">SAVE CHANGES</button>
+      <button class="changes" [disabled]="!newO" (click)="closePopup(0, old, newO)">SAVE CHANGES</button>
     </div>
   </div>
   <div class="skin" >

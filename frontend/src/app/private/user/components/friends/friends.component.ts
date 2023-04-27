@@ -104,7 +104,7 @@ export class FriendsComponent implements OnInit {
 			this.filteredUsers = this.filteredUsers.filter(users => users.id !== this.user.id);
 			this.chatService.connected();
 			this.printAllRoomWithPlayer();
-      this.setMessage();
+      //this.setMessage();
 		});
     },100);
 	}
@@ -137,18 +137,12 @@ export class FriendsComponent implements OnInit {
   }
 
   removeFriend(id: number, friend: UserI) {
-    this.playerService.removeFriend(id, friend).pipe(
-      catchError(error => {
-        console.log('An error occurred:', error);
-        throw('Something went wrong; please try again later.');
-      })
-      )
+    this.playerService.removeFriend(id, friend)
       .subscribe(response => {
-        console.log('Friend removed successfully');
         this.user$.subscribe((user: UserI) => {
           const friendIndex = this.friends.findIndex(f => f.id === friend.id);
           this.friends.splice(friendIndex, 1);
-          this.setMessage()
+          //this.setMessage()
         });
 		this.chatService.connected();
       });
@@ -158,17 +152,10 @@ export class FriendsComponent implements OnInit {
     }
 
     addFriend(userId: number, selectedUser: UserI){
-      this.playerService.addFriend(userId, selectedUser).pipe(
-        catchError(error => {
-          console.log('An error occurred:', error);
-          throw('Something went wrong; please try again later.');
-        })
-        )
-        .subscribe((response : UserI) => {
-          console.log('Friend added successfully');
+      this.playerService.addFriend(userId, selectedUser).subscribe((response : UserI) => {
           this.user$.subscribe((user: UserI) => {
             this.friends = user.friends;
-            this.setMessage()
+           // this.setMessage()
     		this.chatService.connected();
       });
         });
@@ -183,13 +170,13 @@ export class FriendsComponent implements OnInit {
     this.playerService.goToProfileOf(user);
   }
 
-  private setMessage() {
-    if (this.friends.length === 0) {
-      this.message = "Liste d'amis vide !";
-    } else {
-      this.message = "";
-    }
-  }
+  // private setMessage() {
+  //   if (this.friends.length === 0) {
+  //     this.message = "Liste d'amis vide !";
+  //   } else {
+  //     this.message = "";
+  //   }
+  // }
 
   block(user: UserI) {
 	this.chatService.blockUser(user, null);
