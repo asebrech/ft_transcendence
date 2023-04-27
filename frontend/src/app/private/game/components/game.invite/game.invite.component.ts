@@ -165,6 +165,7 @@ export class GameInviteComponent implements OnInit {
     {
       if (this.hasShownAlert == false && invitePlay == false)
       {
+		localStorage.removeItem('hasReloaded');
         window.alert('One of the player disconnected !');
         this.router.navigate(['private/chat']);
         this.hasShownAlert = true;
