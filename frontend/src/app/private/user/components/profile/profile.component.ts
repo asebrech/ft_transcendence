@@ -22,6 +22,8 @@ export class ProfileComponent {
   opponentName: string;
   ratio : number;
   hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
+  history = [];  
+
 
   constructor(
       private playerService: PlayerService,
@@ -69,8 +71,13 @@ export class ProfileComponent {
 
     this.user$.subscribe((user) => {
       this.user = user;
-      this.opponents$ = this.getOpponents(this.user.history);
       this.ratio = (user.wins / (user.wins + user.losses)) * 100;
+      for (let i = 0; i < 10;i++ ) {
+        if ( i >= user.history.length)
+        break;
+        this.history.push(user.history[(user.history.length - 1) - i]);
+      }
+      this.opponents$ = this.getOpponents(this.history);
       });
     },100);
   }
