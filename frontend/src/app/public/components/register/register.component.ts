@@ -9,6 +9,8 @@ import { LoginComponent } from '../login/login.component';
 import { PlayerService } from 'src/app/private/user/services/player.service';
 import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { UserI } from 'src/app/model/user.interface';
+import { ValidationErrors } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
 export interface File {
   data: any;
@@ -34,7 +36,7 @@ export class RegisterComponent {
   }
 
 	form: FormGroup = new FormGroup ({
-		email: new FormControl(null, [Validators.required, Validators.email]),
+		email: new FormControl(null, [Validators.required, Validators.email, this.emailDomainValidator]),
 		username: new FormControl(null, [Validators.required]),
 		password: new FormControl(null, [Validators.required]),
 		passwordConfirm: new FormControl(null, [Validators.required]),
@@ -42,6 +44,17 @@ export class RegisterComponent {
 	},
 		{ validators: CustomValidators.passwordsMatching }
 	);
+
+	emailDomainValidator(control: AbstractControl): ValidationErrors | null {
+		const email = control.value;
+		const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|fr)$/;
+	  
+		if (emailPattern.test(email)) {
+		  return null;
+		} else {
+		  return { emailDomain: true };
+		}
+	  }
 
   mail : string | undefined = this.userService.mail;
 
