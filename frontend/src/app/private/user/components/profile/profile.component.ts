@@ -23,7 +23,8 @@ export class ProfileComponent {
   ratio : number;
   hostname: string = window.location.protocol + "//" + window.location.hostname + ":" + "3000/api/users/profile-image/";
   history = [];  
-
+  win: number = 0;
+  loss: number = 0;
 
   constructor(
       private playerService: PlayerService,
@@ -65,13 +66,18 @@ export class ProfileComponent {
     } else {
       this.user$ = this.playerService.getUser();
     }
-
-    this.user$.subscribe();
+  
     this.user = this.authService.getLoggedInUser();
 
     this.user$.subscribe((user) => {
       this.user = user;
-      this.ratio = (user.wins / (user.wins + user.losses)) * 100;
+      for (const user of this.user.history) {
+        if (user.won)
+        this.win+=1;
+        else 
+        this.loss+= 1;
+      }
+      this.ratio = (this.win / (this.win + this.loss)) * 100;
       for (let i = 0; i < 10;i++ ) {
         if ( i >= user.history.length)
         break;

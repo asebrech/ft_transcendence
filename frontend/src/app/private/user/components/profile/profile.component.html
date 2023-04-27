@@ -13,16 +13,16 @@
         50%</progress>
         <div><img src="../../../../../assets/images/master-chief.png" alt="badge" class="badge"></div>
       </div>
-      <div class="block" *ngIf="user$ | async as user">
+      <div class="block">
         <h1>STATISTIC</h1>
         <div class="row">
           <div class="col">
             <h2>VICTORY</h2>
-            <p>{{user.wins}}</p>
+            <p>{{win}}</p>
           </div>
           <div class="col">
             <h2>LOSS</h2>
-            <p>{{user.losses}}</p>
+            <p>{{loss}}</p>
           </div>
         </div>
         <div class="circle">
