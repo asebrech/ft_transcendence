@@ -522,6 +522,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('blockUser')
 	async blockUser(socket: Socket, object: { room: RoomI, user: UserI }) {
+		object.user = await this.userService.getOne(object.user.id);
+		socket.data.user = await this.userService.getOne(socket.data.user.id);
 		const user = await this.userService.addBlockedUser(object.user, socket.data.user);
 		// const rooms: RoomI[] = await this.roomService.getAllRoomWithUsers();
 		// for (const room of rooms) {
@@ -546,6 +548,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 	@SubscribeMessage('unBlockUser')
 	async UnBlockUser(socket: Socket, object: { room: RoomI, user: UserI }) {
+		object.user = await this.userService.getOne(object.user.id);
+		socket.data.user = await this.userService.getOne(socket.data.user.id);
 		await this.userService.removeBlockedUser(object.user, socket.data.user);
 		if (object.room) {
 			const upRoom: RoomI = await this.roomService.getRoom(object.room.id);

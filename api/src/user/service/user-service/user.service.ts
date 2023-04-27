@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, Pagination, paginate } from 'nestjs-typeorm-paginate';
 import { Observable, from, map, switchMap, of, throwError } from 'rxjs';
@@ -232,6 +232,7 @@ export class UserService {
 
 	async addFriend(id: number, newFriend: UserI): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({ id });
+		newFriend = await this.userRepository.findOneBy({ id: newFriend.id });
 		const friend: Friend = {
 			id: newFriend.id,
 			username: newFriend.username,
@@ -252,6 +253,9 @@ export class UserService {
 
 	async removeFriend(id: number, friend: UserI): Promise<UserI> {
 		const user = await this.userRepository.findOneBy({ id });
+		friend = await this.userRepository.findOneBy({ id: friend.id });
+		Logger.log(user.id)
+		Logger.log(user.friends);
 		const friendIndex = user.friends.findIndex(f => f.id === friend.id);
 		if (friendIndex !== -1) {
 		  user.friends.splice(friendIndex, 1);
