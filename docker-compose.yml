@@ -67,15 +67,15 @@ services:
     ports:
       - 35000:5432
 
-  # The Postgres Admin tool if we want to run some custom queries and so on against our Database
-  postgres_admin:
-    image: dpage/pgadmin4:6.19
-    depends_on:
-      - postgres
-    env_file:
-      - .env
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    ports:
-      - 5050:80
+  # # The Postgres Admin tool if we want to run some custom queries and so on against our Database
+  # postgres_admin:
+  #   image: dpage/pgadmin4:6.19
+  #   depends_on:
+  #     - postgres
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+  #   ports:
+  #     - 5050:80

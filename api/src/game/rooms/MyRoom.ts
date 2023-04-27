@@ -113,7 +113,7 @@ export class MyRoom extends Room<Schema>
       {
         try
         {
-          this.clients[0].send("launch", ({x: 300, y : 300}));
+          this.clients[0].send("launch", ({x: 500, y : 500}));
         }
         catch
         {

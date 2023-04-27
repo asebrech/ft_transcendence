@@ -42,6 +42,8 @@ export class InviteScene extends Phaser.Scene
   isColorBall : boolean;
   skin : string;
   isOpponentColorPad : boolean;
+  firstTime : boolean = false;
+
 
 
   constructor() 
@@ -56,7 +58,7 @@ export class InviteScene extends Phaser.Scene
     let pos = this.getRandomInt(0, 7);
     this.last_bg_x = this.positions[pos][0];
     this.last_bg_y = this.positions[pos][1];
-    this.speed = 300;
+    this.speed = 500;
     /////////////////////////////////////////////////
     if (opponentPad[0] == '#')
     {
@@ -253,20 +255,32 @@ export class InviteScene extends Phaser.Scene
 
     this.physics.add.collider(left_pad, ball, () =>
     {
-      if (this.speed < 500)
+      if (this.speed < 2000)
       {
-        this.speed += 100;
+        if (this.firstTime == false)
+        {
+          this.speed += 500;
+          this.firstTime = true;
+        }
+        else
+          this.speed += 250;
         ball.body.velocity.normalize().scale(this.speed);
       }
     });
 
     this.physics.add.collider(right_pad, ball, () =>
     {
-      if (this.speed < 500)
+      if (this.speed < 2000)
       {
-        this.speed += 100;
+        if (this.firstTime == false)
+        {
+          this.speed += 500;
+          this.firstTime = true;
+        }
+        else
+          this.speed += 250;
         ball.body.velocity.normalize().scale(this.speed);
-      }
+      }    
     });
 
     this.particle = this.add.particles('space').setInteractive();
@@ -361,11 +375,17 @@ export class InviteScene extends Phaser.Scene
         {
           this.left_score += 1;
           this.score.setText(this.left_score + ' | ' + this.right_score)
+          this.speed = 500;
+          this.firstTime = false;
+          ball.body.velocity.normalize().scale(500);
         }
         else
         {
           this.right_score += 1;
           this.score.setText(this.left_score + ' | ' + this.right_score)
+          this.speed = 500;
+          this.firstTime = false;
+          ball.body.velocity.normalize().scale(500);
         }
         ball.setPosition(inWidth / 2, inHeight / 2);
         room?.send("score_update", ({score_left : this.left_score, score_right : this.right_score}));
@@ -387,7 +407,7 @@ export class InviteScene extends Phaser.Scene
     }
     if (player_left == true)
     {
-      if ((this.right_score || this.left_score) > 4)
+      if (this.right_score > 4 || this.left_score > 4)
       {
         if (this.left_score > this.right_score)
         {
