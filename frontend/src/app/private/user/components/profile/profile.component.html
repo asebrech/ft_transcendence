@@ -41,7 +41,7 @@
       <table *ngIf="user.history?.length > 0; else message">
         <tbody>
           <ng-container *ngIf="opponents$ | async as opponents">
-          <tr *ngFor="let match of user.history.slice(0, 10); let i = index" >
+          <tr *ngFor="let match of user.history.slice(user.history.length - 10, user.history.length).reverse(); let i = index" >
             <td>{{ user.username }}</td>
             <td [ngClass]="{'red': !match.won, 'green': match.won}" >{{ match.won? 'V' : 'D' }}</td>
             <td>{{ opponents[i]?.username || 'Unknown' }}</td>
