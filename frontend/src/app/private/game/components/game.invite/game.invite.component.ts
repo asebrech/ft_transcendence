@@ -44,6 +44,9 @@ export class GameInviteComponent implements OnInit {
   realName : string;
   in : boolean = true;
   hasShownAlert : boolean = false;
+  player1: number;
+  player2: number;
+
 
   constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private route : ActivatedRoute, private chatService: ChatService, private router : Router) 
   {
@@ -81,6 +84,9 @@ export class GameInviteComponent implements OnInit {
       this.notJoined = false;
       if (this.notJoined == false && this.in == true)
       {
+		this.chatService.inGame([message.player_left_id, message.player_right_id])
+		this.player1 = message.player_left_id;
+		this.player2 = message.player_right_id;
         this.in = false
         setTimeout(() => {
           this.inviteScene = new Phaser.Game(this.inviteSceneConfig);
@@ -91,6 +97,7 @@ export class GameInviteComponent implements OnInit {
     {
       if (message.winner == true && this.checked == false)
       {
+		this.chatService.endGame([this.player1, this.player2])
         this.checked = true;
         if (player_left == true)
         {
@@ -126,6 +133,7 @@ export class GameInviteComponent implements OnInit {
       }
       else if (message.winner == false && this.checked == false)
       {
+		this.chatService.endGame([this.player1, this.player2])
         this.checked = true;
         if (player_left == true)
         {
@@ -169,6 +177,7 @@ export class GameInviteComponent implements OnInit {
         window.alert('One of the player disconnected !');
         this.router.navigate(['private/chat']);
         this.hasShownAlert = true;
+		this.inviteScene.destroy(true);
       }
     });
   }
@@ -178,6 +187,7 @@ export class GameInviteComponent implements OnInit {
     if(this.in == false)
     {
       room?.leave();
+	  this.inviteScene.destroy(true);
     }
 	localStorage.removeItem('hasReloaded');
   }
@@ -253,8 +263,9 @@ export class GameInviteComponent implements OnInit {
     {
       room = await client?.create("my_room", { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
 	    this.chatService.gameRoom.next(room.id);
-    } catch (e) {
-      console.error("join error", e);
+    } catch (e) 
+	{
+        this.router.navigate(['private/chat']);
     }  
   }
 
@@ -263,8 +274,9 @@ export class GameInviteComponent implements OnInit {
     try {
       room = await client?.joinById(value, { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
       this.notJoined = false;
-    } catch (e) {
-      console.error("join error", e);
+    } catch (e) 
+	{
+        this.router.navigate(['private/chat']);
     }  
   }
   //////////////////////////////////
