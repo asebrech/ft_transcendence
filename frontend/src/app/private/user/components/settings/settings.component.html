@@ -7,19 +7,12 @@
     <p>Set new profile image</p>
     <app-avatar (avatarUpdated)="updateAvatar()"></app-avatar>
     <button (click)="changeUsername()">Change username</button>
-    <button (click)="changeEmail()">Change email</button>
 	<button (click)="goTo2FA()">Manage 2FA</button>
     <div class="username-popup" *ngIf="usernamePopup">
       <button class="close-btn" (click)="close()">X</button>
       <h1>Please enter new username</h1>
       <input type="text" placeholder="NEW USERNAME" [(ngModel)]="newO" >
-      <button class="changes"[disabled]="!newO"  (click)="closePopup(2, old, newO)">SAVE CHANGES</button>
-    </div>
-    <div class="username-popup" *ngIf="emailPopup">
-      <button class="close-btn" (click)="close()">X</button>
-      <h1>Please enter new email</h1>
-      <input type="email" placeholder="NEW EMAIL"  [(ngModel)]="newO" >
-      <button class="changes" [disabled]="!newO" (click)="closePopup(0, old, newO)">SAVE CHANGES</button>
+      <button class="changes"[disabled]="!newO || newO.length > 8"  (click)="closePopup(newO)">SAVE CHANGES</button>
     </div>
   </div>
   <div class="skin" >

@@ -28,12 +28,9 @@ export class SettingsComponent implements OnInit {
 	);
   email: string;
   usernamePopup: boolean = false;
-  pwdPopup: boolean = false;
-  emailPopup: boolean = false;
   user: UserI = this.authService.getLoggedInUser();
   user$: Observable<UserI>;
   newO: string;
-  old: string;
   username: string;
   colorBall : string = '';
   colorPad : string = '';
@@ -68,28 +65,13 @@ export class SettingsComponent implements OnInit {
   changeUsername() {
     this.usernamePopup = true;
   }
-  changePwd() {
-    this.pwdPopup = true;
-  }
-  changeEmail() {
-    this.emailPopup = true;
-  }
 
-  closePopup(num : number, old: string ,newO: string): void{
-    if (num == 0) {
-      if(newO != this.email){
-      this.playerService.updateEmail(this.user.id, newO).subscribe()
-    }
-    this.emailPopup = false;
-    }
-    else {
+  closePopup(newO: string): void{
       if (newO != this.username){
       this.playerService.updateUsername(this.user.id, newO).subscribe();
     }
     this.usernamePopup = false;
     }
-    //this.simpleNotification();
-  }
 
   retrieveBallSkin(event: Event){
     const clickedImageSrc = (event.target as HTMLImageElement).getAttribute('src');
@@ -143,8 +125,6 @@ export class SettingsComponent implements OnInit {
 
   close() {
     this.usernamePopup = false;
-    this.pwdPopup = false;
-    this.emailPopup = false;
   }
 
 
