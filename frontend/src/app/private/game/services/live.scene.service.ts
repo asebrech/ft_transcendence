@@ -176,12 +176,12 @@ export class LiveScene extends Phaser.Scene
       this.score.setText(this.left_score + ' | ' + this.right_score);
     });
     ///////////////////////////////////////////////////////////////
-    this.bg.x += 1;
-    this.bg.y += 1;
-    this.last_bg_x++;
-    this.last_bg_y++;
-    this.stars.tilePositionX += 1;
-    this.stars.tilePositionY += 1;
+    // this.bg.x += 1;
+    // this.bg.y += 1;
+    // this.last_bg_x++;
+    // this.last_bg_y++;
+    // this.stars.tilePositionX += 1;
+    // this.stars.tilePositionY += 1;
     /////////////////////////////////////////////////////////////
   } 
 }

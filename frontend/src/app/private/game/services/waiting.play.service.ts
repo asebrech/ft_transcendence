@@ -190,12 +190,12 @@ export class WaitingScene extends Phaser.Scene
       ball_velocity_y = this.getRandomInt(-200, -300);
     }
     ///////////////////////////////////////////////////////////////
-    this.bg.x += 1;
-    this.bg.y += 1;
-    this.last_bg_x++;
-    this.last_bg_y++;
-    this.stars.tilePositionX += 1;
-    this.stars.tilePositionY += 1;
+    // this.bg.x += 1;
+    // this.bg.y += 1;
+    // this.last_bg_x++;
+    // this.last_bg_y++;
+    // this.stars.tilePositionX += 1;
+    // this.stars.tilePositionY += 1;
     /////////////////////////////////////////////////////////////
   }
 }
