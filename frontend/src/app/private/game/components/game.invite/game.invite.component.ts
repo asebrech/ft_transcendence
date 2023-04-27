@@ -8,6 +8,8 @@ import { AuthService } from 'src/app/public/services/auth-service/auth.service';
 import { InviteScene } from '../../services/invite.scene.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from 'src/app/private/chat/services/chat-service/chat.service';
+import { NavigationStart } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 export let room : any;
 export let client : Client;
@@ -176,12 +178,14 @@ export class GameInviteComponent implements OnInit {
     {
       room?.leave();
     }
+	localStorage.removeItem('hasReloaded');
   }
 
 
 
   ngOnInit(): void
   {
+	this.onReload();
     this.route.queryParams.subscribe(params => {
       const functionName = params['functionName'];
       // appeler la fonction en fonction du nom
@@ -270,4 +274,17 @@ export class GameInviteComponent implements OnInit {
     else
       this.connect(value);
   }
+
+  private onReload() {
+	const hasReloaded = localStorage.getItem('hasReloaded');
+
+	// Redirect to a different route if the page has been reloaded
+	if (hasReloaded) {
+	  localStorage.removeItem('hasReloaded');
+	  this.router.navigate(['/private/chat/dashboard']);
+	} else {
+	  // Set a flag in the localStorage indicating the page has been loaded
+	  localStorage.setItem('hasReloaded', 'true');
+	}
+}
 }
