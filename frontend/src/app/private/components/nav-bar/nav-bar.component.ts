@@ -25,7 +25,6 @@ export class NavBarComponent implements OnInit
 
 	deconnection() 
 	{
-		console.log('deco');
 		localStorage.removeItem('access_token');
 		location.reload();
 	}

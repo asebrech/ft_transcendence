@@ -148,6 +148,17 @@ export class PlayScene extends Phaser.Scene
         this.load.image('left_pad', 'assets/images/paddle/' + opponentPad.split('/').pop());
       }
     }
+    if (this.isOpponentColorPad == true)
+    {
+      if (player_left == true)
+      {
+        this.load.image('right_pad', 'assets/images/paddle/default.png');  
+      }
+      else
+      {
+        this.load.image('left_pad', 'assets/images/paddle/default.png');  
+      }
+    }
     if (this.isColorPad == true)
     {
       this.load.image('right_pad', 'assets/images/paddle/default.png');  

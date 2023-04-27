@@ -156,7 +156,7 @@ export class MemberOptionComponent implements OnInit {
 	}
 
 	addFriend() {
-		console.log('Add Friend', this.selectedUser);
+
 	}
 
 }

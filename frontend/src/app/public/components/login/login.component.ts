@@ -6,6 +6,8 @@ import { tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { UserService } from '../../services/user-service/user.service';
+import { ValidationErrors } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
 @Component({
 	selector: 'app-login',
@@ -28,9 +30,20 @@ import { UserService } from '../../services/user-service/user.service';
   export class LoginComponent {
   
 	  form: FormGroup = new FormGroup({
-		  email: new FormControl(null, [Validators.required, Validators.email]),
+		  email: new FormControl(null, [Validators.required, Validators.email, this.emailDomainValidator]),
 		  password: new FormControl(null, [Validators.required])
 	  });
+
+	  emailDomainValidator(control: AbstractControl): ValidationErrors | null {
+		const email = control.value;
+		const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|fr)$/;
+	  
+		if (emailPattern.test(email)) {
+		  return null;
+		} else {
+		  return { emailDomain: true };
+		}
+	  }
   
 	mail: string;
 	  showPasswordField : boolean = false;

@@ -31,7 +31,6 @@ export class ProfileComponent {
   }
 
   ngOnInit(){
-
     setTimeout(() => {
     this.chatService.getInGame().subscribe (players => {
       this.printAllRoomWithPlayer()
@@ -92,7 +91,7 @@ export class ProfileComponent {
 		  {
 			  const metadata = rooms[i].metadata;
 			  if (this.toto) {
-				if (this.toto.id === metadata.player_left || this.toto.id == metadata.player_right) {
+				if (metadata.player_left && metadata.player_right && this.toto.id === metadata.player_left || this.toto.id == metadata.player_right) {
 					this.toto.inGame = true;
 				}
 			}

@@ -46,6 +46,7 @@ export class GameInviteComponent implements OnInit {
   hasShownAlert : boolean = false;
   player1: number;
   player2: number;
+  hasJoined : boolean = false;
 
 
   constructor(private authService : AuthService, private starsService: StarsService, private playerService : PlayerService, private route : ActivatedRoute, private chatService: ChatService, private router : Router) 
@@ -111,7 +112,8 @@ export class GameInviteComponent implements OnInit {
             opponentId: message.player_right,
             won: true
           }
-          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+          if (this.user && history)
+            this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
         }
         else
@@ -126,7 +128,8 @@ export class GameInviteComponent implements OnInit {
             opponentId: message.player_left,
             won: false
           }
-          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+          if (this.user && history)
+            this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
         }
         this.gameEnded = true;
@@ -146,7 +149,8 @@ export class GameInviteComponent implements OnInit {
             opponentId: message.player_right,
             won: false
           }
-          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+          if (this.user && history)
+            this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
         }
         else
@@ -160,7 +164,8 @@ export class GameInviteComponent implements OnInit {
             opponentId: message.player_left,
             won: true
           }
-          this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
+          if (this.user && history)
+            this.playerService.setHistory(this.user.id, history).subscribe((user: UserI) => {
           });
         }
         this.gameEnded = true;
@@ -173,23 +178,19 @@ export class GameInviteComponent implements OnInit {
     {
       if (this.hasShownAlert == false && invitePlay == false)
       {
-		localStorage.removeItem('hasReloaded');
+        this.chatService.endGame([this.player1, this.player2]);
+		    localStorage.removeItem('hasReloaded');
         window.alert('One of the player disconnected !');
         this.router.navigate(['private/chat']);
         this.hasShownAlert = true;
-		this.inviteScene.destroy(true);
       }
     });
   }
 
   ngOnDestroy()
   {
-    if(this.in == false)
-    {
-      room?.leave();
-	  this.inviteScene.destroy(true);
-    }
-	localStorage.removeItem('hasReloaded');
+	  localStorage.removeItem('hasReloaded');
+    window.location.reload();
   }
 
 
@@ -263,6 +264,7 @@ export class GameInviteComponent implements OnInit {
     {
       room = await client?.create("my_room", { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
 	    this.chatService.gameRoom.next(room.id);
+      this.hasJoined = true;
     } catch (e) 
 	{
         this.router.navigate(['private/chat']);
@@ -274,6 +276,7 @@ export class GameInviteComponent implements OnInit {
     try {
       room = await client?.joinById(value, { rank : this.user.level, numClientsToMatch : 2 , clientId : this.username, padSkin : skinPad, player_name : this.realName});
       this.notJoined = false;
+      this.hasJoined = true;
     } catch (e) 
 	{
         this.router.navigate(['private/chat']);

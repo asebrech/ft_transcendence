@@ -152,8 +152,10 @@ export class MyRoom extends Room<Schema>
       this.setMetadata({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}})
     });
     this.setMetadata({player_left : this.left_player, player_right : this.right_player, score : {right : this.right_score, left : this.left_score}, left_username : this.left_player_username, right_username : this.right_player_username})
+    this.autoDispose = true;
+    
   }
-
+  
   // When a client leaves the room
   onLeave (client: Client, consented: boolean) 
   {
@@ -163,7 +165,7 @@ export class MyRoom extends Room<Schema>
       for (const client of this.clients) {
         this.disconnectClient(client);
       }
-	  // this.autoDispose = true;
+      // this.autoDispose = true;
     }
     else
     {

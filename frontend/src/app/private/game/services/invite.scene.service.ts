@@ -89,11 +89,11 @@ export class InviteScene extends Phaser.Scene
     /////////////////////////
     if (player_left == true)
     {
-      this.skin = "pad2.png"
+      this.skin = "default.png"
     }
     else
     {
-      this.skin = "pad.png"
+      this.skin = "default.png"
     }
     /////////////////////////////////
   }
@@ -149,6 +149,17 @@ export class InviteScene extends Phaser.Scene
         this.load.image('left_pad', 'assets/images/paddle/' + opponentPad.split('/').pop());
       }
     }
+    if (this.isOpponentColorPad == true)
+    {
+      if (player_left == true)
+      {
+        this.load.image('right_pad', 'assets/images/paddle/default.png');  
+      }
+      else
+      {
+        this.load.image('left_pad', 'assets/images/paddle/default.png');  
+      }
+    }
     if (this.isColorPad == true)
     {
       this.load.image('right_pad', 'assets/images/paddle/default.png');  
@@ -166,9 +177,9 @@ export class InviteScene extends Phaser.Scene
         this.load.image('ball', 'assets/images/ball/' + skinBall.split('/').pop());  
       }
     }
-    if (this.isColorBall == false)
+    if (this.isColorBall == true)
     {
-      this.load.image('ball', 'assets/images/ball/ball.png');
+      this.load.image('ball', 'assets/images/ball/default.png');
     }
 
     
@@ -224,14 +235,22 @@ export class InviteScene extends Phaser.Scene
         right_pad.setTint(this.convertColorCode(skinPad));
     }
 
+    if (this.isOpponentColorPad == true)
+    {
+      if(player_left == true)
+        right_pad.setTint(this.convertColorCode(opponentPad));
+      else
+        left_pad.setTint(this.convertColorCode(opponentPad));
+    }
+
     ball = this.physics.add.image(inWidth / 2, inHeight / 2, 'ball').setCollideWorldBounds(false).setScrollFactor(0);
     
     if (this.isColorBall == true)
     {
       if(player_left == true)
-        ball.setTint(this.convertColorCode(skinPad));
+        ball.setTint(this.convertColorCode(skinBall));
       else
-        ball.setTint(this.convertColorCode(skinPad));
+        ball.setTint(this.convertColorCode(skinBall));
     }
 
     //////////////////////////////////////////////////
